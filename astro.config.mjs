@@ -9,12 +9,16 @@ const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 // https://astro.build/config
 export default defineConfig({
+    redirects: {
+        "/en/[...slug]": "/[...slug]",
+    },
     i18n,
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
             components: {
                 home: "storyblok/pages/Home",
+                page: "storyblok/pages/Page",
             },
         }),
     ],

@@ -11,53 +11,36 @@ export async function getStaticPaths() {
         version: "draft",
     });
 
-    let paths: {}[] = [];
-
-    links
+    return links
         .filter((link) => !link.is_folder)
-        .forEach((link: { slug: string }) => {
-            locales.forEach((language) => {
-                //This slug will be used for fetching data from storyblok
-                let slug = link.slug === "home" ? undefined : link.slug;
-                //This will be used for generating all the urls for astro
-                let full_url =
-                    language === defaultLocale
-                        ? slug
-                        : `${language}/${slug ?? ""}`;
-                //This will let us change the url for diffrent versions
-                let langSwitch = {};
-                locales.forEach((lang) => {
-                    langSwitch = {
-                        ...langSwitch,
-                        [lang]:
-                            lang === defaultLocale
-                                ? `/${slug ?? ""}`
-                                : `/${lang}/${slug ?? ""}`,
-                    };
-                });
-                paths.push({
-                    props: { language, slug, langSwitch },
-                    params: {
-                        slug: full_url,
-                    },
-                });
-            });
+        .map((link: { slug: string }) => {
+            const fullSlug = link.slug;
+            const language = fullSlug.split("/")[0];
+
+            const slug =
+                language === defaultLocale
+                    ? link.slug.replace(/^(en\/)/, "")
+                    : link.slug;
+
+            return {
+                props: {
+                    language,
+                    fullSlug,
+                },
+                params: {
+                    slug: slug !== "" ? slug : undefined,
+                },
+            };
         });
-
-    console.log(paths);
-
-    return paths;
 }
 
 const storyblokApi = useStoryblokApi();
-const { slug, language, langSwitch } = Astro.props;
-const { data } = await storyblokApi.get(
-    `cdn/stories/${slug === undefined ? "home" : slug}`,
-    {
-        version: "draft",
-        language,
-    },
-);
+const { language, fullSlug } = Astro.props;
+
+const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
+    version: "draft",
+});
+
 const story = data.story;
 ---
 
