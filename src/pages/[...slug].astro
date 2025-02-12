@@ -1,0 +1,66 @@
+---
+import { useStoryblokApi } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+import Layout from "../layouts/Layout.astro";
+import { locales, defaultLocale } from "../i18n.config";
+
+export async function getStaticPaths() {
+    const storyblokApi = useStoryblokApi();
+
+    const links = await storyblokApi.getAll("cdn/links", {
+        version: "draft",
+    });
+
+    let paths: {}[] = [];
+
+    links
+        .filter((link) => !link.is_folder)
+        .forEach((link: { slug: string }) => {
+            locales.forEach((language) => {
+                //This slug will be used for fetching data from storyblok
+                let slug = link.slug === "home" ? undefined : link.slug;
+                //This will be used for generating all the urls for astro
+                let full_url =
+                    language === defaultLocale
+                        ? slug
+                        : `${language}/${slug ?? ""}`;
+                //This will let us change the url for diffrent versions
+                let langSwitch = {};
+                locales.forEach((lang) => {
+                    langSwitch = {
+                        ...langSwitch,
+                        [lang]:
+                            lang === defaultLocale
+                                ? `/${slug ?? ""}`
+                                : `/${lang}/${slug ?? ""}`,
+                    };
+                });
+                paths.push({
+                    props: { language, slug, langSwitch },
+                    params: {
+                        slug: full_url,
+                    },
+                });
+            });
+        });
+
+    console.log(paths);
+
+    return paths;
+}
+
+const storyblokApi = useStoryblokApi();
+const { slug, language, langSwitch } = Astro.props;
+const { data } = await storyblokApi.get(
+    `cdn/stories/${slug === undefined ? "home" : slug}`,
+    {
+        version: "draft",
+        language,
+    },
+);
+const story = data.story;
+---
+
+<Layout>
+    <StoryblokComponent language={language} blok={story.content} />
+</Layout>

@@ -9,6 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.2.5"
+    "@storyblok/astro": "^6.0.1",
+    "astro": "^5.2.5",
+    "vite": "^6.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
+    "prettier": "^3.5.0",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }
