@@ -1,0 +1,40 @@
+---
+const currentPath = Astro.url.pathname;
+
+const routes = [
+    {
+        slug: "/",
+        name: "Home",
+    },
+    {
+        slug: "/test",
+        name: "Page",
+    },
+];
+---
+
+<header class="header">
+    <nav>
+        {routes.map((r) => <a href={r.slug}>{r.name}</a>)}
+    </nav>
+</header>
+
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 50px 100px;
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 2rem;
+        }
+    }
+</style>
