@@ -19,13 +19,14 @@ import splitText from "../utils/splitText";
 </style>
 
 <script>
-    let section: NodeListOf<Element>;
-    let words: NodeListOf<Element>;
+    let section: NodeListOf<Element> | null;
+    let words: NodeListOf<Element> | null;
+    let tl: gsap.core.Timeline | null;
 
     const init = () => {
         section = document.querySelectorAll(".section-text");
         words = document.querySelectorAll(".section-text .word-inner");
-        const tl = gsap
+        tl = gsap
             .timeline({
                 scrollTrigger: {
                     trigger: section,
@@ -40,7 +41,20 @@ import splitText from "../utils/splitText";
             });
     };
 
+    const cleanup = () => {
+        if (tl) {
+            tl.kill();
+            tl = null;
+        }
+        section = null;
+        words = null;
+    };
+
     document.addEventListener("astro:page-load", () => {
         init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
