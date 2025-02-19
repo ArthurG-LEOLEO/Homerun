@@ -21,12 +21,75 @@ import SocialPost from "../../components/atoms/SocialPost.astro";
                 </div>
             </div>
         </div>
-        <div class="flex items-start gap-24">
-            {
-                blok.posts?.map((post) => {
-                    return <SocialPost post={post} />;
-                })
-            }
-        </div>
+    </div>
+    <div class="feed-slider-wrapper flex items-start overflow-hidden">
+        {
+            blok.posts?.map((post) => {
+                return <SocialPost post={post} />;
+            })
+        }
+        {
+            blok.posts?.map((post) => {
+                return <SocialPost post={post} />;
+            })
+        }
+        {
+            blok.posts?.map((post) => {
+                return <SocialPost post={post} />;
+            })
+        }
     </div>
 </div>
+
+<script>
+    import horizontalLoop from "../../scripts/horizontalLoop";
+
+    let wrapper: HTMLElement | null;
+    let posts: NodeListOf<Element> | null;
+    let loop: GSAPTimeline | undefined | null;
+
+    const init = () => {
+        wrapper = document.querySelector(".feed-slider-wrapper");
+        posts = document.querySelectorAll(".feed-slider-post");
+
+        loop = horizontalLoop(posts, {
+            draggable: true,
+            center: true,
+            snap: false,
+        });
+
+        wrapper?.addEventListener("mouseenter", function () {
+            if (loop) {
+                gsap.to(loop, {
+                    duration: 0.5,
+                    timeScale: 0,
+                });
+            }
+        });
+        wrapper?.addEventListener("mouseleave", function () {
+            if (loop) {
+                gsap.to(loop, {
+                    duration: 0.5,
+                    timeScale: 1,
+                });
+            }
+        });
+    };
+
+    const cleanup = () => {
+        if (loop) {
+            loop.kill();
+            loop = null;
+        }
+        wrapper = null;
+        posts = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
