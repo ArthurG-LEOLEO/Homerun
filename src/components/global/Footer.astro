@@ -1,0 +1,17 @@
+---
+interface Props {
+    footerData: {
+        title: string;
+        copy: string;
+        made_by: string;
+    };
+}
+
+const { footerData } = Astro.props;
+---
+
+<footer>
+    <p>{footerData.title}</p>
+    <p>{footerData.copy}</p>
+    {footerData.made_by && <p>{footerData.made_by}</p>}
+</footer>

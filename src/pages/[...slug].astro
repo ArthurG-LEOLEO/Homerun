@@ -44,6 +44,6 @@ const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
 const story = data.story;
 ---
 
-<Layout>
+<Layout language={language}>
     <StoryblokComponent language={language} blok={story.content} />
 </Layout>
