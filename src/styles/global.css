@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+    --color-*: initial;
+    --color-black: #181817;
+    --color-white: #f8f7ec;
+    --color-green: #2d5a36;
+    --color-orange: #e56138;
+    --color-blue: #cdf0ff;
+    --color-pink: #edd4f8;
+    --color-transparent: transparent;
+
+    --font-*: initial;
+    --font-figtree: "Figtree Variable", sans-serif;
+    --font-space: "Space Grotesk Variable", sans-serif;
+
+    --text-*: initial;
+    --text-p16: 1.6rem;
+    --text-p16--line-height: 24px;
+    --text-h1: 7.6rem;
+    --text-h1--line-height: 97px;
+
+    --container-container: 1440px;
+
+    --spacing: 1px;
+    --spacing-gutter: 10px;
+}
+
+@layer base {
+    html {
+        /* sets the base font to 10px for easier math */
+        font-size: 62.5%;
+        color: var(--black);
+        background: var(--white);
+    }
+
+    body {
+        @apply text-p16;
+        font-family: var(--font-figtree);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+    }
+}
+
+@layer components {
+    .container-main {
+        width: 100%;
+        max-width: 1440px;
+        padding-inline: 10px;
+        margin-inline: auto;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .word {
+        display: inline-flex;
+        overflow: hidden;
+    }
+
+    .word-inner {
+        display: inline-block;
+    }
+}

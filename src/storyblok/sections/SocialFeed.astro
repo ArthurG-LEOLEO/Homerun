@@ -1,0 +1,32 @@
+---
+const { language, blok } = Astro.props;
+
+import SocialPost from "../../components/atoms/SocialPost.astro";
+---
+
+<div class="bg-black pt-170 pb-130 text-white">
+    <div class="container-main">
+        <div
+            class="after:left-gutter after:right-gutter relative mb-70 pb-8 after:absolute after:bottom-0 after:h-1 after:bg-[#656565]"
+        >
+            <div class="flex items-center gap-6">
+                <h2 class="text-h1 px-gutter">{blok.title}</h2>
+                <div class="px-gutter flex flex-col">
+                    {
+                        blok.subtitle && (
+                            <span class="text-[#666]">{blok.subtitle}</span>
+                        )
+                    }
+                    {blok.social_handle && <span>{blok.social_handle}</span>}
+                </div>
+            </div>
+        </div>
+        <div class="flex items-start gap-24">
+            {
+                blok.posts?.map((post) => {
+                    return <SocialPost post={post} />;
+                })
+            }
+        </div>
+    </div>
+</div>

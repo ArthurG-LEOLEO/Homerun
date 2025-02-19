@@ -1,21 +1,34 @@
 ---
+import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
 import splitText from "../../utils/splitText";
 import SectionText from "../../components/SectionText.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div class="home">
-    <div class="hero">
-        <h1 class="title" set:html={splitText("Home: " + blok.Title)} />
-        <div class="blocks">
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
-            <div class="block"></div>
+<div class="home" {...storyblokEditable(blok)}>
+    <div class="bg-pink flex flex-col items-center justify-center py-300">
+        <h1
+            class="text-h1 hero-title block"
+            set:html={splitText("Home: " + blok.title)}
+        />
+        <div class="mt-50 flex gap-10">
+            <div class="bg-orange hero-block size-50"></div>
+            <div class="bg-orange hero-block size-50"></div>
+            <div class="bg-orange hero-block size-50"></div>
+            <div class="bg-orange hero-block size-50"></div>
+            <div class="bg-orange hero-block size-50"></div>
         </div>
     </div>
     <SectionText />
+    <div>
+        {
+            blok.sections?.map((blok: SbBlokData) => {
+                return <StoryblokComponent blok={blok} language={language} />;
+            })
+        }
+    </div>
 </div>
 
 <script>
@@ -24,8 +37,8 @@ const { language, blok } = Astro.props;
     let tl: gsap.core.Timeline | null;
 
     const setVariables = () => {
-        blocks = document.querySelectorAll(".home .hero .block");
-        title = document.querySelectorAll(".home .hero .title .word-inner");
+        blocks = document.querySelectorAll(".home .hero-block");
+        title = document.querySelectorAll(".home .hero-title .word-inner");
     };
     const init = () => {
         setVariables();
@@ -71,34 +84,3 @@ const { language, blok } = Astro.props;
         cleanup();
     });
 </script>
-
-<style>
-    .hero {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--pink);
-        padding-block: 300px;
-        h1 {
-            font-size: 10rem;
-            font-weight: 400;
-        }
-    }
-
-    .title {
-        display: block;
-    }
-
-    .blocks {
-        margin-top: 50px;
-        display: flex;
-        gap: 10px;
-    }
-
-    .block {
-        width: 50px;
-        height: 50px;
-        background-color: var(--orange);
-    }
-</style>

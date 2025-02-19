@@ -1,0 +1,23 @@
+<div
+    id="grid"
+    hidden
+    class="container-main pointer-events-none fixed inset-0 z-50 flex size-full opacity-10 outline outline-[red]"
+>
+    {
+        [...Array(12)].map((i) => (
+            <div class="px-gutter flex-1 border-l border-l-[red] last:border-r last:border-r-[red]">
+                <div class="size-full bg-[red]" />
+            </div>
+        ))
+    }
+</div>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const grid = document.getElementById("grid");
+
+        window.addEventListener("keydown", (event) => {
+            if (event.code === "KeyG" && grid) grid.hidden = !grid.hidden;
+        });
+    });
+</script>

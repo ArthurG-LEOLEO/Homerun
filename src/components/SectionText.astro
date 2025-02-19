@@ -2,21 +2,13 @@
 import splitText from "../utils/splitText";
 ---
 
-<div class="section-text">
+<div class="text-h1 section-text px-150 py-100 text-center">
     <p
         set:html={splitText(
             "At the crossroad of consulting & advertising, we design cultural innovations that create value and cross channel communications that generate conversations",
         )}
     />
 </div>
-
-<style>
-    .section-text {
-        padding: 100px 150px;
-        font-size: 8rem;
-        text-align: center;
-    }
-</style>
 
 <script>
     let section: NodeListOf<Element> | null;

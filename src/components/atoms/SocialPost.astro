@@ -1,0 +1,48 @@
+---
+import SBImage from "../global/SBImage.astro";
+import { getImageSize } from "../../utils/storyblok";
+
+import Linkedin from "../icons/Linkedin.astro";
+import Instagram from "../icons/Instagram.astro";
+
+const { post } = Astro.props;
+
+const hasImage = post.image && post.image.id;
+const { width, height } = getImageSize(post.image);
+
+const aspectRatio = hasImage ? `${width}/${height}` : "auto";
+
+console.log(post);
+---
+
+<a
+    href={post.link.url}
+    target="_blank"
+    draggable="false"
+    class="relative w-1/3 overflow-hidden rounded-[10px] p-32 select-none"
+    style={{ backgroundColor: post.color, aspectRatio }}
+>
+    <div
+        class="relative z-[1] flex size-48 items-center justify-center rounded-full bg-black p-17 text-white"
+    >
+        {post.type === "linkedin" ? <Linkedin /> : <Instagram />}
+    </div>
+
+    {post.text && <p class="mt-88">{post.text}</p>}
+
+    {
+        hasImage && (
+            <div class="absolute inset-0">
+                <SBImage class="size-full object-cover" image={post.image} />
+            </div>
+        )
+    }
+
+    {
+        post.text && (
+            <span class="relative mt-24 inline-flex flex-col gap-4 font-medium after:h-1 after:w-full after:bg-current">
+                En savoir plus
+            </span>
+        )
+    }
+</a>

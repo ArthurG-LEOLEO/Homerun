@@ -5,6 +5,8 @@ import { loadEnv } from "vite";
 
 import i18n from "./src/i18n.config";
 
+import tailwindcss from "@tailwindcss/vite";
+
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 // https://astro.build/config
@@ -19,11 +21,12 @@ export default defineConfig({
             components: {
                 home: "storyblok/pages/Home",
                 page: "storyblok/pages/Page",
+                social_feed: "storyblok/sections/SocialFeed",
             },
         }),
     ],
     vite: {
-        plugins: [basicSsl()],
+        plugins: [basicSsl(), tailwindcss()],
         server: {
             https: true,
         },
