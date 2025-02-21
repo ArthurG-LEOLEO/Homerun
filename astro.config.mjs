@@ -7,6 +7,8 @@ import i18n from "./src/i18n.config";
 
 import tailwindcss from "@tailwindcss/vite";
 
+import icon from "astro-icon";
+
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 // https://astro.build/config
@@ -15,16 +17,14 @@ export default defineConfig({
         "/en/[...slug]": "/[...slug]",
     },
     i18n,
-    integrations: [
-        storyblok({
-            accessToken: env.STORYBLOK_TOKEN,
-            components: {
-                home: "storyblok/pages/Home",
-                page: "storyblok/pages/Page",
-                social_feed: "storyblok/sections/SocialFeed",
-            },
-        }),
-    ],
+    integrations: [storyblok({
+        accessToken: env.STORYBLOK_TOKEN,
+        components: {
+            home: "storyblok/pages/Home",
+            page: "storyblok/pages/Page",
+            social_feed: "storyblok/sections/SocialFeed",
+        },
+    }), icon()],
     vite: {
         plugins: [basicSsl(), tailwindcss()],
         server: {

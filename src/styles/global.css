@@ -15,10 +15,22 @@
     --font-space: "Space Grotesk Variable", sans-serif;
 
     --text-*: initial;
+    --text-p12: 1.2rem;
+    --text-p12--line-height: 24px;
+    --text-p14: 1.4rem;
+    --text-p14--line-height: 24px;
     --text-p16: 1.6rem;
     --text-p16--line-height: 24px;
     --text-h1: 7.6rem;
     --text-h1--line-height: 97px;
+    --text-h2: 5.6rem;
+    --text-h2--line-height: 72px;
+    --text-h5: 1.4rem;
+    --text-h5--line-height: 19px;
+    --text-cta16: 1.6rem;
+    --text-cta16--line-height: 22px;
+    --text-cta32: 3.2rem;
+    --text-cta32--line-height: 40px;
 
     --container-container: 1440px;
 
@@ -30,8 +42,8 @@
     html {
         /* sets the base font to 10px for easier math */
         font-size: 62.5%;
-        color: var(--black);
-        background: var(--white);
+        color: var(--color-black);
+        background: var(--color-white);
     }
 
     body {

@@ -1,0 +1,20 @@
+---
+interface Props {
+    link: {
+        cached_url?: string;
+        url?: string;
+        linktype?: string;
+        target?: string;
+    };
+    className?: string;
+}
+
+const { link, className = "" } = Astro.props;
+
+const url = link?.cached_url || link?.url || "#";
+const target = link?.target || "_self";
+---
+
+<a href={url} target={target} class:list={[className]}>
+    <slot />
+</a>

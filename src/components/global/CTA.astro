@@ -1,0 +1,46 @@
+---
+import Link from "./Link.astro";
+import { Icon } from "astro-icon/components";
+
+interface StoryblokLink {
+    cached_url?: string;
+    url?: string;
+    linktype?: string;
+    target?: string;
+}
+
+interface Props {
+    label?: string;
+    icon?: string;
+    link?: StoryblokLink;
+    onClick?: string;
+    className?: string;
+}
+
+const { label, icon, link, onClick, className = "" } = Astro.props;
+
+const horizontalPadding = label ? "px-24" : "px-16";
+const baseClasses = `flex items-center gap-10 py-16 ${horizontalPadding} rounded-[90px] hover:opacity-80`;
+---
+
+{
+    link ? (
+        <Link link={link} className={`${baseClasses} ${className}`}>
+            {label && (
+                <span class="font-space text-cta16 font-medium">{label}</span>
+            )}
+            {icon && <Icon name={icon} size="16" />}
+        </Link>
+    ) : (
+        <button
+            type="button"
+            class={`${baseClasses} ${className}`}
+            onclick={onClick}
+        >
+            {label && (
+                <span class="font-space text-cta16 font-medium">{label}</span>
+            )}
+            {icon && <Icon name={icon} size="16" />}
+        </button>
+    )
+}

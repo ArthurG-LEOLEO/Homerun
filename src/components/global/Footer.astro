@@ -1,17 +1,137 @@
 ---
-interface Props {
-    footerData: {
-        title: string;
-        copy: string;
-        made_by: string;
+import BasicLink from "../atoms/BasicLink.astro";
+import CTA from "./CTA.astro";
+import LogoTypo from "./LogoTypo.astro";
+import SBImage from "./SBImage.astro";
+
+interface FooterLink {
+    label: string;
+    link: {
+        cached_url?: string;
+        url?: string;
+        linktype?: string;
+        target?: string;
     };
+}
+
+interface FooterCol {
+    title: string;
+    links: FooterLink[];
+}
+
+interface FooterImage {
+    filename: string;
+    alt?: string;
+    id: number;
+}
+
+interface FooterData {
+    title: string;
+    top_link?: FooterLink[];
+    copy?: string;
+    made_by?: string;
+    cols?: FooterCol[];
+    linkedin?: {
+        cached_url?: string;
+        url?: string;
+        target?: string;
+    };
+    instagram?: {
+        cached_url?: string;
+        url?: string;
+        target?: string;
+    };
+    bottom_images?: FooterImage[];
 }
 
 const { footerData } = Astro.props;
 ---
 
-<footer>
-    <p>{footerData.title}</p>
-    <p>{footerData.copy}</p>
-    {footerData.made_by && <p>{footerData.made_by}</p>}
+<footer class="border-orange border-b-11 pt-190 pb-10">
+    <div class="container-main flex">
+        <div class="pl-gutter w-1/2 pt-30 pr-42">
+            <LogoTypo className="mb-65 w-237" />
+            <h2 class="text-h2 font-space">{footerData.title}</h2>
+            {
+                footerData.top_link && (
+                    <BasicLink
+                        label={footerData.top_link[0].label}
+                        link={footerData.top_link[0].link}
+                        variant="arrow"
+                        className="mt-24"
+                    />
+                )
+            }
+            {
+                footerData.cols && (
+                    <div class="mt-90 flex flex-wrap gap-64">
+                        {footerData.cols.map((col: FooterCol) => (
+                            <div class="footer-col">
+                                <h5 class="text-h5 font-space mb-8 font-medium">
+                                    {col.title}
+                                </h5>
+                                <div class="flex flex-col">
+                                    {col.links?.map((linkItem: FooterLink) => (
+                                        <BasicLink
+                                            label={linkItem.label}
+                                            link={linkItem.link}
+                                            className="text-p14 text-black/50"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )
+            }
+            <div class="mt-42 flex items-baseline gap-14">
+                <p class="text-p14">{footerData.copy}</p>
+                {
+                    footerData.made_by && (
+                        <p class="text-p12">{footerData.made_by}</p>
+                    )
+                }
+            </div>
+        </div>
+        <div
+            class="pr-gutter flex w-1/2 flex-grow flex-col justify-between gap-25 pl-42"
+        >
+            <div class="flex w-full flex-grow gap-40">
+                <div class="flex-grow">
+                    <div
+                        class="flex aspect-square max-w-500 items-center justify-center bg-black text-white"
+                    >
+                        <span>SPLINE</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 self-end">
+                    {
+                        footerData.linkedin && (
+                            <CTA
+                                link={footerData.linkedin}
+                                icon="linkedin"
+                                className="bg-green text-white"
+                            />
+                        )
+                    }
+                    {
+                        footerData.instagram && (
+                            <CTA
+                                link={footerData.instagram}
+                                icon="instagram"
+                                className="bg-blue text-black"
+                            />
+                        )
+                    }
+                </div>
+            </div>
+            <div class="flex gap-32">
+                {
+                    footerData.bottom_images?.map((image: FooterImage) => (
+                        <SBImage image={image} />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
 </footer>

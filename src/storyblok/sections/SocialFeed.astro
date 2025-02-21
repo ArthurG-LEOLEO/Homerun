@@ -2,12 +2,13 @@
 const { language, blok } = Astro.props;
 
 import SocialPost from "../../components/atoms/SocialPost.astro";
+import CTA from "../../components/global/CTA.astro";
 ---
 
 <div class="bg-black pt-170 pb-130 text-white">
     <div class="container-main">
         <div
-            class="after:left-gutter after:right-gutter relative mb-70 pb-8 after:absolute after:bottom-0 after:h-1 after:bg-[#656565]"
+            class="flex items-center justify-between gap-50 after:left-gutter after:right-gutter relative mb-70 pb-8 after:absolute after:bottom-0 after:h-1 after:bg-[#656565]"
         >
             <div class="flex items-center gap-6">
                 <h2 class="text-h1 px-gutter">{blok.title}</h2>
@@ -19,6 +20,48 @@ import SocialPost from "../../components/atoms/SocialPost.astro";
                     }
                     {blok.social_handle && <span>{blok.social_handle}</span>}
                 </div>
+            </div>
+            <div class="px-gutter flex items-center gap-8">
+                {
+                    blok.twitter && (
+                        <CTA
+                            link={blok.twitter}
+                            label="Twitter"
+                            icon="twitter"
+                            className="bg-blue text-white"
+                        />
+                    )
+                }
+                {
+                    blok.facebook && (
+                        <CTA
+                            link={blok.facebook}
+                            label="Facebook"
+                            icon="facebook"
+                            className="bg-blue text-white"
+                        />
+                    )
+                }
+                {
+                    blok.linkedin && (
+                        <CTA
+                            link={blok.linkedin}
+                            label="LinkedIn"
+                            icon="linkedin"
+                            className="bg-green text-white"
+                        />
+                    )
+                }
+                {
+                    blok.instagram && (
+                        <CTA
+                            link={blok.instagram}
+                            label="Instagram"
+                            icon="instagram"
+                            className="bg-blue text-black"
+                        />
+                    )
+                }
             </div>
         </div>
     </div>
