@@ -9,44 +9,12 @@ interface Props {
         target?: string;
     };
     label: string;
-    variant?: "default" | "arrow";
     className?: string;
 }
 
-const { link, label, variant = "default", className = "" } = Astro.props;
-
-const variants = {
-    default: "hover:opacity-80",
-    arrow: "hover:opacity-80 inline-flex items-center gap-11 text-cta32 font-space",
-};
-const labelVariants = {
-    default: "whitespace-pre-wrap",
-    arrow: "whitespace-pre-wrap decoration-solid underline underline-offset-8 decoration-2",
-};
-
-const baseClasses = variants[variant];
-const labelClasses = labelVariants[variant];
+const { link, label, className = "" } = Astro.props;
 ---
 
-<Link link={link} className={`${baseClasses} ${className}`}>
-    <span class={labelClasses}>{label}</span>
-    {
-        variant === "arrow" && (
-            <span class="flex size-34 items-center justify-center rounded-full border-2 border-black">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="12"
-                    fill="none"
-                >
-                    <path
-                        fill="currentColor"
-                        fill-rule="evenodd"
-                        d="M14.142 6.071 8.638 11.49l-1.33-1.351 3.167-3.117-9.527-.002-.001-1.895 9.51.002L7.308 2.06 8.63.702l5.512 5.37Z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-            </span>
-        )
-    }
+<Link link={link} className={`hover:opacity-80 ${className}`}>
+    <span class="whitespace-pre-wrap">{label}</span>
 </Link>

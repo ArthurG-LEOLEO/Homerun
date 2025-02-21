@@ -1,4 +1,5 @@
 ---
+import ArrowLink from "../atoms/ArrowLink.astro";
 import BasicLink from "../atoms/BasicLink.astro";
 import CTA from "./CTA.astro";
 import LogoTypo from "./LogoTypo.astro";
@@ -54,10 +55,9 @@ const { footerData } = Astro.props;
             <h2 class="text-h2 font-space">{footerData.title}</h2>
             {
                 footerData.top_link && (
-                    <BasicLink
+                    <ArrowLink
                         label={footerData.top_link[0].label}
                         link={footerData.top_link[0].link}
-                        variant="arrow"
                         className="mt-24"
                     />
                 )
