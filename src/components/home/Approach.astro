@@ -1,0 +1,54 @@
+---
+import ArrowLink from "../atoms/ArrowLink.astro";
+
+interface CaseStory {
+    uuid: string;
+    name: string;
+    content: {
+        title: string;
+    };
+    full_slug: string;
+}
+
+interface ApproachBlok {
+    title_first_part: string;
+    first_category_first_part: string;
+    first_category_second_part: string;
+    first_category_cases: CaseStory[];
+    title_second_part: string;
+    second_category_first_part: string;
+    second_category_second_part: string;
+    second_category_cases: CaseStory[];
+    title_third_part: string;
+    projects_link: any[];
+}
+
+const { blok } = Astro.props;
+---
+
+<div class="px-150 py-100 text-center">
+    <h1 class="text-h1">
+        <span>{blok.title_first_part}</span>
+        <span>{blok.first_category_first_part}</span>
+        <span>{blok.first_category_second_part}</span>
+        <span>{blok.title_second_part}</span>
+        <span>{blok.second_category_first_part}</span>
+        <span>{blok.second_category_second_part}</span>
+        <span>{blok.title_third_part}</span>
+    </h1>
+    {
+        blok.first_category_cases.map((story) => (
+            <div class="mt-4">{story.content.title}</div>
+        ))
+    }
+    {
+        blok.second_category_cases?.map((story) => (
+            <div class="mt-4">{story.content.title}</div>
+        ))
+    }
+    <ArrowLink
+        label={blok.projects_link[0].label}
+        link={blok.projects_link[0].link}
+        className="mt-40"
+    />
+</div>
