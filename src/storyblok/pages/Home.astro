@@ -2,6 +2,7 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 
+import SBVideo from "../../components/global/SBVideo.astro";
 import splitText from "../../utils/splitText";
 import SectionText from "../../components/SectionText.astro";
 const { language, blok } = Astro.props;
@@ -19,6 +20,20 @@ const { language, blok } = Astro.props;
             <div class="bg-orange hero-block size-50"></div>
             <div class="bg-orange hero-block size-50"></div>
             <div class="bg-orange hero-block size-50"></div>
+        </div>
+    </div>
+    <div class="relative aspect-1440/920 bg-black text-white">
+        <SBVideo
+            video={blok.showreel}
+            className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div
+            class="container-main relative flex size-full items-center justify-center"
+        >
+            <h2 class="text-h2 px-gutter w-8/12 text-center">
+                {blok.showreel_title}
+            </h2>
         </div>
     </div>
     <SectionText />
@@ -63,7 +78,7 @@ const { language, blok } = Astro.props;
                     stagger: 0.05,
                     ease: "elastic.out(1,0.3)",
                 },
-                "<+0.2",
+                "<+0.2"
             );
     };
 

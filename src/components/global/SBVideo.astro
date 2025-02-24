@@ -1,0 +1,28 @@
+---
+interface Props {
+    video: {
+        filename: string;
+        title?: string;
+        alt?: string;
+        copyright?: string;
+        source?: string;
+    };
+    className?: string;
+}
+
+const { video, className = "" } = Astro.props;
+---
+
+<video
+    class={className}
+    autoplay
+    muted
+    loop
+    playsinline
+    title={video.title}
+    aria-label={video.alt}
+    data-copyright={video.copyright}
+    data-source={video.source}
+>
+    <source src={video.filename} type="video/mp4" />
+</video>
