@@ -72,13 +72,13 @@ console.log(blok);
                     </h2>
                     <div class="mb-85 flex w-full gap-50">
                         <div
-                            class="px-gutter w-1/2"
+                            class="px-gutter text-p20 w-1/2"
                             set:html={renderRichText(
                                 blok.first_cultural_column_text,
                             )}
                         />
                         <div
-                            class="px-gutter w-1/2"
+                            class="px-gutter text-p20 w-1/2"
                             set:html={renderRichText(
                                 blok.second_cultural_column_text,
                             )}
@@ -152,6 +152,41 @@ console.log(blok);
                         <ArrowLink
                             label={blok.cultural_link[0].label}
                             link={blok.cultural_link[0].link}
+                            className="mt-40"
+                        />
+                    )
+                }
+            </div>
+        </div>
+    </div>
+    <div id="communication-section" class="bg-orange py-130 text-white">
+        <div class="container-main flex justify-end">
+            <div class="mr-[8.333%] w-5/12">
+                <div class="mb-55">
+                    <h2 class="text-h2 font-space mx-gutter mb-36">
+                        {blok.communication_title}
+                    </h2>
+                    <div
+                        class="px-gutter text-p24 w-full"
+                        set:html={renderRichText(blok.communication_text)}
+                    />
+                </div>
+                <div class="flex flex-col gap-6">
+                    {
+                        blok.communication_items
+                            .split(",")
+                            .map((item: string) => (
+                                <div class="font-space text-h4 bg-white px-32 py-24 font-bold text-black">
+                                    {item}
+                                </div>
+                            ))
+                    }
+                </div>
+                {
+                    blok.communication_link[0]?.label && (
+                        <ArrowLink
+                            label={blok.communication_link[0].label}
+                            link={blok.communication_link[0].link}
                             className="mt-40"
                         />
                     )

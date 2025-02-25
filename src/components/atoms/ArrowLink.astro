@@ -14,6 +14,8 @@ interface Props {
 }
 
 const { link, label, className = "" } = Astro.props;
+
+const isExternal = link.linktype === "url";
 ---
 
 <Link
@@ -27,6 +29,12 @@ const { link, label, className = "" } = Astro.props;
     <span
         class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34"
     >
-        <Icon name="arrow-right" class="size-14 md:size-16" />
+        <Icon
+            name="arrow-right"
+            class:list={[
+                "size-14 md:size-16",
+                { "rotate-[-45deg]": isExternal },
+            ]}
+        />
     </span>
 </Link>
