@@ -29,6 +29,8 @@
     --text-h1--line-height: 97px;
     --text-h2: 5.6rem;
     --text-h2--line-height: 72px;
+    --text-h2-mobile: 3.4rem;
+    --text-h2-mobile--line-height: 40px;
     --text-h3: 4rem;
     --text-h3--line-height: 51px;
     --text-h4: 3.2rem;
@@ -39,6 +41,8 @@
     --text-cta16--line-height: 22px;
     --text-cta32: 3.2rem;
     --text-cta32--line-height: 44px;
+    --text-cta32-mobile: 2.4rem;
+    --text-cta32-mobile--line-height: 32px;
 
     --container-container: 1440px;
 
@@ -94,5 +98,14 @@
 
     .word-inner {
         display: inline-block;
+    }
+
+    .text-title-2 {
+        @apply text-h2-mobile md:text-h2;
+        @apply font-space;
+    }
+    .text-cta-32 {
+        @apply text-cta32-mobile md:text-cta32;
+        @apply font-space;
     }
 }

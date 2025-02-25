@@ -18,15 +18,15 @@ const { link, label, className = "" } = Astro.props;
 
 <Link
     link={link}
-    className={`text-cta32 font-space inline-flex items-end gap-11 hover:opacity-80 ${className}`}
+    className={`text-cta-32 inline-flex items-end gap-11 hover:opacity-80 ${className}`}
 >
     <span
         class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
         >{label}</span
     >
     <span
-        class="flex size-34 items-center justify-center rounded-full border-2 border-current"
+        class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34"
     >
-        <Icon name="arrow-right" size="16" />
+        <Icon name="arrow-right" class="size-14 md:size-16" />
     </span>
 </Link>
