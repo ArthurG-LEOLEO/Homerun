@@ -17,14 +17,18 @@ export default defineConfig({
         "/en/[...slug]": "/[...slug]",
     },
     i18n,
-    integrations: [storyblok({
-        accessToken: env.STORYBLOK_TOKEN,
-        components: {
-            home: "storyblok/pages/Home",
-            page: "storyblok/pages/Page",
-            social_feed: "storyblok/sections/SocialFeed",
-        },
-    }), icon()],
+    integrations: [
+        storyblok({
+            accessToken: env.STORYBLOK_TOKEN,
+            components: {
+                home: "storyblok/pages/Home",
+                page: "storyblok/pages/Page",
+                approach: "storyblok/pages/Approach",
+                social_feed: "storyblok/sections/SocialFeed",
+            },
+        }),
+        icon(),
+    ],
     vite: {
         plugins: [basicSsl(), tailwindcss()],
         server: {
