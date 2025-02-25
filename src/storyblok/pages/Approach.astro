@@ -1,0 +1,164 @@
+---
+import splitText from "../../utils/splitText";
+import SectionText from "../../components/SectionText.astro";
+
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+import {
+    renderRichText,
+    type ISbRichtext,
+    type SbBlokData,
+} from "@storyblok/astro";
+import { Icon } from "astro-icon/components";
+import { imageConfig } from "astro:assets";
+
+const { language, blok } = Astro.props;
+
+console.log(blok);
+---
+
+<div class="approach">
+    <div class="container-main flex flex-col items-center pt-135">
+        <span
+            class="mb-65 flex items-center justify-center rounded-[50px] border-3 px-24 py-13 text-[2rem] font-black uppercase"
+        >
+            {blok.subtitle}
+        </span>
+        <h1 class="text-h1 font-space px-gutter w-10/12 text-center">
+            {blok.title}
+        </h1>
+    </div>
+    <div class="mt-130 flex aspect-[1440/660] w-full">
+        <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
+        <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
+    </div>
+    <div
+        class="bg-green after:bg-orange relative w-full text-white after:absolute after:inset-y-0 after:right-0 after:left-[50%]"
+    >
+        <div class="container-main relative z-[1] flex text-center">
+            <div
+                class="flex w-1/2 translate-y-[-50%] flex-col items-center justify-center gap-55"
+            >
+                <div
+                    class="text-h3 font-space max-w-375"
+                    set:html={renderRichText(blok.left_description)}
+                />
+                <div
+                    class="flex size-34 items-center justify-center rounded-full border-2"
+                >
+                    <Icon name="arrow-down" size="12" />
+                </div>
+            </div>
+            <div
+                class="flex w-1/2 translate-y-[-50%] flex-col items-center justify-center gap-55"
+            >
+                <div
+                    class="text-h3 font-space max-w-375"
+                    set:html={renderRichText(blok.right_description)}
+                />
+                <div
+                    class="flex size-34 items-center justify-center rounded-full border-2"
+                >
+                    <Icon name="arrow-down" size="12" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="cultural-section" class="bg-green py-130 text-white">
+        <div class="container-main">
+            <div class="ml-[8.333%] w-1/2">
+                <div>
+                    <h2 class="text-h2 font-space mx-gutter mb-48">
+                        {blok.first_cultural_title}
+                    </h2>
+                    <div class="mb-85 flex w-full gap-50">
+                        <div
+                            class="px-gutter w-1/2"
+                            set:html={renderRichText(
+                                blok.first_cultural_column_text,
+                            )}
+                        />
+                        <div
+                            class="px-gutter w-1/2"
+                            set:html={renderRichText(
+                                blok.second_cultural_column_text,
+                            )}
+                        />
+                    </div>
+                </div>
+                <div id="cultural-items" class="mb-80 w-5/6 text-black">
+                    {
+                        blok.cultural_items.map(
+                            (item: SbBlokData, index: number) => (
+                                <div
+                                    class:list={[
+                                        "flex w-full gap-40 py-40 pr-40 pl-32",
+                                        {
+                                            "items-start bg-white":
+                                                !item.highlight,
+                                            "bg-orange items-center text-white":
+                                                item.highlight,
+                                        },
+                                    ]}
+                                >
+                                    <span class="flex size-56 shrink-0 items-center justify-center rounded-full border-3 text-[2rem]/[56px] font-black">
+                                        {String(index + 1).padStart(2, "0")}
+                                    </span>
+                                    <div class="flex flex-col">
+                                        <span class="text-h4 font-space font-bold">
+                                            {item.title}
+                                        </span>
+                                        {item.text && (
+                                            <span class="text-p20 mt-16">
+                                                {item.text}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            ),
+                        )
+                    }
+                </div>
+                <div id="cultural-process" class="w-5/6">
+                    <h2 class="text-h2 font-space mx-gutter mb-48">
+                        {blok.second_cultural_title}
+                    </h2>
+                    <div class="flex flex-col gap-6">
+                        {
+                            blok.cultural_accordions.map((item: SbBlokData) => (
+                                <button class="flex justify-between gap-10 border border-white/40 p-40 text-left">
+                                    <div>
+                                        <div class="text-p22 font-bold">
+                                            {item.title}
+                                        </div>
+                                        <div class="h-0 overflow-hidden">
+                                            <div
+                                                class="pt-24"
+                                                set:html={renderRichText(
+                                                    item.text as ISbRichtext,
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="flex size-34 shrink-0 items-center justify-center rounded-full border-2">
+                                        <Icon name="arrow-down" size="16" />
+                                    </div>
+                                </button>
+                            ))
+                        }
+                    </div>
+                </div>
+                {
+                    blok.cultural_link[0]?.label && (
+                        <ArrowLink
+                            label={blok.cultural_link[0].label}
+                            link={blok.cultural_link[0].link}
+                            className="mt-40"
+                        />
+                    )
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script></script>
