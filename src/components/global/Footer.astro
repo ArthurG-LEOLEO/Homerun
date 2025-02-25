@@ -51,12 +51,12 @@ const { footerData } = Astro.props;
 <footer class="border-orange border-b-11 pt-190 pb-10">
     <div class="container-main flex flex-col md:flex-row-reverse">
         <div
-            class="pr-gutter flex flex-grow flex-col justify-between gap-25 pl-42 md:w-1/2"
+            class="flex flex-grow flex-col justify-between gap-25 md:pr-gutter md:pl-42 md:w-1/2"
         >
-            <div class="flex w-full flex-grow gap-40">
-                <div class="flex-grow">
+            <div class="flex justify-end w-full flex-grow gap-40">
+                <div class="size-10/12 max-w-400 px-gutter md:max-w-auto md:size-full md:flex-grow md:px-0">
                     <div
-                        class="flex aspect-square max-w-500 items-center justify-center bg-black text-white"
+                        class="flex aspect-square md:max-w-500 items-center justify-center bg-black text-white"
                     >
                         <span>SPLINE</span>
                     </div>
@@ -83,7 +83,7 @@ const { footerData } = Astro.props;
                 </div>
             </div>
         </div>
-        <div class="px-gutter pt-30 md:w-1/2 md:pr-42">
+        <div class="px-gutter pt-16 md:pt-30 md:w-1/2 md:pr-42">
             <LogoTypo className="mb-65 hidden w-237 md:block" />
             <div class="flex items-end gap-25">
                 <div>
@@ -121,7 +121,7 @@ const { footerData } = Astro.props;
             </div>
             {
                 footerData.cols && (
-                    <div class="mt-90 flex flex-wrap gap-64">
+                    <div class="mt-90 flex flex-wrap gap-x-64 gap-y-24">
                         {footerData.cols.map((col: FooterCol) => (
                             <div class="footer-col">
                                 <h5 class="text-h5 font-space mb-8 font-medium">
