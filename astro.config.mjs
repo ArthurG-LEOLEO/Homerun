@@ -24,6 +24,7 @@ export default defineConfig({
                 home: "storyblok/pages/Home",
                 page: "storyblok/pages/Page",
                 approach: "storyblok/pages/Approach",
+                about: "storyblok/pages/About",
                 social_feed: "storyblok/sections/SocialFeed",
             },
         }),

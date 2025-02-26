@@ -1,0 +1,14 @@
+---
+interface Props {
+    title: {
+        mobile_title: string;
+        desktop_title: string;
+    };
+    className?: string;
+}
+
+const { title, className = "" } = Astro.props;
+---
+
+<span class={`whitespace-pre-wrap lg:hidden ${className}`}>{title.mobile_title}</span>
+<span class={`whitespace-pre-wrap hidden lg:block ${className}`}>{title.desktop_title}</span>
