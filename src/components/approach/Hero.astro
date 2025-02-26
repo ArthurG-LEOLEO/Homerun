@@ -5,39 +5,80 @@ import { Icon } from "astro-icon/components";
 const { blok } = Astro.props;
 ---
 
-<div class="mt-105 flex aspect-[1440/660] w-full md:mt-130">
-    <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
-    <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
-</div>
 <div
-    class="bg-green after:bg-orange relative w-full text-white after:absolute after:inset-y-0 after:right-0 after:left-[50%]"
+    class="relative h-[120vh] w-full text-white"
+    style="--offset: 0;"
+    id="approach-hero"
 >
-    <div class="container-main relative z-[1] flex pb-50 text-center md:pb-0">
-        <div
-            class="px-gutter flex w-1/2 flex-col items-center justify-center gap-15 md:translate-y-[-20%] md:gap-55"
-        >
+    <div class="container-main z-[1] text-center" id="approach-hero-inner">
+        <div class="flex w-full lg:translate-y-[-20%]">
             <div
-                class="text-title-3 max-w-375"
-                set:html={renderRichText(blok.left_description)}
-            />
-            <div
-                class="flex size-34 items-center justify-center rounded-full border-2"
+                class="px-gutter flex w-1/2 translate-x-[calc(50%*var(--offset))] flex-col items-center justify-center gap-15 lg:translate-x-[calc(16.66%*var(--offset))] lg:gap-55"
             >
-                <Icon name="arrow-down" size="12" />
+                <div
+                    class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                    set:html={renderRichText(blok.left_description)}
+                />
+                <div
+                    class="flex size-34 items-center justify-center rounded-full border-2"
+                >
+                    <Icon name="arrow-down" size="12" />
+                </div>
             </div>
-        </div>
-        <div
-            class="px-gutter flex w-1/2 flex-col items-center justify-center gap-15 md:translate-y-[-20%] md:gap-55"
-        >
             <div
-                class="text-title-3 max-w-375"
-                set:html={renderRichText(blok.right_description)}
-            />
-            <div
-                class="flex size-34 items-center justify-center rounded-full border-2"
+                class="px-gutter flex w-1/2 translate-x-[calc(50vw*var(--offset))] flex-col items-center justify-center gap-15 lg:gap-55"
             >
-                <Icon name="arrow-down" size="12" />
+                <div
+                    class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                    set:html={renderRichText(blok.right_description)}
+                />
+                <div
+                    class="flex size-34 items-center justify-center rounded-full border-2"
+                >
+                    <Icon name="arrow-down" size="12" />
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let hero: HTMLElement | null;
+    let heroInner: HTMLElement | null;
+    let tl: gsap.core.Timeline | null;
+
+    const setVariables = () => {
+        hero = document.querySelector(".approach #approach-hero");
+        heroInner = document.querySelector(".approach #approach-hero-inner");
+    };
+    const init = () => {
+        setVariables();
+
+        tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: heroInner,
+                start: "center-=20% center",
+                endTrigger: hero,
+                end: "bottom 70%",
+                pin: heroInner,
+            },
+        });
+    };
+
+    const cleanup = () => {
+        if (tl) {
+            tl.kill();
+            tl = null;
+        }
+        hero = null;
+        heroInner = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

@@ -10,10 +10,10 @@ import BoldAdvertising from "../../components/approach/BoldAdvertising.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div class="approach">
-    <div class="container-main flex flex-col items-center pt-150 md:pt-135">
+<div class="approach overflow-hidden">
+    <div class="container-main flex flex-col items-center pt-150 lg:pt-135">
         <span
-            class="text-tag-big mb-24 flex items-center justify-center rounded-[50px] border-3 px-16 py-12 md:mb-65 md:px-24 md:py-13"
+            class="text-tag-big mb-24 flex items-center justify-center rounded-[50px] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
         >
             {blok.subtitle}
         </span>
@@ -21,35 +21,336 @@ const { language, blok } = Astro.props;
             {blok.title}
         </h1>
     </div>
-
-    <Hero blok={blok} />
-
-    <div id="cultural-section" class="bg-green py-105 text-white md:py-130">
-        <div class="container-main">
-            <div class="mx-auto w-10/12 md:mx-0 md:ml-[8.333%] md:w-1/2">
-                <CulturalPhilosophy blok={blok} />
-                <CulturalItems items={blok.cultural_items} />
-                <CulturalProcess blok={blok} />
-                {
-                    blok.cultural_link[0]?.label && (
-                        <ArrowLink
-                            label={blok.cultural_link[0].label}
-                            link={blok.cultural_link[0].link}
-                            className="mt-52 md:mt-40"
-                        />
-                    )
-                }
+    <div id="scroll-container">
+        <div class="relative mt-105 flex aspect-[1440/660] w-full lg:mt-130">
+            <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
+            <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
+            <div
+                id="helmet"
+                class="absolute top-[-50px] left-[50%] size-[40vw] lg:size-[35vw]"
+                style="--c: #FF0000"
+            >
+                <div
+                    id="inner-helmet"
+                    class="size-full translate-x-[-50%] bg-[var(--c)] lg:size-[70%]"
+                >
+                </div>
             </div>
         </div>
-    </div>
-    <div
-        id="communication-section"
-        class="bg-orange py-105 text-white md:py-130"
-    >
-        <div class="container-main flex justify-end">
-            <div class="mx-auto w-10/12 md:mx-0 md:mr-[8.333%] md:w-5/12">
-                <BoldAdvertising blok={blok} />
+        <div id="split-container" class="relative" style="--progress: 0.5;">
+            <div
+                id="left-split"
+                class="bg-green absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))]"
+            >
+            </div>
+
+            <div
+                id="right-split"
+                class="bg-orange absolute top-0 right-0 bottom-0 z-[-1] w-[calc(100%*var(--progress))]"
+            >
+            </div>
+
+            <Hero blok={blok} />
+
+            <div id="split-left-wrapper">
+                <div id="split-left" class="py-105 text-white lg:py-130">
+                    <div
+                        id="split-left-inner"
+                        class="translate-x-[calc(100%*var(--progress)*-1)] lg:translate-x-[calc(70%*var(--progress)*-1)]"
+                    >
+                        <div class="container-main">
+                            <div
+                                class="mx-auto w-10/12 lg:mx-0 lg:ml-[8.333%] lg:w-1/2"
+                            >
+                                <CulturalPhilosophy blok={blok} />
+                                <CulturalItems items={blok.cultural_items} />
+                                <CulturalProcess blok={blok} />
+                                {
+                                    blok.cultural_link[0]?.label && (
+                                        <ArrowLink
+                                            label={blok.cultural_link[0].label}
+                                            link={blok.cultural_link[0].link}
+                                            className="mt-52 lg:mt-40"
+                                        />
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                id="second-mobile-helmet"
+                style="--c: #cdf0ff"
+                class="flex w-full items-center justify-center lg:hidden"
+            >
+                <div id="second-inner-helmet" class="size-[40vw] bg-[var(--c)]">
+                </div>
+            </div>
+            <div class="py-105 text-white lg:py-130">
+                <div id="split-right" class="lg:mt-[-100vh]">
+                    <div
+                        id="split-right-inner"
+                        class="translate-x-[calc(100%*(1-var(--progress)))] lg:translate-x-[calc(70%*(1-var(--progress)))]"
+                    >
+                        <div class="container-main flex justify-end">
+                            <div
+                                class="mx-auto w-10/12 lg:mx-0 lg:mr-[8.333%] lg:w-5/12"
+                            >
+                                <BoldAdvertising blok={blok} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // DOM Elements
+    let scrollContainer: HTMLElement | null;
+    let splitContainer: HTMLElement | null;
+    let hero: HTMLElement | null;
+    let splitRight: HTMLElement | null;
+    let splitLeft: HTMLElement | null;
+    let helmet: HTMLElement | null;
+    let secondMobileHelmet: HTMLElement | null;
+
+    // GSAP MatchMedia
+    let mm: gsap.MatchMedia | null;
+
+    // mobile + desktop GSAP Timelines
+    let gTlSplit1: gsap.core.Timeline | null;
+
+    // mobile Timelines
+    let mTlSplit2: gsap.core.Timeline | null;
+    let mTlHelmet1: gsap.core.Timeline | null;
+    let mTlHelmet2: gsap.core.Timeline | null;
+
+    // desktop Timelines
+    let dTlHelmetPin: gsap.core.Timeline | null;
+    let dTlHelmet1: gsap.core.Timeline | null;
+    let dTlHelmet2: gsap.core.Timeline | null;
+    let dTlSplit2Left: gsap.core.Timeline | null;
+    let dTlSplit2Right: gsap.core.Timeline | null;
+
+    const setDOMElements = () => {
+        scrollContainer = document.querySelector(".approach #scroll-container");
+        splitContainer = document.querySelector(".approach #split-container");
+        hero = document.querySelector(".approach #approach-hero");
+        splitRight = document.querySelector(".approach #split-right");
+        splitLeft = document.querySelector(".approach #split-left");
+        helmet = document.querySelector(".approach #helmet");
+        secondMobileHelmet = document.querySelector(
+            ".approach #second-mobile-helmet",
+        );
+    };
+
+    const mobileAnimations = () => {
+        mTlHelmet1 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: hero,
+                    start: "top center",
+                    end: "bottom 80%",
+                    pin: helmet,
+                    scrub: true,
+                },
+            })
+            .fromTo(
+                helmet,
+                {
+                    "--c": "#FF0000",
+                },
+                {
+                    "--c": "#cdf0ff",
+                },
+            );
+
+        mTlHelmet2 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: secondMobileHelmet,
+                    start: "top bottom",
+                    end: "top top",
+                    scrub: true,
+                },
+            })
+            .fromTo(
+                secondMobileHelmet,
+                {
+                    "--c": "#cdf0ff",
+                },
+                {
+                    "--c": "#EDD4F8",
+                },
+            );
+
+        mTlSplit2 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: splitRight,
+                    start: "top bottom",
+                    end: "top top",
+                    scrub: true,
+                },
+            })
+            .to(splitContainer, {
+                "--progress": 0.99,
+            });
+    };
+
+    const desktopAnimations = () => {
+        dTlSplit2Left = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: splitLeft,
+                    start: "bottom bottom",
+                    end: "bottom top",
+                    scrub: true,
+                    pinSpacing: false,
+                    pin: splitLeft,
+                },
+            })
+            .to(splitContainer, {
+                "--progress": 0.99,
+            })
+            .to(
+                helmet,
+                {
+                    "--c": "#EDD4F8",
+                    x: "-30vw",
+                },
+
+                "<",
+            );
+
+        dTlSplit2Right = gsap.timeline({
+            scrollTrigger: {
+                trigger: splitLeft,
+                start: "bottom bottom",
+                end: "bottom top",
+                pin: splitRight,
+                scrub: true,
+            },
+        });
+
+        dTlHelmetPin = gsap.timeline({
+            scrollTrigger: {
+                trigger: helmet,
+                start: "center-=50px center",
+                endTrigger: scrollContainer,
+                end: "bottom bottom",
+                pin: helmet,
+                scrub: true,
+            },
+        });
+
+        dTlHelmet1 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: helmet,
+                    start: "center-=50px center",
+                    endTrigger: hero,
+                    end: "bottom top",
+                    scrub: true,
+                },
+            })
+            .fromTo(
+                helmet,
+                {
+                    "--c": "#FF0000",
+                },
+                {
+                    "--c": "#cdf0ff",
+                },
+            );
+
+        dTlHelmet2 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: hero,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true,
+                },
+            })
+            .to(helmet, {
+                x: "30vw",
+            });
+    };
+
+    const init = () => {
+        setDOMElements();
+
+        mm = gsap.matchMedia();
+
+        mm.add("(width < 1024px )", () => {
+            mobileAnimations();
+        });
+
+        mm.add("(width > 1024px )", () => {
+            desktopAnimations();
+        });
+
+        gTlSplit1 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: hero,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true,
+                },
+            })
+            .to(splitContainer, {
+                "--progress": 0.01,
+            })
+            .to(
+                hero,
+                {
+                    "--offset": 1,
+                },
+                "<",
+            );
+    };
+
+    const cleanup = () => {
+        mm?.revert();
+        mm = null;
+        gTlSplit1?.kill();
+        gTlSplit1 = null;
+        mTlHelmet1?.kill();
+        mTlHelmet1 = null;
+        mTlHelmet2?.kill();
+        mTlHelmet2 = null;
+        mTlSplit2?.kill();
+        mTlSplit2 = null;
+        dTlSplit2Left?.kill();
+        dTlSplit2Left = null;
+        dTlSplit2Right?.kill();
+        dTlSplit2Right = null;
+        dTlHelmetPin?.kill();
+        dTlHelmetPin = null;
+        dTlHelmet1?.kill();
+        dTlHelmet1 = null;
+        dTlHelmet2?.kill();
+        dTlHelmet2 = null;
+
+        scrollContainer = null;
+        splitContainer = null;
+        hero = null;
+        splitRight = null;
+        splitLeft = null;
+        helmet = null;
+        secondMobileHelmet = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
