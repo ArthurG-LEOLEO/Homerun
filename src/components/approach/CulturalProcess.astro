@@ -10,7 +10,7 @@ const { blok } = Astro.props;
 ---
 
 <div id="cultural-process" class="w-5/6">
-    <h2 class="text-h2 font-space mx-gutter mb-48">
+    <h2 class="text-title-2 mx-gutter mb-48">
         {blok.second_cultural_title}
     </h2>
     <div class="flex flex-col gap-6">
@@ -18,7 +18,7 @@ const { blok } = Astro.props;
             blok.cultural_accordions.map((item: SbBlokData) => (
                 <button class="flex justify-between gap-10 border border-white/40 p-40 text-left">
                     <div>
-                        <div class="text-p22 font-bold">{item.title}</div>
+                        <div class="text-p-22">{item.title}</div>
                         <div class="h-0 overflow-hidden">
                             <div
                                 class="pt-24"

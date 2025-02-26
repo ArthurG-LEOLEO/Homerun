@@ -23,12 +23,20 @@
     --text-p16--line-height: 24px;
     --text-p20: 2rem;
     --text-p20--line-height: 29px;
+    --text-p20-mobile: 1.6rem;
+    --text-p20-mobile--line-height: 24px;
     --text-p22: 2.2rem;
     --text-p22--line-height: 30px;
+    --text-p22-mobile: 1.8rem;
+    --text-p22-mobile--line-height: 25px;
     --text-p24: 2.4rem;
     --text-p24--line-height: 33px;
+    --text-p24-mobile: 1.8rem;
+    --text-p24-mobile--line-height: 25px;
     --text-h1: 7.6rem;
     --text-h1--line-height: 97px;
+    --text-h1-mobile: 4rem;
+    --text-h1-mobile--line-height: 43px;
     --text-h2: 5.6rem;
     --text-h2--line-height: 72px;
     --text-h2-tablet: 4.5rem;
@@ -37,8 +45,12 @@
     --text-h2-mobile--line-height: 40px;
     --text-h3: 4rem;
     --text-h3--line-height: 51px;
+    --text-h3-mobile: 2.2rem;
+    --text-h3-mobile--line-height: 30px;
     --text-h4: 3.2rem;
     --text-h4--line-height: 40px;
+    --text-h4-mobile: 2rem;
+    --text-h4-mobile--line-height: 21px;
     --text-h5: 1.4rem;
     --text-h5--line-height: 19px;
     --text-cta16: 1.6rem;
@@ -47,6 +59,10 @@
     --text-cta32--line-height: 44px;
     --text-cta32-mobile: 2.4rem;
     --text-cta32-mobile--line-height: 32px;
+    --text-tagbig: 2rem;
+    --text-tagbig--line-height: 24px;
+    --text-tagbig-mobile: 1.4rem;
+    --text-tagbig-mobile--line-height: 17px;
 
     --container-container: 1440px;
 
@@ -104,12 +120,40 @@
         display: inline-block;
     }
 
+    .text-title-1 {
+        @apply text-h1-mobile md:text-h1;
+        @apply font-space;
+    }
     .text-title-2 {
         @apply text-h2-mobile sm:text-h2-tablet md:text-h2;
         @apply font-space;
     }
+    .text-title-3 {
+        @apply text-h3-mobile md:text-h3;
+        @apply font-space;
+    }
+    .text-title-4 {
+        @apply text-h4-mobile md:text-h4;
+        @apply font-space;
+        @apply font-bold;
+    }
+    .text-p-20 {
+        @apply text-p20-mobile md:text-p20;
+    }
+    .text-p-22 {
+        @apply text-p22-mobile md:text-p22;
+        @apply font-bold;
+    }
+    .text-p-24 {
+        @apply text-p24-mobile md:text-p24;
+    }
     .text-cta-32 {
         @apply text-cta32-mobile md:text-cta32;
         @apply font-space;
+    }
+    .text-tag-big {
+        @apply text-tagbig-mobile md:text-tagbig;
+        @apply font-black;
+        @apply uppercase;
     }
 }

@@ -6,11 +6,11 @@ const { blok } = Astro.props;
 ---
 
 <div class="mb-55">
-    <h2 class="text-h2 font-space mx-gutter mb-36">
+    <h2 class="text-title-2 mx-gutter mb-36">
         {blok.communication_title}
     </h2>
     <div
-        class="px-gutter text-p24 w-full"
+        class="px-gutter text-p-24 w-full"
         set:html={renderRichText(blok.communication_text)}
     />
 </div>
@@ -19,7 +19,7 @@ const { blok } = Astro.props;
         blok.communication_items
             .split(",")
             .map((item: string) => (
-                <div class="font-space text-h4 bg-white px-32 py-24 font-bold text-black">
+                <div class="text-title-4 bg-white px-32 py-24 text-black">
                     {item}
                 </div>
             ))

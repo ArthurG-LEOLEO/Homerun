@@ -12,7 +12,7 @@ const { language, blok } = Astro.props;
 <div class="home" {...storyblokEditable(blok)}>
     <div class="bg-pink flex flex-col items-center justify-center py-300">
         <h1
-            class="text-h1 hero-title block"
+            class="text-title-1 hero-title block"
             set:html={splitText("Home: " + blok.title)}
         />
         <div class="mt-50 flex gap-10">
