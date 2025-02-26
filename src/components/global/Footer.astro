@@ -151,7 +151,7 @@ const { footerData } = Astro.props;
         >
             {
                 footerData.bottom_images?.map((image: FooterImage) => (
-                    <SBImage image={image} />
+                    <SBImage image={image} class="max-h-[40px] w-auto lg:max-h-[50px]" />
                 ))
             }
         </div>
