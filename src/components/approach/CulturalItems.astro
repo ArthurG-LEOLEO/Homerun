@@ -4,25 +4,25 @@ import type { SbBlokData } from "@storyblok/astro";
 const { items } = Astro.props;
 ---
 
-<div id="cultural-items" class="mb-80 w-5/6 text-black">
+<div id="cultural-items" class="mb-140 w-full text-black md:mb-80 md:w-5/6">
     {
         items.map((item: SbBlokData, index: number) => (
             <div
                 class:list={[
-                    "flex w-full gap-40 py-40 pr-40 pl-32",
+                    "flex w-full gap-16 py-24 pr-24 pl-16 md:gap-40 md:py-40 md:pr-40 md:pl-32",
                     {
                         "items-start bg-white": !item.highlight,
                         "bg-orange items-center text-white": item.highlight,
                     },
                 ]}
             >
-                <span class="flex size-56 shrink-0 items-center justify-center rounded-full border-3 text-[2rem]/[56px] font-black">
+                <span class="flex size-40 shrink-0 items-center justify-center rounded-full border-2 text-[1.6rem]/[40px] font-black md:size-56 md:border-3 md:text-[2rem]/[56px]">
                     {String(index + 1).padStart(2, "0")}
                 </span>
                 <div class="flex flex-col">
                     <span class="text-title-4">{item.title}</span>
                     {item.text && (
-                        <span class="text-p-20 mt-16">{item.text}</span>
+                        <span class="text-p-20 mt-8 md:mt-16">{item.text}</span>
                     )}
                 </div>
             </div>

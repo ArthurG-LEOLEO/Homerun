@@ -5,12 +5,16 @@ import { Icon } from "astro-icon/components";
 const { blok } = Astro.props;
 ---
 
+<div class="mt-105 flex aspect-[1440/660] w-full md:mt-130">
+    <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
+    <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
+</div>
 <div
     class="bg-green after:bg-orange relative w-full text-white after:absolute after:inset-y-0 after:right-0 after:left-[50%]"
 >
-    <div class="container-main relative z-[1] flex text-center">
+    <div class="container-main relative z-[1] flex pb-50 text-center md:pb-0">
         <div
-            class="flex w-1/2 translate-y-[-50%] flex-col items-center justify-center gap-55"
+            class="px-gutter flex w-1/2 flex-col items-center justify-center gap-15 md:translate-y-[-20%] md:gap-55"
         >
             <div
                 class="text-title-3 max-w-375"
@@ -23,7 +27,7 @@ const { blok } = Astro.props;
             </div>
         </div>
         <div
-            class="flex w-1/2 translate-y-[-50%] flex-col items-center justify-center gap-55"
+            class="px-gutter flex w-1/2 flex-col items-center justify-center gap-15 md:translate-y-[-20%] md:gap-55"
         >
             <div
                 class="text-title-3 max-w-375"

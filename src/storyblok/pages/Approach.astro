@@ -11,9 +11,9 @@ const { language, blok } = Astro.props;
 ---
 
 <div class="approach">
-    <div class="container-main flex flex-col items-center pt-135">
+    <div class="container-main flex flex-col items-center pt-150 md:pt-135">
         <span
-            class="text-tag-big mb-65 flex items-center justify-center rounded-[50px] border-3 px-24 py-13"
+            class="text-tag-big mb-24 flex items-center justify-center rounded-[50px] border-3 px-16 py-12 md:mb-65 md:px-24 md:py-13"
         >
             {blok.subtitle}
         </span>
@@ -21,16 +21,12 @@ const { language, blok } = Astro.props;
             {blok.title}
         </h1>
     </div>
-    <div class="mt-130 flex aspect-[1440/660] w-full">
-        <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
-        <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
-    </div>
 
     <Hero blok={blok} />
 
-    <div id="cultural-section" class="bg-green py-130 text-white">
+    <div id="cultural-section" class="bg-green py-105 text-white md:py-130">
         <div class="container-main">
-            <div class="ml-[8.333%] w-1/2">
+            <div class="mx-auto w-10/12 md:mx-0 md:ml-[8.333%] md:w-1/2">
                 <CulturalPhilosophy blok={blok} />
                 <CulturalItems items={blok.cultural_items} />
                 <CulturalProcess blok={blok} />
@@ -39,16 +35,19 @@ const { language, blok } = Astro.props;
                         <ArrowLink
                             label={blok.cultural_link[0].label}
                             link={blok.cultural_link[0].link}
-                            className="mt-40"
+                            className="mt-52 md:mt-40"
                         />
                     )
                 }
             </div>
         </div>
     </div>
-    <div id="communication-section" class="bg-orange py-130 text-white">
+    <div
+        id="communication-section"
+        class="bg-orange py-105 text-white md:py-130"
+    >
         <div class="container-main flex justify-end">
-            <div class="mr-[8.333%] w-5/12">
+            <div class="mx-auto w-10/12 md:mx-0 md:mr-[8.333%] md:w-5/12">
                 <BoldAdvertising blok={blok} />
             </div>
         </div>
