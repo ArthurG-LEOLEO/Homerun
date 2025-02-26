@@ -49,19 +49,19 @@ const { footerData } = Astro.props;
 ---
 
 <footer class="border-orange border-b-11 pt-190 pb-10">
-    <div class="container-main flex flex-col md:flex-row-reverse">
+    <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
-            class="flex flex-grow flex-col justify-between gap-25 md:pr-gutter md:pl-42 md:w-1/2"
+            class="flex flex-grow flex-col justify-between gap-25 lg:pr-gutter lg:pl-42 lg:w-1/2"
         >
             <div class="flex justify-end w-full flex-grow gap-40">
-                <div class="size-10/12 max-w-400 px-gutter md:max-w-auto md:size-full md:flex-grow md:px-0">
+                <div class="size-10/12 max-w-400 px-gutter lg:max-w-auto lg:size-full lg:flex-grow lg:px-0">
                     <div
-                        class="flex aspect-square md:max-w-500 items-center justify-center bg-black text-white"
+                        class="flex aspect-square lg:max-w-500 items-center justify-center bg-black text-white"
                     >
                         <span>SPLINE</span>
                     </div>
                 </div>
-                <div class="hidden md:flex md:flex-col md:gap-4 md:self-end">
+                <div class="hidden lg:flex lg:flex-col lg:gap-4 lg:self-end">
                     {
                         footerData.linkedin && (
                             <CTA
@@ -83,8 +83,8 @@ const { footerData } = Astro.props;
                 </div>
             </div>
         </div>
-        <div class="px-gutter pt-16 md:pt-30 md:w-1/2 md:pr-42">
-            <LogoTypo className="mb-65 hidden w-237 md:block" />
+        <div class="px-gutter pt-16 lg:pt-30 lg:w-1/2 lg:pr-42">
+            <LogoTypo className="mb-65 hidden w-237 lg:block" />
             <div class="flex items-end gap-25">
                 <div>
                     <h2 class="text-title-2">{footerData.title}</h2>
@@ -98,7 +98,7 @@ const { footerData } = Astro.props;
                         )
                     }
                 </div>
-                <div class="flex flex-none flex-col gap-4 self-end md:hidden">
+                <div class="flex flex-none flex-col gap-4 self-end lg:hidden">
                     {
                         footerData.linkedin && (
                             <CTA
@@ -144,10 +144,10 @@ const { footerData } = Astro.props;
         </div>
     </div>
     <div
-        class="container-main mt-30 flex flex-col gap-30 md:mt-25 md:flex-row-reverse md:items-end"
+        class="container-main mt-30 flex flex-col gap-30 lg:mt-25 lg:flex-row-reverse lg:items-end"
     >
         <div
-            class="pr-gutter flex items-center gap-32 md:w-1/2 md:justify-end md:pl-42"
+            class="pr-gutter flex items-center gap-32 lg:w-1/2 lg:justify-end lg:pl-42"
         >
             {
                 footerData.bottom_images?.map((image: FooterImage) => (
@@ -155,7 +155,7 @@ const { footerData } = Astro.props;
                 ))
             }
         </div>
-        <div class="pl-gutter flex items-baseline gap-14 md:w-1/2 md:pr-42">
+        <div class="pl-gutter flex items-baseline gap-14 lg:w-1/2 lg:pr-42">
             <p class="text-p14">{footerData.copy}</p>
             {footerData.made_by && <p class="text-p12">{footerData.made_by}</p>}
         </div>
