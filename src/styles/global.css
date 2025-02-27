@@ -21,6 +21,10 @@
     --text-p14--line-height: 24px;
     --text-p16: 1.6rem;
     --text-p16--line-height: 24px;
+    --text-p18: 1.8rem;
+    --text-p18--line-height: 25px;
+    --text-p18-mobile: 1.6rem;
+    --text-p18-mobile--line-height: 22px;
     --text-p20: 2rem;
     --text-p20--line-height: 29px;
     --text-p20-mobile: 1.6rem;
@@ -140,6 +144,9 @@
         @apply text-h4-mobile md:text-h4;
         @apply font-space;
         @apply font-bold;
+    }
+    .text-p-18 {
+        @apply text-p18-mobile md:text-p18;
     }
     .text-p-20 {
         @apply text-p20-mobile md:text-p20;

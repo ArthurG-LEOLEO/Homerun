@@ -1,0 +1,21 @@
+---
+import Title from "../../components/atoms/Title.astro";
+
+const { title, bgColor, color } = Astro.props;
+
+const classes = [
+    'py-100',
+    'md:py-150',
+    `bg-${bgColor}`,
+    `text-${color}`
+];
+---
+
+<div class:list={classes}>
+    <div class="container-main">
+        <h2 class="text-title-1 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            <Title title={title} />
+        </h2>
+        <slot />
+    </div>
+</div>
