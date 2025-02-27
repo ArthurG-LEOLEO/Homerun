@@ -1,0 +1,23 @@
+---
+import { renderRichText } from "@storyblok/astro";
+
+import Title from "../../components/atoms/Title.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="px-gutter mt-45 md:mt-75">
+    <div class="md:flex md:items-end md:max-w-1030 md:mx-auto">
+        <div
+            class="text-p-20 p-32 bg-green text-white -rotate-2 md:flex-1 md:-mr-10 lg:p-64"
+            set:html={renderRichText(blok.left_frame)}
+        />
+        <div
+            class="text-p-20 p-32 bg-blue rotate-2 md:flex-1 md:relative md:bottom-23 md:-ml-10 lg:p-64"
+            set:html={renderRichText(blok.right_frame)}
+        />
+    </div>
+    <h2 class="text-huge text-center mt-80 md:mt-105">
+        <Title title={blok.huge_title[0]} />
+    </h2>
+</div>
