@@ -2,41 +2,13 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 
-import SBVideo from "../../components/global/SBVideo.astro";
-import splitText from "../../utils/splitText";
-import SectionText from "../../components/SectionText.astro";
 import Approach from "../../components/home/Approach.astro";
+import Hero from "../../components/home/Hero.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div class="home" {...storyblokEditable(blok)}>
-    <div class="bg-pink flex flex-col items-center justify-center py-300">
-        <h1
-            class="text-title-1 hero-title block"
-            set:html={splitText("Home: " + blok.title)}
-        />
-        <div class="mt-50 flex gap-10">
-            <div class="bg-orange hero-block size-50"></div>
-            <div class="bg-orange hero-block size-50"></div>
-            <div class="bg-orange hero-block size-50"></div>
-            <div class="bg-orange hero-block size-50"></div>
-            <div class="bg-orange hero-block size-50"></div>
-        </div>
-    </div>
-    <div class="relative aspect-1440/920 bg-black text-white">
-        <SBVideo
-            video={blok.showreel_video}
-            className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div class="absolute inset-0 bg-black/30"></div>
-        <div
-            class="container-main relative flex size-full items-center justify-center"
-        >
-            <h2 class="text-title-2 px-gutter w-8/12 text-center">
-                {blok.showreel_title}
-            </h2>
-        </div>
-    </div>
+<div class="home overflow-hidden" {...storyblokEditable(blok)}>
+    <Hero blok={blok} />
 
     <!-- <SectionText /> -->
     <Approach blok={blok.approach[0]} />
@@ -49,56 +21,4 @@ const { language, blok } = Astro.props;
     </div>
 </div>
 
-<script>
-    let title: NodeListOf<Element> | null;
-    let blocks: NodeListOf<Element> | null;
-    let tl: gsap.core.Timeline | null;
-
-    const setVariables = () => {
-        blocks = document.querySelectorAll(".home .hero-block");
-        title = document.querySelectorAll(".home .hero-title .word-inner");
-    };
-    const init = () => {
-        setVariables();
-
-        tl = gsap
-            .timeline({
-                defaults: {
-                    ease: "power4",
-                },
-            })
-            .from(title, {
-                duration: 1,
-                y: "100%",
-                stagger: 0.2,
-            })
-            .from(
-                blocks,
-                {
-                    duration: 1.2,
-                    y: 50,
-                    opacity: 0,
-                    stagger: 0.05,
-                    ease: "elastic.out(1,0.3)",
-                },
-                "<+0.2",
-            );
-    };
-
-    const cleanup = () => {
-        if (tl) {
-            tl.kill(); // Stop the timeline
-            tl = null;
-        }
-        title = null;
-        blocks = null;
-    };
-
-    document.addEventListener("astro:page-load", () => {
-        init();
-    });
-
-    document.addEventListener("astro:before-swap", () => {
-        cleanup();
-    });
-</script>
+<script></script>
