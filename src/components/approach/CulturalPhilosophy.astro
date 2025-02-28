@@ -4,17 +4,17 @@ import { renderRichText } from "@storyblok/astro";
 const { blok } = Astro.props;
 ---
 
-<div>
+<div class="lg:w-5/6">
     <h2 class="text-title-2 mx-gutter mb-35 md:mb-48">
         {blok.first_cultural_title}
     </h2>
-    <div class="mb-85 flex w-full flex-col gap-24 lg:flex-row lg:gap-50">
+    <div class="mb-85 flex w-full flex-col gap-24">
         <div
-            class="px-gutter text-p-20 w-full lg:w-1/2"
+            class="px-gutter text-p-20 w-full"
             set:html={renderRichText(blok.first_cultural_column_text)}
         />
         <div
-            class="px-gutter text-p-20 w-full lg:w-1/2"
+            class="px-gutter text-p-20 w-full"
             set:html={renderRichText(blok.second_cultural_column_text)}
         />
     </div>
