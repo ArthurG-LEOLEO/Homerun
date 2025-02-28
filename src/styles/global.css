@@ -59,8 +59,16 @@
     --text-h4--line-height: 4rem;
     --text-h4-mobile: 2rem;
     --text-h4-mobile--line-height: 2.1rem;
-    --text-h5: 1.4rem;
-    --text-h5--line-height: 1.9rem;
+    --text-h5: 3rem;
+    --text-h5--line-height: 4.1rem;
+    --text-h5-mobile: 2rem;
+    --text-h5-mobile--line-height: 2.7rem;
+    --text-h6: 2.4rem;
+    --text-h6--line-height: 3.3rem;
+    --text-h6-mobile: 2rem;
+    --text-h6-mobile--line-height: 2.5rem;
+    --text-h7: 1.4rem;
+    --text-h7--line-height: 1.9rem;
     --text-cta16: 1.6rem;
     --text-cta16--line-height: 2.2rem;
     --text-cta32: 3.2rem;
@@ -147,6 +155,19 @@
     }
     .text-title-4 {
         @apply text-h4-mobile md:text-h4;
+        @apply font-space;
+        @apply font-bold;
+    }
+    .text-title-5 {
+        @apply text-h5-mobile md:text-h5;
+        @apply font-space;
+    }
+    .text-title-6 {
+        @apply text-h6-mobile md:text-h6;
+        @apply font-space;
+    }
+    .text-title-7 {
+        @apply text-h7;
         @apply font-space;
         @apply font-bold;
     }
