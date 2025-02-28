@@ -4,6 +4,7 @@ import { Icon } from "astro-icon/components";
 import Title from "../../components/atoms/Title.astro";
 import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
+import SBImage from "../../components/global/SBImage.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -68,6 +69,33 @@ const { language, blok } = Astro.props;
                     {blok.people_right_col_text}
                 </p>
             </div>
+        </div>
+        <div class="mt-30 md:mt-65">
+            <h3 class="text-title-3 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+                <Title title={blok.people_agency_title[0]} />
+            </h3>
+            {blok.people_agency_photo && (
+                <div class="mt-24 px-gutter md:mt-45 mx-auto lg:w-8/12 xl:w-6/12">
+                    <SBImage
+                        class="size-full lg:max-w-none lg:w-[calc(100%+4rem)] lg:-ml-[2rem]"
+                        image={blok.people_agency_photo}
+                    />
+                </div>
+            )}
+        </div>
+        <div class="mt-24 md:mt-42 mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.people_agency_legend_title && (
+                <h4 class="text-title-7 px-gutter mb-16 md:mb-23">
+                    {blok.people_agency_legend_title}
+                </h4>
+            )}
+            {Array.isArray(blok.people_agency_legend_list) && blok.people_agency_legend_list.length > 0 && (
+                <ul class="text-p14 gap-8 md:columns-2">
+                    {blok.people_agency_legend_list.map((item: { Text: string }) => (
+                        <li class="px-gutter">{item.Text}</li>
+                    ))}
+                </ul>
+            )}
         </div>
     </Section>
     <Section title={blok.clients_title[0]} bgColor="green" color="white" />
