@@ -72,7 +72,7 @@
     --text-tagbig-mobile: 1.4rem;
     --text-tagbig-mobile--line-height: 1.7rem;
 
-    --container-container: 1440px;
+    --breakpoint-container: 1440px;
 
     --spacing: 0.1rem;
     --spacing-gutter: 1rem;
@@ -97,12 +97,17 @@
         display: block;
         max-width: 100%;
     }
+
+    @media (min-width: 1440px) {
+        html {
+            font-size: 0.6944444vw;
+        }
+    }
 }
 
 @layer components {
     .container-main {
         width: 100%;
-        max-width: 1440px;
         padding-inline: 1rem;
         margin-inline: auto;
     }
