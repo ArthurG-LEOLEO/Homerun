@@ -9,9 +9,11 @@ const { language, blok } = Astro.props;
 ---
 
 <div class="about">
-    <div class="container-main flex flex-col items-center pt-150 pb-120 lg:pt-135 lg:pb-145">
+    <div
+        class="container-main flex flex-col items-center pt-150 pb-120 lg:pt-135 lg:pb-145"
+    >
         <span
-            class="text-tag-big mb-24 flex items-center justify-center rounded-[50px] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+            class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
         >
             {blok.subtitle}
         </span>
@@ -21,26 +23,50 @@ const { language, blok } = Astro.props;
         <Hero blok={blok} />
     </div>
     <Section title={blok.people_title[0]} bgColor="black" color="white">
-        <div class="flex flex-col gap-30 mt-32 mx-auto w-10/12 md:flex-row md:gap-0 md:mt-50 lg:w-8/12 xl:w-6/12">
-            <div class="flex flex-col gap-32 px-gutter md:gap-42 md:flex-1 md:pr-33">
+        <div
+            class="mx-auto mt-32 flex w-10/12 flex-col gap-30 md:mt-50 md:flex-row md:gap-0 lg:w-8/12 xl:w-6/12"
+        >
+            <div
+                class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
+            >
                 <div class="relative flex flex-col">
-                    <div class="absolute text-orange w-150 h-107 -top-13 -left-38 md:w-217 md:h-154 md:-top-22 md:-left-67">
-                        <Icon name="punks" size="full"/>
+                    <div
+                        class="text-orange absolute -top-13 -left-38 h-107 w-150 md:-top-22 md:-left-67 md:h-154 md:w-217"
+                    >
+                        <Icon name="punks" size="full" />
                     </div>
-                    <span class="relative text-[4.5rem]/[45px] md:text-[6rem]/[60px]">{blok.people_left_col_emoji}</span>
-                    <span class="relative text-tag-big">{blok.people_left_col_title}</span>
+                    <span
+                        class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
+                        >{blok.people_left_col_emoji}</span
+                    >
+                    <span class="text-tag-big relative"
+                        >{blok.people_left_col_title}</span
+                    >
                 </div>
-                <p class="whitespace-pre-wrap text-p-18">{blok.people_left_col_text}</p>
+                <p class="text-p-18 whitespace-pre-wrap">
+                    {blok.people_left_col_text}
+                </p>
             </div>
-            <div class="flex flex-col gap-32 px-gutter md:gap-42 md:flex-1 md:pr-33">
+            <div
+                class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
+            >
                 <div class="relative flex flex-col">
-                    <div class="absolute text-blue w-107 h-82 -top-5 -left-17 md:w-135 md:h-103 md:top-3 md:-left-18">
-                        <Icon name="scouts" size="full"/>
+                    <div
+                        class="text-blue absolute -top-5 -left-17 h-82 w-107 md:top-3 md:-left-18 md:h-103 md:w-135"
+                    >
+                        <Icon name="scouts" size="full" />
                     </div>
-                    <span class="relative text-[4.5rem]/[45px] md:text-[6rem]/[60px]">{blok.people_right_col_emoji}</span>
-                    <span class="relative text-tag-big text-black">{blok.people_right_col_title}</span>
+                    <span
+                        class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
+                        >{blok.people_right_col_emoji}</span
+                    >
+                    <span class="text-tag-big relative text-black"
+                        >{blok.people_right_col_title}</span
+                    >
                 </div>
-                <p class="whitespace-pre-wrap text-p-18">{blok.people_right_col_text}</p>
+                <p class="text-p-18 whitespace-pre-wrap">
+                    {blok.people_right_col_text}
+                </p>
             </div>
         </div>
     </Section>

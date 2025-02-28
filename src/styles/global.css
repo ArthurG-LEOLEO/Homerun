@@ -16,66 +16,66 @@
 
     --text-*: initial;
     --text-p12: 1.2rem;
-    --text-p12--line-height: 24px;
+    --text-p12--line-height: 2.4rem;
     --text-p14: 1.4rem;
-    --text-p14--line-height: 24px;
+    --text-p14--line-height: 2.4rem;
     --text-p16: 1.6rem;
-    --text-p16--line-height: 24px;
+    --text-p16--line-height: 2.4rem;
     --text-p18: 1.8rem;
-    --text-p18--line-height: 25px;
+    --text-p18--line-height: 2.5rem;
     --text-p18-mobile: 1.6rem;
-    --text-p18-mobile--line-height: 22px;
+    --text-p18-mobile--line-height: 2.2rem;
     --text-p20: 2rem;
-    --text-p20--line-height: 29px;
+    --text-p20--line-height: 2.9rem;
     --text-p20-mobile: 1.6rem;
-    --text-p20-mobile--line-height: 24px;
+    --text-p20-mobile--line-height: 2.4rem;
     --text-p22: 2.2rem;
-    --text-p22--line-height: 30px;
+    --text-p22--line-height: 3rem;
     --text-p22-mobile: 1.8rem;
-    --text-p22-mobile--line-height: 25px;
+    --text-p22-mobile--line-height: 2.5rem;
     --text-p24: 2.4rem;
-    --text-p24--line-height: 33px;
+    --text-p24--line-height: 3.3rem;
     --text-p24-mobile: 1.8rem;
-    --text-p24-mobile--line-height: 25px;
+    --text-p24-mobile--line-height: 2.5rem;
     --text-p86: 8.6rem;
-    --text-p86--line-height: 109px;
+    --text-p86--line-height: 10.9rem;
     --text-h1: 7.6rem;
-    --text-h1--line-height: 97px;
+    --text-h1--line-height: 9.7rem;
     --text-h1-mobile: 4rem;
-    --text-h1-mobile--line-height: 43px;
+    --text-h1-mobile--line-height: 4.3rem;
     --text-h2: 5.6rem;
-    --text-h2--line-height: 72px;
+    --text-h2--line-height: 7.2rem;
     --text-h2-tablet: 4.5rem;
-    --text-h2-tablet--line-height: 60px;
+    --text-h2-tablet--line-height: 6rem;
     --text-h2-mobile: 3.4rem;
-    --text-h2-mobile--line-height: 40px;
+    --text-h2-mobile--line-height: 4rem;
     --text-h3: 4rem;
-    --text-h3--line-height: 51px;
+    --text-h3--line-height: 5.1rem;
     --text-h3-tablet: 3rem;
-    --text-h3-tablet--line-height: 37px;
+    --text-h3-tablet--line-height: 3.7rem;
     --text-h3-mobile: 2.2rem;
-    --text-h3-mobile--line-height: 30px;
+    --text-h3-mobile--line-height: 3rem;
     --text-h4: 3.2rem;
-    --text-h4--line-height: 40px;
+    --text-h4--line-height: 4rem;
     --text-h4-mobile: 2rem;
-    --text-h4-mobile--line-height: 21px;
+    --text-h4-mobile--line-height: 2.1rem;
     --text-h5: 1.4rem;
-    --text-h5--line-height: 19px;
+    --text-h5--line-height: 1.9rem;
     --text-cta16: 1.6rem;
-    --text-cta16--line-height: 22px;
+    --text-cta16--line-height: 2.2rem;
     --text-cta32: 3.2rem;
-    --text-cta32--line-height: 44px;
+    --text-cta32--line-height: 4.4rem;
     --text-cta32-mobile: 2.4rem;
-    --text-cta32-mobile--line-height: 32px;
+    --text-cta32-mobile--line-height: 3.2rem;
     --text-tagbig: 2rem;
-    --text-tagbig--line-height: 24px;
+    --text-tagbig--line-height: 2.4rem;
     --text-tagbig-mobile: 1.4rem;
-    --text-tagbig-mobile--line-height: 17px;
+    --text-tagbig-mobile--line-height: 1.7rem;
 
     --container-container: 1440px;
 
-    --spacing: 1px;
-    --spacing-gutter: 10px;
+    --spacing: 0.1rem;
+    --spacing-gutter: 1rem;
 }
 
 @layer base {
@@ -103,7 +103,7 @@
     .container-main {
         width: 100%;
         max-width: 1440px;
-        padding-inline: 10px;
+        padding-inline: 1rem;
         margin-inline: auto;
     }
 
