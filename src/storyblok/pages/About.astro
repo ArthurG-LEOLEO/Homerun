@@ -11,6 +11,7 @@ import Section from "../../components/about/Section.astro";
 import SBImage from "../../components/global/SBImage.astro";
 import LogosGrid from "../sections/LogosGrid.astro";
 import SBRichText from "../../components/global/SBRichText.astro";
+import SBListIcon from "../../components/global/SBListIcon.astro";
 
 
 const { language, blok } = Astro.props;
@@ -202,12 +203,18 @@ const { language, blok } = Astro.props;
                     content={blok.worldwide_content}
                 />
             )}
+            {blok.worldwide_list && (
+                <SBListIcon 
+                    items={blok.worldwide_list} 
+                    className="mt-30 md:mt-72"
+                />
+            )}
             {
                 blok.worldwide_link[0]?.label && (
                     <ArrowLink
                         label={blok.worldwide_link[0].label}
                         link={blok.worldwide_link[0].link}
-                        className="mt-40 md:mt-50"
+                        className="mt-45 md:mt-50"
                     />
                 )
             }
