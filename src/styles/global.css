@@ -39,6 +39,8 @@
     --text-p24-mobile--line-height: 2.5rem;
     --text-p86: 8.6rem;
     --text-p86--line-height: 10.9rem;
+    --text-p86-mobile: 3.8rem;
+    --text-p86-mobile--line-height: 4.6rem;
     --text-h1: 7.6rem;
     --text-h1--line-height: 9.7rem;
     --text-h1-mobile: 4rem;
@@ -183,6 +185,9 @@
     }
     .text-p-24 {
         @apply text-p24-mobile md:text-p24;
+    }
+    .text-p-86 {
+        @apply text-p86-mobile md:text-p86;
     }
     .text-cta-32 {
         @apply text-cta32-mobile md:text-cta32;
