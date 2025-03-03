@@ -4,26 +4,50 @@ import ArrowLink from "../atoms/ArrowLink.astro";
 import SBImage from "../global/SBImage.astro";
 
 const { blok } = Astro.props;
-
-console.log(blok);
 ---
 
-<div class="py-120 text-center md:py-180">
-    <div class="text-p-86 mx-auto max-w-1050">
+<div
+    class="container:text-[1rem] py-120 text-center text-[1rem] md:py-180 lg:text-[0.6944444vw]"
+    id="home-approach"
+>
+    <div
+        class="text-p86-mobile mx-auto w-full lg:w-[71vw] lg:text-[8.6em]/[1.27em]"
+    >
         <span>{blok.title_first_part}</span>
-        <div>
+        <a class="relative inline-block" href="#" id="first-cat">
+            <div
+                class="absolute top-[0.2em] right-[0.8em] bottom-[0.2em] left-[0.8em] rotate-[-1.9deg]"
+            >
+                <div
+                    id="first-cat-hl"
+                    class="bg-pink size-full origin-left scale-x-0"
+                >
+                </div>
+            </div>
             <span
-                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                id="first-cat-p1"
+                class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
                 >{blok.first_category_first_part}</span
             >
-            <div class="relative inline-block h-97 w-138 align-bottom">
+            <div
+                class="pointer-events-none relative inline-block h-[1.24em] w-[1.76em] align-bottom"
+            >
                 <div
-                    class="absolute top-[50%] left-[50%] size-138 translate-[-50%]"
+                    class="absolute top-[50%] left-[50%] size-[1.76em] translate-[-50%]"
                 >
                     {
                         blok.first_category_cases.map(
-                            ({ asset }: { asset: SbBlokData }) => (
-                                <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
+                            (
+                                { asset }: { asset: SbBlokData },
+                                index: number,
+                            ) => (
+                                <div
+                                    class:list={[
+                                        "absolute top-0 left-0 size-full overflow-hidden rounded-full",
+                                        { "z-[-1] scale-[0.99]": index > 0 },
+                                    ]}
+                                    id={`fc-img-${index}`}
+                                >
                                     <SBImage
                                         class="size-full object-cover"
                                         cover
@@ -36,24 +60,53 @@ console.log(blok);
                 </div>
             </div>
             <span
-                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                id="first-cat-p2"
+                class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
                 >{blok.first_category_second_part}</span
             >
-        </div>
+        </a>
         <span>{blok.title_second_part}</span>
-        <div class="inline-block">
-            <span
-                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
-                >{blok.second_category_first_part}</span
-            >
-            <div class="relative inline-block h-97 w-138 align-bottom">
+        <a
+            class="relative inline-block"
+            href="#"
+            id="second-cat"
+            style="color: #181817;"
+        >
+            <div class="relative inline-block">
                 <div
-                    class="absolute top-[50%] left-[50%] size-138 translate-[-50%]"
+                    class="absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] translate-x-[1em] rotate-[1.1deg]"
+                >
+                    <div
+                        id="second-cat-hl1"
+                        class="bg-orange size-full origin-left scale-x-0"
+                    >
+                    </div>
+                </div>
+                <span
+                    id="second-cat-p1"
+                    class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
+                    >{blok.second_category_first_part}</span
+                >
+            </div>
+            <div
+                class="pointer-events-none relative inline-block h-[1.24em] w-[1.76em] align-bottom"
+            >
+                <div
+                    class="absolute top-[50%] left-[50%] size-[1.76em] translate-[-50%]"
                 >
                     {
-                        blok.second_category_cases?.map(
-                            ({ asset }: { asset: SbBlokData }) => (
-                                <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
+                        blok.second_category_cases.map(
+                            (
+                                { asset }: { asset: SbBlokData },
+                                index: number,
+                            ) => (
+                                <div
+                                    class:list={[
+                                        "absolute top-0 left-0 size-full overflow-hidden rounded-full",
+                                        { "z-[-1] scale-[0.99]": index > 0 },
+                                    ]}
+                                    id={`sc-img-${index}`}
+                                >
                                     <SBImage
                                         class="size-full object-cover"
                                         cover
@@ -65,11 +118,22 @@ console.log(blok);
                     }
                 </div>
             </div>
-            <span
-                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
-                >{blok.second_category_second_part}</span
-            >
-        </div>
+            <div class="relative inline-block">
+                <div
+                    class="absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] z-[-1] rotate-[-1.07deg]"
+                >
+                    <div
+                        id="second-cat-hl2"
+                        class="bg-orange size-full origin-left scale-x-0"
+                    >
+                    </div>
+                </div>
+                <span
+                    class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
+                    >{blok.second_category_second_part}</span
+                >
+            </div>
+        </a>
         <span>{blok.title_third_part}</span>
     </div>
 
@@ -79,3 +143,289 @@ console.log(blok);
         className="mt-24 md:mt-40"
     />
 </div>
+
+<script>
+    let ha: HTMLElement | null;
+    let firstCat: HTMLElement | null;
+    let firstCatP1: HTMLElement | null;
+    let firstCatP2: HTMLElement | null;
+    let firstCatHl: HTMLElement | null;
+    let fcImg1: HTMLElement | null;
+    let fcImg2: HTMLElement | null;
+    let fcImg3: HTMLElement | null;
+    let secondCat: HTMLElement | null;
+    let secondCatP1: HTMLElement | null;
+    let secondCatHl1: HTMLElement | null;
+    let secondCatHl2: HTMLElement | null;
+    let scImg1: HTMLElement | null;
+    let scImg2: HTMLElement | null;
+    let scImg3: HTMLElement | null;
+
+    const setVariables = () => {
+        firstCat = document.querySelector("#home-approach #first-cat");
+        firstCatP1 = document.querySelector("#home-approach #first-cat-p1");
+        firstCatP2 = document.querySelector("#home-approach #first-cat-p2");
+        firstCatHl = document.querySelector("#home-approach #first-cat-hl");
+        fcImg1 = document.querySelector("#home-approach #fc-img-0");
+        fcImg2 = document.querySelector("#home-approach #fc-img-1");
+        fcImg3 = document.querySelector("#home-approach #fc-img-2");
+        secondCat = document.querySelector("#home-approach #second-cat");
+        secondCatP1 = document.querySelector("#home-approach #second-cat-p1");
+        secondCatHl1 = document.querySelector("#home-approach #second-cat-hl1");
+        secondCatHl2 = document.querySelector("#home-approach #second-cat-hl2");
+        scImg1 = document.querySelector("#home-approach #sc-img-0");
+        scImg2 = document.querySelector("#home-approach #sc-img-1");
+        scImg3 = document.querySelector("#home-approach #sc-img-2");
+    };
+
+    const firstCatEnter = () => {
+        gsap.timeline()
+            .to(fcImg1, {
+                duration: 1,
+                ease: "elastic.out(1,0.7)",
+                scale: 1.5,
+                xPercent: -240,
+                yPercent: -70,
+                overwrite: true,
+            })
+            .to(
+                fcImg2,
+                {
+                    duration: 1,
+                    ease: "elastic.out(1,0.5)",
+                    scale: 1.5,
+                    xPercent: -30,
+                    yPercent: -140,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                fcImg3,
+                {
+                    duration: 1,
+                    ease: "elastic.out(1,0.5)",
+                    scale: 1.5,
+                    xPercent: 160,
+                    yPercent: -95,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                firstCatP1,
+                {
+                    duration: 0.8,
+                    ease: "elastic.out(1,1)",
+                    x: "1em",
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                firstCatP2,
+                {
+                    duration: 0.8,
+                    ease: "elastic.out(1,1)",
+                    x: "-1em",
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                firstCatHl,
+                {
+                    duration: 0.5,
+                    ease: "power4.out",
+                    scaleX: 1,
+                    overwrite: true,
+                },
+                "<",
+            );
+    };
+
+    const firstCatLeave = () => {
+        gsap.timeline()
+            .to(fcImg1, {
+                duration: 0.6,
+                xPercent: 0,
+                yPercent: 0,
+                scale: 1,
+                overwrite: true,
+                ease: "elastic.out(0.8,1)",
+            })
+            .to(
+                [fcImg2, fcImg3],
+                {
+                    duration: 0.6,
+                    xPercent: 0,
+                    yPercent: 0,
+                    scale: 0.99,
+                    overwrite: true,
+                    ease: "elastic.out(0.8,1)",
+                },
+                "<",
+            )
+            .to(
+                [firstCatP1, firstCatP2],
+                {
+                    duration: 0.6,
+                    ease: "elastic.out(0.8,1)",
+                    x: 0,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                firstCatHl,
+                {
+                    duration: 0.2,
+                    ease: "power3.out",
+                    scaleX: 0,
+                    overwrite: true,
+                },
+                "<",
+            );
+    };
+
+    const secondCatEnter = () => {
+        gsap.timeline()
+            .to(scImg1, {
+                duration: 1,
+                ease: "elastic.out(1,0.7)",
+                scale: 1.5,
+                xPercent: -250,
+                yPercent: -110,
+                overwrite: true,
+            })
+            .to(
+                scImg2,
+                {
+                    duration: 1,
+                    ease: "elastic.out(1,0.5)",
+                    scale: 1.5,
+                    xPercent: -70,
+                    yPercent: -155,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                scImg3,
+                {
+                    duration: 1,
+                    ease: "elastic.out(1,0.5)",
+                    scale: 1.5,
+                    xPercent: 120,
+                    yPercent: -85,
+                    overwrite: true,
+                },
+                "<",
+            )
+
+            .to(
+                secondCatP1,
+                {
+                    duration: 0.8,
+                    ease: "elastic.out(1,1)",
+                    x: "1em",
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                [secondCatHl1, secondCatHl2],
+                {
+                    duration: 0.5,
+                    ease: "power4.out",
+                    scaleX: 1,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                secondCat,
+                {
+                    duration: 0.15,
+                    color: "#F8F7EC",
+                    overwrite: true,
+                    delay: 0.1,
+                },
+                "<",
+            );
+    };
+
+    const secondCatLeave = () => {
+        gsap.timeline()
+            .to(scImg1, {
+                duration: 0.6,
+                xPercent: 0,
+                yPercent: 0,
+                scale: 1,
+                overwrite: true,
+                ease: "elastic.out(0.8,1)",
+            })
+            .to(
+                [scImg2, scImg3],
+                {
+                    duration: 0.6,
+                    xPercent: 0,
+                    yPercent: 0,
+                    scale: 0.99,
+                    overwrite: true,
+                    ease: "elastic.out(0.8,1)",
+                },
+                "<",
+            )
+            .to(
+                secondCat,
+                {
+                    duration: 0.3,
+                    ease: "power4.out",
+                    color: "#181817",
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                secondCatP1,
+                {
+                    duration: 0.6,
+                    ease: "elastic.out(0.8,1)",
+                    x: 0,
+                    overwrite: true,
+                },
+                "<",
+            )
+            .to(
+                [secondCatHl2, secondCatHl1],
+                {
+                    duration: 0.2,
+                    stagger: 0.1,
+                    ease: "power3.out",
+                    scaleX: 0,
+                    overwrite: true,
+                },
+                "<",
+            );
+    };
+
+    const init = () => {
+        setVariables();
+
+        firstCat?.addEventListener("mouseenter", firstCatEnter);
+        firstCat?.addEventListener("mouseleave", firstCatLeave);
+        secondCat?.addEventListener("mouseenter", secondCatEnter);
+        secondCat?.addEventListener("mouseleave", secondCatLeave);
+    };
+
+    const cleanup = () => {
+        firstCat?.removeEventListener("mouseenter", firstCatEnter);
+        firstCat?.removeEventListener("mouseleave", firstCatLeave);
+        secondCat?.removeEventListener("mouseenter", secondCatEnter);
+        secondCat?.removeEventListener("mouseleave", secondCatLeave);
+    };
+
+    document.addEventListener("astro:page-load", init);
+    document.addEventListener("astro:before-swap", cleanup);
+</script>
