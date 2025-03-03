@@ -12,6 +12,7 @@ import SBImage from "../../components/global/SBImage.astro";
 import LogosGrid from "../sections/LogosGrid.astro";
 import SBRichText from "../../components/global/SBRichText.astro";
 import SBListIcon from "../../components/global/SBListIcon.astro";
+import SBListOrdered from "../../components/global/SBListOrdered.astro";
 
 
 const { language, blok } = Astro.props;
@@ -225,6 +226,12 @@ const { language, blok } = Astro.props;
             {blok.mindset_content && (
                 <SBRichText 
                     content={blok.mindset_content}
+                />
+            )}
+            {blok.mindset_list && (
+                <SBListOrdered 
+                    items={blok.mindset_list} 
+                    className="mt-42 md:mt-65"
                 />
             )}
         </div>
