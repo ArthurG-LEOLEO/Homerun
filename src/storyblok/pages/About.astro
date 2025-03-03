@@ -105,7 +105,7 @@ const { language, blok } = Astro.props;
             )}
         </div>
     </Section>
-    <Section title={blok.clients_title[0]} bgColor="green" color="white">
+    <Section title={blok.clients_title[0]} bgColor="blue" color="black">
         {blok.clients_intro && (
             <p class="whitespace-pre-wrap text-p-24 mt-25 px-gutter mx-auto w-10/12 md:mt-55 lg:w-8/12 xl:w-6/12">{blok.clients_intro}</p>
         )}
@@ -177,7 +177,7 @@ const { language, blok } = Astro.props;
             )
         }
     </Section>
-    <Section title={blok.sports_title[0]} bgColor="blue" color="black">
+    <Section title={blok.sports_title[0]} bgColor="green" color="white">
         <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
             {blok.sports_content && (
                 <SBRichText 
@@ -195,6 +195,40 @@ const { language, blok } = Astro.props;
             }
         </div>
     </Section>
-    <Section title={blok.worldwide_title[0]} bgColor="pink" color="black" />
-    <Section title={blok.mindset_title[0]} bgColor="orange" color="white" />
+    <Section title={blok.worldwide_title[0]} bgColor="pink" color="black">
+        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.worldwide_content && (
+                <SBRichText 
+                    content={blok.worldwide_content}
+                />
+            )}
+            {
+                blok.worldwide_link[0]?.label && (
+                    <ArrowLink
+                        label={blok.worldwide_link[0].label}
+                        link={blok.worldwide_link[0].link}
+                        className="mt-40 md:mt-50"
+                    />
+                )
+            }
+        </div>
+    </Section>
+    <Section title={blok.mindset_title[0]} bgColor="orange" color="white">
+        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.mindset_content && (
+                <SBRichText 
+                    content={blok.mindset_content}
+                />
+            )}
+        </div>
+    </Section>
+    <Section title={blok.tomorrows_title[0]} bgColor="black" color="white">
+        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.tomorrows_content && (
+                <SBRichText 
+                    content={blok.tomorrows_content}
+                />
+            )}
+        </div>
+    </Section>
 </div>

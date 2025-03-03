@@ -28,7 +28,7 @@ const MAX_LOGOS_DESKTOP = 8;
     >
         <div class="grid grid-cols-2 gap-1 md:grid-cols-4">
             {Array.from({ length: MAX_LOGOS_DESKTOP }, (_, index) => (
-                <div class={`relative aspect-square outline-1 outline-white ${index >= MAX_LOGOS_MOBILE ? 'hidden md:block' : ''}`}>
+                <div class={`relative aspect-square outline-1 outline-current ${index >= MAX_LOGOS_MOBILE ? 'hidden md:block' : ''}`}>
                     <div class="logo-container absolute inset-0 p-30 lg:p-40">
                         <div class="relative h-full w-full flex items-center justify-center">
                             <SBImage
