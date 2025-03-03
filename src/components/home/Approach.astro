@@ -1,54 +1,81 @@
 ---
+import type { SbBlokData } from "@storyblok/astro";
 import ArrowLink from "../atoms/ArrowLink.astro";
-
-interface CaseStory {
-    uuid: string;
-    name: string;
-    content: {
-        title: string;
-    };
-    full_slug: string;
-}
-
-interface ApproachBlok {
-    title_first_part: string;
-    first_category_first_part: string;
-    first_category_second_part: string;
-    first_category_cases: CaseStory[];
-    title_second_part: string;
-    second_category_first_part: string;
-    second_category_second_part: string;
-    second_category_cases: CaseStory[];
-    title_third_part: string;
-    projects_link: any[];
-}
+import SBImage from "../global/SBImage.astro";
 
 const { blok } = Astro.props;
+
+console.log(blok);
 ---
 
-<div class="px-150 py-100 text-center">
-    <h1 class="text-title-1">
+<div class="py-120 text-center md:py-180">
+    <div class="text-p-86 mx-auto max-w-1050">
         <span>{blok.title_first_part}</span>
-        <span>{blok.first_category_first_part}</span>
-        <span>{blok.first_category_second_part}</span>
+        <div>
+            <span
+                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                >{blok.first_category_first_part}</span
+            >
+            <div class="relative inline-block h-97 w-138 align-bottom">
+                <div
+                    class="absolute top-[50%] left-[50%] size-138 translate-[-50%]"
+                >
+                    {
+                        blok.first_category_cases.map(
+                            ({ asset }: { asset: SbBlokData }) => (
+                                <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
+                                    <SBImage
+                                        class="size-full object-cover"
+                                        cover
+                                        image={asset}
+                                    />
+                                </div>
+                            ),
+                        )
+                    }
+                </div>
+            </div>
+            <span
+                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                >{blok.first_category_second_part}</span
+            >
+        </div>
         <span>{blok.title_second_part}</span>
-        <span>{blok.second_category_first_part}</span>
-        <span>{blok.second_category_second_part}</span>
+        <div class="inline-block">
+            <span
+                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                >{blok.second_category_first_part}</span
+            >
+            <div class="relative inline-block h-97 w-138 align-bottom">
+                <div
+                    class="absolute top-[50%] left-[50%] size-138 translate-[-50%]"
+                >
+                    {
+                        blok.second_category_cases?.map(
+                            ({ asset }: { asset: SbBlokData }) => (
+                                <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
+                                    <SBImage
+                                        class="size-full object-cover"
+                                        cover
+                                        image={asset}
+                                    />
+                                </div>
+                            ),
+                        )
+                    }
+                </div>
+            </div>
+            <span
+                class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-5 after:bg-current"
+                >{blok.second_category_second_part}</span
+            >
+        </div>
         <span>{blok.title_third_part}</span>
-    </h1>
-    {
-        blok.first_category_cases.map((story) => (
-            <div class="mt-4">{story.content.title}</div>
-        ))
-    }
-    {
-        blok.second_category_cases?.map((story) => (
-            <div class="mt-4">{story.content.title}</div>
-        ))
-    }
+    </div>
+
     <ArrowLink
         label={blok.projects_link[0].label}
         link={blok.projects_link[0].link}
-        className="mt-40"
+        className="mt-24 md:mt-40"
     />
 </div>
