@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Title from "../../components/atoms/Title.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
 import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
 import SBImage from "../../components/global/SBImage.astro";
@@ -130,7 +131,47 @@ const { language, blok } = Astro.props;
             )}
         </div>
     </Section>
-    <Section title={blok.approach_title[0]} bgColor="white" color="black" />
+    <Section title={blok.approach_title[0]} bgColor="white" color="black">
+        <div class="relative pt-40 pb-60 mt-60 mx-auto md:mt-95 md:pt-120 md:pb-90 lg:w-8/12">
+            <div class="absolute top-0 -left-gutter right-1/2 h-full flex flex-col before:w-full before:flex-none before:aspect-187/171 before:bg-pink before:rounded-tl-full after:flex-1 after:bg-pink">
+            </div>
+            <div class="absolute top-0 -right-gutter left-1/2 h-full flex flex-col before:w-full before:flex-none before:aspect-187/171 before:bg-orange before:rounded-tr-full after:flex-1 after:bg-orange"></div>
+            <div class="relative w-6/12 max-w-300 mx-auto px-gutter mb-80 md:mb-45">
+                <div class="flex items-center justify-center aspect-174/240 bg-black">
+                    <span class="text-white">SPLINE</span>
+                </div>
+            </div>
+            <div class="relative flex">
+                <div class="px-25 w-1/2 flex flex-col justify-between gap-30 text-black md:gap-40 xl:pl-100 xl:pr-60">
+                    {blok.approach_left_col_title[0] && (
+                        <h5 class="text-title-5"><Title title={blok.approach_left_col_title[0]} /></h5>
+                    )}
+                    {blok.approach_left_col_text && (
+                        <p class="whitespace-pre-wrap text-p-18 flex">{blok.approach_left_col_text}</p>
+                    )}
+                </div>
+                <div class="px-25 w-1/2 flex flex-col justify-between gap-30 text-white md:gap-40 xl:pl-60 xl:pr-100">
+                    {blok.approach_right_col_title[0] && (
+                        <h5 class="text-title-5"><Title title={blok.approach_right_col_title[0]} /></h5>
+                    )}
+                    {blok.approach_right_col_text && (
+                        <p class="whitespace-pre-wrap text-p-18">{blok.approach_right_col_text}</p>
+                    )}
+                </div>
+            </div>
+        </div>
+        {
+            blok.approach_link[0]?.label && (
+                <div class="flex justify-center px-gutter">
+                    <ArrowLink
+                        label={blok.approach_link[0].label}
+                        link={blok.approach_link[0].link}
+                        className="mt-40 md:mt-50"
+                    />
+                </div>
+            )
+        }
+    </Section>
     <Section title={blok.sports_title[0]} bgColor="blue" color="black" />
     <Section title={blok.worldwide_title[0]} bgColor="pink" color="black" />
     <Section title={blok.mindset_title[0]} bgColor="orange" color="white" />
