@@ -1,0 +1,51 @@
+---
+import RichTextRenderer from "storyblok-rich-text-astro-renderer/RichTextRenderer.astro";
+import { storyblokEditable } from "@storyblok/astro";
+import SBImage from "./SBImage.astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+interface Props {
+    content: any;
+    blok?: any;
+}
+
+const { content, blok } = Astro.props;
+---
+
+<RichTextRenderer
+  content={content}
+  schema={{
+    nodes: {
+      image: ({ attrs }) => ({
+        component: SBImage,
+        props: {
+          image: {
+            id: attrs.id,
+            filename: attrs.src,
+            alt: attrs.alt,
+          },
+          class: 'my-[5.6rem] w-[calc(14/12*100%+2rem)] -ml-[calc(1/12*100%+1rem)] max-w-none lg:my-[7.2rem] lg:w-[calc(100%+4rem)] lg:-ml-[2rem] last:mb-0',
+        },
+      }),
+      paragraph: () => ({
+        component: 'p',
+        props: {
+          class: 'text-p-24 my-[1em] last:mb-0'
+        }
+      }),
+      heading: ({ attrs }) => ({
+        component: 'h3',
+        props: {
+          class: 'text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0',
+        }
+      }),
+    }
+  }}
+  resolver={(blok) => {
+    return {
+      component: StoryblokComponent,
+      props: { blok },
+    };
+  }}
+  {...storyblokEditable(blok)}
+/>
