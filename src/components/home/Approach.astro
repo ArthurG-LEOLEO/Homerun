@@ -43,16 +43,26 @@ const { blok } = Astro.props;
                             ) => (
                                 <div
                                     class:list={[
-                                        "absolute top-0 left-0 size-full overflow-hidden rounded-full",
+                                        "absolute top-0 left-0 size-full",
                                         { "z-[-1] scale-[0.99]": index > 0 },
                                     ]}
                                     id={`fc-img-${index}`}
                                 >
-                                    <SBImage
-                                        class="size-full object-cover"
-                                        cover
-                                        image={asset}
-                                    />
+                                    <div
+                                        class:list={[
+                                            "first-cat-inner-img size-full overflow-hidden rounded-full ease-linear",
+                                            {
+                                                "duration-[0.08s]": index === 1,
+                                                "duration-[0.15s]": index !== 1,
+                                            },
+                                        ]}
+                                    >
+                                        <SBImage
+                                            class="size-full object-cover"
+                                            cover
+                                            image={asset}
+                                        />
+                                    </div>
                                 </div>
                             ),
                         )
@@ -102,16 +112,26 @@ const { blok } = Astro.props;
                             ) => (
                                 <div
                                     class:list={[
-                                        "absolute top-0 left-0 size-full overflow-hidden rounded-full",
+                                        "absolute top-0 left-0 size-full",
                                         { "z-[-1] scale-[0.99]": index > 0 },
                                     ]}
                                     id={`sc-img-${index}`}
                                 >
-                                    <SBImage
-                                        class="size-full object-cover"
-                                        cover
-                                        image={asset}
-                                    />
+                                    <div
+                                        class:list={[
+                                            "second-cat-inner-img size-full overflow-hidden rounded-full ease-linear",
+                                            {
+                                                "duration-[0.08s]": index === 1,
+                                                "duration-[0.15s]": index !== 1,
+                                            },
+                                        ]}
+                                    >
+                                        <SBImage
+                                            class="size-full object-cover"
+                                            cover
+                                            image={asset}
+                                        />
+                                    </div>
                                 </div>
                             ),
                         )
@@ -145,11 +165,17 @@ const { blok } = Astro.props;
 </div>
 
 <script>
+    let mp = {
+        x: 0,
+        y: 0,
+    };
+
     let ha: HTMLElement | null;
     let firstCat: HTMLElement | null;
     let firstCatP1: HTMLElement | null;
     let firstCatP2: HTMLElement | null;
     let firstCatHl: HTMLElement | null;
+    let firstCatImgs: NodeListOf<HTMLElement> | null;
     let fcImg1: HTMLElement | null;
     let fcImg2: HTMLElement | null;
     let fcImg3: HTMLElement | null;
@@ -157,6 +183,7 @@ const { blok } = Astro.props;
     let secondCatP1: HTMLElement | null;
     let secondCatHl1: HTMLElement | null;
     let secondCatHl2: HTMLElement | null;
+    let secondCatImgs: NodeListOf<HTMLElement> | null;
     let scImg1: HTMLElement | null;
     let scImg2: HTMLElement | null;
     let scImg3: HTMLElement | null;
@@ -169,6 +196,10 @@ const { blok } = Astro.props;
         fcImg1 = document.querySelector("#home-approach #fc-img-0");
         fcImg2 = document.querySelector("#home-approach #fc-img-1");
         fcImg3 = document.querySelector("#home-approach #fc-img-2");
+        firstCatImgs = document.querySelectorAll(
+            "#home-approach .first-cat-inner-img",
+        );
+
         secondCat = document.querySelector("#home-approach #second-cat");
         secondCatP1 = document.querySelector("#home-approach #second-cat-p1");
         secondCatHl1 = document.querySelector("#home-approach #second-cat-hl1");
@@ -176,6 +207,9 @@ const { blok } = Astro.props;
         scImg1 = document.querySelector("#home-approach #sc-img-0");
         scImg2 = document.querySelector("#home-approach #sc-img-1");
         scImg3 = document.querySelector("#home-approach #sc-img-2");
+        secondCatImgs = document.querySelectorAll(
+            "#home-approach .second-cat-inner-img",
+        );
     };
 
     const firstCatEnter = () => {
@@ -286,6 +320,36 @@ const { blok } = Astro.props;
                 },
                 "<",
             );
+    };
+
+    const firstCatMove = (e: MouseEvent) => {
+        if (!firstCat) return;
+
+        const newMp = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+
+        gsap.to(mp, {
+            duration: 0.2,
+            x: newMp.x,
+            y: newMp.y,
+            overwrite: true,
+            onUpdate: () => {
+                const velocity = {
+                    x: mp.x - newMp.x,
+                    y: mp.y - newMp.y,
+                };
+
+                firstCatImgs?.forEach((img, index) => {
+                    gsap.set(img, {
+                        x: -velocity.x * (index === 1 ? 0.1 : 0.1),
+                        y: -velocity.y * (index === 1 ? 0.1 : 0.1),
+                        overwrite: true,
+                    });
+                });
+            },
+        });
     };
 
     const secondCatEnter = () => {
@@ -410,20 +474,54 @@ const { blok } = Astro.props;
             );
     };
 
+    const secondCatMove = (e: MouseEvent) => {
+        if (!secondCat) return;
+
+        const newMp = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+
+        gsap.to(mp, {
+            duration: 0.2,
+            x: newMp.x,
+            y: newMp.y,
+            overwrite: true,
+            onUpdate: () => {
+                const velocity = {
+                    x: mp.x - newMp.x,
+                    y: mp.y - newMp.y,
+                };
+
+                secondCatImgs?.forEach((img, index) => {
+                    gsap.set(img, {
+                        x: -velocity.x * (index === 1 ? 0.1 : 0.1),
+                        y: -velocity.y * (index === 1 ? 0.1 : 0.1),
+                        overwrite: true,
+                    });
+                });
+            },
+        });
+    };
+
     const init = () => {
         setVariables();
 
         firstCat?.addEventListener("mouseenter", firstCatEnter);
         firstCat?.addEventListener("mouseleave", firstCatLeave);
+        firstCat?.addEventListener("mousemove", firstCatMove);
         secondCat?.addEventListener("mouseenter", secondCatEnter);
         secondCat?.addEventListener("mouseleave", secondCatLeave);
+        secondCat?.addEventListener("mousemove", secondCatMove);
     };
 
     const cleanup = () => {
         firstCat?.removeEventListener("mouseenter", firstCatEnter);
         firstCat?.removeEventListener("mouseleave", firstCatLeave);
+        firstCat?.removeEventListener("mousemove", firstCatMove);
         secondCat?.removeEventListener("mouseenter", secondCatEnter);
         secondCat?.removeEventListener("mouseleave", secondCatLeave);
+        secondCat?.removeEventListener("mousemove", secondCatMove);
     };
 
     document.addEventListener("astro:page-load", init);
