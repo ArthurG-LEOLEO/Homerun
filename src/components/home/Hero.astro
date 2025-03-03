@@ -14,7 +14,7 @@ const { blok } = Astro.props;
     <div
         style="color: #181817;"
         id="home-hero-texts"
-        class="relative flex h-[100vh] flex-col bg-black pt-[60vh] 2xl:justify-end 2xl:pt-0 2xl:pb-100"
+        class="relative flex h-[100vh] flex-col bg-black pt-[42vh] 2xl:justify-end 2xl:pt-0 2xl:pb-200"
     >
         <div
             class="flex w-full justify-center px-[calc(var(--spacing-gutter)*2)]"
@@ -107,6 +107,9 @@ const { blok } = Astro.props;
     let videoOverlay: HTMLElement | null;
     let baseline: HTMLElement | null;
     let title: NodeListOf<Element> | null;
+    let titleLettersHom: NodeListOf<Element> | null;
+    let titleLettersEr: NodeListOf<Element> | null;
+    let titleLettersUn: NodeListOf<Element> | null;
     let overlay: HTMLElement | null;
     let heroTexts: HTMLElement | null;
     let baselineCreative: HTMLElement | null;
@@ -125,6 +128,15 @@ const { blok } = Astro.props;
         heroTexts = document.querySelector("#home-hero #home-hero-texts");
 
         title = document.querySelectorAll("#home-hero .home-hero-title");
+        titleLettersHom = document.querySelectorAll(
+            "#home-hero #home-hero-title .letters-hom",
+        );
+        titleLettersEr = document.querySelectorAll(
+            "#home-hero #home-hero-title .letters-er",
+        );
+        titleLettersUn = document.querySelectorAll(
+            "#home-hero #home-hero-title .letters-un",
+        );
 
         baseline = document.querySelector("#home-hero #home-hero-baseline");
         baselineCreative = document.querySelector(
@@ -164,9 +176,9 @@ const { blok } = Astro.props;
                     const titleHeight = target.offsetHeight;
 
                     if (ww < 1536) {
-                        return titleHeight / -2 - wh * 0.1;
+                        return titleHeight / -2 + wh * 0.08;
                     } else {
-                        const heroPaddingBottom = ww * 0.06944;
+                        const heroPaddingBottom = ww * 0.13888;
                         const baselineHeight = ww * 0.042;
 
                         return (
@@ -200,7 +212,18 @@ const { blok } = Astro.props;
             });
 
         tlBaseline = gsap
-            .timeline({ delay: 1 })
+            .timeline()
+            .to(
+                [titleLettersHom, titleLettersEr, titleLettersUn],
+                {
+                    y: 0,
+                    stagger: 0.05,
+                    duration: 0.8,
+                    ease: "power4.out",
+                },
+                "before",
+            )
+            .addLabel("start", "+=0.3")
             .to(
                 overlay,
                 {
@@ -229,9 +252,9 @@ const { blok } = Astro.props;
                         const titleHeight = target.offsetHeight;
 
                         if (ww < 1536) {
-                            return titleHeight / -2 - wh * 0.1;
+                            return titleHeight / -2 + wh * 0.08;
                         } else {
-                            const heroPaddingBottom = ww * 0.06944;
+                            const heroPaddingBottom = ww * 0.13888;
                             const baselineHeight = ww * 0.042;
 
                             return (
@@ -249,7 +272,7 @@ const { blok } = Astro.props;
                     ease: "expo.inOut",
                     y: 0,
                 },
-                "start-=0.4",
+                "start-=0.3",
             )
             .to(baselineCreativeLetters, {
                 y: 0,
@@ -318,9 +341,7 @@ const { blok } = Astro.props;
             );
 
         tlVideo = gsap
-            .timeline({
-                delay: 1.3,
-            })
+            .timeline({})
             .to(videoWithLayers, {
                 rotate: -6,
                 duration: 1.3,
@@ -329,8 +350,8 @@ const { blok } = Astro.props;
                     const wh = window.innerHeight;
                     const videoHeight = video ? video.offsetHeight : 0;
                     if (ww >= 1536) {
-                        // ww * 0.06944 = 10rem
-                        const heroPaddingBottom = ww * 0.06944;
+                        // ww * 0.13888 = 20rem = pb-200
+                        const heroPaddingBottom = ww * 0.13888;
                         const baselineHeight = ww * 0.042;
                         const titleHeight = ww * 0.1456;
                         const y =
@@ -342,10 +363,11 @@ const { blok } = Astro.props;
 
                         return y;
                     } else {
-                        return wh * 0.6 - videoHeight + ww * 0.06;
+                        return wh * 0.42 - videoHeight + ww * 0.06;
                     }
                 },
                 ease: "elastic.out(0.8,0.7)",
+                delay: 1.8,
             })
             .fromTo(
                 videoWithLayers,
@@ -356,8 +378,8 @@ const { blok } = Astro.props;
                         const wh = window.innerHeight;
                         const videoHeight = video ? video.offsetHeight : 0;
                         if (ww >= 1536) {
-                            // ww * 0.06944 = 10rem
-                            const heroPaddingBottom = ww * 0.06944;
+                            // ww * 0.13888 = 20rem = pb-200
+                            const heroPaddingBottom = ww * 0.13888;
                             const baselineHeight = ww * 0.042;
                             const titleHeight = ww * 0.1456;
                             const y =
@@ -369,7 +391,7 @@ const { blok } = Astro.props;
 
                             return y;
                         } else {
-                            return wh * 0.6 - videoHeight + ww * 0.06;
+                            return wh * 0.42 - videoHeight + ww * 0.06;
                         }
                     },
                     x: function () {
