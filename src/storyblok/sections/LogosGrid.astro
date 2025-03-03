@@ -1,0 +1,200 @@
+---
+import SBImage from "../../components/global/SBImage.astro";
+
+interface Logo {
+    filename: string;
+    alt?: string;
+    id: number;
+}
+
+interface Props {
+    logos: {
+        logos: Logo[];
+    };
+    className?: string;
+}
+
+const { logos, className = "" } = Astro.props;
+const logosArray = logos.logos || [];
+
+const MAX_LOGOS_MOBILE = 6;
+const MAX_LOGOS_DESKTOP = 8;
+---
+
+<div class={`px-gutter mx-auto w-10/12 lg:w-8/12 ${className}`}>
+    <div 
+        class="grid-logos-wrapper"
+        data-logos={JSON.stringify(logosArray)}
+    >
+        <div class="grid grid-cols-2 gap-1 md:grid-cols-4">
+            {Array.from({ length: MAX_LOGOS_DESKTOP }, (_, index) => (
+                <div class={`relative aspect-square outline-1 outline-white ${index >= MAX_LOGOS_MOBILE ? 'hidden md:block' : ''}`}>
+                    <div class="logo-container absolute inset-0 p-30 lg:p-40">
+                        <div class="relative h-full w-full flex items-center justify-center">
+                            <SBImage
+                                image={logosArray[index]}
+                                class="max-h-full max-w-full w-auto h-auto object-contain"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+
+    let currentLogos: number[] = [];
+    let remainingLogos: number[] = [];
+    let isAnimating = false;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let previousIsMobile: boolean;
+
+    const isMobile = () => !window.matchMedia('(min-width: 768px)').matches;
+
+    const shuffleArray = (array: any[]) => {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    };
+
+    const updateLogos = (allLogos: any[]) => {
+        const cells = document.querySelectorAll('.logo-container > div');
+        currentLogos.forEach((logoIndex, cellIndex) => {
+            const img = cells[cellIndex]?.querySelector('img');
+            if (img && allLogos[logoIndex]) {
+                const logo = allLogos[logoIndex];
+                img.src = logo.filename;
+                img.alt = logo.alt || '';
+            }
+        });
+    };
+
+    const setupLogos = (allLogos: any[]) => {
+        const totalLogos = allLogos.length;
+        const mobile = isMobile();
+        const maxLogos = mobile ? 6 : 8;
+
+        // Si on a assez de logos pour remplir la grille, pas besoin d'animation
+        if (totalLogos <= maxLogos) {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            currentLogos = Array.from({ length: totalLogos }, (_, i) => i);
+            remainingLogos = [];
+            updateLogos(allLogos);
+            return;
+        }
+
+        // Réinitialiser les logos avec un ordre aléatoire
+        const allIndices = Array.from({ length: totalLogos }, (_, i) => i);
+        const shuffledIndices = shuffleArray(allIndices);
+        
+        currentLogos = shuffledIndices.slice(0, maxLogos);
+        remainingLogos = shuffledIndices.slice(maxLogos);
+
+        updateLogos(allLogos);
+        
+        // Démarrer l'animation seulement si on a des logos en attente
+        if (remainingLogos.length > 0) {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+            startLogoRotation();
+        }
+    };
+
+    const init = () => {
+        const gridWrapper = document.querySelector('.grid-logos-wrapper');
+        if (!gridWrapper) return;
+
+        const logosStr = gridWrapper.getAttribute('data-logos');
+        if (!logosStr) return;
+
+        try {
+            const allLogos = JSON.parse(logosStr);
+            previousIsMobile = isMobile();
+            setupLogos(allLogos);
+
+            // Gestionnaire de redimensionnement
+            const handleResize = () => {
+                const mobile = isMobile();
+                // Vérifier si on a changé de breakpoint
+                if (mobile !== previousIsMobile) {
+                    previousIsMobile = mobile;
+                    setupLogos(allLogos);
+                }
+            };
+
+            window.addEventListener('resize', handleResize);
+            
+            // Cleanup du gestionnaire lors de la navigation
+            document.addEventListener('astro:before-swap', () => {
+                window.removeEventListener('resize', handleResize);
+            });
+
+        } catch (e) {
+            console.error('Erreur lors du parsing des données logos:', e);
+        }
+    };
+
+    const startLogoRotation = () => {
+        intervalId = setInterval(animateNextLogo, 3000);
+    };
+
+    const animateNextLogo = async () => {
+        if (isAnimating || !remainingLogos.length) return;
+        isAnimating = true;
+
+        const gridWrapper = document.querySelector('.grid-logos-wrapper');
+        if (!gridWrapper) return;
+
+        const allLogos = JSON.parse(gridWrapper.getAttribute('data-logos') || '[]');
+        const randomCellIndex = Math.floor(Math.random() * currentLogos.length);
+        const cells = document.querySelectorAll('.logo-container > div');
+        const targetCell = cells[randomCellIndex];
+        if (!targetCell) return;
+
+        const oldLogoIndex = currentLogos[randomCellIndex];
+        currentLogos[randomCellIndex] = remainingLogos[0];
+        remainingLogos.shift();
+        remainingLogos.push(oldLogoIndex);
+
+        await gsap.to(targetCell, {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.3,
+            ease: "power2.in",
+            transformOrigin: "center"
+        });
+
+        const img = targetCell.querySelector('img');
+        if (img) {
+            const newLogo = allLogos[currentLogos[randomCellIndex]];
+            img.src = newLogo.filename;
+            img.alt = newLogo.alt || '';
+        }
+
+        await gsap.to(targetCell, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            transformOrigin: "center"
+        });
+
+        isAnimating = false;
+    };
+
+    // Event listeners
+    document.addEventListener("astro:page-load", init);
+    document.addEventListener("astro:before-swap", () => {
+        if (intervalId) clearInterval(intervalId);
+    });
+</script>

@@ -5,6 +5,7 @@ import Title from "../../components/atoms/Title.astro";
 import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
 import SBImage from "../../components/global/SBImage.astro";
+import LogosGrid from "../sections/LogosGrid.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -98,7 +99,37 @@ const { language, blok } = Astro.props;
             )}
         </div>
     </Section>
-    <Section title={blok.clients_title[0]} bgColor="green" color="white" />
+    <Section title={blok.clients_title[0]} bgColor="green" color="white">
+        {blok.clients_intro && (
+            <p class="whitespace-pre-wrap text-p-24 mt-25 px-gutter mx-auto w-10/12 md:mt-55 lg:w-8/12 xl:w-6/12">{blok.clients_intro}</p>
+        )}
+        <LogosGrid logos={blok.clients_logos[0]} className="mt-55 md:mt-80" />
+        {blok.clients_text && (
+            <p class="whitespace-pre-wrap text-p-18 mt-56 px-gutter mx-auto max-w-276 w-10/12 md:mt-72 md:max-w-none lg:w-8/12 xl:w-6/12 2xl:w-4/12">{blok.clients_text}</p>
+        )}
+        <div class="text-title-3 px-gutter mt-48 md:mt-72 mx-auto max-w-334 md:max-w-none md:w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.clients_workflow_title && (
+                <h3>{blok.clients_workflow_title}</h3>
+            )}
+            {Array.isArray(blok.clients_workflow_list) && blok.clients_workflow_list.length > 0 && (
+                <ul>
+                    {blok.clients_workflow_list.map((item: { Text: string }) => (
+                        <li class="inline ">
+                            <span class="align-baseline  relative bottom-[0.3rem] inline-flex items-center justify-center rounded-full border-2 border-current size-28 md:size-34">
+                                <Icon
+                                    name="arrow-right"
+                                    class:list={[
+                                        "size-14 md:size-16",
+                                    ]}
+                                />
+                            </span>
+                            <span> {item.Text} </span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    </Section>
     <Section title={blok.approach_title[0]} bgColor="white" color="black" />
     <Section title={blok.sports_title[0]} bgColor="blue" color="black" />
     <Section title={blok.worldwide_title[0]} bgColor="pink" color="black" />
