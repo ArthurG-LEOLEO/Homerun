@@ -1,12 +1,17 @@
 ---
 import { Icon } from "astro-icon/components";
 
+import { storyblokEditable } from "@storyblok/astro";
+import RichTextRenderer from "storyblok-rich-text-astro-renderer/RichTextRenderer.astro";
+
 import Title from "../../components/atoms/Title.astro";
 import ArrowLink from "../../components/atoms/ArrowLink.astro";
 import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
 import SBImage from "../../components/global/SBImage.astro";
 import LogosGrid from "../sections/LogosGrid.astro";
+import SBRichText from "../../components/global/SBRichText.astro";
+
 
 const { language, blok } = Astro.props;
 ---
@@ -172,7 +177,24 @@ const { language, blok } = Astro.props;
             )
         }
     </Section>
-    <Section title={blok.sports_title[0]} bgColor="blue" color="black" />
+    <Section title={blok.sports_title[0]} bgColor="blue" color="black">
+        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+            {blok.sports_content && (
+                <SBRichText 
+                    content={blok.sports_content}
+                />
+            )}
+            {
+                blok.sports_link[0]?.label && (
+                    <ArrowLink
+                        label={blok.sports_link[0].label}
+                        link={blok.sports_link[0].link}
+                        className="mt-40 md:mt-50"
+                    />
+                )
+            }
+        </div>
+    </Section>
     <Section title={blok.worldwide_title[0]} bgColor="pink" color="black" />
     <Section title={blok.mindset_title[0]} bgColor="orange" color="white" />
 </div>
