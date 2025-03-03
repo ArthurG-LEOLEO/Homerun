@@ -7,11 +7,11 @@ const { blok } = Astro.props;
 ---
 
 <div
-    class="container:text-[1rem] py-120 text-center text-[1rem] md:py-180 lg:text-[0.6944444vw]"
+    class="container-main container:text-[1rem] py-120 text-center text-[1rem] md:py-180 lg:text-[0.6944444vw]"
     id="home-approach"
 >
     <div
-        class="text-p86-mobile mx-auto w-full lg:w-[71vw] lg:text-[8.6em]/[1.27em]"
+        class="text-p86-mobile px-gutter mx-auto w-full md:text-[5.5rem]/[7.4rem] lg:w-[71vw] lg:px-0 lg:text-[8.6em]/[1.27em]"
     >
         <span>{blok.title_first_part}</span>
         <a class="relative inline-block" href="#" id="first-cat">
@@ -24,11 +24,17 @@ const { blok } = Astro.props;
                 >
                 </div>
             </div>
-            <span
-                id="first-cat-p1"
-                class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
-                >{blok.first_category_first_part}</span
-            >
+            <div class="relative inline-block">
+                <div
+                    class="bg-pink absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] z-[-1] rotate-[-2.3deg] lg:hidden"
+                >
+                </div>
+                <span
+                    id="first-cat-p1"
+                    class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
+                    >{blok.first_category_first_part}</span
+                >
+            </div>
             <div
                 class="pointer-events-none relative inline-block h-[1.24em] w-[1.76em] align-bottom"
             >
@@ -69,26 +75,31 @@ const { blok } = Astro.props;
                     }
                 </div>
             </div>
-            <span
-                id="first-cat-p2"
-                class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
-                >{blok.first_category_second_part}</span
-            >
+            <div class="relative inline-block">
+                <div
+                    class="bg-pink absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] z-[-1] rotate-[0.8deg] lg:hidden"
+                >
+                </div>
+                <span
+                    id="first-cat-p2"
+                    class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:bg-current"
+                    >{blok.first_category_second_part}</span
+                >
+            </div>
         </a>
         <span>{blok.title_second_part}</span>
         <a
-            class="relative inline-block"
+            class="relative inline-block text-white lg:text-black"
             href="#"
             id="second-cat"
-            style="color: #181817;"
         >
             <div class="relative inline-block">
                 <div
-                    class="absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] translate-x-[1em] rotate-[1.1deg]"
+                    class="absolute top-[0.2em] right-[-0.1em] bottom-[0em] left-[-0.1em] rotate-[1.1deg] lg:translate-x-[1em]"
                 >
                     <div
                         id="second-cat-hl1"
-                        class="bg-orange size-full origin-left scale-x-0"
+                        class="bg-orange size-full origin-left lg:scale-x-0"
                     >
                     </div>
                 </div>
@@ -144,7 +155,7 @@ const { blok } = Astro.props;
                 >
                     <div
                         id="second-cat-hl2"
-                        class="bg-orange size-full origin-left scale-x-0"
+                        class="bg-orange size-full origin-left lg:scale-x-0"
                     >
                     </div>
                 </div>
@@ -187,6 +198,8 @@ const { blok } = Astro.props;
     let scImg1: HTMLElement | null;
     let scImg2: HTMLElement | null;
     let scImg3: HTMLElement | null;
+
+    let mm: gsap.MatchMedia | null;
 
     const setVariables = () => {
         firstCat = document.querySelector("#home-approach #first-cat");
@@ -343,8 +356,8 @@ const { blok } = Astro.props;
 
                 firstCatImgs?.forEach((img, index) => {
                     gsap.set(img, {
-                        x: -velocity.x * (index === 1 ? 0.1 : 0.1),
-                        y: -velocity.y * (index === 1 ? 0.1 : 0.1),
+                        x: -velocity.x * 0.2,
+                        y: -velocity.y * 0.2,
                         overwrite: true,
                     });
                 });
@@ -352,7 +365,7 @@ const { blok } = Astro.props;
         });
     };
 
-    const secondCatEnter = () => {
+    const secondCatEnter = function () {
         gsap.timeline()
             .to(scImg1, {
                 duration: 1,
@@ -495,8 +508,8 @@ const { blok } = Astro.props;
 
                 secondCatImgs?.forEach((img, index) => {
                     gsap.set(img, {
-                        x: -velocity.x * (index === 1 ? 0.1 : 0.1),
-                        y: -velocity.y * (index === 1 ? 0.1 : 0.1),
+                        x: -velocity.x * 0.2,
+                        y: -velocity.y * 0.2,
                         overwrite: true,
                     });
                 });
@@ -506,24 +519,34 @@ const { blok } = Astro.props;
 
     const init = () => {
         setVariables();
+        mm = gsap.matchMedia();
 
-        firstCat?.addEventListener("mouseenter", firstCatEnter);
-        firstCat?.addEventListener("mouseleave", firstCatLeave);
-        firstCat?.addEventListener("mousemove", firstCatMove);
-        secondCat?.addEventListener("mouseenter", secondCatEnter);
-        secondCat?.addEventListener("mouseleave", secondCatLeave);
-        secondCat?.addEventListener("mousemove", secondCatMove);
+        mm.add("(width > 1024px )", () => {
+            firstCat?.addEventListener("mouseenter", firstCatEnter);
+            firstCat?.addEventListener("mouseleave", firstCatLeave);
+            firstCat?.addEventListener("mousemove", firstCatMove);
+            secondCat?.addEventListener("mouseenter", secondCatEnter);
+            secondCat?.addEventListener("mouseleave", secondCatLeave);
+            secondCat?.addEventListener("mousemove", secondCatMove);
+            return () => {
+                firstCat?.removeEventListener("mouseenter", firstCatEnter);
+                firstCat?.removeEventListener("mouseleave", firstCatLeave);
+                firstCat?.removeEventListener("mousemove", firstCatMove);
+                secondCat?.removeEventListener("mouseenter", secondCatEnter);
+                secondCat?.removeEventListener("mouseleave", secondCatLeave);
+                secondCat?.removeEventListener("mousemove", secondCatMove);
+            };
+        });
     };
 
     const cleanup = () => {
-        firstCat?.removeEventListener("mouseenter", firstCatEnter);
-        firstCat?.removeEventListener("mouseleave", firstCatLeave);
-        firstCat?.removeEventListener("mousemove", firstCatMove);
-        secondCat?.removeEventListener("mouseenter", secondCatEnter);
-        secondCat?.removeEventListener("mouseleave", secondCatLeave);
-        secondCat?.removeEventListener("mousemove", secondCatMove);
+        mm?.revert();
     };
 
-    document.addEventListener("astro:page-load", init);
+    document.addEventListener("astro:page-load", () => {
+        // TODO: This is running every time we change pages
+        // We need to make sure the component exists in the page before init
+        init();
+    });
     document.addEventListener("astro:before-swap", cleanup);
 </script>

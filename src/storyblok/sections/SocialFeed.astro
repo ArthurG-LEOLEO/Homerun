@@ -129,6 +129,8 @@ import CTA from "../../components/global/CTA.astro";
     };
 
     document.addEventListener("astro:page-load", () => {
+        // TODO: This is running every time we change pages
+        // We need to make sure the component exists in the page before init
         init();
     });
 
