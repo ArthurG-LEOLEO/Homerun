@@ -66,7 +66,9 @@ import CTA from "../../components/global/CTA.astro";
             </div>
         </div>
     </div>
-    <div class="feed-slider-wrapper flex w-max items-start gap-24 pr-24">
+    <div
+        class="feed-slider-wrapper flex w-max cursor-grab items-start gap-24 pr-24"
+    >
         {
             blok.posts?.map((post: SbBlokData) => {
                 return <SocialPost post={post} />;
@@ -83,20 +85,27 @@ import CTA from "../../components/global/CTA.astro";
 <script>
     let wrapper: HTMLElement | null;
     let posts: NodeListOf<Element> | null;
+    let postLinks: NodeListOf<Element> | null;
+    let layers1: NodeListOf<Element> | null;
+    let layers2: NodeListOf<Element> | null;
 
     let xTo: gsap.QuickToFunc | ((arg0: any) => void);
+    let xToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
+    let xToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
     let total = 0;
     let isHover = false;
     let gsapObserver: Observer;
 
     const init = () => {
-        //TODO: update on resize
-
         wrapper = document.querySelector(".feed-slider-wrapper");
         if (!wrapper) return;
 
         posts = document.querySelectorAll(".feed-slider-post");
         if (!posts) return;
+
+        postLinks = document.querySelectorAll(".feed-link");
+        layers1 = wrapper.querySelectorAll(".feed-post-layer-1");
+        layers2 = wrapper.querySelectorAll(".feed-post-layer-2");
 
         const half = wrapper.clientWidth / 2;
 
@@ -108,6 +117,14 @@ import CTA from "../../components/global/CTA.astro";
             modifiers: {
                 x: gsap.utils.unitize(wrap),
             },
+        });
+        xToLayer1 = gsap.quickTo(layers1, "x", {
+            duration: 2,
+            ease: "power3",
+        });
+        xToLayer2 = gsap.quickTo(layers2, "x", {
+            duration: 2,
+            ease: "power3",
         });
 
         const onDragTlIn = gsap.timeline({ paused: true }).to(posts, {
@@ -126,18 +143,41 @@ import CTA from "../../components/global/CTA.astro";
             target: wrapper,
             type: "pointer,touch",
             onPress: () => {
+                if (Observer.isTouch) {
+                    isHover = true;
+                } else if (wrapper) {
+                    wrapper.style.cursor = "grabbing";
+                }
                 onDragTlOut.pause();
                 onDragTlIn.restart();
             },
             onDrag: (self: { deltaX: number }) => {
-                gsap.set(posts, { pointerEvents: "none" });
-                total += self.deltaX;
+                if (Observer.isTouch) isHover = true;
+                gsap.set(postLinks, { pointerEvents: "none" });
+                const movementX = Observer.isTouch
+                    ? self.deltaX * 1.5
+                    : self.deltaX;
+                total += movementX;
+                const layerOffset = gsap.utils.clamp(
+                    -100,
+                    100,
+                    -movementX * 1.4,
+                );
                 xTo(total);
+                xToLayer1(layerOffset / 2);
+                xToLayer2(layerOffset);
             },
             onRelease: () => {
+                if (Observer.isTouch) {
+                    isHover = false;
+                } else if (wrapper) {
+                    wrapper.style.cursor = "grab";
+                }
                 onDragTlIn.pause();
                 onDragTlOut.restart();
-                gsap.set(posts, { pointerEvents: "auto" });
+                gsap.set(postLinks, { pointerEvents: "auto" });
+                xToLayer1(0);
+                xToLayer2(0);
             },
             onHover: () => (isHover = true),
             onHoverEnd: () => (isHover = false),
@@ -150,7 +190,7 @@ import CTA from "../../components/global/CTA.astro";
 
     const tick = (time: any, deltaTime: number) => {
         if (isHover) return;
-        total -= deltaTime / 10; // Adjust the speed of automatic scrolling
+        total -= deltaTime / 10; // Speed of automatic scrolling
         xTo(total);
     };
 

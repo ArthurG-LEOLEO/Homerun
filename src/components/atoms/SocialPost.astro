@@ -11,27 +11,21 @@ const hasImage = post.image && post.image.id;
 const { width, height } = getImageSize(post.image);
 
 const aspectRatio = hasImage ? `${width}/${height}` : "auto";
-
-const colorMapping: Record<string, string> = {
-    "#2D5A36": "white",
-    default: "black",
-};
-
-const textColor = `var(--color-${colorMapping[post.color] ?? colorMapping.default})`;
 ---
 
 <div
-    class="feed-slider-post flex w-[33vw] min-w-230 shrink-0 origin-top select-none"
+    class="feed-slider-post relative flex w-[33vw] min-w-230 shrink-0 origin-top select-none"
 >
+    <div class="feed-post-layer-2 bg-orange absolute inset-0"></div>
+    <div class="feed-post-layer-1 bg-green absolute inset-0"></div>
     <a
         href={post.link.url}
         target="_blank"
         draggable="false"
-        class="relative w-full overflow-hidden p-16 md:p-32"
+        class="feed-link relative w-full overflow-hidden p-16 text-black [-webkit-touch-callout:none] select-none md:p-32"
         style={{
             backgroundColor: hasImage ? "#181817" : post.color,
             aspectRatio,
-            color: textColor,
         }}
     >
         <div
