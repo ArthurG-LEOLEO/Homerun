@@ -1,0 +1,13 @@
+---
+import SBRichText from "../../components/global/SBRichText.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+    {
+        blok.tomorrows_content && (
+            <SBRichText content={blok.tomorrows_content} />
+        )
+    }
+</div>

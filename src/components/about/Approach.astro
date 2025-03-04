@@ -1,0 +1,81 @@
+---
+import Title from "../../components/atoms/Title.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+
+const { blok } = Astro.props;
+---
+
+<div
+    class="relative mx-auto mt-60 pt-40 pb-60 md:mt-95 md:pt-120 md:pb-90 lg:w-8/12"
+>
+    <div
+        class="-left-gutter before:bg-pink after:bg-pink absolute top-0 right-1/2 flex h-full flex-col before:aspect-187/171 before:w-full before:flex-none before:rounded-tl-full after:flex-1"
+    >
+    </div>
+    <div
+        class="-right-gutter before:bg-orange after:bg-orange absolute top-0 left-1/2 flex h-full flex-col before:aspect-187/171 before:w-full before:flex-none before:rounded-tr-full after:flex-1"
+    >
+    </div>
+    <div
+        class="px-gutter relative mx-auto mb-80 w-6/12 max-w-300 md:mb-45"
+    >
+        <div
+            class="flex aspect-174/240 items-center justify-center bg-black"
+        >
+            <span class="text-white">SPLINE</span>
+        </div>
+    </div>
+    <div class="relative flex">
+        <div
+            class="flex w-1/2 flex-col justify-between gap-30 px-25 text-black md:gap-40 xl:pr-60 xl:pl-100"
+        >
+            {
+                blok.approach_left_col_title[0] && (
+                    <h5 class="text-title-5">
+                        <Title
+                            title={blok.approach_left_col_title[0]}
+                        />
+                    </h5>
+                )
+            }
+            {
+                blok.approach_left_col_text && (
+                    <p class="text-p-18 flex whitespace-pre-wrap">
+                        {blok.approach_left_col_text}
+                    </p>
+                )
+            }
+        </div>
+        <div
+            class="flex w-1/2 flex-col justify-between gap-30 px-25 text-white md:gap-40 xl:pr-100 xl:pl-60"
+        >
+            {
+                blok.approach_right_col_title[0] && (
+                    <h5 class="text-title-5">
+                        <Title
+                            title={blok.approach_right_col_title[0]}
+                        />
+                    </h5>
+                )
+            }
+            {
+                blok.approach_right_col_text && (
+                    <p class="text-p-18 whitespace-pre-wrap">
+                        {blok.approach_right_col_text}
+                    </p>
+                )
+            }
+        </div>
+    </div>
+</div>
+{
+    blok.approach_link[0]?.label && (
+        <div class="px-gutter flex justify-center">
+            <ArrowLink
+                label={blok.approach_link[0].label}
+                link={blok.approach_link[0].link}
+                className="mt-40 md:mt-50"
+            />
+        </div>
+    )
+}

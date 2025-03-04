@@ -1,0 +1,93 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Title from "../../components/atoms/Title.astro";
+import SBImage from "../../components/global/SBImage.astro";
+
+const { blok } = Astro.props;
+---
+
+<div
+    class="mx-auto mt-32 flex w-10/12 flex-col gap-30 md:mt-50 md:flex-row md:gap-0 lg:w-8/12 xl:w-6/12"
+>
+    <div
+        class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
+    >
+        <div class="relative flex flex-col">
+            <div
+                class="text-orange absolute -top-13 -left-38 h-107 w-150 md:-top-22 md:-left-67 md:h-154 md:w-217"
+            >
+                <Icon name="punks" size="full" />
+            </div>
+            <span
+                class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
+                >{blok.people_left_col_emoji}</span
+            >
+            <span class="text-tag-big relative"
+                >{blok.people_left_col_title}</span
+            >
+        </div>
+        <p class="text-p-18 whitespace-pre-wrap">
+            {blok.people_left_col_text}
+        </p>
+    </div>
+    <div
+        class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
+    >
+        <div class="relative flex flex-col">
+            <div
+                class="text-blue absolute -top-5 -left-17 h-82 w-107 md:top-3 md:-left-18 md:h-103 md:w-135"
+            >
+                <Icon name="scouts" size="full" />
+            </div>
+            <span
+                class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
+                >{blok.people_right_col_emoji}</span
+            >
+            <span class="text-tag-big relative text-black"
+                >{blok.people_right_col_title}</span
+            >
+        </div>
+        <p class="text-p-18 whitespace-pre-wrap">
+            {blok.people_right_col_text}
+        </p>
+    </div>
+</div>
+<div class="mt-30 md:mt-65">
+    <h3
+        class="text-title-3 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12"
+    >
+        <Title title={blok.people_agency_title[0]} />
+    </h3>
+    {
+        blok.people_agency_photo && (
+            <div class="px-gutter mx-auto mt-24 md:mt-45 lg:w-8/12 xl:w-6/12">
+                <SBImage
+                    class="size-full lg:-ml-[2rem] lg:w-[calc(100%+4rem)] lg:max-w-none"
+                    image={blok.people_agency_photo}
+                />
+            </div>
+        )
+    }
+</div>
+<div class="mx-auto mt-24 w-10/12 md:mt-42 lg:w-8/12 xl:w-6/12">
+    {
+        blok.people_agency_legend_title && (
+            <h4 class="text-title-7 px-gutter mb-16 md:mb-23">
+                {blok.people_agency_legend_title}
+            </h4>
+        )
+    }
+    {
+        Array.isArray(blok.people_agency_legend_list) &&
+            blok.people_agency_legend_list.length > 0 && (
+                <ul class="text-p14 gap-8 md:columns-2">
+                    {blok.people_agency_legend_list.map(
+                        (item: { Text: string }) => (
+                            <li class="px-gutter">{item.Text}</li>
+                        ),
+                    )}
+                </ul>
+            )
+    }
+</div>
