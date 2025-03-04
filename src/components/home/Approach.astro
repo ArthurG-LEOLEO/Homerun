@@ -190,11 +190,13 @@ const { blok } = Astro.props;
         <span set:html={splitText(blok.title_third_part)} />
     </div>
 
-    <ArrowLink
-        label={blok.projects_link[0].label}
-        link={blok.projects_link[0].link}
-        className="mt-24 md:mt-40"
-    />
+    <div id="approach-link">
+        <ArrowLink
+            label={blok.projects_link[0].label}
+            link={blok.projects_link[0].link}
+            className="mt-24 md:mt-40"
+        />
+    </div>
 </div>
 
 <script>
@@ -620,7 +622,16 @@ const { blok } = Astro.props;
                     stagger: 0.1,
                 },
                 "start+=0.6",
+            )
+            .from(
+                "#approach-link",
+                {
+                    opacity: 0,
+                    x: -50,
+                },
+                "start+=0.6",
             );
+
         if (window.innerWidth < 1024) {
             tlAppear.from(
                 wordHls,
