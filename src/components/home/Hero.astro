@@ -340,11 +340,38 @@ const { blok } = Astro.props;
                 "<",
             );
 
-        tlVideo = gsap
-            .timeline({})
-            .to(videoWithLayers, {
+        const videoAppear = gsap.to(videoWithLayers, {
+            rotate: -6,
+            duration: 1.3,
+            y: function () {
+                const ww = window.innerWidth;
+                const wh = window.innerHeight;
+                const videoHeight = video ? video.offsetHeight : 0;
+                if (ww >= 1536) {
+                    // ww * 0.13888 = 20rem = pb-200
+                    const heroPaddingBottom = ww * 0.13888;
+                    const baselineHeight = ww * 0.042;
+                    const titleHeight = ww * 0.1456;
+                    const y =
+                        wh -
+                        heroPaddingBottom -
+                        baselineHeight -
+                        titleHeight * 0.6 -
+                        videoHeight;
+
+                    return y;
+                } else {
+                    return wh * 0.42 - videoHeight + ww * 0.06;
+                }
+            },
+            ease: "elastic.out(0.8,0.7)",
+            delay: 1.8,
+        });
+
+        tlVideo = gsap.timeline().fromTo(
+            videoWithLayers,
+            {
                 rotate: -6,
-                duration: 1.3,
                 y: function () {
                     const ww = window.innerWidth;
                     const wh = window.innerHeight;
@@ -366,55 +393,30 @@ const { blok } = Astro.props;
                         return wh * 0.42 - videoHeight + ww * 0.06;
                     }
                 },
-                ease: "elastic.out(0.8,0.7)",
-                delay: 1.8,
-            })
-            .fromTo(
-                videoWithLayers,
-                {
-                    rotate: -6,
-                    y: function () {
-                        const ww = window.innerWidth;
-                        const wh = window.innerHeight;
-                        const videoHeight = video ? video.offsetHeight : 0;
-                        if (ww >= 1536) {
-                            // ww * 0.13888 = 20rem = pb-200
-                            const heroPaddingBottom = ww * 0.13888;
-                            const baselineHeight = ww * 0.042;
-                            const titleHeight = ww * 0.1456;
-                            const y =
-                                wh -
-                                heroPaddingBottom -
-                                baselineHeight -
-                                titleHeight * 0.6 -
-                                videoHeight;
-
-                            return y;
-                        } else {
-                            return wh * 0.42 - videoHeight + ww * 0.06;
-                        }
-                    },
-                    x: function () {
-                        return window.innerWidth < 500 ? "-5vw" : "-32vw";
+                x: function () {
+                    return window.innerWidth < 500 ? "-5vw" : "-32vw";
+                },
+            },
+            {
+                duration: 1,
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top bottom",
+                    end: "bottom bottom",
+                    invalidateOnRefresh: true,
+                    scrub: true,
+                    onEnter: function () {
+                        videoAppear.kill();
                     },
                 },
-                {
-                    duration: 1,
-                    scrollTrigger: {
-                        trigger: videoHolder,
-                        start: "top bottom",
-                        end: "bottom bottom",
-                        invalidateOnRefresh: true,
-                        scrub: true,
-                    },
-                    height: "100vh",
-                    width: "100vw",
-                    rotate: 0,
-                    x: 0,
-                    y: "100vh",
-                    ease: "none",
-                },
-            );
+                height: "100vh",
+                width: "100vw",
+                rotate: 0,
+                x: 0,
+                y: "100vh",
+                ease: "none",
+            },
+        );
 
         tlVideoText = gsap.timeline({
             scrollTrigger: {
