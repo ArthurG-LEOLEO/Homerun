@@ -20,13 +20,19 @@ const colorMapping: Record<string, string> = {
 const textColor = `var(--color-${colorMapping[post.color] ?? colorMapping.default})`;
 ---
 
-<div class="feed-slider-post flex w-[33vw] shrink-0 px-12 select-none">
+<div
+    class="feed-slider-post flex w-[33vw] min-w-230 shrink-0 origin-top select-none"
+>
     <a
         href={post.link.url}
         target="_blank"
         draggable="false"
-        class="relative w-full overflow-hidden rounded-[1rem] p-32"
-        style={{ backgroundColor: post.color, aspectRatio, color: textColor }}
+        class="relative w-full overflow-hidden p-16 md:p-32"
+        style={{
+            backgroundColor: hasImage ? "#181817" : post.color,
+            aspectRatio,
+            color: textColor,
+        }}
     >
         <div
             class="relative z-[1] flex size-48 items-center justify-center rounded-full bg-black p-17 text-white"
@@ -34,7 +40,7 @@ const textColor = `var(--color-${colorMapping[post.color] ?? colorMapping.defaul
             {post.type === "linkedin" ? <Linkedin /> : <Instagram />}
         </div>
 
-        {post.text && <p class="mt-88">{post.text}</p>}
+        {post.text && <p class="mt-46 md:mt-88">{post.text}</p>}
 
         {
             hasImage && (

@@ -1,6 +1,7 @@
 ---
 const { language, blok } = Astro.props;
 
+import type { SbBlokData } from "@storyblok/astro";
 import SocialPost from "../../components/atoms/SocialPost.astro";
 import CTA from "../../components/global/CTA.astro";
 ---
@@ -65,19 +66,14 @@ import CTA from "../../components/global/CTA.astro";
             </div>
         </div>
     </div>
-    <div class="feed-slider-wrapper flex items-start overflow-hidden">
+    <div class="feed-slider-wrapper flex w-max items-start gap-24 pr-24">
         {
-            blok.posts?.map((post) => {
+            blok.posts?.map((post: SbBlokData) => {
                 return <SocialPost post={post} />;
             })
         }
         {
-            blok.posts?.map((post) => {
-                return <SocialPost post={post} />;
-            })
-        }
-        {
-            blok.posts?.map((post) => {
+            blok.posts?.map((post: SbBlokData) => {
                 return <SocialPost post={post} />;
             })
         }
@@ -85,38 +81,75 @@ import CTA from "../../components/global/CTA.astro";
 </div>
 
 <script>
-    import horizontalLoop from "../../scripts/horizontalLoop";
-
     let wrapper: HTMLElement | null;
     let posts: NodeListOf<Element> | null;
     let loop: GSAPTimeline | undefined | null;
 
+    let xTo: gsap.QuickToFunc | ((arg0: any) => void);
+    let total = 0;
+    let isHover = false;
+
     const init = () => {
+        //TODO: update on resize
+
         wrapper = document.querySelector(".feed-slider-wrapper");
+        if (!wrapper) return;
+
         posts = document.querySelectorAll(".feed-slider-post");
+        if (!posts) return;
 
-        loop = horizontalLoop(posts, {
-            draggable: true,
-            center: true,
-            snap: false,
+        const half = wrapper.clientWidth / 2;
+
+        const wrap = gsap.utils.wrap(-half, 0);
+
+        xTo = gsap.quickTo(wrapper, "x", {
+            duration: 0.5,
+            ease: "power3",
+            modifiers: {
+                x: gsap.utils.unitize(wrap),
+            },
         });
 
-        wrapper?.addEventListener("mouseenter", function () {
-            if (loop) {
-                gsap.to(loop, {
-                    duration: 0.5,
-                    timeScale: 0,
-                });
-            }
+        const onDragTlIn = gsap.timeline({ paused: true }).to(posts, {
+            scale: 0.95,
+            duration: 1,
+            ease: "elastic.out(1.2, 0.7)",
         });
-        wrapper?.addEventListener("mouseleave", function () {
-            if (loop) {
-                gsap.to(loop, {
-                    duration: 0.5,
-                    timeScale: 1,
-                });
-            }
+
+        const onDragTlOut = gsap.timeline({ paused: true }).to(posts, {
+            scale: 1,
+            duration: 1,
+            ease: "elastic.out(1.2, 0.7)",
         });
+
+        window.Observer.create({
+            target: wrapper,
+            type: "pointer,touch",
+            onPress: () => {
+                onDragTlOut.pause();
+                onDragTlIn.restart();
+            },
+            onDrag: (self: { deltaX: number }) => {
+                gsap.set(posts, { pointerEvents: "none" });
+                total += self.deltaX;
+                xTo(total);
+            },
+            onRelease: () => {
+                onDragTlIn.pause();
+                onDragTlOut.restart();
+                gsap.set(posts, { pointerEvents: "auto" });
+            },
+            onHover: () => (isHover = true),
+            onHoverEnd: () => (isHover = false),
+        });
+
+        gsap.ticker.add(tick);
+    };
+
+    const tick = (time: any, deltaTime: number) => {
+        if (isHover) return;
+        total -= deltaTime / 10; // Adjust the speed of automatic scrolling
+        xTo(total);
     };
 
     const cleanup = () => {
@@ -129,8 +162,6 @@ import CTA from "../../components/global/CTA.astro";
     };
 
     document.addEventListener("astro:page-load", () => {
-        // TODO: This is running every time we change pages
-        // We need to make sure the component exists in the page before init
         init();
     });
 

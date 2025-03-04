@@ -47,9 +47,11 @@ const footerData = data.story.content.Footer[0];
 <script>
     import { gsap } from "gsap";
     import ScrollTrigger from "gsap/ScrollTrigger";
+    import Observer from "gsap/Observer";
     import Lenis from "lenis";
 
     gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(Observer);
 
     // Initialize a new Lenis instance for smooth scrolling
     const lenis = new Lenis();
@@ -68,6 +70,7 @@ const footerData = data.story.content.Footer[0];
 
     window.gsap = gsap;
     window.lenis = lenis;
+    window.Observer = Observer;
     document.addEventListener("astro:page-load", (event) => {
         window.scrollTo(0, 0);
     });
