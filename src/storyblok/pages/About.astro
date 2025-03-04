@@ -10,6 +10,7 @@ import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
 import SBImage from "../../components/global/SBImage.astro";
 import LogosGrid from "../sections/LogosGrid.astro";
+import LogosBubbles from "../sections/LogosBubbles.astro";
 import SBRichText from "../../components/global/SBRichText.astro";
 import SBListIcon from "../../components/global/SBListIcon.astro";
 import SBListOrdered from "../../components/global/SBListOrdered.astro";
@@ -234,6 +235,10 @@ const { language, blok } = Astro.props;
                     className="mt-42 md:mt-65"
                 />
             )}
+            {blok.mindset_brands_title[0] && (
+                <h3 class="text-title-3 mt-65 md:mt-90"><Title title={blok.mindset_brands_title[0]} /></h3>
+            )}
+            <LogosBubbles logos={blok.mindset_brands_logos} className="mt-24 md:mt-0" />
         </div>
     </Section>
     <Section title={blok.tomorrows_title[0]} bgColor="black" color="white">
