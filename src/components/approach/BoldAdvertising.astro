@@ -5,32 +5,96 @@ import ArrowLink from "../atoms/ArrowLink.astro";
 const { blok } = Astro.props;
 ---
 
-<div class="mb-55">
-    <h2 class="text-title-2 mx-gutter mb-36">
-        {blok.communication_title}
-    </h2>
-    <div
-        class="px-gutter text-p-24 w-full"
-        set:html={renderRichText(blok.communication_text)}
-    />
-</div>
-<div class="flex flex-col gap-6">
+<div id="bold-advertising">
+    <div class="mb-55">
+        <h2 class="text-title-2 mx-gutter mb-36">
+            {blok.communication_title}
+        </h2>
+        <div
+            class="px-gutter text-p-24 w-full"
+            set:html={renderRichText(blok.communication_text)}
+        />
+    </div>
+    <div class="flex flex-col">
+        {
+            blok.communication_items
+                .split(",")
+                .map((item: string) => (
+                    <div class="text-title-4 bold-ad-item bg-white px-24 py-16 text-black md:px-32 md:py-24">
+                        {item}
+                    </div>
+                ))
+        }
+    </div>
     {
-        blok.communication_items
-            .split(",")
-            .map((item: string) => (
-                <div class="text-title-4 bg-white px-24 py-16 text-black md:px-32 md:py-24">
-                    {item}
-                </div>
-            ))
+        blok.communication_link[0]?.label && (
+            <ArrowLink
+                label={blok.communication_link[0].label}
+                link={blok.communication_link[0].link}
+                className="mt-40"
+            />
+        )
     }
 </div>
-{
-    blok.communication_link[0]?.label && (
-        <ArrowLink
-            label={blok.communication_link[0].label}
-            link={blok.communication_link[0].link}
-            className="mt-40"
-        />
-    )
-}
+
+<script>
+    import { getRandomNumber } from "../../utils/number";
+
+    let items: NodeListOf<HTMLElement> | null;
+    let tl: gsap.core.Timeline | null;
+
+    const setVariables = () => {
+        items = document.querySelectorAll("#bold-advertising .bold-ad-item");
+    };
+    const init = () => {
+        const container = document.querySelector("#bold-advertising");
+        if (!container) return;
+
+        setVariables();
+
+        tl = gsap.timeline();
+
+        items?.forEach((item, index) => {
+            const inverse = index % 2 !== 0 ? 1 : -1;
+            // const inverse = Math.random() > 0.5 ? 1 : -1;
+            const startR = getRandomNumber(2, 5) * inverse;
+            const endR = getRandomNumber(-2, 0) * inverse;
+            tl?.fromTo(
+                item,
+                { rotate: startR },
+                {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: () =>
+                            window.innerWidth > 1024 ? "top top" : "top bottom",
+                        end: () =>
+                            window.innerWidth > 1024
+                                ? "bottom top-=100%"
+                                : "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                    ease: "linear",
+                    rotate: endR,
+                },
+                "start",
+            );
+        });
+    };
+
+    const cleanup = () => {
+        if (tl) {
+            tl.kill();
+            tl = null;
+        }
+        items = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

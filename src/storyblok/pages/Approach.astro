@@ -23,12 +23,12 @@ const { language, blok } = Astro.props;
     </div>
     <div id="scroll-container">
         <div class="relative mt-105 flex aspect-[1440/660] w-full lg:mt-130">
-            <div class="bg-green w-1/2 rounded-tl-[100%]"></div>
+            <div class="bg-pink w-1/2 rounded-tl-[100%]"></div>
             <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
             <div
                 id="helmet"
                 class="absolute top-[-5rem] left-[50%] size-[40vw] lg:size-[35vw]"
-                style="--c: #FF0000"
+                style="--c: #2D5A36"
             >
                 <div
                     id="inner-helmet"
@@ -40,7 +40,7 @@ const { language, blok } = Astro.props;
         <div id="split-container" class="relative" style="--progress: 0.5;">
             <div
                 id="left-split"
-                class="bg-green absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))]"
+                class="bg-pink absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))]"
             >
             </div>
 
@@ -53,7 +53,7 @@ const { language, blok } = Astro.props;
             <Hero blok={blok} />
 
             <div id="split-left-wrapper">
-                <div id="split-left" class="py-105 text-white lg:py-130">
+                <div id="split-left" class="py-105 lg:py-130">
                     <div
                         id="split-left-inner"
                         class="translate-x-[calc(100%*var(--progress)*-1)] lg:translate-x-[calc(70%*var(--progress)*-1)]"
@@ -81,7 +81,7 @@ const { language, blok } = Astro.props;
             </div>
             <div
                 id="second-mobile-helmet"
-                style="--c: #cdf0ff"
+                style="--c: #2D5A36"
                 class="flex w-full items-center justify-center lg:hidden"
             >
                 <div id="second-inner-helmet" class="size-[40vw] bg-[var(--c)]">
@@ -161,10 +161,10 @@ const { language, blok } = Astro.props;
             .fromTo(
                 helmet,
                 {
-                    "--c": "#FF0000",
+                    "--c": "#2D5A36",
                 },
                 {
-                    "--c": "#cdf0ff",
+                    "--c": "#2D5A36",
                 },
             );
 
@@ -180,7 +180,7 @@ const { language, blok } = Astro.props;
             .fromTo(
                 secondMobileHelmet,
                 {
-                    "--c": "#cdf0ff",
+                    "--c": "#2D5A36",
                 },
                 {
                     "--c": "#EDD4F8",
@@ -260,10 +260,10 @@ const { language, blok } = Astro.props;
             .fromTo(
                 helmet,
                 {
-                    "--c": "#FF0000",
+                    "--c": "#2D5A36",
                 },
                 {
-                    "--c": "#cdf0ff",
+                    "--c": "#E56138",
                 },
             );
 

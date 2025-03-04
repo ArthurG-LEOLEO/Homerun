@@ -4,15 +4,18 @@ import type { SbBlokData } from "@storyblok/astro";
 const { items } = Astro.props;
 ---
 
-<div id="cultural-items" class="mb-140 w-full text-black lg:mb-80 lg:w-5/6">
+<div
+    id="cultural-items"
+    class="mb-140 flex w-full flex-col text-black lg:mb-80 lg:w-5/6"
+>
     {
         items.map((item: SbBlokData, index: number) => (
             <div
                 class:list={[
-                    "flex w-full gap-16 py-24 pr-24 pl-16 md:gap-40 md:py-40 md:pr-40 md:pl-32",
+                    "cultural-item flex w-full gap-16 py-24 pr-24 pl-16 md:gap-40 md:py-40 md:pr-40 md:pl-32",
                     {
                         "items-start bg-white": !item.highlight,
-                        "bg-orange items-center text-white": item.highlight,
+                        "items-center bg-black text-white": item.highlight,
                     },
                 ]}
             >
@@ -29,3 +32,61 @@ const { items } = Astro.props;
         ))
     }
 </div>
+
+<script>
+    import { getRandomNumber } from "../../utils/number";
+
+    let items: NodeListOf<HTMLElement> | null;
+
+    let tl: gsap.core.Timeline | null;
+
+    const setVariables = () => {
+        items = document.querySelectorAll("#cultural-items .cultural-item");
+    };
+    const init = () => {
+        const container = document.querySelector("#cultural-items");
+        if (!container) return;
+
+        setVariables();
+
+        tl = gsap.timeline();
+
+        items?.forEach((i, index) => {
+            const inverse = index % 2 !== 0 ? 1 : -1;
+            // const inverse = Math.random() > 0.5 ? 1 : -1;
+            const startR = getRandomNumber(2, 5) * inverse;
+            const endR = getRandomNumber(-2, 0) * inverse;
+            tl?.fromTo(
+                i,
+                { rotate: startR },
+                {
+                    scrollTrigger: {
+                        trigger: i,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true,
+                    },
+                    rotate: endR,
+                    ease: "linear",
+                },
+                "start",
+            );
+        });
+    };
+
+    const cleanup = () => {
+        if (tl) {
+            tl.kill();
+            tl = null;
+        }
+        items = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

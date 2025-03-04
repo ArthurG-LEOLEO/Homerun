@@ -1,0 +1,25 @@
+---
+import { renderRichText, type ISbRichtext } from "@storyblok/astro";
+import { Icon } from "astro-icon/components";
+
+const { blok } = Astro.props;
+---
+
+<button
+    class="flex justify-between gap-10 border border-current/40 px-16 py-24 text-left md:px-40 md:py-40"
+>
+    <div>
+        <div class="text-p-22">{blok.title}</div>
+        <div class="h-0 overflow-hidden">
+            <div
+                class="pt-24"
+                set:html={renderRichText(blok.text as ISbRichtext)}
+            />
+        </div>
+    </div>
+    <div
+        class="flex size-28 shrink-0 items-center justify-center rounded-full border-2 md:size-34"
+    >
+        <Icon name="arrow-down" class="size-12 md:size-16" />
+    </div>
+</button>
