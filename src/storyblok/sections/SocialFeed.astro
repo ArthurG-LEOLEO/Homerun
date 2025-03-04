@@ -196,7 +196,7 @@ import CTA from "../../components/global/CTA.astro";
                 },
                 scrollTrigger: {
                     trigger: container,
-                    start: "top 80%",
+                    start: "top 50%",
                     end: "bottom top",
                 },
                 onComplete: () => {
@@ -206,9 +206,9 @@ import CTA from "../../components/global/CTA.astro";
             .from(
                 ".feed-slider-container .el",
                 {
-                    duration: 0.6,
+                    duration: 0.4,
                     opacity: 0,
-                    y: 20,
+                    y: 50,
                     stagger: 0.1,
                 },
                 "start",
@@ -217,14 +217,17 @@ import CTA from "../../components/global/CTA.astro";
                 ".feed-slider-container",
                 {
                     "--underline": 1,
+                    duration: 1,
+                    ease: "expo.inOut",
                 },
-                "start+=0.4",
+                "start+=0.3",
             )
             .to(
                 scrollingSpeed,
                 {
                     x: 1,
-                    duration: 1.2,
+                    duration: 2,
+                    ease: "expo.out",
                 },
                 "start+=0.4",
             )
@@ -232,9 +235,9 @@ import CTA from "../../components/global/CTA.astro";
                 ".feed-slider-wrapper",
                 {
                     opacity: 0,
-                    duration: 0.5,
+                    duration: 1,
                 },
-                "start+=0.4",
+                "start+=0.2",
             );
 
         gsapObserver = Observer.create({
