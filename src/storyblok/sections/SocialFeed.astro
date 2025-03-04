@@ -6,16 +6,19 @@ import SocialPost from "../../components/atoms/SocialPost.astro";
 import CTA from "../../components/global/CTA.astro";
 ---
 
-<div class="bg-black pt-90 pb-90 text-white md:pt-170 md:pb-130">
+<div
+    class="feed-slider-container bg-black pt-90 pb-90 text-white md:pt-170 md:pb-130"
+    style="--underline: 0;"
+>
     <div class="container-main">
         <div
-            class="after:left-gutter after:right-gutter relative mb-70 flex items-center justify-between gap-50 pb-8 after:absolute after:bottom-0 after:h-1 after:bg-[#656565]"
+            class="after:left-gutter after:right-gutter relative mb-70 flex items-center justify-between gap-50 pb-8 after:absolute after:bottom-0 after:h-1 after:origin-left after:scale-x-[var(--underline)] after:bg-[#656565]"
         >
             <div
                 class="flex w-full items-center justify-between gap-6 md:w-auto"
             >
-                <h2 class="text-title-1 px-gutter">{blok.title}</h2>
-                <div class="px-gutter flex flex-col">
+                <h2 class="text-title-1 px-gutter el">{blok.title}</h2>
+                <div class="px-gutter el flex flex-col">
                     {
                         blok.subtitle && (
                             <span class="text-[#666]">{blok.subtitle}</span>
@@ -31,7 +34,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.twitter}
                             label="Twitter"
                             icon="twitter"
-                            className="bg-blue text-white"
+                            className="bg-blue text-white el"
                         />
                     )
                 }
@@ -41,7 +44,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.facebook}
                             label="Facebook"
                             icon="facebook"
-                            className="bg-blue text-white"
+                            className="bg-blue text-white el"
                         />
                     )
                 }
@@ -51,7 +54,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.linkedin}
                             label="LinkedIn"
                             icon="linkedin"
-                            className="bg-green text-white"
+                            className="bg-green text-white el"
                         />
                     )
                 }
@@ -61,7 +64,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.instagram}
                             label="Instagram"
                             icon="instagram"
-                            className="bg-blue text-black"
+                            className="bg-blue text-black el"
                         />
                     )
                 }
@@ -88,7 +91,7 @@ import CTA from "../../components/global/CTA.astro";
                 <CTA
                     link={blok.twitter}
                     icon="twitter"
-                    className="bg-blue text-white"
+                    className="bg-blue text-white el"
                 />
             )
         }
@@ -97,7 +100,7 @@ import CTA from "../../components/global/CTA.astro";
                 <CTA
                     link={blok.facebook}
                     icon="facebook"
-                    className="bg-blue text-white"
+                    className="bg-blue text-white el"
                 />
             )
         }
@@ -106,7 +109,7 @@ import CTA from "../../components/global/CTA.astro";
                 <CTA
                     link={blok.linkedin}
                     icon="linkedin"
-                    className="bg-green text-white"
+                    className="bg-green text-white el"
                 />
             )
         }
@@ -115,7 +118,7 @@ import CTA from "../../components/global/CTA.astro";
                 <CTA
                     link={blok.instagram}
                     icon="instagram"
-                    className="bg-blue text-black"
+                    className="bg-blue text-black el"
                 />
             )
         }
@@ -124,6 +127,7 @@ import CTA from "../../components/global/CTA.astro";
 
 <script>
     let wrapper: HTMLElement | null;
+    let container: HTMLElement | null;
     let posts: NodeListOf<Element> | null;
     let postLinks: NodeListOf<Element> | null;
     let layers1: NodeListOf<Element> | null;
@@ -136,9 +140,14 @@ import CTA from "../../components/global/CTA.astro";
     let isHover = false;
     let gsapObserver: Observer;
 
+    let tlAppear: gsap.core.Timeline;
+
+    let scrollingSpeed = { x: 20 };
+
     const init = () => {
+        container = document.querySelector(".feed-slider-container");
         wrapper = document.querySelector(".feed-slider-wrapper");
-        if (!wrapper) return;
+        if (!container || !wrapper) return;
 
         posts = document.querySelectorAll(".feed-slider-post");
         if (!posts) return;
@@ -178,6 +187,56 @@ import CTA from "../../components/global/CTA.astro";
             duration: 1,
             ease: "elastic.out(1.2, 0.7)",
         });
+
+        tlAppear = gsap
+            .timeline({
+                default: {
+                    duration: 0.4,
+                    ease: "power4.out",
+                },
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top 80%",
+                    end: "bottom top",
+                    markers: true,
+                },
+                onComplete: () => {
+                    gsap.ticker.add(tick);
+                },
+            })
+            .from(
+                ".feed-slider-container .el",
+                {
+                    duration: 0.6,
+                    opacity: 0,
+                    y: 20,
+                    stagger: 0.1,
+                },
+                "start",
+            )
+            .to(
+                ".feed-slider-container",
+                {
+                    "--underline": 1,
+                },
+                "start+=0.4",
+            )
+            .to(
+                scrollingSpeed,
+                {
+                    x: 1,
+                    duration: 1.2,
+                },
+                "start+=0.4",
+            )
+            .from(
+                ".feed-slider-wrapper",
+                {
+                    opacity: 0,
+                    duration: 0.5,
+                },
+                "start+=0.4",
+            );
 
         gsapObserver = Observer.create({
             target: wrapper,
@@ -230,7 +289,7 @@ import CTA from "../../components/global/CTA.astro";
 
     const tick = (time: any, deltaTime: number) => {
         if (isHover) return;
-        total -= deltaTime / 10; // Speed of automatic scrolling
+        total -= (deltaTime / 10) * scrollingSpeed.x;
         xTo(total);
     };
 
@@ -253,6 +312,7 @@ import CTA from "../../components/global/CTA.astro";
         if (gsapObserver) {
             gsapObserver.kill();
         }
+        tlAppear?.kill();
         wrapper = null;
         posts = null;
         window.removeEventListener("resize", resize);
