@@ -100,6 +100,9 @@ const { blok } = Astro.props;
 </div>
 
 <script>
+    let banner: HTMLElement | null;
+    let header: HTMLElement | null;
+
     let videoHolder: HTMLElement | null;
     let video: HTMLElement | null;
     let videoLayer1: HTMLElement | null;
@@ -125,6 +128,8 @@ const { blok } = Astro.props;
 
     const setVariables = () => {
         overlay = document.querySelector("#home-hero #home-hero-overlay");
+        banner = document.querySelector("#layout-banner");
+        header = document.querySelector("#layout-header");
         heroTexts = document.querySelector("#home-hero #home-hero-texts");
 
         title = document.querySelectorAll("#home-hero .home-hero-title");
@@ -165,9 +170,19 @@ const { blok } = Astro.props;
         videoOverlay = document.querySelector("#home-hero #home-video-overlay");
     };
     const init = () => {
+        const wrapper = document.querySelector("#home-hero");
+        if (!wrapper) return;
+
         setVariables();
 
         gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            })
             .set(title, {
                 width: "30%",
                 y: (i, target) => {
@@ -228,6 +243,25 @@ const { blok } = Astro.props;
                 overlay,
                 {
                     scaleY: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
                     duration: 0.6,
                     ease: "expo.out",
                 },
@@ -467,8 +501,6 @@ const { blok } = Astro.props;
     };
 
     document.addEventListener("astro:page-load", () => {
-        // TODO: This is running every time we change pages
-        // We need to make sure the component exists in the page before init
         init();
     });
 

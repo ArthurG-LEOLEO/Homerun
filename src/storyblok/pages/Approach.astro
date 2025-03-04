@@ -10,7 +10,7 @@ import BoldAdvertising from "../../components/approach/BoldAdvertising.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div class="approach overflow-hidden">
+<div class="approach overflow-hidden" id="page-approach">
     <div class="container-main flex flex-col items-center pt-150 lg:pt-135">
         <span
             class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
@@ -27,7 +27,7 @@ const { language, blok } = Astro.props;
             <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
             <div
                 id="helmet"
-                class="absolute top-[-5rem] left-[50%] size-[40vw] lg:size-[35vw]"
+                class="absolute top-[-5rem] left-[50%] size-[40vw] lg:size-[30vw]"
                 style="--c: #2D5A36"
             >
                 <div
@@ -116,6 +116,8 @@ const { language, blok } = Astro.props;
     let splitLeft: HTMLElement | null;
     let helmet: HTMLElement | null;
     let secondMobileHelmet: HTMLElement | null;
+
+    let tlAppear: gsap.core.Timeline | null;
 
     // GSAP MatchMedia
     let mm: gsap.MatchMedia | null;
@@ -282,6 +284,44 @@ const { language, blok } = Astro.props;
     };
 
     const init = () => {
+        const page = document.querySelector("#page-approach");
+
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelector("#layout-header");
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+
         setDOMElements();
 
         mm = gsap.matchMedia();
@@ -347,8 +387,6 @@ const { language, blok } = Astro.props;
     };
 
     document.addEventListener("astro:page-load", () => {
-        // TODO: This is running every time we change pages
-        // We need to make sure the component exists in the page before init
         init();
     });
 

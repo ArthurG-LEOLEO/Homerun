@@ -29,16 +29,9 @@ export function parseUrl(
 export async function generateStaticPaths() {
     const storyblokApi = useStoryblokApi();
 
-    let links = [];
-
-    try {
-        links = await storyblokApi.getAll("cdn/links", {
-            version: "draft",
-        });
-    } catch (error) {
-        console.log("oui");
-        console.log(error);
-    }
+    const links = await storyblokApi.getAll("cdn/links", {
+        version: "draft",
+    });
 
     return links
         .filter((link) => !link.is_folder)
@@ -51,8 +44,6 @@ export async function generateStaticPaths() {
                 language === defaultLocale
                     ? link.slug.replace(/^(en\/)/, "")
                     : link.slug;
-
-            console.log(link.slug);
 
             return {
                 props: {

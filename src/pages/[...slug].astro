@@ -30,8 +30,10 @@ const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
 });
 
 const story = data.story;
+
+const headerLogoless = story.content.component === "home";
 ---
 
-<Layout language={language}>
+<Layout language={language} headerLogoless={headerLogoless}>
     <StoryblokComponent language={language} blok={story.content} />
 </Layout>

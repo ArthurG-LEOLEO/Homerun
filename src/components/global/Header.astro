@@ -1,34 +1,29 @@
 ---
-const currentPath = Astro.url.pathname;
+import { Icon } from "astro-icon/components";
+import LogoTypo from "./LogoTypo.astro";
 
-const routes = [
-    {
-        slug: "/",
-        name: "Home",
-    },
-    {
-        slug: "/test",
-        name: "Page",
-    },
-    {
-        slug: "/approach",
-        name: "Approach",
-    },
-    {
-        slug: "/about",
-        name: "About",
-    },
-];
+const { logoless } = Astro.props;
 ---
 
-<header class="fixed top-0 right-0 left-0 z-[100] px-100 py-50">
-    <nav class="flex justify-end gap-20">
+<header
+    class="absolute top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
+    id="layout-header"
+>
+    <div class="container-main flex items-center">
         {
-            routes.map((r) => (
-                <a class="text-[2rem]" href={r.slug}>
-                    {r.name}
+            !logoless && (
+                <a href="/" class="px-gutter h-36 w-237 text-black">
+                    <LogoTypo />
                 </a>
-            ))
+            )
         }
-    </nav>
+        <div class="px-gutter ml-auto">
+            <button
+                class="bg-orange text-cta16 font-space flex items-center gap-10 rounded-[10rem] px-24 py-16 text-white"
+            >
+                <span>Menu</span>
+                <Icon name="open" size="16" />
+            </button>
+        </div>
+    </div>
 </header>

@@ -11,12 +11,13 @@ import { ClientRouter } from "astro:transitions";
 
 import Grid from "../components/global/Grid.astro";
 import Header from "../components/global/Header.astro";
+import Banner from "../components/global/Banner.astro";
 import Footer from "../components/global/Footer.astro";
 import Loader from "../components/global/Loader.astro";
 
 const isDev = import.meta.env.DEV;
 const storyblokApi = useStoryblokApi();
-const { language } = Astro.props;
+const { language, headerLogoless = false } = Astro.props;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
     version: "draft",
@@ -36,7 +37,8 @@ const footerData = data.story.content.Footer[0];
         <ClientRouter />
     </head>
     <body>
-        <Header />
+        <Banner />
+        <Header logoless={headerLogoless} />
         <slot />
         <Footer footerData={footerData} />
         <Loader />

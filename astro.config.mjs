@@ -5,6 +5,7 @@ import { loadEnv } from "vite";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import tailwindcss from "@tailwindcss/vite";
 import netlify from "@astrojs/netlify";
+import node from "@astrojs/node";
 import icon from "astro-icon";
 
 import i18n from "./src/i18n.config";
@@ -41,5 +42,9 @@ export default defineConfig({
             https: true,
         },
     },
-    adapter: netlify(),
+    adapter: isPreview
+        ? node({
+              mode: "standalone",
+          })
+        : undefined,
 });
