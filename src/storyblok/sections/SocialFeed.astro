@@ -83,11 +83,11 @@ import CTA from "../../components/global/CTA.astro";
 <script>
     let wrapper: HTMLElement | null;
     let posts: NodeListOf<Element> | null;
-    let loop: GSAPTimeline | undefined | null;
 
     let xTo: gsap.QuickToFunc | ((arg0: any) => void);
     let total = 0;
     let isHover = false;
+    let gsapObserver: Observer;
 
     const init = () => {
         //TODO: update on resize
@@ -122,7 +122,7 @@ import CTA from "../../components/global/CTA.astro";
             ease: "elastic.out(1.2, 0.7)",
         });
 
-        window.Observer.create({
+        gsapObserver = Observer.create({
             target: wrapper,
             type: "pointer,touch",
             onPress: () => {
@@ -144,6 +144,8 @@ import CTA from "../../components/global/CTA.astro";
         });
 
         gsap.ticker.add(tick);
+
+        window.addEventListener("resize", resize);
     };
 
     const tick = (time: any, deltaTime: number) => {
@@ -152,13 +154,28 @@ import CTA from "../../components/global/CTA.astro";
         xTo(total);
     };
 
+    const resize = () => {
+        if (!wrapper) return;
+
+        const half = wrapper.clientWidth / 2;
+        const wrap = gsap.utils.wrap(-half, 0);
+
+        xTo = gsap.quickTo(wrapper, "x", {
+            duration: 0.5,
+            ease: "power3",
+            modifiers: {
+                x: gsap.utils.unitize(wrap),
+            },
+        });
+    };
+
     const cleanup = () => {
-        if (loop) {
-            loop.kill();
-            loop = null;
+        if (gsapObserver) {
+            gsapObserver.kill();
         }
         wrapper = null;
         posts = null;
+        window.removeEventListener("resize", resize);
     };
 
     document.addEventListener("astro:page-load", () => {
