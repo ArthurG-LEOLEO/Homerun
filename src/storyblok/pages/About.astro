@@ -1,19 +1,16 @@
 ---
-import { Icon } from "astro-icon/components";
-
-import { storyblokEditable } from "@storyblok/astro";
-import RichTextRenderer from "storyblok-rich-text-astro-renderer/RichTextRenderer.astro";
-
-import Title from "../../components/atoms/Title.astro";
-import ArrowLink from "../../components/atoms/ArrowLink.astro";
 import Hero from "../../components/about/Hero.astro";
 import Section from "../../components/about/Section.astro";
-import SBImage from "../../components/global/SBImage.astro";
-import LogosGrid from "../sections/LogosGrid.astro";
-import LogosBubbles from "../sections/LogosBubbles.astro";
-import SBRichText from "../../components/global/SBRichText.astro";
-import SBListIcon from "../../components/global/SBListIcon.astro";
-import SBListOrdered from "../../components/global/SBListOrdered.astro";
+import People from "../../components/about/People.astro";
+import Clients from "../../components/about/Clients.astro";
+import Approach from "../../components/about/Approach.astro";
+import Sports from "../../components/about/Sports.astro";
+import Worldwide from "../../components/about/Worldwide.astro";
+import Mindset from "../../components/about/Mindset.astro";
+import Tomorrows from "../../components/about/Tomorrows.astro";
+
+
+import Title from "../../components/atoms/Title.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -33,295 +30,25 @@ const { language, blok } = Astro.props;
         <Hero blok={blok} />
     </div>
     <Section title={blok.people_title[0]} bgColor="black" color="white">
-        <div
-            class="mx-auto mt-32 flex w-10/12 flex-col gap-30 md:mt-50 md:flex-row md:gap-0 lg:w-8/12 xl:w-6/12"
-        >
-            <div
-                class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
-            >
-                <div class="relative flex flex-col">
-                    <div
-                        class="text-orange absolute -top-13 -left-38 h-107 w-150 md:-top-22 md:-left-67 md:h-154 md:w-217"
-                    >
-                        <Icon name="punks" size="full" />
-                    </div>
-                    <span
-                        class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
-                        >{blok.people_left_col_emoji}</span
-                    >
-                    <span class="text-tag-big relative"
-                        >{blok.people_left_col_title}</span
-                    >
-                </div>
-                <p class="text-p-18 whitespace-pre-wrap">
-                    {blok.people_left_col_text}
-                </p>
-            </div>
-            <div
-                class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
-            >
-                <div class="relative flex flex-col">
-                    <div
-                        class="text-blue absolute -top-5 -left-17 h-82 w-107 md:top-3 md:-left-18 md:h-103 md:w-135"
-                    >
-                        <Icon name="scouts" size="full" />
-                    </div>
-                    <span
-                        class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
-                        >{blok.people_right_col_emoji}</span
-                    >
-                    <span class="text-tag-big relative text-black"
-                        >{blok.people_right_col_title}</span
-                    >
-                </div>
-                <p class="text-p-18 whitespace-pre-wrap">
-                    {blok.people_right_col_text}
-                </p>
-            </div>
-        </div>
-        <div class="mt-30 md:mt-65">
-            <h3
-                class="text-title-3 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12"
-            >
-                <Title title={blok.people_agency_title[0]} />
-            </h3>
-            {
-                blok.people_agency_photo && (
-                    <div class="px-gutter mx-auto mt-24 md:mt-45 lg:w-8/12 xl:w-6/12">
-                        <SBImage
-                            class="size-full lg:-ml-[2rem] lg:w-[calc(100%+4rem)] lg:max-w-none"
-                            image={blok.people_agency_photo}
-                        />
-                    </div>
-                )
-            }
-        </div>
-        <div class="mx-auto mt-24 w-10/12 md:mt-42 lg:w-8/12 xl:w-6/12">
-            {
-                blok.people_agency_legend_title && (
-                    <h4 class="text-title-7 px-gutter mb-16 md:mb-23">
-                        {blok.people_agency_legend_title}
-                    </h4>
-                )
-            }
-            {
-                Array.isArray(blok.people_agency_legend_list) &&
-                    blok.people_agency_legend_list.length > 0 && (
-                        <ul class="text-p14 gap-8 md:columns-2">
-                            {blok.people_agency_legend_list.map(
-                                (item: { Text: string }) => (
-                                    <li class="px-gutter">{item.Text}</li>
-                                ),
-                            )}
-                        </ul>
-                    )
-            }
-        </div>
+        <People blok={blok} />
     </Section>
     <Section title={blok.clients_title[0]} bgColor="blue" color="black">
-        {
-            blok.clients_intro && (
-                <p class="text-p-24 px-gutter mx-auto mt-25 w-10/12 whitespace-pre-wrap md:mt-55 lg:w-8/12 xl:w-6/12">
-                    {blok.clients_intro}
-                </p>
-            )
-        }
-        <LogosGrid logos={blok.clients_logos[0]} className="mt-55 md:mt-80" />
-        {
-            blok.clients_text && (
-                <p class="text-p-18 px-gutter mx-auto mt-56 w-10/12 max-w-276 whitespace-pre-wrap md:mt-72 md:max-w-none lg:w-8/12 xl:w-6/12 2xl:w-4/12">
-                    {blok.clients_text}
-                </p>
-            )
-        }
-        <div
-            class="text-title-3 px-gutter mx-auto mt-48 max-w-334 md:mt-72 md:w-10/12 md:max-w-none lg:w-8/12 xl:w-6/12"
-        >
-            {
-                blok.clients_workflow_title && (
-                    <h3>{blok.clients_workflow_title}</h3>
-                )
-            }
-            {
-                Array.isArray(blok.clients_workflow_list) &&
-                    blok.clients_workflow_list.length > 0 && (
-                        <ul>
-                            {blok.clients_workflow_list.map(
-                                (item: { Text: string }) => (
-                                    <li class="inline">
-                                        <span class="relative bottom-[0.3rem] inline-flex size-28 items-center justify-center rounded-full border-2 border-current align-baseline md:size-34">
-                                            <Icon
-                                                name="arrow-right"
-                                                class:list={[
-                                                    "size-14 md:size-16",
-                                                ]}
-                                            />
-                                        </span>
-                                        <span> {item.Text} </span>
-                                    </li>
-                                ),
-                            )}
-                        </ul>
-                    )
-            }
-        </div>
+        <Clients blok={blok} />
     </Section>
     <Section title={blok.approach_title[0]} bgColor="white" color="black">
-        <div
-            class="relative mx-auto mt-60 pt-40 pb-60 md:mt-95 md:pt-120 md:pb-90 lg:w-8/12"
-        >
-            <div
-                class="-left-gutter before:bg-pink after:bg-pink absolute top-0 right-1/2 flex h-full flex-col before:aspect-187/171 before:w-full before:flex-none before:rounded-tl-full after:flex-1"
-            >
-            </div>
-            <div
-                class="-right-gutter before:bg-orange after:bg-orange absolute top-0 left-1/2 flex h-full flex-col before:aspect-187/171 before:w-full before:flex-none before:rounded-tr-full after:flex-1"
-            >
-            </div>
-            <div
-                class="px-gutter relative mx-auto mb-80 w-6/12 max-w-300 md:mb-45"
-            >
-                <div
-                    class="flex aspect-174/240 items-center justify-center bg-black"
-                >
-                    <span class="text-white">SPLINE</span>
-                </div>
-            </div>
-            <div class="relative flex">
-                <div
-                    class="flex w-1/2 flex-col justify-between gap-30 px-25 text-black md:gap-40 xl:pr-60 xl:pl-100"
-                >
-                    {
-                        blok.approach_left_col_title[0] && (
-                            <h5 class="text-title-5">
-                                <Title
-                                    title={blok.approach_left_col_title[0]}
-                                />
-                            </h5>
-                        )
-                    }
-                    {
-                        blok.approach_left_col_text && (
-                            <p class="text-p-18 flex whitespace-pre-wrap">
-                                {blok.approach_left_col_text}
-                            </p>
-                        )
-                    }
-                </div>
-                <div
-                    class="flex w-1/2 flex-col justify-between gap-30 px-25 text-white md:gap-40 xl:pr-100 xl:pl-60"
-                >
-                    {
-                        blok.approach_right_col_title[0] && (
-                            <h5 class="text-title-5">
-                                <Title
-                                    title={blok.approach_right_col_title[0]}
-                                />
-                            </h5>
-                        )
-                    }
-                    {
-                        blok.approach_right_col_text && (
-                            <p class="text-p-18 whitespace-pre-wrap">
-                                {blok.approach_right_col_text}
-                            </p>
-                        )
-                    }
-                </div>
-            </div>
-        </div>
-        {
-            blok.approach_link[0]?.label && (
-                <div class="px-gutter flex justify-center">
-                    <ArrowLink
-                        label={blok.approach_link[0].label}
-                        link={blok.approach_link[0].link}
-                        className="mt-40 md:mt-50"
-                    />
-                </div>
-            )
-        }
+        <Approach blok={blok} />
     </Section>
     <Section title={blok.sports_title[0]} bgColor="green" color="white">
-        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-            {
-                blok.sports_content && (
-                    <SBRichText content={blok.sports_content} />
-                )
-            }
-            {
-                blok.sports_link[0]?.label && (
-                    <ArrowLink
-                        label={blok.sports_link[0].label}
-                        link={blok.sports_link[0].link}
-                        className="mt-40 md:mt-50"
-                    />
-                )
-            }
-        </div>
+        <Sports blok={blok} />
     </Section>
     <Section title={blok.worldwide_title[0]} bgColor="pink" color="black">
-        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-            {
-                blok.worldwide_content && (
-                    <SBRichText content={blok.worldwide_content} />
-                )
-            }
-            {
-                blok.worldwide_list && (
-                    <SBListIcon
-                        items={blok.worldwide_list}
-                        className="mt-30 md:mt-72"
-                    />
-                )
-            }
-            {
-                blok.worldwide_link[0]?.label && (
-                    <ArrowLink
-                        label={blok.worldwide_link[0].label}
-                        link={blok.worldwide_link[0].link}
-                        className="mt-45 md:mt-50"
-                    />
-                )
-            }
-        </div>
+        <Worldwide blok={blok} />
     </Section>
     <Section title={blok.mindset_title[0]} bgColor="orange" color="white">
-        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-            {
-                blok.mindset_content && (
-                    <SBRichText content={blok.mindset_content} />
-                )
-            }
-            {
-                blok.mindset_list && (
-                    <SBListOrdered
-                        items={blok.mindset_list}
-                        className="mt-42 md:mt-65"
-                    />
-                )
-            }
-            {
-                blok.mindset_brands_title[0] && (
-                    <h3 class="text-title-3 mt-65 md:mt-90">
-                        <Title title={blok.mindset_brands_title[0]} />
-                    </h3>
-                )
-            }
-        </div>
-        <LogosBubbles
-            logos={blok.mindset_brands_logos}
-            className="mt-24"
-        />
+        <Mindset blok={blok} />
     </Section>
     <Section title={blok.tomorrows_title[0]} bgColor="black" color="white">
-        <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-            {
-                blok.tomorrows_content && (
-                    <SBRichText content={blok.tomorrows_content} />
-                )
-            }
-        </div>
+        <Tomorrows blok={blok} />
     </Section>
 </div>
 

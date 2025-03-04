@@ -1,0 +1,23 @@
+---
+import SBRichText from "../../components/global/SBRichText.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+    {
+        blok.sports_content && (
+            <SBRichText content={blok.sports_content} />
+        )
+    }
+    {
+        blok.sports_link[0]?.label && (
+            <ArrowLink
+                label={blok.sports_link[0].label}
+                link={blok.sports_link[0].link}
+                className="mt-40 md:mt-50"
+            />
+        )
+    }
+</div>

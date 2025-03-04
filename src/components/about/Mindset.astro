@@ -1,0 +1,35 @@
+---
+import SBRichText from "../../components/global/SBRichText.astro";
+import LogosBubbles from "../../storyblok/sections/LogosBubbles.astro";
+import SBListOrdered from "../../components/global/SBListOrdered.astro";
+import Title from "../../components/atoms/Title.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+    {
+        blok.mindset_content && (
+            <SBRichText content={blok.mindset_content} />
+        )
+    }
+    {
+        blok.mindset_list && (
+            <SBListOrdered
+                items={blok.mindset_list}
+                className="mt-42 md:mt-65"
+            />
+        )
+    }
+    {
+        blok.mindset_brands_title[0] && (
+            <h3 class="text-title-3 mt-65 md:mt-90">
+                <Title title={blok.mindset_brands_title[0]} />
+            </h3>
+        )
+    }
+</div>
+<LogosBubbles
+    logos={blok.mindset_brands_logos}
+    className="mt-24"
+/>

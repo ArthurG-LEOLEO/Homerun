@@ -1,0 +1,32 @@
+---
+import SBRichText from "../../components/global/SBRichText.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+import SBListIcon from "../../components/global/SBListIcon.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+    {
+        blok.worldwide_content && (
+            <SBRichText content={blok.worldwide_content} />
+        )
+    }
+    {
+        blok.worldwide_list && (
+            <SBListIcon
+                items={blok.worldwide_list}
+                className="mt-30 md:mt-72"
+            />
+        )
+    }
+    {
+        blok.worldwide_link[0]?.label && (
+            <ArrowLink
+                label={blok.worldwide_link[0].label}
+                link={blok.worldwide_link[0].link}
+                className="mt-45 md:mt-50"
+            />
+        )
+    }
+</div>
