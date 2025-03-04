@@ -11,9 +11,11 @@ import i18n from "./src/i18n.config";
 
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 
+const isPreview = env.STORYBLOK_PREVIEW === "true";
+
 // https://astro.build/config
 export default defineConfig({
-    output: "server",
+    output: isPreview ? "server" : "static",
     redirects: {
         "/en/[...slug]": "/[...slug]",
     },
@@ -21,11 +23,13 @@ export default defineConfig({
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
+            bridge: isPreview,
             components: {
                 home: "storyblok/pages/Home",
                 page: "storyblok/pages/Page",
                 approach: "storyblok/pages/Approach",
                 about: "storyblok/pages/About",
+                case_study: "storyblok/pages/Case",
                 social_feed: "storyblok/sections/SocialFeed",
             },
         }),

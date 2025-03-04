@@ -4,38 +4,22 @@ import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import Layout from "../layouts/Layout.astro";
 import { locales, defaultLocale } from "../i18n.config";
 
-export async function getStaticPaths() {
-    const storyblokApi = useStoryblokApi();
-
-    const links = await storyblokApi.getAll("cdn/links", {
-        version: "draft",
-    });
-
-    return links
-        .filter((link) => !link.is_folder)
-        .map((link: { slug: string }) => {
-            const fullSlug = link.slug;
-            const language = fullSlug.split("/")[0];
-
-            const slug =
-                language === defaultLocale
-                    ? link.slug.replace(/^(en\/)/, "")
-                    : link.slug;
-
-            return {
-                props: {
-                    language,
-                    fullSlug,
-                },
-                params: {
-                    slug: slug !== "" ? slug : undefined,
-                },
-            };
-        });
-}
+import { parseUrl, generateStaticPaths } from "../utils/storyblok";
+import isPreview from "../utils/isPreview";
 
 const storyblokApi = useStoryblokApi();
-const { language, fullSlug } = Astro.props;
+
+export async function getStaticPaths() {
+    return await generateStaticPaths();
+}
+
+const params = Astro.params;
+
+let props = isPreview()
+    ? parseUrl(params?.slug, Astro.currentLocale)
+    : Astro.props;
+
+const { language, fullSlug } = props;
 
 const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
     version: "draft",
