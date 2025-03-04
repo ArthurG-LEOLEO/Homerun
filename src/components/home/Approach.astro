@@ -58,8 +58,8 @@ const { blok } = Astro.props;
                                         class:list={[
                                             "first-cat-inner-img size-full overflow-hidden rounded-full ease-linear",
                                             {
-                                                "duration-[0.08s]": index === 1,
-                                                "duration-[0.15s]": index !== 1,
+                                                "duration-[0.05s]": index === 1,
+                                                "duration-[0.1s]": index !== 1,
                                             },
                                         ]}
                                     >
@@ -130,10 +130,10 @@ const { blok } = Astro.props;
                                 >
                                     <div
                                         class:list={[
-                                            "second-cat-inner-img size-full overflow-hidden rounded-full ease-linear",
+                                            "second-cat-inner-img size-full origin-center overflow-hidden rounded-full ease-linear",
                                             {
-                                                "duration-[0.08s]": index === 1,
-                                                "duration-[0.15s]": index !== 1,
+                                                "duration-[0.05s]": index === 1,
+                                                "duration-[0.1s]": index !== 1,
                                             },
                                         ]}
                                     >
@@ -181,7 +181,6 @@ const { blok } = Astro.props;
         y: 0,
     };
 
-    let ha: HTMLElement | null;
     let firstCat: HTMLElement | null;
     let firstCatP1: HTMLElement | null;
     let firstCatP2: HTMLElement | null;
@@ -354,10 +353,14 @@ const { blok } = Astro.props;
                     y: mp.y - newMp.y,
                 };
 
+                const scale =
+                    1 - gsap.utils.clamp(0, 0.1, Math.abs(velocity.x) * 0.001);
+
                 firstCatImgs?.forEach((img, index) => {
                     gsap.set(img, {
                         x: -velocity.x * 0.2,
                         y: -velocity.y * 0.2,
+                        scale,
                         overwrite: true,
                     });
                 });
@@ -506,10 +509,14 @@ const { blok } = Astro.props;
                     y: mp.y - newMp.y,
                 };
 
+                const scale =
+                    1 - gsap.utils.clamp(0, 0.1, Math.abs(velocity.x) * 0.001);
+
                 secondCatImgs?.forEach((img, index) => {
                     gsap.set(img, {
                         x: -velocity.x * 0.2,
                         y: -velocity.y * 0.2,
+                        scale,
                         overwrite: true,
                     });
                 });
@@ -518,6 +525,9 @@ const { blok } = Astro.props;
     };
 
     const init = () => {
+        const container = document.querySelector("#home-approach");
+        if (!container) return;
+
         setVariables();
         mm = gsap.matchMedia();
 
@@ -544,8 +554,6 @@ const { blok } = Astro.props;
     };
 
     document.addEventListener("astro:page-load", () => {
-        // TODO: This is running every time we change pages
-        // We need to make sure the component exists in the page before init
         init();
     });
     document.addEventListener("astro:before-swap", cleanup);
