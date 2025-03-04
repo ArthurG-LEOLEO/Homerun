@@ -1,18 +1,19 @@
 import { defineConfig } from "astro/config";
 import { storyblok } from "@storyblok/astro";
-import basicSsl from "@vitejs/plugin-basic-ssl";
 import { loadEnv } from "vite";
 
-import i18n from "./src/i18n.config";
-
+import basicSsl from "@vitejs/plugin-basic-ssl";
 import tailwindcss from "@tailwindcss/vite";
-
+import netlify from "@astrojs/netlify";
 import icon from "astro-icon";
+
+import i18n from "./src/i18n.config";
 
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 // https://astro.build/config
 export default defineConfig({
+    output: "server",
     redirects: {
         "/en/[...slug]": "/[...slug]",
     },
@@ -36,4 +37,5 @@ export default defineConfig({
             https: true,
         },
     },
+    adapter: netlify(),
 });
