@@ -1,5 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 import Title from "../../components/atoms/Title.astro";
 import Tag from "../../components/atoms/Tag.astro";
@@ -37,6 +41,8 @@ const { language, blok } = Astro.props;
                 <Tag category={blok.category} class="absolute top-16 left-16" />
             </div>
         </div>
+        {t('case.challenges')}
+        {t('case.response')}
     </div>
 </div>
 
