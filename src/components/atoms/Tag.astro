@@ -1,0 +1,17 @@
+---
+interface Props {
+    category: 'consulting' | 'advertising';
+    class?: string;
+}
+
+const { category, class: className } = Astro.props;
+
+const styles = {
+    consulting: 'bg-pink border-black text-black',
+    advertising: 'bg-orange border-white text-white'
+}
+---
+
+<div class={`text-tag-lil inline-flex py-5 px-13 rounded-[6rem] border-3 ${styles[category]} ${className || ''}`}>
+    {category}
+</div>
