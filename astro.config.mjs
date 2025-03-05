@@ -8,7 +8,7 @@ import netlify from "@astrojs/netlify";
 import node from "@astrojs/node";
 import icon from "astro-icon";
 
-import i18n from "./src/i18n.config";
+import i18n from "./src/i18n/config";
 
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 

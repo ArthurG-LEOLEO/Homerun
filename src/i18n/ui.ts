@@ -1,17 +1,10 @@
-export const languages = {
-    en: 'English',
-    fr: 'French',
-  };
-  
-  export const defaultLang = 'en';
-  
-  export const ui = {
+export default {
     en: {
-      'case.challenges': 'Strategic challenges:',
-      'case.response': 'Response:',
+        "case.challenges": "Strategic challenges:",
+        "case.response": "Response:",
     },
     fr: {
-      'case.challenges': 'Enjeux strat’ :',
-      'case.response': 'Réponse :',
+        "case.challenges": "Enjeux strat’ :",
+        "case.response": "Réponse :",
     },
-  } as const;
+} as Record<string, Record<string, string>>;

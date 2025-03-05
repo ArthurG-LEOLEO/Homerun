@@ -1,6 +1,6 @@
 import { useStoryblokApi } from "@storyblok/astro";
 import isPreview from "./isPreview";
-import { locales, defaultLocale } from "../i18n.config";
+import { locales, defaultLocale } from "../i18n/config";
 
 export function getImageSize(image: { filename: string }) {
     const url = image.filename;

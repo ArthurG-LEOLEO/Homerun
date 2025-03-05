@@ -1,8 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { useTranslations } from "../../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
 import Title from "../../components/atoms/Title.astro";
@@ -13,36 +13,44 @@ const { language, blok } = Astro.props;
 ---
 
 <div id="page-case" class="case">
-    <div
-        class="container-main pt-105 md:pt-150"
-    >
+    <div class="container-main pt-105 md:pt-150">
         <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
-        <div class="flex flex-col gap-56 mt-17 md:mt-24 lg:flex-row lg:items-baseline lg:gap-0 lg:justify-between">
+        <div
+            class="mt-17 flex flex-col gap-56 md:mt-24 lg:flex-row lg:items-baseline lg:justify-between lg:gap-0"
+        >
             <h1 class="text-title-1 px-gutter lg:w-5/12">
                 <Title title={blok.title[0]} />
             </h1>
-            {blok.intro && (
-                <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
-            )}
+            {
+                blok.intro && (
+                    <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">
+                        {blok.intro}
+                    </h3>
+                )
+            }
         </div>
         <div class="px-gutter mt-40 lg:mt-55">
-            <div class={`relative ${
-                blok.cover_ratio === 'square' 
-                    ? 'aspect-square' 
-                    : 'aspect-[1398/883]'
-            }`}>
-                <SBImage
-                    class="size-full object-cover"
-                    image={blok.cover}
-                />
-                {blok.united && (
-                    <Icon name="united" class="absolute text-white bottom-16 right-16 size-37 md:size-55 md:bottom-24 md:right-24" />
-                )}
+            <div
+                class={`relative ${
+                    blok.cover_ratio === "square"
+                        ? "aspect-square"
+                        : "aspect-[1398/883]"
+                }`}
+            >
+                <SBImage class="size-full object-cover" image={blok.cover} />
+                {
+                    blok.united && (
+                        <Icon
+                            name="united"
+                            class="absolute right-16 bottom-16 size-37 text-white md:right-24 md:bottom-24 md:size-55"
+                        />
+                    )
+                }
                 <Tag category={blok.category} class="absolute top-16 left-16" />
             </div>
         </div>
-        {t('case.challenges')}
-        {t('case.response')}
+        {t("case.challenges")}
+        {t("case.response")}
     </div>
 </div>
 
