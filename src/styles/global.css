@@ -158,6 +158,10 @@
         flex-direction: column;
     }
 
+    .roll-space {
+        width: 0.23em;
+    }
+
     .roll-under {
         position: absolute;
         left: 0;

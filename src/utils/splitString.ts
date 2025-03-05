@@ -11,9 +11,9 @@ export const splitRoll = (text: String) => {
         .split("")
         .map(
             (l) =>
-                `<span class='roll-letter'><span class='roll-inner'>${l}</span><span class='roll-under'>${l}</span></span>`,
+                `<span class='roll-letter'><span class='roll-inner${l === " " ? " roll-space" : ""}'>${l}</span><span class='roll-under'>${l}</span></span>`,
         )
         .join("");
 
-    return `<span class='roll'>${splittedText}</span>`;
+    return `<span aria-label='${text}' class='roll'>${splittedText}</span>`;
 };
