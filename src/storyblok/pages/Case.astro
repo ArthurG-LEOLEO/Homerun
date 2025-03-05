@@ -1,6 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
+import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 
 const lang = Astro.currentLocale;
 const t = useTranslations(lang);
@@ -12,7 +14,7 @@ import SBImage from "../../components/global/SBImage.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div id="page-case" class="case">
+<div id="page-case" class="case" {...storyblokEditable(blok)}>
     <div class="container-main pt-105 md:pt-150">
         <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
         <div
@@ -68,6 +70,13 @@ const { language, blok } = Astro.props;
                 </div>
             )
         }
+        <div>
+            {
+                blok.sections?.map((blok: SbBlokData) => {
+                    return <StoryblokComponent blok={blok} language={language} />;
+                })
+            }
+        </div>
     </div>
 </div>
 
