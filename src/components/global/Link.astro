@@ -9,6 +9,7 @@ const target = link?.target || "_self";
 if (link?.linktype === "story") {
     const linkLanguage = url.split("/")[0];
     url = linkLanguage === defaultLocale ? url?.replace(/^(en\/)/, "") : url;
+    url = `/${url}`;
 }
 
 if (url === "") url = "/";
