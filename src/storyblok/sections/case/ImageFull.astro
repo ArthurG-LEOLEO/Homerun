@@ -1,7 +1,9 @@
 ---
+import SBImage from "../../../components/global/SBImage.astro";
+
 const { language, blok } = Astro.props;
 ---
 
-<div class="text-title-2">
-    Image full
+<div class="px-gutter">
+    <SBImage class="w-full" image={blok.image} />
 </div>

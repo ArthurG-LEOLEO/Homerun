@@ -70,7 +70,7 @@ const { language, blok } = Astro.props;
                 </div>
             )
         }
-        <div>
+        <div class="mt-72 flex flex-col gap-72 md:mt-130 md:gap-130">
             {
                 blok.sections?.map((blok: SbBlokData) => {
                     return <StoryblokComponent blok={blok} language={language} />;
