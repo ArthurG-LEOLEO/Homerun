@@ -81,6 +81,10 @@
     --text-tagbig--line-height: 2.4rem;
     --text-tagbig-mobile: 1.4rem;
     --text-tagbig-mobile--line-height: 1.7rem;
+    --text-taglil: 1.4rem;
+    --text-taglil--line-height: 2.4rem;
+    --text-taglil-mobile: 1rem;
+    --text-taglil-mobile--line-height: 2.4rem;
 
     --breakpoint-container: 1440px;
 
@@ -192,6 +196,11 @@
     .text-cta-32 {
         @apply text-cta32-mobile md:text-cta32;
         @apply font-space;
+    }
+    .text-tag-lil {
+        @apply text-taglil-mobile md:text-taglil;
+        @apply font-black;
+        @apply uppercase;
     }
     .text-tag-big {
         @apply text-tagbig-mobile md:text-tagbig;

@@ -1,1 +1,87 @@
-<div>case</div>
+---
+import { Icon } from "astro-icon/components";
+
+import Title from "../../components/atoms/Title.astro";
+import Tag from "../../components/atoms/Tag.astro";
+import SBImage from "../../components/global/SBImage.astro";
+
+const { language, blok } = Astro.props;
+---
+
+<div id="page-case" class="case">
+    <div
+        class="container-main pt-105 md:pt-150"
+    >
+        <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
+        <div class="flex flex-col gap-56 mt-17 md:mt-24 lg:flex-row lg:items-baseline lg:gap-0 lg:justify-between">
+            <h1 class="text-title-1 px-gutter lg:w-5/12">
+                <Title title={blok.title[0]} />
+            </h1>
+            {blok.intro && (
+                <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+            )}
+        </div>
+        <div class="px-gutter mt-40 lg:mt-55">
+            <div class={`relative ${
+                blok.cover_ratio === 'square' 
+                    ? 'aspect-square' 
+                    : 'aspect-[1398/883]'
+            }`}>
+                <SBImage
+                    class="size-full object-cover"
+                    image={blok.cover}
+                />
+                {blok.united && (
+                    <Icon name="united" class="absolute text-white bottom-16 right-16 size-37 md:size-55 md:bottom-24 md:right-24" />
+                )}
+                <Tag category={blok.category} class="absolute top-16 left-16" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let tlAppear;
+    const init = () => {
+        const page = document.querySelector("#page-case");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelector("#layout-header");
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>
