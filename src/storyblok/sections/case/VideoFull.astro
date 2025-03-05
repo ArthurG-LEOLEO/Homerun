@@ -1,7 +1,41 @@
 ---
+interface Props {
+  language: string;
+  blok: {
+    youtube_url: string;
+  };
+}
+
 const { language, blok } = Astro.props;
+
+function extractYouTubeId(url: string): string | null {
+  const regexPatterns = [
+    /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/
+  ];
+  
+  for (const regex of regexPatterns) {
+    const match = url.match(regex);
+    if (match && match[3]) {
+      return match[3];
+    }
+  }
+
+  return null;
+}
+
+const videoId = extractYouTubeId(blok.youtube_url);
+const isShort = blok.youtube_url.includes('/shorts/');
+const aspectRatioClass = isShort ? "aspect-[9/16]" : "aspect-video";
+const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 ---
 
-<div class="text-title-2">
-    Video full
-</div>
+{videoId && (
+  <div class={`px-gutter ${aspectRatioClass}`}>
+    <iframe
+      src={embedUrl}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      class="w-full h-full"
+    ></iframe>
+  </div>
+)}
