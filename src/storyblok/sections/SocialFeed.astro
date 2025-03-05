@@ -248,9 +248,9 @@ import CTA from "../../components/global/CTA.astro";
                     isHover = true;
                 } else if (wrapper) {
                     wrapper.style.cursor = "grabbing";
+                    onDragTlOut.pause();
+                    onDragTlIn.restart();
                 }
-                onDragTlOut.pause();
-                onDragTlIn.restart();
             },
             onDrag: (self: { deltaX: number }) => {
                 if (Observer.isTouch) isHover = true;
@@ -273,9 +273,9 @@ import CTA from "../../components/global/CTA.astro";
                     isHover = false;
                 } else if (wrapper) {
                     wrapper.style.cursor = "grab";
+                    onDragTlIn.pause();
+                    onDragTlOut.restart();
                 }
-                onDragTlIn.pause();
-                onDragTlOut.restart();
                 gsap.set(postLinks, { pointerEvents: "auto" });
                 xToLayer1(0);
                 xToLayer2(0);
