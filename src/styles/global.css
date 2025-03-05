@@ -143,6 +143,23 @@
         display: inline-block;
     }
 
+    .roll {
+        display: inline-flex;
+        overflow: hidden;
+    }
+
+    .roll-letter {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .roll-under {
+        position: absolute;
+        left: 0;
+        top: 100%;
+    }
+
     .text-title-1 {
         @apply text-h1-mobile md:text-h1;
         @apply font-space;

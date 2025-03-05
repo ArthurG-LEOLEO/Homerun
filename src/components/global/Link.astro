@@ -1,18 +1,17 @@
 ---
-interface Props {
-    link: {
-        cached_url?: string;
-        url?: string;
-        linktype?: string;
-        target?: string;
-    };
-    className?: string;
-}
+import { defaultLocale } from "../../i18n.config";
 
 const { link, className = "" } = Astro.props;
 
-const url = link?.cached_url || link?.url || "#";
+let url = link?.cached_url || link?.url || "#";
 const target = link?.target || "_self";
+
+if (link?.linktype === "story") {
+    const linkLanguage = url.split("/")[0];
+    url = linkLanguage === defaultLocale ? url?.replace(/^(en\/)/, "") : url;
+}
+
+if (url === "") url = "/";
 ---
 
 <a href={url} target={target} class:list={[className]}>

@@ -1,20 +1,9 @@
 ---
 import Link from "../global/Link.astro";
 
-interface Props {
-    link: {
-        cached_url?: string;
-        url?: string;
-        linktype?: string;
-        target?: string;
-    };
-    label: string;
-    className?: string;
-}
-
-const { link, label, className = "" } = Astro.props;
+const { link, className = "" } = Astro.props;
 ---
 
-<Link link={link} className={`hover:opacity-80 ${className}`}>
-    <span class="whitespace-pre-wrap">{label}</span>
+<Link link={link.link} className={`hover:opacity-80 ${className}`}>
+    <span class="whitespace-pre-wrap">{link.label}</span>
 </Link>

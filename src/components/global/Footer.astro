@@ -126,14 +126,11 @@ const { footerData } = Astro.props;
                     <div class="mt-90 flex flex-wrap gap-x-64 gap-y-24">
                         {footerData.cols.map((col: FooterCol) => (
                             <div class="footer-col">
-                                <h5 class="text-title-7 mb-8">
-                                    {col.title}
-                                </h5>
+                                <h5 class="text-title-7 mb-8">{col.title}</h5>
                                 <div class="flex flex-col">
                                     {col.links?.map((linkItem: FooterLink) => (
                                         <BasicLink
-                                            label={linkItem.label}
-                                            link={linkItem.link}
+                                            link={linkItem}
                                             className="text-p14 text-black/50"
                                         />
                                     ))}

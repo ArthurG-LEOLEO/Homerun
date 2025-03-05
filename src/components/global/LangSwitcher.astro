@@ -1,0 +1,52 @@
+---
+import Link from "./Link.astro";
+
+const availableLangs = ["en", "fr"];
+
+const currentLocale = Astro.currentLocale;
+
+const { alternates } = Astro.props;
+
+const currentAlternates = alternates.reduce(
+    (alts: { [x: string]: string }, alt: { full_slug: string }) => {
+        const fullSlug = alt.full_slug;
+        const altLang = fullSlug.split("/")[0];
+
+        alts[altLang] = fullSlug;
+
+        return alts;
+    },
+    {},
+);
+---
+
+{
+    availableLangs.length > 1 && (
+        <ul class="mt-16 flex font-black uppercase lg:text-[2rem]/[2.4rem]">
+            {availableLangs.map((lang) => (
+                <li
+                    class:list={[
+                        "flex size-56 items-center justify-center rounded-full",
+                        {
+                            "border-3 border-white": currentLocale === lang,
+                        },
+                    ]}
+                >
+                    {lang === currentLocale ? (
+                        <span>{lang}</span>
+                    ) : (
+                        <Link
+                            link={{
+                                url: currentAlternates[lang] || `${lang}/`,
+                                linktype: "story",
+                                from: "langswitch",
+                            }}
+                        >
+                            {lang}
+                        </Link>
+                    )}
+                </li>
+            ))}
+        </ul>
+    )
+}

@@ -1,29 +1,150 @@
 ---
 import { Icon } from "astro-icon/components";
 import LogoTypo from "./LogoTypo.astro";
+import type { SbBlokData } from "@storyblok/astro";
+import Link from "./Link.astro";
 
-const { logoless } = Astro.props;
+import { splitRoll } from "../../utils/splitString";
+import LangSwitcher from "./LangSwitcher.astro";
+
+const { logoless, blok, alternates } = Astro.props;
 ---
 
 <header
     class="absolute top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
     id="layout-header"
 >
-    <div class="container-main flex items-center">
+    <div class="container-main relative flex items-center">
         {
             !logoless && (
-                <a href="/" class="px-gutter h-36 w-237 text-black">
+                <a
+                    href="/"
+                    class="px-gutter flex h-36 w-237 items-center text-black"
+                >
                     <LogoTypo />
                 </a>
             )
         }
-        <div class="px-gutter ml-auto">
-            <button
-                class="bg-orange text-cta16 font-space flex items-center gap-10 rounded-[10rem] px-24 py-16 text-white"
-            >
-                <span>Menu</span>
-                <Icon name="open" size="16" />
-            </button>
-        </div>
+        {
+            blok && (
+                <div class="px-gutter relative z-[2] ml-auto">
+                    <button
+                        id="menu-button"
+                        class="bg-orange text-cta16 font-space flex cursor-pointer items-center gap-10 rounded-[10rem] px-24 py-16 text-white transition-transform duration-100 ease-out active:scale-[0.95]"
+                    >
+                        <span>{blok.label}</span>
+                        <Icon name="open" size="16" />
+                    </button>
+                </div>
+            )
+        }
+        {
+            blok && (
+                <div
+                    id="header-menu"
+                    data-open="false"
+                    class="bg-green right-gutter left-gutter invisible absolute top-[-0.8rem] z-[-1] z-[1] origin-top-right scale-x-[0.95] scale-y-[0.7] rounded-[3rem] py-70 pr-70 pl-70 text-white opacity-0 sm:left-auto sm:pr-170 lg:py-75 lg:pr-270 lg:pl-110"
+                >
+                    {blok.links.length && (
+                        <ul class="font-space text-cta32 flex flex-col font-medium lg:text-[6.4rem]/[8.8rem]">
+                            {blok.links.map((link: SbBlokData) => (
+                                <li class="lg:mt-[-1rem]">
+                                    <Link link={link.link}>
+                                        <div
+                                            set:html={splitRoll(
+                                                link.label as string,
+                                            )}
+                                        />
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <LangSwitcher alternates={alternates} />
+                    <svg
+                        class="absolute bottom-24 left-24 size-40 lg:size-74"
+                        viewBox="0 0 75 75"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path d="M20.885 64.5a8 8 0 0 1-5.657-2.343l-2.385-2.385a8 8 0 0 1-2.343-5.657V3a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v68.5a3 3 0 0 0 3 3H72a3 3 0 0 0 3-3v-4a3 3 0 0 0-3-3H20.885Z" />
+                    </svg>
+                </div>
+            )
+        }
     </div>
 </header>
+
+<script>
+    let tlOpen: gsap.core.Timeline;
+    let tlClose: gsap.core.Timeline;
+    let button: HTMLElement | null;
+    let menu: HTMLElement | null;
+
+    const openMenu = (m: HTMLElement) => {
+        tlClose?.kill();
+        tlOpen = gsap
+            .timeline()
+            .to(m, {
+                autoAlpha: 1,
+                duration: 0.3,
+                ease: "power3",
+            })
+            .to(
+                m,
+                {
+                    scaleY: 1,
+                    scaleX: 1,
+                    duration: 0.6,
+                    ease: "elastic(1.2, 0.7)",
+                },
+                "<",
+            );
+        m.dataset.open = "true";
+    };
+
+    const closeMenu = (m: HTMLElement) => {
+        tlOpen?.kill();
+        tlClose = gsap.timeline().to(m, {
+            scaleY: 0.7,
+            scaleX: 0.95,
+            autoAlpha: 0,
+            duration: 0.1,
+            ease: "power3",
+        });
+        m.dataset.open = "false";
+    };
+
+    const toggleMenu = () => {
+        if (!menu) return;
+
+        const open = menu.dataset.open === "true";
+
+        if (open) {
+            closeMenu(menu);
+        } else {
+            openMenu(menu);
+        }
+    };
+
+    const init = () => {
+        const header = document.querySelector("#layout-header");
+        menu = document.querySelector("#layout-header #header-menu");
+
+        if (!header || !menu) return;
+        button = document.querySelector("#layout-header #menu-button");
+
+        button?.addEventListener("click", toggleMenu);
+    };
+
+    const cleanup = () => {
+        button?.removeEventListener("click", toggleMenu);
+    };
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>

@@ -17,13 +17,14 @@ import Loader from "../components/global/Loader.astro";
 
 const isDev = import.meta.env.DEV;
 const storyblokApi = useStoryblokApi();
-const { language, headerLogoless = false } = Astro.props;
+const { language, headerLogoless = false, alternates } = Astro.props;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
     version: "draft",
 });
 
 const footerData = data.story.content.Footer[0];
+const headerData = data.story.content.menu[0];
 ---
 
 <!doctype html>
@@ -38,7 +39,11 @@ const footerData = data.story.content.Footer[0];
     </head>
     <body>
         <Banner />
-        <Header logoless={headerLogoless} />
+        <Header
+            blok={headerData}
+            logoless={headerLogoless}
+            alternates={alternates}
+        />
         <slot />
         <Footer footerData={footerData} />
         <Loader />
