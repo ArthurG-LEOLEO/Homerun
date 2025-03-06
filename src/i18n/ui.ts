@@ -3,6 +3,7 @@ export default {
         "case.challenges": "Strategic challenges:",
         "case.response": "Response:",
         "banner.title": "Rosbeef! is now HOMERUN",
+        "about.nav.creative": "Creative",
         "about.nav.people": "People",
         "about.nav.clients": "Clients",
         "about.nav.approach": "Approach",

@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 
 const lang = Astro.currentLocale;
@@ -7,55 +8,96 @@ const t = useTranslations(lang);
 const items = [
     {
         label: t("about.nav.people"),
+        bg: "black",
+        text: "#f8f7ec",
     },
     {
         label: t("about.nav.clients"),
+        bg: "blue",
+        text: "#181817",
     },
     {
         label: t("about.nav.approach"),
+        bg: "white",
+        text: "#181817",
     },
     {
         label: t("about.nav.sports"),
+        bg: "green",
+        text: "#f8f7ec",
     },
     {
         label: t("about.nav.worldwide"),
+        bg: "pink",
+        text: "#181817",
     },
     {
         label: t("about.nav.mindset"),
+        bg: "orange",
+        text: "#f8f7ec",
     },
     {
         label: t("about.nav.tomorrows"),
+        bg: "black",
+        text: "#f8f7ec",
     },
 ];
 ---
 
 <div
     id="about-nav"
-    class="absolute top-0 right-0 left-0 w-full text-[white] mix-blend-difference"
+    style="--active-index: 0;"
+    class="pointer-events-none absolute top-0 right-0 left-0 z-10 h-56 w-full text-white select-none lg:z-[auto] lg:h-auto"
 >
-    <div class="container-main flex items-center justify-between py-100">
-        <div class="px-gutter text-[3.2rem]/[3.8rem] font-medium uppercase">
-            Creative
+    <div
+        class="container-main flex h-full items-center py-8 lg:h-auto lg:justify-between lg:py-100"
+    >
+        <div class="absolute inset-0 z-[-1] overflow-hidden lg:hidden">
+            {
+                items.map((item, index) => (
+                    <div
+                        class="size-full translate-y-[calc(-100%*var(--active-index))]"
+                        style={{ backgroundColor: `var(--color-${item.bg})` }}
+                    />
+                ))
+            }
         </div>
-        <div class="px-gutter">
-            <div class="flex flex-col items-end">
+        <div
+            class="px-gutter py-8 text-[2rem]/[2.4rem] font-medium uppercase lg:py-0 lg:text-[3.2rem]/[3.8rem]"
+        >
+            {t("about.nav.creative")}
+        </div>
+        <div
+            class="lg:px-gutter ml-auto h-full overflow-hidden lg:ml-0 lg:h-auto lg:overflow-auto"
+        >
+            <ul
+                class="flex translate-y-[calc(-3.2rem*var(--active-index))] flex-col items-end lg:translate-y-0"
+            >
                 {
                     items.map((item, index) => (
-                        <button
+                        <li
                             style={{
                                 "--active": Number(index === 0),
                                 "--i-before": index,
                                 "--i-after": items.length - index - 1,
                             }}
-                            data-order={index + 1}
                             data-active={index === 0}
-                            class="nav-items cursor-pointer pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2] font-medium uppercase"
+                            data-color={item.text}
+                            class="nav-items mt-8 text-[2rem]/[2.4rem] lg:mt-0 lg:pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] lg:pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] lg:text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2]"
                         >
-                            {item.label}
-                        </button>
+                            <button
+                                data-order={index + 1}
+                                class="pointer-events-none cursor-pointer font-medium uppercase lg:pointer-events-auto"
+                            >
+                                {item.label}
+                            </button>
+                        </li>
                     ))
                 }
-            </div>
+            </ul>
+        </div>
+        <div class="px-gutter lg:hidden">
+            <Icon name="arrow-circle" size="28" />
         </div>
     </div>
 </div>
@@ -69,7 +111,9 @@ const items = [
     let pin: gsap.core.Timeline | null;
 
     let nav: Element | null;
+    let navMenu: Element | null;
     let navItems: NodeListOf<HTMLElement> | null;
+    let navButtons: NodeListOf<HTMLElement> | null;
 
     const onSectionChange = (e: any) => {
         const index = parseInt(e.detail) - 1;
@@ -78,6 +122,13 @@ const items = [
 
         // If already active
         if (navItems[index].dataset.active === "true") return;
+
+        gsap.to(nav, {
+            "--active-index": index,
+            duration: 0.4,
+            ease: "power3.inOut",
+            color: navItems[index].dataset.color,
+        });
 
         const prevActiveItem: HTMLElement | null = nav.querySelector(
             ".nav-items[data-active='true']",
@@ -117,6 +168,8 @@ const items = [
         if (!nav) return;
 
         navItems = nav.querySelectorAll(".nav-items");
+        navButtons = nav.querySelectorAll(".nav-items button");
+        navMenu = nav.querySelector("#about-nav-menu");
 
         pin = gsap.timeline({
             scrollTrigger: {
@@ -129,7 +182,7 @@ const items = [
 
         nav.addEventListener("sectionchange", onSectionChange);
 
-        navItems.forEach((item) => {
+        navButtons.forEach((item) => {
             item.addEventListener("click", onNavItemClick);
         });
     };
@@ -138,7 +191,7 @@ const items = [
         pin?.kill();
         nav?.removeEventListener("sectionchange", onSectionChange);
 
-        navItems?.forEach((item) => {
+        navButtons?.forEach((item) => {
             item.removeEventListener("click", onNavItemClick);
         });
     };
