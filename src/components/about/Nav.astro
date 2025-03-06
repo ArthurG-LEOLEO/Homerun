@@ -47,57 +47,101 @@ const items = [
 <div
     id="about-nav"
     style="--active-index: 0;"
-    class="pointer-events-none absolute top-0 right-0 left-0 z-10 h-56 w-full text-white select-none lg:z-[auto] lg:h-auto"
+    class="pointer-events-none absolute top-0 right-0 left-0 z-10 h-56 w-full text-white select-none lg:z-[auto] lg:h-[100vh] lg:!text-white"
 >
-    <div
-        class="container-main flex h-full items-center py-8 lg:h-auto lg:justify-between lg:py-100"
-    >
-        <div class="absolute inset-0 z-[-1] overflow-hidden lg:hidden">
-            {
-                items.map((item, index) => (
-                    <div
-                        class="size-full translate-y-[calc(-100%*var(--active-index))]"
-                        style={{ backgroundColor: `var(--color-${item.bg})` }}
-                    />
-                ))
-            }
-        </div>
+    <div class="size-full lg:flex lg:items-center" id="about-nav-white">
         <div
-            class="px-gutter py-8 text-[2rem]/[2.4rem] font-medium uppercase lg:py-0 lg:text-[3.2rem]/[3.8rem]"
+            class="container-main flex h-full items-center py-8 lg:h-auto lg:justify-between lg:py-100"
         >
-            {t("about.nav.creative")}
-        </div>
-        <div
-            class="lg:px-gutter ml-auto h-full overflow-hidden lg:ml-0 lg:h-auto lg:overflow-auto"
-        >
-            <ul
-                class="flex translate-y-[calc(-3.2rem*var(--active-index))] flex-col items-end lg:translate-y-0"
-            >
+            <div class="absolute inset-0 z-[-1] overflow-hidden lg:hidden">
                 {
                     items.map((item, index) => (
-                        <li
+                        <div
+                            class="size-full translate-y-[calc(-100%*var(--active-index))]"
                             style={{
-                                "--active": Number(index === 0),
-                                "--i-before": index,
-                                "--i-after": items.length - index - 1,
+                                backgroundColor: `var(--color-${item.bg})`,
                             }}
-                            data-active={index === 0}
-                            data-color={item.text}
-                            class="nav-items mt-8 text-[2rem]/[2.4rem] lg:mt-0 lg:pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] lg:pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] lg:text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2]"
-                        >
-                            <button
-                                data-order={index + 1}
-                                class="pointer-events-none cursor-pointer font-medium uppercase lg:pointer-events-auto"
-                            >
-                                {item.label}
-                            </button>
-                        </li>
+                        />
                     ))
                 }
-            </ul>
+            </div>
+            <div
+                class="px-gutter py-8 text-[2rem]/[2.4rem] font-medium uppercase lg:py-0 lg:text-[3.2rem]/[3.8rem]"
+            >
+                {t("about.nav.creative")}
+            </div>
+            <div
+                class="lg:px-gutter ml-auto h-full overflow-hidden lg:ml-0 lg:h-auto lg:overflow-auto"
+            >
+                <ul
+                    class="flex translate-y-[calc(-3.2rem*var(--active-index))] flex-col items-end lg:translate-y-0"
+                >
+                    {
+                        items.map((item, index) => (
+                            <li
+                                style={{
+                                    "--active": Number(index === 0),
+                                    "--i-before": index,
+                                    "--i-after": items.length - index - 1,
+                                }}
+                                data-active={index === 0}
+                                data-index={index}
+                                data-color={item.text}
+                                class="nav-items mt-8 text-[2rem]/[2.4rem] lg:mt-0 lg:pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] lg:pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] lg:text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2]"
+                            >
+                                <button
+                                    data-order={index + 1}
+                                    class="pointer-events-none cursor-pointer font-medium uppercase lg:pointer-events-auto"
+                                >
+                                    {item.label}
+                                </button>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+            <div class="px-gutter lg:hidden">
+                <Icon name="arrow-circle" size="28" />
+            </div>
         </div>
-        <div class="px-gutter lg:hidden">
-            <Icon name="arrow-circle" size="28" />
+    </div>
+    <div
+        id="about-nav-black"
+        style="polygon(0 100%, 100% 100%, 100% 100%, 0 100%);"
+        class="absolute inset-0 hidden size-full items-center lg:flex"
+    >
+        <div
+            class="container-main flex items-center justify-between py-100 text-black"
+        >
+            <div class="px-gutter text-[3.2rem]/[3.8rem] font-medium uppercase">
+                {t("about.nav.creative")}
+            </div>
+            <div class="px-gutter">
+                <ul class="flex flex-col items-end">
+                    {
+                        items.map((item, index) => (
+                            <li
+                                style={{
+                                    "--active": Number(index === 0),
+                                    "--i-before": index,
+                                    "--i-after": items.length - index - 1,
+                                }}
+                                data-active={index === 0}
+                                data-index={index}
+                                data-color={item.text}
+                                class="nav-items pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2]"
+                            >
+                                <button
+                                    data-order={index + 1}
+                                    class="pointer-events-auto cursor-pointer font-medium uppercase"
+                                >
+                                    {item.label}
+                                </button>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -120,8 +164,15 @@ const items = [
 
         if (!navItems || !navItems[index] || !nav) return;
 
-        // If already active
-        if (navItems[index].dataset.active === "true") return;
+        const currentItem = [...navItems].filter((ni) => {
+            return (
+                ni.dataset.index &&
+                parseInt(ni.dataset.index) === index &&
+                ni.dataset.index !== "true"
+            );
+        });
+
+        if (!currentItem.length) return;
 
         gsap.to(nav, {
             "--active-index": index,
@@ -130,24 +181,27 @@ const items = [
             color: navItems[index].dataset.color,
         });
 
-        const prevActiveItem: HTMLElement | null = nav.querySelector(
-            ".nav-items[data-active='true']",
-        );
+        const prevActiveItem: NodeListOf<HTMLElement> | null =
+            nav.querySelectorAll(".nav-items[data-active='true']");
 
         if (prevActiveItem) {
-            prevActiveItem.dataset.active = "false";
-            gsap.to(prevActiveItem, {
-                "--active": 0,
-                duration: 0.4,
-                ease: "power3.inOut",
+            prevActiveItem.forEach((pi) => {
+                pi.dataset.active = "false";
+                gsap.to(pi, {
+                    "--active": 0,
+                    duration: 0.4,
+                    ease: "power3.inOut",
+                });
             });
         }
 
-        navItems[index].dataset.active = "true";
-        gsap.to(navItems[index], {
-            "--active": 1,
-            duration: 0.4,
-            ease: "power3.inOut",
+        currentItem.forEach((ci) => {
+            ci.dataset.active = "true";
+            gsap.to(ci, {
+                "--active": 1,
+                duration: 0.4,
+                ease: "power3.inOut",
+            });
         });
     };
 
@@ -177,6 +231,7 @@ const items = [
                 start: "top top",
                 end: "bottom bottom",
                 pin: nav,
+                invalidateOnRefresh: true,
             },
         });
 

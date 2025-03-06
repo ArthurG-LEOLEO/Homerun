@@ -41,6 +41,7 @@ const { language, blok } = Astro.props;
         </Section>
         <Section
             order="2"
+            id="about-clients"
             title={blok.clients_title[0]}
             bgColor="blue"
             color="black"
@@ -57,6 +58,7 @@ const { language, blok } = Astro.props;
         </Section>
         <Section
             order="4"
+            id="about-sports"
             title={blok.sports_title[0]}
             bgColor="green"
             color="white"
@@ -67,6 +69,7 @@ const { language, blok } = Astro.props;
             order="5"
             title={blok.worldwide_title[0]}
             bgColor="pink"
+            id="about-worldwide"
             color="black"
         >
             <Worldwide blok={blok} />
@@ -74,6 +77,7 @@ const { language, blok } = Astro.props;
         <Section
             order="6"
             title={blok.mindset_title[0]}
+            id="about-mindset"
             bgColor="orange"
             color="white"
         >
@@ -92,7 +96,11 @@ const { language, blok } = Astro.props;
 
 <script>
     let tlAppear;
+    let mm;
+    let page: HTMLElement | null;
     let nav: HTMLElement | null;
+    let navWhite: HTMLElement | null;
+    let navBlack: HTMLElement | null;
 
     const appear = (banner: Element | null, header: Element | null) => {
         if (!banner || !header) return;
@@ -139,8 +147,8 @@ const { language, blok } = Astro.props;
             gsap.timeline({
                 scrollTrigger: {
                     trigger: section,
-                    start: "top 20%",
-                    end: "bottom 20%",
+                    start: "top 50%",
+                    end: "bottom 50%",
                     onEnter: () => {
                         nav?.dispatchEvent(navEvent);
                     },
@@ -152,13 +160,77 @@ const { language, blok } = Astro.props;
         });
     };
 
+    const setupNavMask = () => {
+        mm = gsap.matchMedia();
+
+        mm.add("(width > 1024px)", () => {
+            // Order is important, last one should be the first element in the page
+            const sectionConfig = [
+                {
+                    el: page?.querySelector("#about-mindset"),
+                    toWhite: true,
+                },
+                {
+                    el: page?.querySelector("#about-worldwide"),
+                    toWhite: false,
+                },
+                {
+                    el: page?.querySelector("#about-sports"),
+                    toWhite: true,
+                },
+                {
+                    el: page?.querySelector("#about-clients"),
+                    toWhite: false,
+                },
+            ];
+
+            sectionConfig.forEach((s) => {
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: s.el,
+                        start: "top bottom",
+                        end: "top top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                })
+                    .fromTo(
+                        s.toWhite ? navBlack : navWhite,
+                        {
+                            clipPath:
+                                "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                        },
+                        {
+                            clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+                            ease: "none",
+                        },
+                    )
+                    .fromTo(
+                        s.toWhite ? navWhite : navBlack,
+                        {
+                            clipPath:
+                                "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+                        },
+                        {
+                            clipPath:
+                                "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                            ease: "none",
+                        },
+                        "<",
+                    );
+            });
+        });
+    };
+
     const init = () => {
-        const page = document.querySelector("#page-about");
+        page = document.querySelector("#page-about");
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
         const header = document.querySelector("#layout-header");
         nav = page.querySelector("#about-nav");
+        navWhite = page.querySelector("#about-nav-white");
+        navBlack = page.querySelector("#about-nav-black");
 
         appear(banner, header);
 
@@ -166,6 +238,8 @@ const { language, blok } = Astro.props;
             page.querySelectorAll(".about-section");
 
         setupNavUpdates(sections);
+
+        setupNavMask();
     };
 
     document.addEventListener("astro:page-load", () => {
