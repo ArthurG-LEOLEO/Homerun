@@ -296,6 +296,11 @@ const items = [
         const target = e.target as HTMLElement | null;
         if (!target) return;
 
+        if (window.innerWidth < 1024 && navbarMobileOpen) {
+            navbarMobileOpen = false;
+            closeMenu();
+        }
+
         const order = target.dataset.order || "1";
         const sectionToScrollTo = document.querySelector(
             `#page-about .about-section[data-order="${order}"]`,
