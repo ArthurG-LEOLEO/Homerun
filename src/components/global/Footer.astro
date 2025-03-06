@@ -48,19 +48,23 @@ interface FooterData {
 const { footerData } = Astro.props;
 ---
 
-<footer class="border-orange border-b-11 pt-25 pb-10 lg:pt-190">
+<footer class="border-orange border-b-11 pb-10">
     <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
             class="lg:pr-gutter flex flex-grow flex-col justify-between gap-25 lg:w-1/2 lg:pl-42"
         >
-            <div class="flex w-full flex-grow justify-end gap-40">
+            <div class="flex w-full flex-grow justify-end">
                 <div
-                    class="px-gutter size-10/12 max-w-400 lg:size-full lg:max-w-auto lg:flex-grow lg:px-0"
+                    class="px-gutter flex size-10/12 max-w-400 items-center justify-center lg:size-full lg:max-w-none lg:flex-grow lg:px-0"
                 >
-                    <div
-                        class="flex aspect-square items-center justify-center bg-black text-white lg:max-w-500"
-                    >
-                        <span>SPLINE</span>
+                    <div class="aspect-square w-full">
+                        <script
+                            type="module"
+                            src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"
+                        ></script>
+                        <spline-viewer
+                            url="https://prod.spline.design/R2yB4AHf16NOPonA/scene.splinecode"
+                            background="transparent"></spline-viewer>
                     </div>
                 </div>
                 <div class="hidden lg:flex lg:flex-col lg:gap-4 lg:self-end">
@@ -85,7 +89,7 @@ const { footerData } = Astro.props;
                 </div>
             </div>
         </div>
-        <div class="px-gutter pt-16 lg:w-1/2 lg:pt-30 lg:pr-42">
+        <div class="px-gutter lg:w-1/2 lg:pt-220 lg:pr-42">
             <LogoTypo className="mb-65 hidden w-237 lg:block" />
             <div class="flex items-end gap-25">
                 <div>
