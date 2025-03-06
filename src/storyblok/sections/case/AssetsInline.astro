@@ -1,0 +1,64 @@
+---
+import SBImage from "../../../components/global/SBImage.astro";
+import VideoEmbed from "../../../components/global/VideoEmbed.astro";
+
+interface AssetItem {
+    filename: string;
+    alt?: string;
+}
+
+interface VideoBlock {
+    youtube_url: string;
+    component: 'video';
+}
+
+interface Props {
+    assets: (AssetItem | VideoBlock)[];
+    moreSpacing: boolean;
+    className?: string;
+}
+
+const { assets = [], moreSpacing, className = "" } = Astro.props;
+
+const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
+    return 'component' in asset && asset.component === 'video';
+};
+
+const getGridClasses = (itemsCount: number): string => {
+    switch (itemsCount) {
+        case 2:
+            return 'grid grid-cols-1 md:grid-cols-2';
+        case 3:
+            return 'grid grid-cols-1 md:grid-cols-3';
+        case 4:
+            return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+        default:
+            return '';
+    }
+};
+
+const getItemClasses = (itemsCount: number): string => {
+    if (itemsCount === 1 && moreSpacing) {
+        return 'lg:px-[8.33333%]';
+    } else if (itemsCount === 2 && moreSpacing) {
+        return 'lg:px-[16.6666%]';
+    }
+    return '';
+};
+---
+
+<div class={`mx-auto gap-y-20 ${getGridClasses(assets.length)} ${className}`}>
+    {assets.map((asset) => (
+        <div class={`${getItemClasses(assets.length)}`}>
+            <div class='px-gutter'>
+                {isVideo(asset) ? (
+                    <VideoEmbed url={asset.youtube_url} />
+                ) : (
+                    <SBImage
+                        image={asset}
+                    />
+                )}
+            </div>
+        </div>
+    ))}
+</div>
