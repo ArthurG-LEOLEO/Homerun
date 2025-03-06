@@ -3,6 +3,13 @@ export default {
         "case.challenges": "Strategic challenges:",
         "case.response": "Response:",
         "banner.title": "Rosbeef! is now HOMERUN",
+        "about.nav.people": "People",
+        "about.nav.clients": "Clients",
+        "about.nav.approach": "Approach",
+        "about.nav.sports": "Sports",
+        "about.nav.worldwide": "Worldwide",
+        "about.nav.mindset": "Mindset",
+        "about.nav.tomorrows": "Tomorrows",
     },
     fr: {
         "case.challenges": "Enjeux strat’ :",

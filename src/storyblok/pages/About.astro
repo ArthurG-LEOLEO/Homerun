@@ -8,7 +8,7 @@ import Sports from "../../components/about/Sports.astro";
 import Worldwide from "../../components/about/Worldwide.astro";
 import Mindset from "../../components/about/Mindset.astro";
 import Tomorrows from "../../components/about/Tomorrows.astro";
-
+import Nav from "../../components/about/Nav.astro";
 
 import Title from "../../components/atoms/Title.astro";
 
@@ -29,38 +29,73 @@ const { language, blok } = Astro.props;
         </h1>
         <Hero blok={blok} />
     </div>
-    <Section title={blok.people_title[0]} bgColor="black" color="white">
-        <People blok={blok} />
-    </Section>
-    <Section title={blok.clients_title[0]} bgColor="blue" color="black">
-        <Clients blok={blok} />
-    </Section>
-    <Section title={blok.approach_title[0]} bgColor="white" color="black">
-        <Approach blok={blok} />
-    </Section>
-    <Section title={blok.sports_title[0]} bgColor="green" color="white">
-        <Sports blok={blok} />
-    </Section>
-    <Section title={blok.worldwide_title[0]} bgColor="pink" color="black">
-        <Worldwide blok={blok} />
-    </Section>
-    <Section title={blok.mindset_title[0]} bgColor="orange" color="white">
-        <Mindset blok={blok} />
-    </Section>
-    <Section title={blok.tomorrows_title[0]} bgColor="black" color="white">
-        <Tomorrows blok={blok} />
-    </Section>
+    <div class="relative w-full" id="about-scrolling-container">
+        <Nav />
+        <Section
+            order="1"
+            title={blok.people_title[0]}
+            bgColor="black"
+            color="white"
+        >
+            <People blok={blok} />
+        </Section>
+        <Section
+            order="2"
+            title={blok.clients_title[0]}
+            bgColor="blue"
+            color="black"
+        >
+            <Clients blok={blok} />
+        </Section>
+        <Section
+            order="3"
+            title={blok.approach_title[0]}
+            bgColor="white"
+            color="black"
+        >
+            <Approach blok={blok} />
+        </Section>
+        <Section
+            order="4"
+            title={blok.sports_title[0]}
+            bgColor="green"
+            color="white"
+        >
+            <Sports blok={blok} />
+        </Section>
+        <Section
+            order="5"
+            title={blok.worldwide_title[0]}
+            bgColor="pink"
+            color="black"
+        >
+            <Worldwide blok={blok} />
+        </Section>
+        <Section
+            order="6"
+            title={blok.mindset_title[0]}
+            bgColor="orange"
+            color="white"
+        >
+            <Mindset blok={blok} />
+        </Section>
+        <Section
+            order="7"
+            title={blok.tomorrows_title[0]}
+            bgColor="black"
+            color="white"
+        >
+            <Tomorrows blok={blok} />
+        </Section>
+    </div>
 </div>
 
 <script>
     let tlAppear;
-    const init = () => {
-        const page = document.querySelector("#page-about");
-        if (!page) return;
+    let nav: HTMLElement | null;
 
-        const banner = document.querySelector("#layout-banner");
-        const header = document.querySelector("#layout-header");
-
+    const appear = (banner: Element | null, header: Element | null) => {
+        if (!banner || !header) return;
         gsap.timeline()
             .set(banner, {
                 y: "-100%",
@@ -91,6 +126,46 @@ const { language, blok } = Astro.props;
                 },
                 "start",
             );
+    };
+
+    const setupNavUpdates = (sections: NodeListOf<HTMLElement> | null) => {
+        if (!nav || !sections || !sections.length) return;
+
+        sections.forEach((section) => {
+            const order = section.dataset.order;
+            const navEvent = new CustomEvent("sectionchange", {
+                detail: order,
+            });
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 50%",
+                    end: "bottom 50%",
+                    onEnter: () => {
+                        nav?.dispatchEvent(navEvent);
+                    },
+                    onEnterBack: () => {
+                        nav?.dispatchEvent(navEvent);
+                    },
+                },
+            });
+        });
+    };
+
+    const init = () => {
+        const page = document.querySelector("#page-about");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelector("#layout-header");
+        nav = page.querySelector("#about-nav");
+
+        appear(banner, header);
+
+        const sections: NodeListOf<HTMLElement> =
+            page.querySelectorAll(".about-section");
+
+        setupNavUpdates(sections);
     };
 
     document.addEventListener("astro:page-load", () => {

@@ -1,0 +1,152 @@
+---
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const items = [
+    {
+        label: t("about.nav.people"),
+    },
+    {
+        label: t("about.nav.clients"),
+    },
+    {
+        label: t("about.nav.approach"),
+    },
+    {
+        label: t("about.nav.sports"),
+    },
+    {
+        label: t("about.nav.worldwide"),
+    },
+    {
+        label: t("about.nav.mindset"),
+    },
+    {
+        label: t("about.nav.tomorrows"),
+    },
+];
+---
+
+<div
+    id="about-nav"
+    class="absolute top-0 right-0 left-0 w-full text-[white] mix-blend-difference"
+>
+    <div class="container-main flex items-center justify-between py-100">
+        <div class="px-gutter text-[3.2rem]/[3.8rem] font-medium uppercase">
+            Creative
+        </div>
+        <div class="px-gutter">
+            <div class="flex flex-col items-end">
+                {
+                    items.map((item, index) => (
+                        <button
+                            style={{
+                                "--active": Number(index === 0),
+                                "--i-before": index,
+                                "--i-after": items.length - index - 1,
+                            }}
+                            data-order={index + 1}
+                            data-active={index === 0}
+                            class="nav-items cursor-pointer pt-[calc((28rem-(var(--i-before)*1.9rem))*var(--active))] pb-[calc((28rem-(var(--i-after)*1.9rem))*var(--active))] text-[calc(1.6rem+(1.6rem*var(--active)))]/[1.2] font-medium uppercase"
+                        >
+                            {item.label}
+                        </button>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // TODO: remove comments when done
+    // full height = 800px
+    // padding-top = 280 - nb item before * 19
+    // padding-bottom = 280 - nb item after * 19
+
+    let pin: gsap.core.Timeline | null;
+
+    let nav: Element | null;
+    let navItems: NodeListOf<HTMLElement> | null;
+
+    const onSectionChange = (e: any) => {
+        const index = parseInt(e.detail) - 1;
+
+        if (!navItems || !navItems[index] || !nav) return;
+
+        // If already active
+        if (navItems[index].dataset.active === "true") return;
+
+        const prevActiveItem: HTMLElement | null = nav.querySelector(
+            ".nav-items[data-active='true']",
+        );
+
+        if (prevActiveItem) {
+            prevActiveItem.dataset.active = "false";
+            gsap.to(prevActiveItem, {
+                "--active": 0,
+                duration: 0.4,
+                ease: "power3.inOut",
+            });
+        }
+
+        navItems[index].dataset.active = "true";
+        gsap.to(navItems[index], {
+            "--active": 1,
+            duration: 0.4,
+            ease: "power3.inOut",
+        });
+    };
+
+    const onNavItemClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const order = target.dataset.order || "1";
+        const sectionToScrollTo = document.querySelector(
+            `#page-about .about-section[data-order="${order}"]`,
+        );
+
+        window.lenis.scrollTo(sectionToScrollTo);
+    };
+
+    const init = () => {
+        nav = document.querySelector("#about-nav");
+        if (!nav) return;
+
+        navItems = nav.querySelectorAll(".nav-items");
+
+        pin = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#about-scrolling-container",
+                start: "top top",
+                end: "bottom bottom",
+                pin: nav,
+            },
+        });
+
+        nav.addEventListener("sectionchange", onSectionChange);
+
+        navItems.forEach((item) => {
+            item.addEventListener("click", onNavItemClick);
+        });
+    };
+
+    const cleanup = () => {
+        pin?.kill();
+        nav?.removeEventListener("sectionchange", onSectionChange);
+
+        navItems?.forEach((item) => {
+            item.removeEventListener("click", onNavItemClick);
+        });
+    };
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>
