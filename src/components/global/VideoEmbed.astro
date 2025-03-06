@@ -1,12 +1,10 @@
 ---
 interface Props {
-  language: string;
-  blok: {
-    youtube_url: string;
-  };
+    url: string;
+    className?: string;
 }
 
-const { language, blok } = Astro.props;
+const { url, className = "" } = Astro.props;
 
 function extractYouTubeId(url: string): string | null {
   const regexPatterns = [
@@ -23,14 +21,14 @@ function extractYouTubeId(url: string): string | null {
   return null;
 }
 
-const videoId = extractYouTubeId(blok.youtube_url);
-const isShort = blok.youtube_url.includes('/shorts/');
+const videoId = extractYouTubeId(url);
+const isShort = url.includes('/shorts/');
 const aspectRatioClass = isShort ? "aspect-[9/16]" : "aspect-video";
 const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 ---
 
 {videoId && (
-  <div class={`px-gutter ${aspectRatioClass}`}>
+  <div class={`${aspectRatioClass} ${className}`}>
     <iframe
       src={embedUrl}
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

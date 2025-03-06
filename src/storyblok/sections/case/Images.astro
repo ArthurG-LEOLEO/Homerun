@@ -1,7 +1,20 @@
 ---
+import AssetsInline from "./AssetsInline.astro";
+import AssetsSlider from "./AssetsSlider.astro";
+
 const { language, blok } = Astro.props;
+const hasLessThanFourImages = blok.images && blok.images.length <= 4;
 ---
 
-<div class="text-title-2">
-    Images
+<div>
+    {blok.intro && (
+        <p class={`px-gutter text-title-6 mb-16 mx-auto ${blok.more_spacing ? 'lg:w-10/12' : ''}`}>{blok.intro}</p>
+    )}
+    {blok.images && (
+        hasLessThanFourImages ? (
+            <AssetsInline assets={blok.images} moreSpacing={blok.more_spacing} />
+        ) : (
+            <AssetsSlider assets={blok.images} />
+        )
+    )}
 </div>
