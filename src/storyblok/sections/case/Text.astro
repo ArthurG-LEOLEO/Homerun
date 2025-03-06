@@ -1,7 +1,17 @@
 ---
+import { renderRichText } from "@storyblok/astro";
+
 const { language, blok } = Astro.props;
 ---
 
-<div class="text-title-2">
-    Text
+<div class=`flex flex-col gap-16 w-10/12 mx-auto lg:w-8/12 lg:gap-32 ${blok.two_cols ? 'xl:w-10/12 xl:flex-row xl:gap-0 xl:justify-between' : 'xl:w-6/12'}`>
+    {blok.title && (
+        <div class={`px-gutter text-title-6 ${blok.two_cols ? 'xl:w-3/10' : ''}`}>
+            {blok.title}
+        </div>
+    )}
+    <div
+        class={`px-gutter text-p-20 text-black/70 ${blok.two_cols ? 'xl:w-6/10 xl:ml-auto' : ''}`}
+        set:html={renderRichText(blok.text)}
+    />
 </div>
