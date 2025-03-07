@@ -30,10 +30,15 @@ const { logoless, blok, alternates } = Astro.props;
                 <div class="px-gutter relative z-[2] ml-auto">
                     <button
                         id="menu-button"
-                        class="bg-orange text-cta16 font-space flex cursor-pointer items-center gap-10 rounded-[10rem] px-24 py-16 text-white transition-transform duration-100 ease-out active:scale-[0.95]"
+                        class="bg-orange text-cta16 font-space cursor-pointer rounded-[10rem] px-16 py-16 text-white transition-transform duration-100 ease-out active:scale-[0.95] sm:px-24"
                     >
-                        <span>{blok.label}</span>
-                        <Icon name="open" size="16" />
+                        <div class="hidden items-center gap-10 sm:flex">
+                            <span>{blok.label}</span>
+                            <Icon name="open" size="16" />
+                        </div>
+                        <div class="sm:hidden">
+                            <Icon name="menu" size="16" />
+                        </div>
                     </button>
                 </div>
             )
