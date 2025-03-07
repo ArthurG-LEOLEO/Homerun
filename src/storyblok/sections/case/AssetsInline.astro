@@ -47,18 +47,20 @@ const getItemClasses = (itemsCount: number): string => {
 };
 ---
 
-<div class={`mx-auto gap-y-20 ${getGridClasses(assets.length)} ${className}`}>
-    {assets.map((asset) => (
-        <div class={`${getItemClasses(assets.length)}`}>
-            <div class='px-gutter'>
-                {isVideo(asset) ? (
-                    <VideoEmbed url={asset.youtube_url} />
-                ) : (
-                    <SBImage
-                        image={asset}
-                    />
-                )}
+<div class="container-main">
+    <div class={`mx-auto gap-y-20 ${getGridClasses(assets.length)} ${className}`}>
+        {assets.map((asset) => (
+            <div class={`${getItemClasses(assets.length)}`}>
+                <div class='px-gutter'>
+                    {isVideo(asset) ? (
+                        <VideoEmbed url={asset.youtube_url} />
+                    ) : (
+                        <SBImage
+                            image={asset}
+                        />
+                    )}
+                </div>
             </div>
-        </div>
-    ))}
+        ))}
+    </div>
 </div>

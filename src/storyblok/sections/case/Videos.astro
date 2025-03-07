@@ -8,7 +8,9 @@ const hasLessThanFourVideos = blok.videos && blok.videos.length <= 4;
 
 <div>
     {blok.intro && (
-        <p class={`px-gutter text-title-6 mb-16 mx-auto ${blok.more_spacing ? 'lg:w-10/12' : ''}`}>{blok.intro}</p>
+        <div class="container-main">
+            <p class={`px-gutter text-title-6 mb-16 mx-auto ${blok.more_spacing ? 'lg:w-10/12' : ''}`}>{blok.intro}</p>
+        </div>
     )}
     {blok.videos && (
         hasLessThanFourVideos ? (
