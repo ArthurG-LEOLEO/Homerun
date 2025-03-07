@@ -11,13 +11,34 @@ const hasImage = post.image && post.image.id;
 const { width, height } = getImageSize(post.image);
 
 const aspectRatio = hasImage ? `${width}/${height}` : "auto";
+
+const bgColorsForImgs = ["#2d5a36", "#e56138", "#cdf0ff", "#edd4f8"];
+const bgColorsForTexts = ["#2d5a36", "#e56138"];
+
+const possibleBgColors = [...bgColorsForTexts];
+
+const indexColor1 = ~~(Math.random() * possibleBgColors.length);
+const layerColor1 = possibleBgColors[indexColor1];
+
+possibleBgColors.splice(indexColor1, 1);
+
+const layerColor2 =
+    possibleBgColors[~~(Math.random() * possibleBgColors.length)];
 ---
 
 <div
     class="feed-slider-post relative flex w-[33vw] min-w-230 shrink-0 origin-top select-none"
 >
-    <div class="feed-post-layer-2 bg-orange absolute inset-0"></div>
-    <div class="feed-post-layer-1 bg-green absolute inset-0"></div>
+    <div
+        class="feed-post-layer-2 absolute inset-0"
+        style={{ backgroundColor: layerColor2 }}
+    >
+    </div>
+    <div
+        class="feed-post-layer-1 absolute inset-0"
+        style={{ backgroundColor: layerColor1 }}
+    >
+    </div>
     <a
         href={post.link.url}
         target="_blank"
