@@ -136,6 +136,8 @@ import CTA from "../../components/global/CTA.astro";
     let xTo: gsap.QuickToFunc | ((arg0: any) => void);
     let xToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
     let xToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
+    let scaleToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
+    let scaleToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
     let total = 0;
     let isHover = false;
     let gsapObserver: Observer;
@@ -169,11 +171,11 @@ import CTA from "../../components/global/CTA.astro";
         });
         xToLayer1 = gsap.quickTo(layers1, "x", {
             duration: 2,
-            ease: "power3",
+            ease: "elastic.out(1.2, 0.7)",
         });
         xToLayer2 = gsap.quickTo(layers2, "x", {
             duration: 2,
-            ease: "power3",
+            ease: "elastic.out(1.2, 0.7)",
         });
 
         const onDragTlIn = gsap.timeline({ paused: true }).to(posts, {
@@ -253,20 +255,23 @@ import CTA from "../../components/global/CTA.astro";
                 }
             },
             onDrag: (self: { deltaX: number }) => {
-                if (Observer.isTouch) isHover = true;
                 gsap.set(postLinks, { pointerEvents: "none" });
-                const movementX = Observer.isTouch
-                    ? self.deltaX * 1.5
-                    : self.deltaX;
-                total += movementX;
-                const layerOffset = gsap.utils.clamp(
-                    -100,
-                    100,
-                    -movementX * 1.4,
-                );
                 xTo(total);
-                xToLayer1(layerOffset / 2);
-                xToLayer2(layerOffset);
+                if (Observer.isTouch) {
+                    isHover = true;
+                } else {
+                    const movementX = Observer.isTouch
+                        ? self.deltaX * 1.5
+                        : self.deltaX;
+                    total += movementX;
+                    const layerOffset = gsap.utils.clamp(
+                        -500,
+                        500,
+                        -movementX * 1.6,
+                    );
+                    xToLayer1(layerOffset / 1.5);
+                    xToLayer2(layerOffset);
+                }
             },
             onRelease: () => {
                 if (Observer.isTouch) {

@@ -436,7 +436,7 @@ const { blok } = Astro.props;
                 scrollTrigger: {
                     trigger: videoHolder,
                     start: "top bottom",
-                    end: "bottom bottom",
+                    end: "bottom bottom+=50%",
                     invalidateOnRefresh: true,
                     scrub: true,
                     onEnter: function () {
@@ -452,42 +452,27 @@ const { blok } = Astro.props;
             },
         );
 
-        tlVideoText = gsap.timeline({
-            scrollTrigger: {
-                trigger: videoHolder,
-                start: "top 10%",
-                end: "bottom top",
-                toggleActions: "play none none reset",
-                onEnter() {
-                    gsap.to(videoOverlay, {
-                        opacity: 1,
-                        duration: 0.4,
-                        overwrite: true,
-                    });
-                    gsap.to(videoTextWords, {
-                        duration: 0.8,
-                        opacity: 1,
-                        x: 0,
-                        stagger: 0.1,
-                        overwrite: true,
-                    });
+        tlVideoText = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top 50%",
+                    end: "top top",
+                    scrub: true,
                 },
-                onLeaveBack() {
-                    gsap.to(videoOverlay, {
-                        opacity: 0,
-                        duration: 0.2,
-                        overwrite: true,
-                    });
-                    gsap.to(videoTextWords, {
-                        duration: 0.2,
-                        opacity: 0,
-                        x: -20,
-                        stagger: 0.02,
-                        overwrite: true,
-                    });
+            })
+            .to(videoOverlay, {
+                opacity: 1,
+            })
+            .to(
+                videoTextWords,
+                {
+                    opacity: 1,
+                    x: 0,
+                    stagger: 0.1,
                 },
-            },
-        });
+                "<",
+            );
     };
 
     const cleanup = () => {
