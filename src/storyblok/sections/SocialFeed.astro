@@ -256,14 +256,14 @@ import CTA from "../../components/global/CTA.astro";
             },
             onDrag: (self: { deltaX: number }) => {
                 gsap.set(postLinks, { pointerEvents: "none" });
+                const movementX = Observer.isTouch
+                    ? self.deltaX * 1.5
+                    : self.deltaX;
+                total += movementX;
                 xTo(total);
                 if (Observer.isTouch) {
                     isHover = true;
                 } else {
-                    const movementX = Observer.isTouch
-                        ? self.deltaX * 1.5
-                        : self.deltaX;
-                    total += movementX;
                     const layerOffset = gsap.utils.clamp(
                         -500,
                         500,
