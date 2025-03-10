@@ -1,9 +1,147 @@
 ---
-const { blok } = Astro.props;
+import { Icon } from "astro-icon/components";
+
+interface SubjectOption {
+  id: string;
+  label: string;
+}
+
+interface FormBlok {
+  first_name_label: string;
+  last_name_label: string;
+  email_label: string;
+  subject_label: string;
+  message_label: string;
+  subject_options: SubjectOption[];
+}
+
+const { blok } = Astro.props as { blok: FormBlok };
 ---
 
 <div class="mt-50 md:mt-60">
-    <div class="py-75 bg-pink text-black">
-        Form
+  <div class="relative py-75 before:bg-pink before:absolute before:inset-0 text-black">
+    <div class="relative px-24 md:px-0 md:mx-auto md:w-8/10 lg:w-6/8">
+      <form
+        name="contact"
+        method="POST"
+        netlify-honeypot="bot-field"
+        data-netlify="true"
+        class="flex flex-col gap-40 md:gap-48"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden">
+          <label>
+            Ne pas remplir ce champ si vous êtes humain: <input name="bot-field" />
+          </label>
+        </p>
+
+        <!-- Name -->
+        <div class="flex flex-col md:flex-row">
+          <div class="flex flex-col flex-1 px-gutter md:gap-8">
+            <label for="lastname" class="text-title-7">{blok.first_name_label}*</label>
+            <input
+              type="text"
+              id="lastname"
+              name="lastname"
+              required
+              class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
+            />
+          </div>
+          <div class="flex flex-col flex-1 px-gutter md:gap-8">
+            <label for="firstname" class="text-title-7">{blok.last_name_label}*</label>
+            <input
+              type="text"
+              id="firstname"
+              name="firstname"
+              required
+              class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col px-gutter md:gap-8">
+          <label for="email" class="text-title-7">{blok.email_label}*</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
+          />
+        </div>
+
+        <!-- Subject -->
+        <div class="flex flex-col px-gutter md:gap-8">
+            <p class="text-title-7">{blok.subject_label}*</p>
+            <div class="flex flex-wrap gap-4">
+                {(blok.subject_options || []).map((option: SubjectOption, index: number) => (
+                    <div class="subject-option">
+                        <input
+                            type="radio"
+                            id={option.id}
+                            name="subject"
+                            value={option.label}
+                            class="topic-radio peer hidden"
+                            required={index === 0}
+                        />
+                        <label
+                            for={option.id}
+                            class="topic-label inline-flex items-center gap-6 text-tag-lil px-10 py-1 border-3 border-black rounded-[6rem] cursor-pointer inline-block transition-all md:gap-10 md:px-13 md:py-5 peer-checked:bg-blue"
+                        >
+                            <span class="arrow-icon relative -top-1">
+                                <Icon 
+                                    name="arrow-right" 
+                                    class="size-12 md:size-16" 
+                                />
+                            </span>
+                            <span>
+                                {option.label}
+                            </span>
+                        </label>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div class="flex flex-col px-gutter md:gap-8">
+          <label for="message" class="text-title-7">{blok.message_label}*</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="3"
+            required
+            class="text-p-24 border border-black py-8 bg-transparent md:py-13 resize-none"
+          ></textarea>
+        </div>
+
+        <div class="flex items-end gap-24 justify-between mt-40 px-gutter md:mt-24">
+            <button
+                type="submit"
+                class='flex-none text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80'
+            >
+                <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
+                >Envoyer</span>
+                <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
+                    <Icon
+                        name="arrow-right"
+                        class="size-14 md:size-16"
+                    />
+                </span>
+            </button>
+            <span>{blok.required_fields_label}</span>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
+
+<style>
+    .topic-label .arrow-icon {
+        display: none;
+    }
+    .topic-radio:checked + .topic-label .arrow-icon {
+        display: inline-flex;
+    }
+</style>

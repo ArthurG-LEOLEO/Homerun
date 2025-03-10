@@ -1,6 +1,7 @@
 ---
 import Title from "../../components/atoms/Title.astro";
 
+import Section from "../../components/contact/Section.astro";
 import Form from "../../components/contact/Form.astro";
 
 const { language, blok } = Astro.props;
@@ -19,8 +20,10 @@ const { language, blok } = Astro.props;
             <h1 class="text-title-1 px-gutter w-10/12 text-center">
                 <Title title={blok.title[0]} />
             </h1>
+            <Section>
+                <Form blok={blok} />
+            </Section>
         </div>
-        <Form />
     </div>
 </div>
 
