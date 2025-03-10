@@ -32,6 +32,7 @@ export default defineConfig({
                 about: "storyblok/pages/About",
                 contact: "storyblok/pages/Contact",
                 case_study: "storyblok/pages/Case",
+                work: "storyblok/pages/Work",
                 social_feed: "storyblok/sections/SocialFeed",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
