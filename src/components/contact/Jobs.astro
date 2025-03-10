@@ -1,0 +1,29 @@
+---
+import SBImage from "../global/SBImage.astro";
+import Title from "../atoms/Title.astro";
+import BasicLink from "../atoms/BasicLink.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="md:px-gutter">
+    <div class="flex flex-col gap-24 pt-24 px-24 pb-32 bg-white text-black md:p-40 md:flex-row md:gap-65 md:items-center">
+        <div class="flex-1">
+            <SBImage
+                class="w-full"
+                image={blok.jobs_image}
+            />
+        </div>
+        <div class="flex-1">
+            <h6 class="text-title-6">
+                <Title
+                    title={blok.jobs_title[0]}
+                />
+            </h6>
+            <BasicLink
+                link={blok.jobs_link[0]}
+                className="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16"
+            />
+        </div>
+    </div>
+</div>

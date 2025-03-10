@@ -1,5 +1,13 @@
+---
+interface Props {
+    className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
 <div
-    class="contact-section w-full max-w-315 md:max-w-none md:w-10/12 lg:w-8/12"
+    class={`contact-section w-full px-20 md:max-w-none md:px-0 md:w-10/12 lg:w-8/12 ${className}`}
 >
     <slot />
 </div>

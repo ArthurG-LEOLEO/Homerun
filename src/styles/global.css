@@ -214,6 +214,11 @@
     .text-p-86 {
         @apply text-p86-mobile md:text-p86;
     }
+    .text-cta-16 {
+        @apply text-cta16;
+        @apply font-space;
+        @apply font-medium;
+    }
     .text-cta-32 {
         @apply text-cta32-mobile md:text-cta32;
         @apply font-space;
