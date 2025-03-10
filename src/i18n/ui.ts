@@ -16,7 +16,7 @@ export default {
         "work.title.consulting": "Innovations",
         "work.title.middle1": "that create value",
         "work.title.middle2": "and",
-        "work.title.advertising": "Innovations",
+        "work.title.advertising": "communications",
         "work.title.end": "that spark conversations.",
         "work.archived.title": "Archives",
         "work.archived.load": "Load more",
