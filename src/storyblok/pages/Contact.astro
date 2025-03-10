@@ -1,7 +1,10 @@
 ---
 import Title from "../../components/atoms/Title.astro";
 
+import Section from "../../components/contact/Section.astro";
 import Form from "../../components/contact/Form.astro";
+import Jobs from "../../components/contact/Jobs.astro";
+import Offices from "../../components/contact/Offices.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -19,8 +22,18 @@ const { language, blok } = Astro.props;
             <h1 class="text-title-1 px-gutter w-10/12 text-center">
                 <Title title={blok.title[0]} />
             </h1>
+            <div class="flex flex-col items-center md:gap-8">
+                <Section>
+                    <Form blok={blok} />
+                </Section>
+                <Section className="rotate-[1deg]">
+                    <Jobs blok={blok} />
+                </Section>
+                <Section className="-rotate-[1.2deg]">
+                    <Offices blok={blok} />
+                </Section>
+            </div>
         </div>
-        <Form />
     </div>
 </div>
 
