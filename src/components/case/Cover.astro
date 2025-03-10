@@ -1,0 +1,27 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Tag from "../../components/atoms/Tag.astro";
+import SBImage from "../../components/global/SBImage.astro";
+
+const { language, caseItem } = Astro.props;
+---
+
+<div
+    class={`relative ${
+        caseItem.cover_ratio === "square"
+            ? "aspect-square"
+            : "aspect-[1398/883]"
+    }`}
+>
+    <SBImage class="size-full object-cover" image={caseItem.cover} />
+    {
+        caseItem.united && (
+            <Icon
+                name="united"
+                class="absolute right-16 bottom-16 size-37 text-white md:right-24 md:bottom-24 md:size-55"
+            />
+        )
+    }
+    <Tag category={caseItem.category} class="absolute top-16 left-16" />
+</div>

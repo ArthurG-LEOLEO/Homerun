@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
@@ -8,76 +7,64 @@ const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
 import Title from "../../components/atoms/Title.astro";
-import Tag from "../../components/atoms/Tag.astro";
-import SBImage from "../../components/global/SBImage.astro";
+import OtherCases from "../../components/case/OtherCases.astro";
+import Cover from "../../components/case/Cover.astro";
 
 const { language, blok } = Astro.props;
 ---
 
 <div id="page-case" class="case" {...storyblokEditable(blok)}>
-    <div class="container-main pt-105 md:pt-150">
-        <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
-        <div
-            class="mt-17 flex flex-col gap-56 md:mt-24 lg:flex-row lg:items-baseline lg:justify-between lg:gap-0"
-        >
-            <h1 class="text-title-1 px-gutter lg:w-5/12">
-                <Title title={blok.title[0]} />
-            </h1>
+    <div class="pt-105 pb-120 md:pt-150 md:pb-170">
+        <div class="container-main">
+            <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
+            <div
+                class="mt-17 flex flex-col gap-56 md:mt-24 lg:flex-row lg:items-baseline lg:justify-between lg:gap-0"
+            >
+                <h1 class="text-title-1 px-gutter lg:w-5/12">
+                    <Title title={blok.title[0]} />
+                </h1>
+                {
+                    blok.intro && (
+                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+                    )
+                }
+            </div>
+            <div class="px-gutter mt-40 lg:mt-55">
+                <Cover caseItem={blok} />
+            </div>
+    
             {
-                blok.intro && (
-                    <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+                (blok.strategic_challenges && blok.response) && (
+                    <div class="flex justify-end mt-72 mx-auto w-10/12 md:mt-130">
+                        <div class="flex flex-col gap-40 px-gutter md:w-8/10 lg:w-6/10 xl:w-5/10">
+                            <div class="flex flex-col gap-16">
+                                <h4 class="text-title-6">
+                                    {t("case.challenges")}
+                                </h4>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.strategic_challenges}</p>
+                            </div>
+                            <div class="flex flex-col gap-16">
+                                <h4 class="text-title-6">
+                                    {t("case.response")}
+                                </h4>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.response}</p>
+                            </div>
+                        </div>
+                    </div>
                 )
             }
         </div>
-        <div class="px-gutter mt-40 lg:mt-55">
-            <div
-                class={`relative ${
-                    blok.cover_ratio === "square"
-                        ? "aspect-square"
-                        : "aspect-[1398/883]"
-                }`}
-            >
-                <SBImage class="size-full object-cover" image={blok.cover} />
-                {
-                    blok.united && (
-                        <Icon
-                            name="united"
-                            class="absolute right-16 bottom-16 size-37 text-white md:right-24 md:bottom-24 md:size-55"
-                        />
-                    )
-                }
-                <Tag category={blok.category} class="absolute top-16 left-16" />
-            </div>
+        <div class="mt-72 flex flex-col gap-72 md:mt-130 md:gap-130">
+            {
+                blok.sections?.map((blok: SbBlokData) => {
+                    return <StoryblokComponent blok={blok} language={language} />;
+                })
+            }
         </div>
-
-        {
-            (blok.strategic_challenges && blok.response) && (
-                <div class="flex justify-end mt-72 mx-auto w-10/12 md:mt-130">
-                    <div class="flex flex-col gap-40 px-gutter md:w-8/10 lg:w-6/10 xl:w-5/10">
-                        <div class="flex flex-col gap-16">
-                            <h4 class="text-title-6">
-                                {t("case.challenges")}
-                            </h4>
-                            <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.strategic_challenges}</p>
-                        </div>
-                        <div class="flex flex-col gap-16">
-                            <h4 class="text-title-6">
-                                {t("case.response")}
-                            </h4>
-                            <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.response}</p>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
     </div>
-    <div class="mt-72 flex flex-col gap-72 md:mt-130 md:gap-130">
-        {
-            blok.sections?.map((blok: SbBlokData) => {
-                return <StoryblokComponent blok={blok} language={language} />;
-            })
-        }
-    </div>
+    {blok.other_cases?.length > 0 && (
+        <OtherCases cases={blok.other_cases} />
+    )}
 </div>
 
 <script>

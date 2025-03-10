@@ -24,8 +24,7 @@ const { language, fullSlug } = props;
 const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
     version: "draft",
     resolve_relations: [
-        "home_approach.first_category_cases",
-        "home_approach.second_category_cases",
+        "case_study.other_cases",
     ],
 });
 

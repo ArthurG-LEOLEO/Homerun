@@ -2,6 +2,7 @@ export default {
     en: {
         "case.challenges": "Strategic challenges:",
         "case.response": "Response:",
+        "case.other": "Other cases",
         "banner.title": "Rosbeef! is now HOMERUN",
         "about.nav.creative": "Creative",
         "about.nav.people": "People",
@@ -15,6 +16,7 @@ export default {
     fr: {
         "case.challenges": "Enjeux strat’ :",
         "case.response": "Réponse :",
+        "case.other": "Autres cases",
         "banner.title": "Rosbeef! devient HOMERUN",
     },
 } as Record<string, Record<string, string>>;
