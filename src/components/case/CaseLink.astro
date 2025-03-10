@@ -1,0 +1,23 @@
+---
+import Link from "../global/Link.astro";
+
+const { language, caseItem, className = "" } = Astro.props;
+
+const hasExternalLink = caseItem.content.external_link?.cached_url;
+---
+
+{
+  !caseItem.content.has_case_study && !hasExternalLink ? (
+    <div class={className}>
+      <slot />
+    </div>
+  ) : caseItem.content.has_case_study && !hasExternalLink ? (
+    <Link link={{url: caseItem.full_slug, linktype: "story"}} className={className}>
+      <slot />
+    </Link>
+  ) : (
+    <Link link={caseItem.content.external_link} className={className}>
+      <slot />
+    </Link>
+  )
+}
