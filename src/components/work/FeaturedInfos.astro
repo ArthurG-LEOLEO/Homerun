@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { nbConsulting, nbAdvertising } = Astro.props;
+---
+
+<div
+    style="--show: 0; pointer-events: none;"
+    class="container-main w-full translate-y-[calc(5rem*(1-var(--show)))] opacity-[var(--show)] transition-[opacity,translate] duration-[400ms] ease-[cubic-bezier(0.87,0,0.13,1)]"
+    id="featured-infos"
+>
+    <div class="flex w-full items-center justify-between">
+        <div class="px-gutter text-p-20">
+            <span data-category="consulting" class="featured-infos-txt hidden"
+                >{nbConsulting} {t("work.consultingProjects")}</span
+            >
+            <span data-category="advertising" class="featured-infos-txt hidden"
+                >{nbAdvertising} {t("work.advertisingProjects")}</span
+            >
+        </div>
+        <button
+            id="all-button"
+            class="px-gutter flex cursor-pointer items-end gap-6 md:gap-12"
+        >
+            <span class="text-cta-32 border-b-[0.2rem]">{t("work.all")}</span>
+            <Icon
+                name="cross-circle"
+                class="size-28 rotate-[45deg] md:size-34"
+            />
+        </button>
+    </div>
+</div>

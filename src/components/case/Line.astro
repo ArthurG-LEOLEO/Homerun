@@ -1,0 +1,42 @@
+---
+import CaseLink from "./CaseLink.astro";
+import Cover from "./Cover.astro";
+
+import SBImage from "../../components/global/SBImage.astro";
+import { Icon } from "astro-icon/components";
+import Tag from "../atoms/Tag.astro";
+
+const { language, caseItem } = Astro.props;
+---
+
+<CaseLink class="w-full" caseItem={caseItem}>
+    <div
+        class="flex items-end border-b border-b-white/40 py-30 md:items-center md:py-16"
+    >
+        <div class="px-gutter hidden md:block lg:w-2/12">
+            <Tag category={caseItem.content.category} />
+        </div>
+        <div
+            class="px-gutter relative aspect-[115/70] w-4/12 max-w-230 md:order-3"
+        >
+            <SBImage
+                class="size-full object-cover"
+                image={caseItem.content.cover}
+            />
+        </div>
+
+        <div class="px-gutter flex flex-col gap-4 md:mr-auto">
+            <span class="text-p-24 text-white/70"
+                >{caseItem.content.client}</span
+            >
+            <span class="text-p-24 text-white"
+                >{caseItem.content.title[0].mobile_title}</span
+            >
+        </div>
+        <div
+            class="px-gutter ml-auto rotate-[-90deg] md:order-4 md:ml-12 md:rotate-[-135deg]"
+        >
+            <Icon name="arrow-circle" class="size-28 md:size-34" />
+        </div>
+    </div>
+</CaseLink>

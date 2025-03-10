@@ -1,0 +1,47 @@
+---
+import { useTranslations } from "../../i18n/utils";
+import Line from "../case/Line.astro";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { cases } = Astro.props;
+---
+
+<div class="container-main pt-110 pb-100 md:pt-175 md:pb-130">
+    <h3 class="text-title-2 px-gutter mb-24 md:mb-48">
+        {t("work.archived.title")}
+    </h3>
+    <div class="flex flex-col">
+        {
+            cases.map((item: { content: { category: string } }) => (
+                <div
+                    class="work-archived-case w-full"
+                    data-category={item.content?.category}
+                >
+                    <Line caseItem={item} />
+                </div>
+            ))
+        }
+        {
+            cases.map((item: { content: { category: string } }) => (
+                <div
+                    class="work-archived-case w-full"
+                    data-category={item.content?.category}
+                >
+                    <Line caseItem={item} />
+                </div>
+            ))
+        }
+        {
+            cases.map((item: { content: { category: string } }) => (
+                <div
+                    class="work-archived-case w-full"
+                    data-category={item.content?.category}
+                >
+                    <Line caseItem={item} />
+                </div>
+            ))
+        }
+    </div>
+</div>

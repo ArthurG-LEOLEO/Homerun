@@ -1,5 +1,168 @@
 ---
+import { useTranslations } from "../../i18n/utils";
+import Archived from "../../components/work/Archived.astro";
+import Featured from "../../components/work/Featured.astro";
+import Hero from "../../components/work/Hero.astro";
+import FeaturedInfos from "../../components/work/FeaturedInfos.astro";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
 const { language, blok } = Astro.props;
+
+const numberFeaturedConsulting = blok.featured_cases.filter(
+    (c: any) => c.content.category === "consulting",
+).length;
+const numberFeaturedAdvertising = blok.featured_cases.filter(
+    (c: any) => c.content.category === "advertising",
+).length;
 ---
 
-<div id="page-work">work</div>
+<div id="page-work" class="bg-black text-white">
+    <Hero subtitle={blok.subtitle} />
+    <FeaturedInfos
+        nbConsulting={numberFeaturedConsulting}
+        nbAdvertising={numberFeaturedAdvertising}
+    />
+
+    <Featured cases={blok.featured_cases} />
+    <Archived cases={blok.archived_cases} />
+</div>
+
+<script>
+    let currentCategory: string | undefined;
+    let tlAppear;
+    let page: HTMLElement | null;
+    let consultingButton: HTMLElement | null;
+    let advertisingButton: HTMLElement | null;
+    let featuredInfos: HTMLElement | null;
+    let allButton: HTMLElement | null;
+    let featuredCases: NodeListOf<HTMLElement> | null;
+    let archivedCases: NodeListOf<HTMLElement> | null;
+    let featuredInfosTxt: NodeListOf<HTMLElement> | null;
+
+    const filter = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const selectedCategory = target.dataset.category || currentCategory;
+
+        currentCategory =
+            selectedCategory === currentCategory ? undefined : selectedCategory;
+
+        const prevActiveButton = page?.querySelector(
+            ".work-category-btn.active",
+        );
+
+        if (!currentCategory) {
+            prevActiveButton?.classList.remove("active");
+            featuredInfos?.style.setProperty("--show", "0");
+            if (featuredInfos) featuredInfos.style.pointerEvents = "none";
+        } else {
+            prevActiveButton?.classList.remove("active");
+            target.classList.add("active");
+            featuredInfos?.style.setProperty("--show", "1");
+            if (featuredInfos) featuredInfos.style.pointerEvents = "auto";
+        }
+
+        featuredCases?.forEach((c) => {
+            const caseCat = c.dataset.category;
+            if (!currentCategory || caseCat === currentCategory) {
+                c.classList.remove("hidden");
+            } else {
+                c.classList.add("hidden");
+            }
+        });
+
+        archivedCases?.forEach((c) => {
+            const caseCat = c.dataset.category;
+            if (!currentCategory) {
+                c.classList.remove("hidden");
+            } else if (caseCat === currentCategory) {
+                c.classList.remove("hidden");
+            } else {
+                c.classList.add("hidden");
+            }
+        });
+
+        if (currentCategory) {
+            featuredInfosTxt?.forEach((txt) => {
+                if (txt.dataset.category === currentCategory) {
+                    txt.classList.remove("hidden");
+                } else {
+                    txt.classList.add("hidden");
+                }
+            });
+        }
+    };
+
+    const initFiltering = () => {
+        if (!page) return;
+        consultingButton = page?.querySelector("#consulting-button");
+        advertisingButton = page?.querySelector("#advertising-button");
+        allButton = page?.querySelector("#all-button");
+        featuredInfos = page?.querySelector("#featured-infos");
+        featuredCases = page?.querySelectorAll(".work-featured-case");
+        archivedCases = page?.querySelectorAll(".work-archived-case");
+        featuredInfosTxt = page?.querySelectorAll(".featured-infos-txt");
+
+        consultingButton?.addEventListener("click", filter);
+        advertisingButton?.addEventListener("click", filter);
+        allButton?.addEventListener("click", filter);
+    };
+    const init = () => {
+        page = document.querySelector("#page-work");
+
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelector("#layout-header");
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+
+        initFiltering();
+    };
+
+    const cleanup = () => {
+        consultingButton?.removeEventListener("click", filter);
+        advertisingButton?.removeEventListener("click", filter);
+        allButton?.removeEventListener("click", filter);
+    };
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>

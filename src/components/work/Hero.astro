@@ -1,0 +1,47 @@
+---
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { subtitle } = Astro.props;
+---
+
+<div class="container-main flex flex-col items-center pt-150 pb-30 lg:pb-125">
+    <span
+        class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+    >
+        {subtitle}
+    </span>
+    <h1 class="text-title-2 m-auto text-center">
+        <button
+            data-category="consulting"
+            id="consulting-button"
+            class="work-category-btn before:bg-pink relative z-[1] cursor-pointer text-white transition-[color] duration-300 before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-1.8deg] before:transition-[scale] before:duration-300 before:ease-[cubic-bezier(0.76,0,0.24,1)] after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:text-black hover:before:scale-x-[1]"
+            >{t("work.title.consulting")}</button
+        >
+        <br class="lg:hidden" />
+        <span>{t("work.title.middle1")}</span>
+        <br />
+        <span>{t("work.title.middle2")}</span>
+        <button
+            data-category="advertising"
+            id="advertising-button"
+            class="work-category-btn before:bg-orange relative z-[1] cursor-pointer before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-1.8deg] before:transition-[scale] before:duration-300 before:ease-[cubic-bezier(0.76,0,0.24,1)] after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:before:scale-x-[1]"
+            >{t("work.title.advertising")}</button
+        >
+        <br />
+        <span>{t("work.title.end")}</span>
+    </h1>
+</div>
+
+<style>
+    .work-category-btn.active {
+        &::before {
+            scale: 1 !important;
+        }
+        &#consulting-button {
+            color: var(--color-black) !important;
+        }
+    }
+</style>

@@ -9,8 +9,6 @@ const { language, blok } = Astro.props;
 
 <div class="home overflow-hidden" {...storyblokEditable(blok)}>
     <Hero blok={blok} />
-
-    <!-- <SectionText /> -->
     <Approach blok={blok.approach[0]} />
     <div>
         {

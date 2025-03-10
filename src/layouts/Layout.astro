@@ -17,7 +17,12 @@ import Loader from "../components/global/Loader.astro";
 
 const isDev = import.meta.env.DEV;
 const storyblokApi = useStoryblokApi();
-const { language, headerLogoless = false, alternates } = Astro.props;
+const {
+    language,
+    headerLogoless = false,
+    headerWhite = false,
+    alternates,
+} = Astro.props;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
     version: "draft",
@@ -42,6 +47,7 @@ const headerData = data.story.content.menu[0];
         <Header
             blok={headerData}
             logoless={headerLogoless}
+            white={headerWhite}
             alternates={alternates}
         />
         <slot />
