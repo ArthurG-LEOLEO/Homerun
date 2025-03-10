@@ -13,6 +13,7 @@ interface FormBlok {
   subject_label: string;
   message_label: string;
   subject_options: SubjectOption[];
+  required_fields_label: string;
 }
 
 const { blok } = Astro.props as { blok: FormBlok };
