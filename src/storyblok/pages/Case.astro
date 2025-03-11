@@ -25,29 +25,35 @@ const { language, blok } = Astro.props;
                 </h1>
                 {
                     blok.intro && (
-                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">
+                            {blok.intro}
+                        </h3>
                     )
                 }
             </div>
             <div class="px-gutter mt-40 lg:mt-55">
                 <Cover caseItem={blok} />
             </div>
-    
+
             {
-                (blok.strategic_challenges && blok.response) && (
-                    <div class="flex justify-end mt-72 mx-auto w-10/12 md:mt-130">
-                        <div class="flex flex-col gap-40 px-gutter md:w-8/10 lg:w-6/10 xl:w-5/10">
+                blok.strategic_challenges && blok.response && (
+                    <div class="mx-auto mt-72 flex w-10/12 justify-end md:mt-130">
+                        <div class="px-gutter flex flex-col gap-40 md:w-8/10 lg:w-6/10 xl:w-5/10">
                             <div class="flex flex-col gap-16">
                                 <h4 class="text-title-6">
                                     {t("case.challenges")}
                                 </h4>
-                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.strategic_challenges}</p>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">
+                                    {blok.strategic_challenges}
+                                </p>
                             </div>
                             <div class="flex flex-col gap-16">
                                 <h4 class="text-title-6">
                                     {t("case.response")}
                                 </h4>
-                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{blok.response}</p>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">
+                                    {blok.response}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -57,18 +63,18 @@ const { language, blok } = Astro.props;
         <div class="mt-72 flex flex-col gap-72 md:mt-130 md:gap-130">
             {
                 blok.sections?.map((blok: SbBlokData) => {
-                    return <StoryblokComponent blok={blok} language={language} />;
+                    return (
+                        <StoryblokComponent blok={blok} language={language} />
+                    );
                 })
             }
         </div>
     </div>
-    {blok.other_cases?.length > 0 && (
-        <OtherCases cases={blok.other_cases} />
-    )}
+    {blok.other_cases?.length > 0 && <OtherCases cases={blok.other_cases} />}
 </div>
 
 <script>
-    let tlAppear;
+    let tlAppear: gsap.core.Timeline;
     const init = () => {
         const page = document.querySelector("#page-case");
         if (!page) return;
@@ -108,7 +114,19 @@ const { language, blok } = Astro.props;
             );
     };
 
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
         init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>

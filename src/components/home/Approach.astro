@@ -669,6 +669,11 @@ const { blok } = Astro.props;
         mm?.revert();
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
         init();
     });

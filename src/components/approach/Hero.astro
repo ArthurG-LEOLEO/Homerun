@@ -48,6 +48,9 @@ const { blok } = Astro.props;
         heroInner = document.querySelector(".approach #approach-hero-inner");
     };
     const init = () => {
+        const page = document.querySelector("#page-approach");
+        if (!page) return;
+
         setVariables();
 
         tl = gsap.timeline({
@@ -70,9 +73,12 @@ const { blok } = Astro.props;
         heroInner = null;
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
-        // TODO: This is running every time we change pages
-        // We need to make sure the component exists in the page before init
         init();
     });
 

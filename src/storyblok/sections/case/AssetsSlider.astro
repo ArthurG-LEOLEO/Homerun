@@ -10,7 +10,7 @@ interface AssetItem {
 
 interface VideoBlock {
     youtube_url: string;
-    component: 'video';
+    component: "video";
 }
 
 interface Props {
@@ -22,54 +22,54 @@ const { assets = [], className = "" } = Astro.props;
 const sliderId = `slider-${Math.random().toString(36).substring(2, 11)}`;
 
 const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
-    return 'component' in asset && asset.component === 'video';
+    return "component" in asset && asset.component === "video";
 };
 ---
 
-<div class={`slider-container overflow-hidden ${className}`} data-slider-id={sliderId} role="region" aria-label="Media gallery">
+<div
+    class={`slider-container overflow-hidden ${className}`}
+    data-slider-id={sliderId}
+    role="region"
+    aria-label="Media gallery"
+>
     <div class="container-main">
-        <div class="slider-track flex will-change-transform ml-[calc(1/12*100%)]">
-            {assets.map((asset, index) => (
-                <div 
-                    class='group px-gutter w-9/11 shrink-0 md:w-4/11'
-                    role="tabpanel"
-                    aria-label={`Slide ${index + 1} of ${assets.length}`}
-                >
-                    <div class="overflow-hidden">
-                        {isVideo(asset) ? (
-                            <VideoEmbed url={asset.youtube_url} />
-                        ) : (
-                            <SBImage
-                                image={asset}
-                                class="w-full"
-                            />
-                        )}
+        <div
+            class="slider-track ml-[calc(1/12*100%)] flex will-change-transform"
+        >
+            {
+                assets.map((asset, index) => (
+                    <div
+                        class="group px-gutter w-9/11 shrink-0 md:w-4/11"
+                        role="tabpanel"
+                        aria-label={`Slide ${index + 1} of ${assets.length}`}
+                    >
+                        <div class="overflow-hidden">
+                            {isVideo(asset) ? (
+                                <VideoEmbed url={asset.youtube_url} />
+                            ) : (
+                                <SBImage image={asset} class="w-full" />
+                            )}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))
+            }
         </div>
-        
-        <div class="flex justify-center mt-40 gap-8 px-gutter md:justify-end">
+
+        <div class="px-gutter mt-40 flex justify-center gap-8 md:justify-end">
             <button
-                class="slider-prev cursor-pointer flex size-48 items-center justify-center rounded-full bg-orange text-white transition-opacity hover:opacity-80 disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-default"
+                class="slider-prev bg-orange flex size-48 cursor-pointer items-center justify-center rounded-full text-white transition-opacity hover:opacity-80 disabled:cursor-default disabled:opacity-40 disabled:hover:opacity-40"
                 disabled
                 aria-label="Previous slide"
                 type="button"
             >
-                <Icon
-                    name="arrow-right"
-                    class="size-16 rotate-180"
-                />
+                <Icon name="arrow-right" class="size-16 rotate-180" />
             </button>
             <button
-                class="slider-next cursor-pointer flex size-48 items-center justify-center rounded-full bg-orange text-white transition-opacity hover:opacity-80 disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-default"
+                class="slider-next bg-orange flex size-48 cursor-pointer items-center justify-center rounded-full text-white transition-opacity hover:opacity-80 disabled:cursor-default disabled:opacity-40 disabled:hover:opacity-40"
                 aria-label="Next slide"
                 type="button"
             >
-                <Icon
-                    name="arrow-right" 
-                    class="size-16"
-                />
+                <Icon name="arrow-right" class="size-16" />
             </button>
         </div>
     </div>
@@ -96,22 +96,29 @@ const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
         private getElements(container: HTMLElement): SliderElements {
             return {
                 container,
-                track: container.querySelector('.slider-track') as HTMLElement,
-                slides: [...container.querySelectorAll('.slider-track > div')] as HTMLElement[],
-                prevButton: container.querySelector('.slider-prev') as HTMLButtonElement,
-                nextButton: container.querySelector('.slider-next') as HTMLButtonElement
+                track: container.querySelector(".slider-track") as HTMLElement,
+                slides: [
+                    ...container.querySelectorAll(".slider-track > div"),
+                ] as HTMLElement[],
+                prevButton: container.querySelector(
+                    ".slider-prev",
+                ) as HTMLButtonElement,
+                nextButton: container.querySelector(
+                    ".slider-next",
+                ) as HTMLButtonElement,
             };
         }
 
         private updateButtons() {
             this.elements.prevButton.disabled = this.currentIndex === 0;
-            this.elements.nextButton.disabled = this.currentIndex === this.elements.slides.length - 1;
+            this.elements.nextButton.disabled =
+                this.currentIndex === this.elements.slides.length - 1;
         }
 
         private slideToIndex(index: number) {
             const slideWidth = this.elements.slides[0].offsetWidth;
             const newX = -index * slideWidth;
-            
+
             gsap.to(this.elements.track, {
                 x: newX,
                 duration: 0.6,
@@ -126,48 +133,67 @@ const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
             if (this.currentIndex > 0) {
                 this.slideToIndex(this.currentIndex - 1);
             }
-        }
+        };
 
         private handleNextClick = () => {
             if (this.currentIndex < this.elements.slides.length - 1) {
                 this.slideToIndex(this.currentIndex + 1);
             }
-        }
+        };
 
         private handleResize = () => {
             this.slideToIndex(this.currentIndex);
-        }
+        };
 
         init() {
-            this.elements.prevButton.addEventListener('click', this.handlePrevClick);
-            this.elements.nextButton.addEventListener('click', this.handleNextClick);
-            window.addEventListener('resize', this.handleResize);
+            this.elements.prevButton.addEventListener(
+                "click",
+                this.handlePrevClick,
+            );
+            this.elements.nextButton.addEventListener(
+                "click",
+                this.handleNextClick,
+            );
+            window.addEventListener("resize", this.handleResize);
             this.updateButtons();
         }
 
         destroy() {
-            this.elements.prevButton.removeEventListener('click', this.handlePrevClick);
-            this.elements.nextButton.removeEventListener('click', this.handleNextClick);
-            window.removeEventListener('resize', this.handleResize);
+            this.elements.prevButton.removeEventListener(
+                "click",
+                this.handlePrevClick,
+            );
+            this.elements.nextButton.removeEventListener(
+                "click",
+                this.handleNextClick,
+            );
+            window.removeEventListener("resize", this.handleResize);
         }
     }
 
     const sliders = new Map<string, Slider>();
 
     const initSliders = () => {
-        document.querySelectorAll<HTMLElement>('.slider-container[data-slider-id]').forEach(container => {
-            const sliderId = container.dataset.sliderId;
-            if (sliderId) {
-                sliders.set(sliderId, new Slider(container));
-            }
-        });
+        document
+            .querySelectorAll<HTMLElement>(".slider-container[data-slider-id]")
+            .forEach((container) => {
+                const sliderId = container.dataset.sliderId;
+                if (sliderId) {
+                    sliders.set(sliderId, new Slider(container));
+                }
+            });
     };
 
     const cleanupSliders = () => {
-        sliders.forEach(slider => slider.destroy());
+        sliders.forEach((slider) => slider.destroy());
         sliders.clear();
     };
 
-    document.addEventListener('astro:page-load', initSliders);
-    document.addEventListener('astro:before-swap', cleanupSliders);
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanupSliders();
+        initSliders();
+    });
+
+    document.addEventListener("astro:page-load", initSliders);
+    document.addEventListener("astro:before-swap", cleanupSliders);
 </script>

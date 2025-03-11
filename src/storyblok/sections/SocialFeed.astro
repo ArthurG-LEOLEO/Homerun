@@ -325,6 +325,11 @@ import CTA from "../../components/global/CTA.astro";
         window.removeEventListener("resize", resize);
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
         init();
     });

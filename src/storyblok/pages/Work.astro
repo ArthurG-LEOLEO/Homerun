@@ -33,7 +33,7 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
     const NB_REP_ARCH_CASES = 5;
     let shownArchivedCases = 5;
     let currentCategory: string | undefined;
-    let tlAppear;
+    let tlAppear: gsap.core.Timeline;
     let page: HTMLElement | null;
     let consultingButton: HTMLElement | null;
     let advertisingButton: HTMLElement | null;
@@ -177,11 +177,17 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
     };
 
     const cleanup = () => {
+        tlAppear?.kill();
         consultingButton?.removeEventListener("click", filter);
         advertisingButton?.removeEventListener("click", filter);
         allButton?.removeEventListener("click", filter);
         loadArchivedButton?.removeEventListener("click", loadMoreArchived);
     };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
 
     document.addEventListener("astro:before-swap", () => {
         cleanup();

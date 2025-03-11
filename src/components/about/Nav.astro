@@ -370,6 +370,11 @@ const items = [
         });
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:before-swap", () => {
         cleanup();
     });

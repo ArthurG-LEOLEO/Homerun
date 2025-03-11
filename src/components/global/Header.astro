@@ -146,6 +146,11 @@ const { logoless, blok, alternates, white } = Astro.props;
         button?.removeEventListener("click", toggleMenu);
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:before-swap", () => {
         cleanup();
     });

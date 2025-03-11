@@ -386,6 +386,11 @@ const { language, blok } = Astro.props;
         secondMobileHelmet = null;
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
         init();
     });

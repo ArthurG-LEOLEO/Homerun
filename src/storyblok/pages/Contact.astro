@@ -36,7 +36,7 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
-    let tlAppear;
+    let tlAppear: gsap.core.Timeline;
     const init = () => {
         const page = document.querySelector("#page-contact");
         if (!page) return;
@@ -76,7 +76,19 @@ const { language, blok } = Astro.props;
             );
     };
 
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:page-load", () => {
         init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
