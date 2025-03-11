@@ -21,6 +21,8 @@ let props = isPreview()
 
 const { language, fullSlug } = props;
 
+console.log(props);
+
 const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
     version: "draft",
     resolve_relations: [

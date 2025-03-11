@@ -14,8 +14,6 @@ const env = loadEnv("", process.cwd(), ["STORYBLOK", "NETLIFY"]);
 
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
-console.log(env);
-
 const adapter =
     env.NETLIFY === "true" ? netlify() : node({ mode: "standalone" });
 
