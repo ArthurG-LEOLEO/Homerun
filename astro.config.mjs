@@ -43,14 +43,10 @@ export default defineConfig({
         icon(),
     ],
     vite: {
-        plugins: [basicSsl(), tailwindcss()],
+        plugins: isPreview ? [tailwindcss()] : [basicSsl(), tailwindcss()],
         server: {
             https: true,
         },
     },
-    adapter: isPreview
-        ? node({
-              mode: "standalone",
-          })
-        : undefined,
+    adapter: isPreview ? netlify() : undefined,
 });
