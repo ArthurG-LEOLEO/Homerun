@@ -14,6 +14,8 @@ const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
+const adapter = env.NETLIFY ? netlify() : node({ mode: "standalone" });
+
 export default defineConfig({
     output: isPreview ? "server" : "static",
     redirects: {
@@ -42,10 +44,10 @@ export default defineConfig({
         icon(),
     ],
     vite: {
-        plugins: isPreview ? [tailwindcss()] : [basicSsl(), tailwindcss()],
+        plugins: [basicSsl(), tailwindcss()],
         server: {
             https: true,
         },
     },
-    adapter: isPreview ? netlify() : undefined,
+    adapter: isPreview ? adapter : undefined,
 });

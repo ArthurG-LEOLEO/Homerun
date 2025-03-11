@@ -17,8 +17,8 @@ export function parseUrl(
     url: string | undefined,
     language: string | undefined,
 ) {
-    const fullSlug =
-        language === defaultLocale ? url?.replace(/^(en\/)/, "") : url;
+    const slug = url || "";
+    const fullSlug = language === defaultLocale ? `en/${slug}` : slug;
 
     return {
         language,
