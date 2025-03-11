@@ -1,6 +1,9 @@
 ---
+import { renderRichText } from "@storyblok/astro";
+
 import ArrowLink from "../atoms/ArrowLink.astro";
 import BasicLink from "../atoms/BasicLink.astro";
+import Title from "../atoms/Title.astro";
 import CTA from "./CTA.astro";
 import LogoTypo from "./LogoTypo.astro";
 import SBImage from "./SBImage.astro";
@@ -15,10 +18,24 @@ interface FooterLink {
     };
 }
 
-interface FooterCol {
+interface FooterColLinks {
+    component: 'footer_col_links';
     title: string;
     links: FooterLink[];
 }
+
+interface FooterText {
+    component: 'text';
+    text: any; // RichText content
+}
+
+interface FooterColText {
+    component: 'footer_col_text';
+    title: string;
+    texts: FooterText[];
+}
+
+type FooterCol = FooterColLinks | FooterColText;
 
 interface FooterImage {
     filename: string;
@@ -27,7 +44,7 @@ interface FooterImage {
 }
 
 interface FooterData {
-    title: string;
+    title: string[];
     top_link?: FooterLink[];
     copy?: string;
     made_by?: string;
@@ -51,7 +68,7 @@ const { footerData } = Astro.props;
 <footer class="border-orange border-b-11 pb-10">
     <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
-            class="lg:pr-gutter flex flex-grow flex-col justify-between gap-25 lg:w-1/2 lg:pl-42"
+            class="lg:pr-gutter flex flex-grow flex-col justify-between gap-25 lg:w-5/12"
         >
             <div class="flex w-full flex-grow justify-end">
                 <div
@@ -89,11 +106,15 @@ const { footerData } = Astro.props;
                 </div>
             </div>
         </div>
-        <div class="px-gutter lg:w-1/2 lg:pt-220 lg:pr-42">
+        <div class="px-gutter lg:w-7/12 lg:pt-220">
             <LogoTypo className="mb-65 hidden w-237 lg:block" />
             <div class="flex items-end gap-25">
                 <div>
-                    <h2 class="text-title-2">{footerData.title}</h2>
+                    <h2 class="text-title-2">
+                        <Title
+                            title={footerData.title[0]}
+                        />
+                    </h2>
                     {
                         footerData.top_link && (
                             <ArrowLink
@@ -128,29 +149,50 @@ const { footerData } = Astro.props;
             {
                 footerData.cols && (
                     <div class="mt-90 flex flex-wrap gap-x-64 gap-y-24">
-                        {footerData.cols.map((col: FooterCol) => (
-                            <div class="footer-col">
-                                <h5 class="text-title-7 mb-8">{col.title}</h5>
-                                <div class="flex flex-col">
-                                    {col.links?.map((linkItem: FooterLink) => (
-                                        <BasicLink
-                                            link={linkItem}
-                                            className="text-p14 text-black/50"
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                        {footerData.cols.map((col: FooterCol) => {
+                            if (col.component === 'footer_col_links') {
+                                return (
+                                    <div class="footer-col">
+                                        <h5 class="text-title-7 mb-8">{col.title}</h5>
+                                        <div class="flex flex-col">
+                                            {col.links?.map((linkItem: FooterLink) => (
+                                                <BasicLink
+                                                    link={linkItem}
+                                                    className="text-p14 text-black/50"
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            } else if (col.component === 'footer_col_text') {
+                                return (
+                                    <div class="footer-col w-full sm:w-auto">
+                                        <h5 class="text-title-7 mb-8">{col.title}</h5>
+                                        <div class="flex align-start gap-20">
+                                            {col.texts?.map((textItem: FooterText) => (
+                                                <div class="flex-1 md:max-w-160">
+                                                    <div
+                                                        class="text-p14 text-black/50"
+                                                        set:html={renderRichText(textItem.text)}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })}
                     </div>
                 )
             }
         </div>
     </div>
     <div
-        class="container-main mt-30 flex flex-col gap-30 lg:mt-25 lg:flex-row-reverse lg:items-end"
+        class="container-main mt-30 flex flex-col gap-30 lg:gap-0 lg:mt-25 lg:flex-row-reverse lg:items-end"
     >
         <div
-            class="pr-gutter flex items-center gap-32 lg:w-1/2 lg:justify-end lg:pl-42"
+            class="pr-gutter flex items-center gap-32 lg:w-5/12 lg:justify-end lg:pl-42"
         >
             {
                 footerData.bottom_images?.map((image: FooterImage) => (
@@ -161,7 +203,7 @@ const { footerData } = Astro.props;
                 ))
             }
         </div>
-        <div class="pl-gutter flex items-baseline gap-14 lg:w-1/2 lg:pr-42">
+        <div class="pl-gutter flex items-baseline gap-14 lg:w-7/12 lg:pr-42">
             <p class="text-p14">{footerData.copy}</p>
             {footerData.made_by && <p class="text-p12">{footerData.made_by}</p>}
         </div>
