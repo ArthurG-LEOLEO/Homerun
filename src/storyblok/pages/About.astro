@@ -95,8 +95,8 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
-    let tlAppear;
-    let mm;
+    let tlAppear: gsap.core.Timeline;
+    let mm: gsap.MatchMedia;
     let page: HTMLElement | null;
     let nav: HTMLElement | null;
     let navWhite: HTMLElement | null;
@@ -242,11 +242,21 @@ const { language, blok } = Astro.props;
         setupNavMask();
     };
 
+    const cleanup = () => {
+        mm?.kill();
+        tlAppear?.kill();
+    };
+
     document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
         init();
     });
     document.addEventListener("astro:page-load", () => {
         init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
 
