@@ -17,13 +17,22 @@ export function parseUrl(
     url: string | undefined,
     language: string | undefined,
 ) {
-    const slug = url || "";
-    const fullSlug = language === defaultLocale ? `en/${slug}` : slug;
+    console.log("before: ", url, language);
 
-    console.log("in parseUrl: ", slug, language, defaultLocale, fullSlug);
+    let fullSlug;
+    let lang;
+
+    try {
+        const slug = url || "";
+        fullSlug = language === defaultLocale ? `en/${slug}` : slug;
+        lang = language;
+        console.log("after: ", slug, language, defaultLocale, fullSlug);
+    } catch (error) {
+        console.log("error in parseUrl: ", error);
+    }
 
     return {
-        language,
+        language: lang,
         fullSlug,
     };
 }
