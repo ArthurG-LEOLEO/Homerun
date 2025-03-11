@@ -243,7 +243,7 @@ const { language, blok } = Astro.props;
     };
 
     const cleanup = () => {
-        mm?.kill();
+        mm?.revert();
         tlAppear?.kill();
     };
 

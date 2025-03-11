@@ -136,13 +136,11 @@ import CTA from "../../components/global/CTA.astro";
     let xTo: gsap.QuickToFunc | ((arg0: any) => void);
     let xToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
     let xToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
-    let scaleToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
-    let scaleToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
     let total = 0;
     let isHover = false;
     let gsapObserver: Observer;
 
-    let tlAppear: gsap.core.Timeline;
+    let tlAppearSlider: gsap.core.Timeline;
 
     let scrollingSpeed = { x: 20 };
 
@@ -190,7 +188,7 @@ import CTA from "../../components/global/CTA.astro";
             ease: "elastic.out(1.2, 0.7)",
         });
 
-        tlAppear = gsap
+        tlAppearSlider = gsap
             .timeline({
                 default: {
                     duration: 0.4,
@@ -246,10 +244,9 @@ import CTA from "../../components/global/CTA.astro";
             target: wrapper,
             type: "pointer,touch",
             onPress: () => {
-                if (Observer.isTouch) {
-                    isHover = true;
-                } else if (wrapper) {
-                    wrapper.style.cursor = "grabbing";
+                isHover = true;
+                if (wrapper) wrapper.style.cursor = "grabbing";
+                if (!Observer.isTouch) {
                     onDragTlOut.pause();
                     onDragTlIn.restart();
                 }
@@ -260,10 +257,9 @@ import CTA from "../../components/global/CTA.astro";
                     ? self.deltaX * 1.5
                     : self.deltaX;
                 total += movementX;
+                isHover = true;
                 xTo(total);
-                if (Observer.isTouch) {
-                    isHover = true;
-                } else {
+                if (!Observer.isTouch) {
                     const layerOffset = gsap.utils.clamp(
                         -500,
                         500,
@@ -274,10 +270,9 @@ import CTA from "../../components/global/CTA.astro";
                 }
             },
             onRelease: () => {
-                if (Observer.isTouch) {
-                    isHover = false;
-                } else if (wrapper) {
-                    wrapper.style.cursor = "grab";
+                isHover = false;
+                if (wrapper) wrapper.style.cursor = "grab";
+                if (!Observer.isTouch) {
                     onDragTlIn.pause();
                     onDragTlOut.restart();
                 }
@@ -319,7 +314,7 @@ import CTA from "../../components/global/CTA.astro";
         if (gsapObserver) {
             gsapObserver.kill();
         }
-        tlAppear?.kill();
+        tlAppearSlider?.kill();
         wrapper = null;
         posts = null;
         window.removeEventListener("resize", resize);
