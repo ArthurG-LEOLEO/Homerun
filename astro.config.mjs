@@ -14,7 +14,6 @@ const env = loadEnv("", process.cwd(), "STORYBLOK");
 
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
-// https://astro.build/config
 export default defineConfig({
     output: isPreview ? "server" : "static",
     redirects: {
