@@ -1,11 +1,5 @@
 export default function isPreview() {
-    console.log(
-        import.meta.env.STORYBLOK_PREVIEW,
-        "true",
-        import.meta.env.STORYBLOK_PREVIEW === "true" ||
-            import.meta.env.STORYBLOK_PREVIEW === true,
-    );
-
+    // Netlify load it as a Boolean
     return (
         import.meta.env.STORYBLOK_PREVIEW === "true" ||
         import.meta.env.STORYBLOK_PREVIEW === true

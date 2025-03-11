@@ -15,7 +15,9 @@ const env = loadEnv("", process.cwd(), ["STORYBLOK", "NETLIFY"]);
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
 const adapter =
-    env.NETLIFY === "true" ? netlify() : node({ mode: "standalone" });
+    env.NETLIFY === "true"
+        ? netlify({ imageCDN: false })
+        : node({ mode: "standalone" });
 
 export default defineConfig({
     output: isPreview ? "server" : "static",
