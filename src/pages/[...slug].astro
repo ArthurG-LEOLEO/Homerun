@@ -1,5 +1,5 @@
 ---
-import { useStoryblokApi } from "@storyblok/astro";
+import { getLiveStory, useStoryblokApi } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import Layout from "../layouts/Layout.astro";
 import { locales, defaultLocale } from "../i18n/config";
@@ -21,16 +21,23 @@ let props = isPreview()
 
 const { language, fullSlug } = props;
 
-const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
-    version: "draft",
-    resolve_relations: [
-        "case_study.other_cases",
-        "work.featured_cases",
-        "work.archived_cases",
-    ],
-});
+let story = null;
+const liveStory = await getLiveStory(Astro);
 
-const story = data.story;
+if (liveStory) {
+    story = liveStory;
+} else {
+    const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
+        version: "draft",
+        resolve_relations: [
+            "case_study.other_cases",
+            "work.featured_cases",
+            "work.archived_cases",
+        ],
+    });
+
+    story = data.story;
+}
 
 const alternates = story.alternates;
 

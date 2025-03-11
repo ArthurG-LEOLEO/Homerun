@@ -25,7 +25,16 @@ export default defineConfig({
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
-            bridge: true,
+            livePreview: isPreview,
+            bridge: isPreview
+                ? {
+                      resolveRelations: [
+                          "case_study.other_cases",
+                          "work.featured_cases",
+                          "work.archived_cases",
+                      ],
+                  }
+                : false,
             components: {
                 home: "storyblok/pages/Home",
                 page: "storyblok/pages/Page",
