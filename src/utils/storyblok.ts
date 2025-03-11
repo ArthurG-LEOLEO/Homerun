@@ -20,6 +20,8 @@ export function parseUrl(
     const slug = url || "";
     const fullSlug = language === defaultLocale ? `en/${slug}` : slug;
 
+    console.log("in parseUrl: ", slug, language, defaultLocale, fullSlug);
+
     return {
         language,
         fullSlug,
