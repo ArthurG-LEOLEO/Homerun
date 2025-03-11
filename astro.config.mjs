@@ -21,6 +21,9 @@ const adapter =
 
 export default defineConfig({
     output: isPreview ? "server" : "static",
+    redirects: {
+        "/en/[...slug]": "/[...slug]",
+    },
     i18n,
     integrations: [
         storyblok({
