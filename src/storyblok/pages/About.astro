@@ -242,6 +242,9 @@ const { language, blok } = Astro.props;
         setupNavMask();
     };
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        init();
+    });
     document.addEventListener("astro:page-load", () => {
         init();
     });
