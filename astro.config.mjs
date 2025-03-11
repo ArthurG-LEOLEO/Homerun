@@ -25,7 +25,7 @@ export default defineConfig({
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
-            bridge: isPreview,
+            bridge: true,
             components: {
                 home: "storyblok/pages/Home",
                 page: "storyblok/pages/Page",
