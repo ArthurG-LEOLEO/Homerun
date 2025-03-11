@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 import Line from "../case/Line.astro";
 
@@ -6,6 +7,8 @@ const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
 const { cases } = Astro.props;
+
+const casesDup = [...cases, ...cases, ...cases, ...cases, ...cases, ...cases];
 ---
 
 <div class="container-main pt-110 pb-100 md:pt-175 md:pb-130">
@@ -14,29 +17,9 @@ const { cases } = Astro.props;
     </h3>
     <div class="flex flex-col">
         {
-            cases.map((item: { content: { category: string } }) => (
+            casesDup.map((item: { content: { category: string } }, index) => (
                 <div
-                    class="work-archived-case w-full"
-                    data-category={item.content?.category}
-                >
-                    <Line caseItem={item} />
-                </div>
-            ))
-        }
-        {
-            cases.map((item: { content: { category: string } }) => (
-                <div
-                    class="work-archived-case w-full"
-                    data-category={item.content?.category}
-                >
-                    <Line caseItem={item} />
-                </div>
-            ))
-        }
-        {
-            cases.map((item: { content: { category: string } }) => (
-                <div
-                    class="work-archived-case w-full"
+                    class={`work-archived-case w-full ${index > 4 && "hidden"}`}
                     data-category={item.content?.category}
                 >
                     <Line caseItem={item} />
@@ -44,4 +27,13 @@ const { cases } = Astro.props;
             ))
         }
     </div>
+    <button
+        id="load-archived-button"
+        class=`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${casesDup.length <= 5 && 'hidden'}`
+    >
+        <span class="text-cta-32 border-b-[0.2rem]"
+            >{t("work.archived.load")}</span
+        >
+        <Icon name="cross-circle" class="size-28 rotate-[45deg] md:size-34" />
+    </button>
 </div>

@@ -50,6 +50,7 @@ const t = useTranslations(lang);
         class="bg-blue invisible absolute top-50 left-[50%] w-[calc(100%-20px)] max-w-750 origin-top translate-x-[-50%] scale-x-[0.95] scale-y-[0.7] p-25 opacity-0 md:p-50"
     >
         <button
+            id="banner-close-button"
             class="absolute top-16 right-16 cursor-pointer md:top-24 md:right-24 md:size-34"
         >
             <Icon name="cross-circle" class="size-28 md:size-34" />
@@ -140,7 +141,7 @@ const t = useTranslations(lang);
 
         if (!banner || !bannerPopup) return;
 
-        buttonClose = document.querySelector("#banner-popup");
+        buttonClose = document.querySelector("#banner-close-button");
 
         banner?.addEventListener("click", openPopup);
         buttonClose?.addEventListener("click", closePopup);
