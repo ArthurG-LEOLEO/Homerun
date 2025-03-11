@@ -1,7 +1,13 @@
 ---
+import { storyblokEditable } from "@storyblok/astro";
+
 const { language, blok } = Astro.props;
 ---
 
-<div class="container-main">
-    <h4 class="px-gutter text-title-2 whitespace-pre-wrap text-center text-black mx-auto w-10/12 lg:w-8/12">{blok.text}</h4>
+<div class="container-main" {...storyblokEditable(blok)}>
+    <h4
+        class="px-gutter text-title-2 mx-auto w-10/12 text-center whitespace-pre-wrap text-black lg:w-8/12"
+    >
+        {blok.text}
+    </h4>
 </div>
