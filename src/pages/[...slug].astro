@@ -16,6 +16,8 @@ export async function getStaticPaths() {
 const params = Astro.params;
 
 console.log("first steps: ", params?.slug, Astro.currentLocale);
+console.log("isPreview: ", isPreview());
+console.log("AstroProps: ", Astro.props);
 
 let props = isPreview()
     ? parseUrl(params?.slug, Astro.currentLocale)
