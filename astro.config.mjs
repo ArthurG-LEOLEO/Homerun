@@ -10,11 +10,14 @@ import icon from "astro-icon";
 
 import i18n from "./src/i18n/config";
 
-const env = loadEnv("", process.cwd(), "STORYBLOK");
+const env = loadEnv("", process.cwd(), ["STORYBLOK", "NETLIFY"]);
 
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
-const adapter = env.NETLIFY ? netlify() : node({ mode: "standalone" });
+console.log(env);
+
+const adapter =
+    env.NETLIFY === "true" ? netlify() : node({ mode: "standalone" });
 
 export default defineConfig({
     output: isPreview ? "server" : "static",
