@@ -11,7 +11,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 ---
 
 <header
-    class="absolute top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
+    class="fixed top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
     id="layout-header"
 >
     <div class="container-main relative flex items-center">
@@ -81,6 +81,9 @@ const { logoless, blok, alternates, white } = Astro.props;
 </header>
 
 <script>
+    const DIST_TO_HIDE_HEADER = 100;
+    let headerIsShown = true;
+    let st: ScrollTrigger;
     let tlOpen: gsap.core.Timeline;
     let tlClose: gsap.core.Timeline;
     let button: HTMLElement | null;
@@ -139,10 +142,37 @@ const { logoless, blok, alternates, white } = Astro.props;
         if (!header || !menu) return;
         button = document.querySelector("#layout-header #menu-button");
 
+        st = ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            onUpdate: (self) => {
+                if (
+                    self.direction > 0 &&
+                    self.scroll() > DIST_TO_HIDE_HEADER &&
+                    headerIsShown
+                ) {
+                    headerIsShown = false;
+                    gsap.to(header, {
+                        y: "-100%",
+                        duration: 0.35,
+                        ease: "power4",
+                    });
+                } else if (self.direction < 0 && !headerIsShown) {
+                    headerIsShown = true;
+                    gsap.to(header, {
+                        y: "0%",
+                        duration: 0.35,
+                        ease: "power4",
+                    });
+                }
+            },
+        });
+
         button?.addEventListener("click", toggleMenu);
     };
 
     const cleanup = () => {
+        st.kill();
         button?.removeEventListener("click", toggleMenu);
     };
 
