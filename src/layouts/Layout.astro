@@ -21,6 +21,10 @@ const {
     language,
     headerLogoless = false,
     headerWhite = false,
+    bannerTheme = {
+        bg: "#edd4f8",
+        txt: "#181817",
+    },
     alternates,
 } = Astro.props;
 
@@ -43,7 +47,7 @@ const headerData = data.story.content.menu[0];
         <ClientRouter />
     </head>
     <body>
-        <Banner />
+        <Banner theme={bannerTheme} />
         <Header
             blok={headerData}
             logoless={headerLogoless}
