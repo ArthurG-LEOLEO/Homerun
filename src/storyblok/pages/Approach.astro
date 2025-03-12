@@ -27,13 +27,13 @@ const { language, blok } = Astro.props;
             <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
             <div
                 id="helmet"
-                class="absolute top-[-5rem] left-[50%] size-[40vw] lg:size-[30vw]"
+                class="absolute top-[-25vw] left-[50%] size-[70vw] lg:size-[70vw]"
                 style="--c: #2D5A36"
             >
-                <div
-                    id="inner-helmet"
-                    class="size-full translate-x-[-50%] bg-[var(--c)] lg:size-[70%]"
-                >
+                <div id="inner-helmet" class="size-full translate-x-[-50%]">
+                    <canvas
+                        id="helmet-canvas"
+                        class="pointer-events-none size-full"></canvas>
                 </div>
             </div>
         </div>
@@ -108,6 +108,8 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    import { Application } from "@splinetool/runtime";
+
     // DOM Elements
     let scrollContainer: HTMLElement | null;
     let splitContainer: HTMLElement | null;
@@ -115,7 +117,12 @@ const { language, blok } = Astro.props;
     let splitRight: HTMLElement | null;
     let splitLeft: HTMLElement | null;
     let helmet: HTMLElement | null;
+    let helmetCanvas: HTMLCanvasElement | null;
     let secondMobileHelmet: HTMLElement | null;
+
+    //Spline stuff
+    let spline: Application | null;
+    let casqueBaseball;
 
     let tlAppear: gsap.core.Timeline | null;
 
@@ -144,6 +151,7 @@ const { language, blok } = Astro.props;
         splitRight = document.querySelector(".approach #split-right");
         splitLeft = document.querySelector(".approach #split-left");
         helmet = document.querySelector(".approach #helmet");
+        helmetCanvas = document.querySelector(".approach #helmet-canvas");
         secondMobileHelmet = document.querySelector(
             ".approach #second-mobile-helmet",
         );
@@ -213,6 +221,13 @@ const { language, blok } = Astro.props;
                     scrub: true,
                     pinSpacing: false,
                     pin: splitLeft,
+                    onUpdate: (self) => {
+                        if (!spline || !casqueBaseball) return;
+
+                        const p = self.progress;
+                        casqueBaseball.rotation.x =
+                            Math.PI * 1.25 + Math.PI * -0.5 * p;
+                    },
                 },
             })
             .to(splitContainer, {
@@ -241,9 +256,10 @@ const { language, blok } = Astro.props;
         dTlHelmetPin = gsap.timeline({
             scrollTrigger: {
                 trigger: helmet,
-                start: "center-=50px center",
+                start: "center center",
                 endTrigger: scrollContainer,
                 end: "bottom bottom",
+                markers: true,
                 pin: helmet,
                 scrub: true,
             },
@@ -257,6 +273,14 @@ const { language, blok } = Astro.props;
                     endTrigger: hero,
                     end: "bottom top",
                     scrub: true,
+                    onUpdate: (self) => {
+                        if (!spline || !casqueBaseball) return;
+
+                        const p = self.progress;
+                        casqueBaseball.rotation.x = Math.PI * 1.25 * p;
+                        casqueBaseball.rotation.z =
+                            (Math.PI / 2) * Math.min(p * 2, 1);
+                    },
                 },
             })
             .fromTo(
@@ -280,6 +304,20 @@ const { language, blok } = Astro.props;
             })
             .to(helmet, {
                 x: "30vw",
+            });
+    };
+
+    const initSpline = () => {
+        if (!helmetCanvas) return;
+        spline = new Application(helmetCanvas);
+        spline
+            .load(
+                "https://prod.spline.design/bx4Ts8cmnCB0NaCw/scene.splinecode",
+            )
+            .then(() => {
+                if (!spline) return;
+                spline.setBackgroundColor("transparent");
+                casqueBaseball = spline.findObjectByName("CasqueBaseball");
             });
     };
 
@@ -353,9 +391,13 @@ const { language, blok } = Astro.props;
                 },
                 "<",
             );
+
+        initSpline();
     };
 
     const cleanup = () => {
+        if (spline) spline.stop();
+        spline = null;
         mm?.revert();
         mm = null;
         gTlSplit1?.kill();
