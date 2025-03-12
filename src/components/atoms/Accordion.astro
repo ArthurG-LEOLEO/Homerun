@@ -30,63 +30,115 @@ const { blok } = Astro.props;
 </div>
 
 <script>
-    const buttons = document.querySelectorAll(".accordion-button");
+    let buttons: NodeListOf<Element>;
+    let resizeObserver: ResizeObserver | null = null;
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+    
+    let isInitialized = false;
 
-    buttons.forEach((button) => {
-        const content = button.nextElementSibling as HTMLElement;
-        const inner = content.querySelector("div") as HTMLElement;
-        const accordionContainer = button.parentElement as HTMLElement;
+    const init = () => {
+        cleanup();
+        
+        buttons = document.querySelectorAll(".accordion-button");
+        
+        buttons.forEach((button) => {
+            const content = button.nextElementSibling as HTMLElement;
+            const inner = content.querySelector("div") as HTMLElement;
+            const accordionContainer = button.parentElement as HTMLElement;
 
-        button.addEventListener("click", () => {
-            const isExpanded = button.getAttribute("aria-expanded") === "true";
-            const icon = button.querySelector(".accordion-icon") as HTMLElement;
+            const handleClick = (event: Event) => {
+                const isExpanded = button.getAttribute("aria-expanded") === "true";
+                const icon = button.querySelector(".accordion-icon") as HTMLElement;
 
-            if (!isExpanded) {
-                button.setAttribute("aria-expanded", "true");
-                content.style.height = `${inner.offsetHeight}px`;
-                if(icon) icon.style.transform = "rotate(180deg)";
-                accordionContainer.classList.add("bg-black", "text-white");
-                accordionContainer.classList.remove("border-current/40");
-                accordionContainer.classList.add("border-black");
-            } else {
-                button.setAttribute("aria-expanded", "false");
-                content.style.height = "0px";
-                if(icon) icon.style.transform = "rotate(0deg)";
-                accordionContainer.classList.remove("bg-black", "text-white");
-                accordionContainer.classList.remove("border-black");
-                accordionContainer.classList.add("border-current/40");
+                if (!isExpanded) {
+                    button.setAttribute("aria-expanded", "true");
+                    content.style.height = `${inner.offsetHeight}px`;
+                    if(icon) icon.style.transform = "rotate(180deg)";
+                    accordionContainer.classList.add("bg-black", "text-white");
+                    accordionContainer.classList.remove("border-current/40");
+                    accordionContainer.classList.add("border-black");
+                } else {
+                    button.setAttribute("aria-expanded", "false");
+                    content.style.height = "0px";
+                    if(icon) icon.style.transform = "rotate(0deg)";
+                    accordionContainer.classList.remove("bg-black", "text-white");
+                    accordionContainer.classList.remove("border-black");
+                    accordionContainer.classList.add("border-current/40");
+                }
+            };
+
+            (button as any)._accordionClickHandler = handleClick;
+            button.addEventListener("click", handleClick);
+        });
+
+        resizeObserver = new ResizeObserver((entries) => {
+            entries.forEach(entry => {
+                const content = entry.target as HTMLElement;
+                const button = content.previousElementSibling as HTMLButtonElement;
+                
+                if (button && button.getAttribute("aria-expanded") === "true") {
+                    const inner = content.querySelector("div") as HTMLElement;
+                    
+                    // Temporarily disable transition for immediate size update
+                    content.style.transition = "none";
+                    content.style.height = `${inner.offsetHeight}px`;
+                    
+                    // Force reflow to apply the height immediately
+                    content.offsetHeight;
+                    
+                    if (resizeTimeout) {
+                        clearTimeout(resizeTimeout);
+                    }
+                    
+                    resizeTimeout = setTimeout(() => {
+                        content.style.transition = "height 200ms ease-out";
+                    }, 50);
+                }
+            });
+        });
+        
+        buttons.forEach((button) => {
+            const content = button.nextElementSibling as HTMLElement;
+            if (resizeObserver) {
+                resizeObserver.observe(content);
             }
         });
+
+        isInitialized = true;
+    };
+
+    const cleanup = () => {
+        if (resizeObserver) {
+            resizeObserver.disconnect();
+            resizeObserver = null;
+        }
+        
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = null;
+        }
+        
+        if (buttons) {
+            buttons.forEach((button) => {
+                if ((button as any)._accordionClickHandler) {
+                    button.removeEventListener("click", (button as any)._accordionClickHandler);
+                    delete (button as any)._accordionClickHandler;
+                }
+            });
+        }
+        
+        isInitialized = false;
+    };
+    
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        init();
     });
 
-    // Handle resize
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-    
-    const resizeObserver = new ResizeObserver((entries) => {
-        entries.forEach(entry => {
-            const content = entry.target as HTMLElement;
-            const button = content.previousElementSibling as HTMLButtonElement;
-            
-            if (button && button.getAttribute("aria-expanded") === "true") {
-                const inner = content.querySelector("div") as HTMLElement;
-                
-                // Temporarily disable transition for immediate size update
-                content.style.transition = "none";
-                content.style.height = `${inner.offsetHeight}px`;
-                
-                // Force reflow to apply the height immediately
-                content.offsetHeight;
-                
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    content.style.transition = "height 200ms ease-out";
-                }, 50);
-            }
-        });
+    document.addEventListener("astro:page-load", () => {
+        if (!isInitialized) init();
     });
     
-    buttons.forEach(button => {
-        const content = button.nextElementSibling as HTMLElement;
-        resizeObserver.observe(content);
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
