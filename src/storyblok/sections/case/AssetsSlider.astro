@@ -130,12 +130,14 @@ const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
         }
 
         private handlePrevClick = () => {
+            console.log('prev click');
             if (this.currentIndex > 0) {
                 this.slideToIndex(this.currentIndex - 1);
             }
         };
 
         private handleNextClick = () => {
+            console.log('next click');
             if (this.currentIndex < this.elements.slides.length - 1) {
                 this.slideToIndex(this.currentIndex + 1);
             }
