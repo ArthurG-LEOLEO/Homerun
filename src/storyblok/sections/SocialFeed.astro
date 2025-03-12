@@ -137,12 +137,13 @@ import CTA from "../../components/global/CTA.astro";
     let xToLayer1: gsap.QuickToFunc | ((arg0: any) => void);
     let xToLayer2: gsap.QuickToFunc | ((arg0: any) => void);
     let total = 0;
+    let half: number;
     let isHover = false;
     let gsapObserver: Observer;
 
     let tlAppearSlider: gsap.core.Timeline;
 
-    let scrollingSpeed = { x: 20 };
+    let scrollingSpeed = { x: 0 };
 
     const init = () => {
         container = document.querySelector(".feed-slider-container");
@@ -156,9 +157,16 @@ import CTA from "../../components/global/CTA.astro";
         layers1 = wrapper.querySelectorAll(".feed-post-layer-1");
         layers2 = wrapper.querySelectorAll(".feed-post-layer-2");
 
-        const half = wrapper.clientWidth / 2;
+        half = wrapper.clientWidth / 2;
 
         const wrap = gsap.utils.wrap(-half, 0);
+
+        gsap.set(wrapper, {
+            x: -1,
+            modifiers: {
+                x: gsap.utils.unitize(wrap),
+            },
+        });
 
         xTo = gsap.quickTo(wrapper, "x", {
             duration: 0.5,
@@ -210,6 +218,9 @@ import CTA from "../../components/global/CTA.astro";
                 },
                 "start",
             )
+            .add(() => {
+                gsap.ticker.add(tick);
+            }, "start")
             .to(
                 ".feed-slider-container",
                 {
@@ -219,23 +230,32 @@ import CTA from "../../components/global/CTA.astro";
                 },
                 "start+=0.3",
             )
+            .from(
+                [...posts].slice(posts.length / 2, posts.length / 2 + 4),
+                {
+                    opacity: 0,
+                    y: 300,
+                    duration: 1,
+                    stagger: 0.1,
+                    ease: "expo.out",
+                },
+                "start+=0.5",
+            )
             .to(
                 scrollingSpeed,
                 {
                     x: 1,
-                    duration: 2,
-                    ease: "expo.out",
-                },
-                "start+=0.4",
-            )
-            .from(
-                ".feed-slider-wrapper",
-                {
-                    opacity: 0,
                     duration: 1,
+                    ease: "power3.in",
                 },
-                "start+=0.2",
+                "start+=0.5",
             );
+
+        console.log([...posts]);
+
+        console.log(posts.length);
+
+        console.log(posts.length / 2);
 
         gsapObserver = Observer.create({
             target: wrapper,
@@ -248,13 +268,13 @@ import CTA from "../../components/global/CTA.astro";
                     onDragTlIn.restart();
                 }
             },
-            onDrag: (self: { deltaX: number }) => {
+            onChangeX: (self: { deltaX: number }) => {
+                isHover = true;
                 gsap.set(postLinks, { pointerEvents: "none" });
                 const movementX = Observer.isTouch
                     ? self.deltaX * 1.5
                     : self.deltaX;
                 total += movementX;
-                isHover = true;
                 xTo(total);
                 if (!Observer.isTouch) {
                     const layerOffset = gsap.utils.clamp(
@@ -281,13 +301,11 @@ import CTA from "../../components/global/CTA.astro";
             onHoverEnd: () => (isHover = false),
         });
 
-        gsap.ticker.add(tick);
-
         window.addEventListener("resize", resize);
     };
 
     const tick = (time: any, deltaTime: number) => {
-        if (isHover) return;
+        if (isHover || gsapObserver.isDragging) return;
         total -= (deltaTime / 10) * scrollingSpeed.x;
         xTo(total);
     };
@@ -295,7 +313,11 @@ import CTA from "../../components/global/CTA.astro";
     const resize = () => {
         if (!wrapper) return;
 
-        const half = wrapper.clientWidth / 2;
+        const newHalf = wrapper.clientWidth / 2;
+
+        if (newHalf === half) return;
+
+        half = newHalf;
         const wrap = gsap.utils.wrap(-half, 0);
 
         xTo = gsap.quickTo(wrapper, "x", {
