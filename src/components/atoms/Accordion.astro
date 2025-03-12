@@ -61,20 +61,32 @@ const { blok } = Astro.props;
 
     // Handle resize
     let resizeTimeout: ReturnType<typeof setTimeout>;
-    window.addEventListener("resize", () => {
-        buttons.forEach((button) => {
-            const content = button.nextElementSibling as HTMLElement;
-            const inner = content.querySelector("div") as HTMLElement;
-
-            if (button.getAttribute("aria-expanded") === "true") {
+    
+    const resizeObserver = new ResizeObserver((entries) => {
+        entries.forEach(entry => {
+            const content = entry.target as HTMLElement;
+            const button = content.previousElementSibling as HTMLButtonElement;
+            
+            if (button && button.getAttribute("aria-expanded") === "true") {
+                const inner = content.querySelector("div") as HTMLElement;
+                
+                // Temporarily disable transition for immediate size update
                 content.style.transition = "none";
                 content.style.height = `${inner.offsetHeight}px`;
-
+                
+                // Force reflow to apply the height immediately
+                content.offsetHeight;
+                
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     content.style.transition = "height 200ms ease-out";
-                }, 100);
+                }, 50);
             }
         });
+    });
+    
+    buttons.forEach(button => {
+        const content = button.nextElementSibling as HTMLElement;
+        resizeObserver.observe(content);
     });
 </script>
