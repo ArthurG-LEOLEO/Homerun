@@ -37,39 +37,45 @@ const { blok } = Astro.props as { blok: FormBlok };
                 </p>
 
                 <!-- Name -->
-                <div class="flex flex-col md:flex-row">
+                <div class="flex flex-col gap-40 md:flex-row md:gap-0">
                     <div class="flex flex-col flex-1 px-gutter md:gap-8">
                         <label for="lastname" class="text-title-7">{blok.first_name_label}*</label>
-                        <input
-                            type="text"
-                            id="lastname"
-                            name="lastname"
-                            required
-                            class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
-                        />
+                        <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                required
+                                class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                            />
+                        </div>
                     </div>
                     <div class="flex flex-col flex-1 px-gutter md:gap-8">
                         <label for="firstname" class="text-title-7">{blok.last_name_label}*</label>
-                        <input
-                            type="text"
-                            id="firstname"
-                            name="firstname"
-                            required
-                            class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
-                        />
+                        <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="firstname"
+                                required
+                                class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <!-- Email -->
                 <div class="flex flex-col px-gutter md:gap-8">
                     <label for="email" class="text-title-7">{blok.email_label}*</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        class="text-p-24 border-b border-black py-8 bg-transparent md:py-13"
-                    />
+                    <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                        />
+                    </div>
                 </div>
 
                 <!-- Subject -->
@@ -107,14 +113,16 @@ const { blok } = Astro.props as { blok: FormBlok };
 
                 <!-- Message -->
                 <div class="flex flex-col px-gutter md:gap-8">
-                <label for="message" class="text-title-7">{blok.message_label}*</label>
-                <textarea
-                    id="message"
-                    name="message"
-                    rows="3"
-                    required
-                    class="text-p-24 border border-black py-8 bg-transparent md:py-13 resize-none"
-                ></textarea>
+                    <label for="message" class="text-title-7">{blok.message_label}*</label>
+                        <div class="relative before:absolute before:inset-0 before:border before:border-black before:pointer-events-none">
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="3"
+                                required
+                                class="relative block w-full text-p-24 border border-3 border-transparent p-8 bg-transparent md:py-13 resize-none focus-visible:outline-0 focus-visible:border-black focus:border-black"
+                            ></textarea>
+                    </div>
                 </div>
 
                 <div class="flex items-end gap-24 justify-between mt-40 px-gutter md:mt-24">
