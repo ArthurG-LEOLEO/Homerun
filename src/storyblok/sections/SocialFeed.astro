@@ -161,13 +161,6 @@ import CTA from "../../components/global/CTA.astro";
 
         const wrap = gsap.utils.wrap(-half, 0);
 
-        gsap.set(wrapper, {
-            x: -1,
-            modifiers: {
-                x: gsap.utils.unitize(wrap),
-            },
-        });
-
         xTo = gsap.quickTo(wrapper, "x", {
             duration: 0.5,
             ease: "power3",
@@ -208,6 +201,12 @@ import CTA from "../../components/global/CTA.astro";
                     end: "bottom top",
                 },
             })
+            .set(wrapper, {
+                x: -1,
+                modifiers: {
+                    x: gsap.utils.unitize(wrap),
+                },
+            })
             .from(
                 ".feed-slider-container .el",
                 {
@@ -231,7 +230,7 @@ import CTA from "../../components/global/CTA.astro";
                 "start+=0.3",
             )
             .from(
-                [...posts].slice(posts.length / 2, posts.length / 2 + 4),
+                [...posts].slice(0, 4),
                 {
                     opacity: 0,
                     y: 300,
@@ -248,14 +247,8 @@ import CTA from "../../components/global/CTA.astro";
                     duration: 1,
                     ease: "power3.in",
                 },
-                "start+=0.5",
+                "start",
             );
-
-        console.log([...posts]);
-
-        console.log(posts.length);
-
-        console.log(posts.length / 2);
 
         gsapObserver = Observer.create({
             target: wrapper,
