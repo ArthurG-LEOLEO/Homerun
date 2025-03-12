@@ -65,10 +65,10 @@ interface FooterData {
 const { footerData } = Astro.props;
 ---
 
-<footer class="border-orange border-b-11 pb-10">
+<footer class="border-orange border-b-11 pt-25 pb-10 lg:pt-190">
     <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
-            class="lg:pr-gutter flex flex-grow flex-col justify-between gap-25 lg:w-5/12"
+            class="flex flex-grow flex-col justify-between gap-25 lg:w-5/12 lg:px-gutter"
         >
             <div class="flex w-full flex-grow justify-end">
                 <div
@@ -106,8 +106,7 @@ const { footerData } = Astro.props;
                 </div>
             </div>
         </div>
-        <div class="px-gutter lg:w-7/12 lg:pt-220">
-            <LogoTypo className="mb-65 hidden w-237 lg:block" />
+        <div class="px-gutter lg:w-7/12 lg:pt-130">
             <div class="flex items-end gap-25">
                 <div>
                     <h2 class="text-title-2">
@@ -170,7 +169,7 @@ const { footerData } = Astro.props;
                                         <h5 class="text-title-7 mb-8">{col.title}</h5>
                                         <div class="flex align-start gap-20">
                                             {col.texts?.map((textItem: FooterText) => (
-                                                <div class="flex-1 md:max-w-160">
+                                                <div class="flex-1">
                                                     <div
                                                         class="text-p14 text-black/50"
                                                         set:html={renderRichText(textItem.text)}
