@@ -54,7 +54,10 @@ const { logoless, blok, alternates, white } = Astro.props;
                         <ul class="font-space text-cta32 flex flex-col font-medium lg:text-[6.4rem]/[8.8rem]">
                             {blok.links.map((link: SbBlokData) => (
                                 <li class="lg:mt-[-1rem]">
-                                    <Link link={link.link}>
+                                    <Link
+                                        className="header-menu-item"
+                                        link={link.link}
+                                    >
                                         <div
                                             set:html={splitRoll(
                                                 link.label as string,
@@ -87,6 +90,7 @@ const { logoless, blok, alternates, white } = Astro.props;
     let tlOpen: gsap.core.Timeline;
     let tlClose: gsap.core.Timeline;
     let button: HTMLElement | null;
+    let menuItems: NodeListOf<HTMLElement> | null;
     let menu: HTMLElement | null;
 
     const openMenu = (m: HTMLElement) => {
@@ -135,12 +139,33 @@ const { logoless, blok, alternates, white } = Astro.props;
         }
     };
 
+    const menuItemHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const letters = target.querySelectorAll(".roll-letter");
+
+        const tl = gsap.timeline().fromTo(
+            letters,
+            { yPercent: 0 },
+            {
+                yPercent: -100,
+                stagger: 0.03,
+                duration: 1,
+                ease: "elastic(1.1, 0.9)",
+            },
+        );
+    };
+
     const init = () => {
         const header = document.querySelector("#layout-header");
         menu = document.querySelector("#layout-header #header-menu");
 
         if (!header || !menu) return;
         button = document.querySelector("#layout-header #menu-button");
+        menuItems = document.querySelectorAll(
+            "#layout-header .header-menu-item",
+        );
 
         st = ScrollTrigger.create({
             trigger: "body",
@@ -168,12 +193,18 @@ const { logoless, blok, alternates, white } = Astro.props;
             },
         });
 
+        menuItems.forEach((mi) => {
+            mi.addEventListener("mouseenter", menuItemHover);
+        });
         button?.addEventListener("click", toggleMenu);
     };
 
     const cleanup = () => {
         st.kill();
         button?.removeEventListener("click", toggleMenu);
+        menuItems?.forEach((mi) => {
+            mi.removeEventListener("mouseenter", menuItemHover);
+        });
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
