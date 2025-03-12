@@ -42,7 +42,8 @@ if (liveStory) {
 const alternates = story.alternates;
 
 const headerLogoless = story.content.component === "home";
-const headerWhite = story.content.component === "work";
+const whiteHeaderComponents = ['work', 'contact'];
+const headerWhite = whiteHeaderComponents.includes(story.content.component);
 ---
 
 <Layout
