@@ -42,8 +42,21 @@ if (liveStory) {
 const alternates = story.alternates;
 
 const headerLogoless = story.content.component === "home";
-const whiteHeaderComponents = ['work', 'contact'];
+const whiteHeaderComponents = ["work", "contact"];
 const headerWhite = whiteHeaderComponents.includes(story.content.component);
+
+const bannerThemeComponents = {
+    work: {
+        txt: "#F8F7EC",
+        bg: "#2D5A36",
+    },
+};
+const bannerThemeComponentKey = story?.content
+    ?.component as keyof typeof bannerThemeComponents;
+const bannerTheme = bannerThemeComponents[bannerThemeComponentKey] || {
+    bg: "#edd4f8",
+    txt: "#181817",
+};
 ---
 
 <Layout
@@ -51,6 +64,7 @@ const headerWhite = whiteHeaderComponents.includes(story.content.component);
     alternates={alternates}
     headerLogoless={headerLogoless}
     headerWhite={headerWhite}
+    bannerTheme={bannerTheme}
 >
     <StoryblokComponent language={language} blok={story.content} />
 </Layout>
