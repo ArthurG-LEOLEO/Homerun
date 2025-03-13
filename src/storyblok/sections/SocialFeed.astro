@@ -254,11 +254,12 @@ import CTA from "../../components/global/CTA.astro";
             target: wrapper,
             type: "pointer,touch",
             onPress: () => {
-                isHover = true;
                 if (wrapper) wrapper.style.cursor = "grabbing";
                 if (!Observer.isTouch) {
                     onDragTlOut.pause();
                     onDragTlIn.restart();
+                } else {
+                    isHover = true;
                 }
             },
             onChangeX: (self: { deltaX: number }) => {
@@ -280,11 +281,12 @@ import CTA from "../../components/global/CTA.astro";
                 }
             },
             onRelease: () => {
-                isHover = false;
                 if (wrapper) wrapper.style.cursor = "grab";
                 if (!Observer.isTouch) {
                     onDragTlIn.pause();
                     onDragTlOut.restart();
+                } else {
+                    isHover = false;
                 }
                 gsap.set(postLinks, { pointerEvents: "auto" });
                 xToLayer1(0);
