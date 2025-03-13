@@ -180,6 +180,8 @@ const { logoless, blok, alternates, white } = Astro.props;
                     gsap.to(header, {
                         y: "-100%",
                         duration: 0.35,
+                        opacity: 1,
+                        overwrite: true,
                         ease: "power4",
                     });
                 } else if (self.direction < 0 && !headerIsShown) {
@@ -187,6 +189,8 @@ const { logoless, blok, alternates, white } = Astro.props;
                     gsap.to(header, {
                         y: "0%",
                         duration: 0.35,
+                        opacity: 1,
+                        overwrite: true,
                         ease: "power4",
                     });
                 }
