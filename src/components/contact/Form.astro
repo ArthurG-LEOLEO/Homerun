@@ -14,6 +14,9 @@ interface FormBlok {
   message_label: string;
   subject_options: SubjectOption[];
   required_fields_label: string;
+  success_message: string;
+  new_message_label: string;
+  error_message: string;
 }
 
 const { blok } = Astro.props as { blok: FormBlok };
@@ -22,12 +25,18 @@ const { blok } = Astro.props as { blok: FormBlok };
 <div class="mt-50 md:mt-60">
     <div class="relative py-75 before:bg-pink before:absolute before:inset-0 text-black md:py-100 md:before:left-gutter md:before:right-gutter">
         <div class="relative px-24 md:px-0 md:mx-auto md:w-8/10 lg:w-6/8">
+
+            <!-- Message de confirmation (caché par défaut) -->
+            <div id="form-success" class="hidden flex-col gap-24">
+                <h2 class="whitespace-pre-wrap text-title-5">{blok.success_message}</h2>
+            </div>
             <form
                 name="contact"
                 method="POST"
                 netlify-honeypot="bot-field"
                 data-netlify="true"
                 class="flex flex-col gap-40 md:gap-48"
+                id="contact-form"
             >
                 <input type="hidden" name="form-name" value="contact" />
                 <p class="hidden">
@@ -125,9 +134,19 @@ const { blok } = Astro.props as { blok: FormBlok };
                     </div>
                 </div>
 
+                <!-- Message d'erreur (caché par défaut) -->
+                <div id="form-error" class="hidden">
+                    <p class="whitespace-pre-wrap text-p-12">{blok.error_message}</p>
+                    <!-- <button id="retry-button" class="mt-24 text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80">
+                        <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current">Réessayer</span>
+                    </button> -->
+                </div>
+
+                <!-- Submit -->
                 <div class="flex items-end gap-24 justify-between mt-40 px-gutter md:mt-24">
                     <button
                         type="submit"
+                        id="submit-button"
                         class='flex-none text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80'
                     >
                         <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
@@ -154,3 +173,80 @@ const { blok } = Astro.props as { blok: FormBlok };
         display: inline-flex;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('contact-form') as HTMLFormElement;
+        const successMessage = document.getElementById('form-success') as HTMLDivElement;
+        const errorMessage = document.getElementById('form-error') as HTMLDivElement;
+        const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+        // const retryButton = document.getElementById('retry-button');
+
+        if (form && successMessage && errorMessage) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Désactiver le bouton pendant la soumission
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.classList.add('opacity-50');
+                }
+                
+                try {
+                    const formData = new FormData(form);
+
+                    console.log('Form submission started');
+                    console.log('Form data:');
+                    const formDataObj: Record<string, any> = {};
+                    formData.forEach((value, key) => {
+                        formDataObj[key] = value;
+                    });
+                    console.log(formDataObj);
+                    
+                    // Soumettre à Netlify
+                    const response = await fetch('/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(formData as any).toString()
+                    });
+                    
+                    if (response.ok) {
+                        // Montrer le message de succès
+                        form.classList.add('hidden');
+                        successMessage.classList.remove('hidden');
+                        successMessage.classList.add('flex');
+                        
+                        // Scroll vers le haut du message
+                        successMessage.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Réinitialiser le formulaire (pour une utilisation future)
+                        form.reset();
+                    } else {
+                        throw new Error('Error during submission');
+                    }
+                } catch (error) {
+                    // Afficher le message d'erreur
+                    form.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.classList.add('flex');
+                    
+                    console.error('Submission error:', error);
+                }
+            });
+            
+            // Bouton pour réessayer en cas d'erreur
+            // if (retryButton) {
+            //     retryButton.addEventListener('click', () => {
+            //         errorMessage.classList.add('hidden');
+            //         errorMessage.classList.remove('flex');
+            //         form.classList.remove('hidden');
+                    
+            //         if (submitButton) {
+            //             submitButton.disabled = false;
+            //             submitButton.classList.remove('opacity-50');
+            //         }
+            //     });
+            // }
+        }
+    });
+</script>
