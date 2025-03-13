@@ -11,7 +11,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 ---
 
 <header
-    class="pointer-events-none fixed top-0 right-0 left-0 z-[100] pt-50 opacity-0 md:pt-64"
+    class="pointer-events-none fixed top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
     id="layout-header"
 >
     <div class="container-main relative flex items-center">
@@ -48,6 +48,12 @@ const { logoless, blok, alternates, white } = Astro.props;
                         <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
                             <div
                                 class="bg-green menu-btn-layers size-full rounded-full shadow-[0_0_0_1px_var(--color-green)] will-change-transform"
+                                style="transform: translate3d(calc(-101%*var(--offset)),0,0); --offset: 1;"
+                            />
+                        </div>
+                        <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
+                            <div
+                                class="bg-blue menu-btn-layer-open size-full rounded-full shadow-[0_0_0_1px_var(--color-blue)] will-change-transform"
                                 style="transform: translate3d(calc(-101%*var(--offset)),0,0); --offset: 1;"
                             />
                         </div>
@@ -110,10 +116,13 @@ const { logoless, blok, alternates, white } = Astro.props;
     let st: ScrollTrigger;
     let tlOpen: gsap.core.Timeline;
     let tlClose: gsap.core.Timeline;
+    let tlButtonHover: gsap.core.Timeline;
+    let tlButtonUnhover: gsap.core.Timeline;
     let button: HTMLElement | null;
     let menuItems: NodeListOf<HTMLElement> | null;
     let menu: HTMLElement | null;
     let menuBtnLayers: NodeListOf<HTMLElement> | null;
+    let menuBtnLayerOpen: HTMLElement | null;
 
     const openMenu = (m: HTMLElement) => {
         tlClose?.kill();
@@ -133,19 +142,57 @@ const { logoless, blok, alternates, white } = Astro.props;
                     ease: "elastic(1.2, 0.7)",
                 },
                 "<",
+            )
+            .to(
+                button,
+                {
+                    color: "#181817",
+                    duration: 0.4,
+                    ease: "power3.out",
+                },
+                "<",
+            )
+            .to(
+                menuBtnLayerOpen,
+                {
+                    "--offset": 0,
+                    duration: 0.4,
+                    ease: "power3.out",
+                },
+                "<",
             );
         m.dataset.open = "true";
     };
 
     const closeMenu = (m: HTMLElement) => {
         tlOpen?.kill();
-        tlClose = gsap.timeline().to(m, {
-            scaleY: 0.7,
-            scaleX: 0.95,
-            autoAlpha: 0,
-            duration: 0.1,
-            ease: "power3",
-        });
+        tlClose = gsap
+            .timeline()
+            .to(m, {
+                scaleY: 0.7,
+                scaleX: 0.95,
+                autoAlpha: 0,
+                duration: 0.1,
+                ease: "power3",
+            })
+            .to(
+                button,
+                {
+                    color: "#F8F7EC",
+                    duration: 0.2,
+                    ease: "power3.out",
+                },
+                "<",
+            )
+            .to(
+                menuBtnLayerOpen,
+                {
+                    "--offset": 1,
+                    duration: 0.2,
+                    ease: "power3.out",
+                },
+                "<",
+            );
         m.dataset.open = "false";
     };
 
@@ -182,23 +229,23 @@ const { logoless, blok, alternates, white } = Astro.props;
     const menuButtonHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
         if (!target || !menuBtnLayers) return;
-
-        gsap.to(menuBtnLayers, {
+        if (tlButtonUnhover) tlButtonUnhover.kill();
+        tlButtonHover = gsap.timeline().to(menuBtnLayers, {
             stagger: 0.1,
-            duration: 0.5,
+            duration: 0.4,
             "--offset": 0,
-            ease: "power3",
+            ease: "power3.inOut",
         });
     };
 
     const menuButtonUnhover = (e: MouseEvent) => {
-        if (!menuBtnLayers) return;
-
-        gsap.to([...menuBtnLayers].reverse(), {
+        if (!menuBtnLayers || !menu || menu.dataset.open === "true") return;
+        if (tlButtonHover) tlButtonHover.kill();
+        tlButtonUnhover = gsap.timeline().to([...menuBtnLayers].reverse(), {
             stagger: 0.1,
-            duration: 0.5,
+            duration: 0.4,
             "--offset": 1,
-            ease: "power3",
+            ease: "power3.inOut",
         });
     };
 
@@ -216,6 +263,9 @@ const { logoless, blok, alternates, white } = Astro.props;
         button = document.querySelector("#layout-header #menu-button");
         menuBtnLayers = document.querySelectorAll(
             "#layout-header #menu-button .menu-btn-layers",
+        );
+        menuBtnLayerOpen = document.querySelector(
+            "#layout-header #menu-button .menu-btn-layer-open",
         );
         menuItems = document.querySelectorAll(
             "#layout-header .header-menu-item",
