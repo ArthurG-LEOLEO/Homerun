@@ -13,6 +13,7 @@ interface FormBlok {
   subject_label: string;
   message_label: string;
   subject_options: SubjectOption[];
+  send_label: string;
   required_fields_label: string;
   success_message: string;
   new_message_label: string;
@@ -23,15 +24,17 @@ const { blok } = Astro.props as { blok: FormBlok };
 ---
 
 <div class="mt-50 md:mt-60">
-    <div class="relative py-75 before:bg-pink before:absolute before:inset-0 text-black md:py-100 md:before:left-gutter md:before:right-gutter">
+    <div id="form-container" class="relative py-75 before:bg-pink before:absolute before:inset-0 text-black md:py-100 md:before:left-gutter md:before:right-gutter">
         <div class="relative px-24 md:px-0 md:mx-auto md:w-8/10 lg:w-6/8">
 
             <!-- Form success -->
-            <div id="form-success" class="hidden flex-col gap-24">
+            <div id="form-success" class="hidden px-gutter flex-col gap-24">
                 <h2 class="whitespace-pre-wrap text-title-5">{blok.success_message}</h2>
-                <button id="new-button" type="button" class="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16 cursor-pointer">
-                    {blok.new_message_label}
-                </button>
+                <div>
+                    <button id="new-button" type="button" class="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16 cursor-pointer">
+                        {blok.new_message_label}
+                    </button>
+                </div>
             </div>
             <form
                 name="contact"
@@ -151,7 +154,7 @@ const { blok } = Astro.props as { blok: FormBlok };
                         class='flex-none text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80'
                     >
                         <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
-                        >Envoyer</span>
+                        >{blok.send_label}</span>
                         <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
                             <Icon
                                 name="arrow-right"
@@ -177,6 +180,7 @@ const { blok } = Astro.props as { blok: FormBlok };
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const formContainer = document.getElementById('form-container') as HTMLFormElement;
         const form = document.getElementById('contact-form') as HTMLFormElement;
         const successMessage = document.getElementById('form-success') as HTMLDivElement;
         const errorMessage = document.getElementById('form-error') as HTMLDivElement;
@@ -187,10 +191,8 @@ const { blok } = Astro.props as { blok: FormBlok };
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                // Désactiver le bouton pendant la soumission
                 if (submitButton) {
                     submitButton.disabled = true;
-                    submitButton.classList.add('opacity-50');
                 }
                 
                 try {
@@ -203,21 +205,17 @@ const { blok } = Astro.props as { blok: FormBlok };
                     });
                     
                     if (response.ok) {
-                        // Montrer le message de succès
                         form.classList.add('hidden');
                         successMessage.classList.remove('hidden');
                         successMessage.classList.add('flex');
                         
-                        // Scroll vers le haut du message
-                        successMessage.scrollIntoView({ behavior: 'smooth' });
+                        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         
-                        // Réinitialiser le formulaire (pour une utilisation future)
                         form.reset();
                     } else {
                         throw new Error('Error during submission');
                     }
                 } catch (error) {
-                    // Afficher le message d'erreur
                     form.classList.add('hidden');
                     errorMessage.classList.remove('hidden');
                     errorMessage.classList.add('flex');
@@ -234,7 +232,6 @@ const { blok } = Astro.props as { blok: FormBlok };
                     
                     if (submitButton) {
                         submitButton.disabled = false;
-                        submitButton.classList.remove('opacity-50');
                     }
                 });
             }
