@@ -243,6 +243,8 @@ const { language, blok } = Astro.props;
     };
 
     const cleanup = () => {
+        page = document.querySelector("#page-about");
+        if (!page) return;
         mm?.revert();
         tlAppear?.kill();
     };
