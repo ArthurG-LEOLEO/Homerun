@@ -194,6 +194,14 @@ const { blok } = Astro.props as { blok: FormBlok };
                 
                 try {
                     const formData = new FormData(form);
+
+                    console.log('Form submission started');
+                    console.log('Form data:');
+                    const formDataObj: Record<string, any> = {};
+                    formData.forEach((value, key) => {
+                        formDataObj[key] = value;
+                    });
+                    console.log(formDataObj);
                     
                     // Soumettre à Netlify
                     const response = await fetch('/', {
