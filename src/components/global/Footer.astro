@@ -19,18 +19,18 @@ interface FooterLink {
 }
 
 interface FooterColLinks {
-    component: 'footer_col_links';
+    component: "footer_col_links";
     title: string;
     links: FooterLink[];
 }
 
 interface FooterText {
-    component: 'text';
+    component: "text";
     text: any; // RichText content
 }
 
 interface FooterColText {
-    component: 'footer_col_text';
+    component: "footer_col_text";
     title: string;
     texts: FooterText[];
 }
@@ -68,7 +68,7 @@ const { footerData } = Astro.props;
 <footer class="border-orange border-b-11 pt-25 pb-10 lg:pt-190">
     <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
-            class="flex flex-grow flex-col justify-between gap-25 lg:w-5/12 lg:px-gutter"
+            class="lg:px-gutter flex flex-grow flex-col justify-between gap-25 lg:w-5/12"
         >
             <div class="flex w-full flex-grow justify-end">
                 <div
@@ -80,7 +80,8 @@ const { footerData } = Astro.props;
                             src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"
                         ></script>
                         <spline-viewer
-                            url="https://prod.spline.design/R2yB4AHf16NOPonA/scene.splinecode"
+                            loading="eager"
+                            url="https://prod.spline.design/xRHNMQtBUPIjMLSM/scene.splinecode"
                             background="transparent"></spline-viewer>
                     </div>
                 </div>
@@ -110,9 +111,7 @@ const { footerData } = Astro.props;
             <div class="flex items-end gap-25">
                 <div>
                     <h2 class="text-title-2">
-                        <Title
-                            title={footerData.title[0]}
-                        />
+                        <Title title={footerData.title[0]} />
                     </h2>
                     {
                         footerData.top_link && (
@@ -149,33 +148,43 @@ const { footerData } = Astro.props;
                 footerData.cols && (
                     <div class="mt-90 flex flex-wrap gap-x-64 gap-y-24">
                         {footerData.cols.map((col: FooterCol) => {
-                            if (col.component === 'footer_col_links') {
+                            if (col.component === "footer_col_links") {
                                 return (
                                     <div class="footer-col">
-                                        <h5 class="text-title-7 mb-8">{col.title}</h5>
+                                        <h5 class="text-title-7 mb-8">
+                                            {col.title}
+                                        </h5>
                                         <div class="flex flex-col">
-                                            {col.links?.map((linkItem: FooterLink) => (
-                                                <BasicLink
-                                                    link={linkItem}
-                                                    className="text-p14 text-black/50"
-                                                />
-                                            ))}
+                                            {col.links?.map(
+                                                (linkItem: FooterLink) => (
+                                                    <BasicLink
+                                                        link={linkItem}
+                                                        className="text-p14 text-black/50"
+                                                    />
+                                                ),
+                                            )}
                                         </div>
                                     </div>
                                 );
-                            } else if (col.component === 'footer_col_text') {
+                            } else if (col.component === "footer_col_text") {
                                 return (
                                     <div class="footer-col w-full sm:w-auto">
-                                        <h5 class="text-title-7 mb-8">{col.title}</h5>
-                                        <div class="flex align-start gap-20">
-                                            {col.texts?.map((textItem: FooterText) => (
-                                                <div class="flex-1">
-                                                    <div
-                                                        class="text-p14 text-black/50"
-                                                        set:html={renderRichText(textItem.text)}
-                                                    />
-                                                </div>
-                                            ))}
+                                        <h5 class="text-title-7 mb-8">
+                                            {col.title}
+                                        </h5>
+                                        <div class="align-start flex gap-20">
+                                            {col.texts?.map(
+                                                (textItem: FooterText) => (
+                                                    <div class="flex-1">
+                                                        <div
+                                                            class="text-p14 text-black/50"
+                                                            set:html={renderRichText(
+                                                                textItem.text,
+                                                            )}
+                                                        />
+                                                    </div>
+                                                ),
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -188,7 +197,7 @@ const { footerData } = Astro.props;
         </div>
     </div>
     <div
-        class="container-main mt-30 flex flex-col gap-30 lg:gap-0 lg:mt-25 lg:flex-row-reverse lg:items-end"
+        class="container-main mt-30 flex flex-col gap-30 lg:mt-25 lg:flex-row-reverse lg:items-end lg:gap-0"
     >
         <div
             class="pr-gutter flex items-center gap-32 lg:w-5/12 lg:justify-end lg:pl-42"
