@@ -206,8 +206,4 @@ const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
         cleanupSliders();
         initSliders();
     });
-
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-        initSliders();
-    }
 </script>
