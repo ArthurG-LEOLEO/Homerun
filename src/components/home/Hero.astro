@@ -118,6 +118,9 @@ const { blok } = Astro.props;
     let titleLettersHom: NodeListOf<Element> | null;
     let titleLettersEr: NodeListOf<Element> | null;
     let titleLettersUn: NodeListOf<Element> | null;
+    let titleInnerLettersHom: NodeListOf<Element> | null;
+    let titleInnerLettersEr: NodeListOf<Element> | null;
+    let titleInnerLettersUn: NodeListOf<Element> | null;
     let overlay: HTMLElement | null;
     let heroTexts: HTMLElement | null;
     let baselineCreative: HTMLElement | null;
@@ -146,6 +149,15 @@ const { blok } = Astro.props;
         );
         titleLettersUn = document.querySelectorAll(
             "#home-hero #home-hero-title .letters-un",
+        );
+        titleInnerLettersHom = document.querySelectorAll(
+            "#home-hero #home-hero-title .title-inner-letter-hom",
+        );
+        titleInnerLettersEr = document.querySelectorAll(
+            "#home-hero #home-hero-title .title-inner-letter-er",
+        );
+        titleInnerLettersUn = document.querySelectorAll(
+            "#home-hero #home-hero-title .title-inner-letter-un",
         );
 
         baseline = document.querySelector("#home-hero #home-hero-baseline");
@@ -265,6 +277,21 @@ const { blok } = Astro.props;
                     duration: 0,
                 },
                 "before+=1",
+            )
+            .to(
+                [
+                    titleInnerLettersHom,
+                    titleInnerLettersEr,
+                    titleInnerLettersUn,
+                ],
+                {
+                    stagger: 0.1,
+                    x: 0,
+                    y: 0,
+                    duration: 1.3,
+                    ease: "power3.inOut",
+                },
+                "before+=1.1",
             )
             .addLabel("start", "+=0.3")
             .to(
@@ -405,7 +432,7 @@ const { blok } = Astro.props;
                 }
             },
             ease: "elastic.out(0.8,0.7)",
-            delay: 2.8,
+            delay: 3.8,
         });
 
         tlVideo = gsap.timeline().fromTo(
