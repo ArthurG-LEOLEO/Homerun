@@ -4,6 +4,11 @@ import ArrowLink from "../atoms/ArrowLink.astro";
 import SBImage from "../global/SBImage.astro";
 import { splitText } from "../../utils/splitString";
 
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
 const { blok } = Astro.props;
 ---
 
@@ -15,7 +20,11 @@ const { blok } = Astro.props;
         class="text-p86-mobile px-gutter mx-auto w-full md:text-[5.5rem]/[7.4rem] lg:w-[71vw] lg:px-0 lg:text-[8.6em]/[1.27em]"
     >
         <span set:html={splitText(blok.title_first_part)} />
-        <a class="relative inline-block" href="#" id="first-cat">
+        <a
+            class="relative inline-block"
+            href={t("links.work.consulting")}
+            id="first-cat"
+        >
             <div
                 class="absolute top-[0.2em] right-[0.8em] bottom-[0.2em] left-[0.8em] rotate-[-1.9deg]"
             >
@@ -103,7 +112,7 @@ const { blok } = Astro.props;
         <span set:html={splitText(blok.title_second_part)} />
         <a
             class="relative inline-block text-white lg:text-black"
-            href="#"
+            href={t("links.work.advertising")}
             id="second-cat"
         >
             <div class="relative inline-block">

@@ -24,6 +24,8 @@ export default {
         "work.consultingProjects": "Consulting projects",
         "work.advertisingProjects": "Advertising projects",
         "links.work": "/work",
+        "links.work.consulting": "/work?type=consulting",
+        "links.work.advertising": "/work?type=advertising",
         "links.home": "/",
     },
     fr: {
@@ -33,6 +35,8 @@ export default {
         "banner.title": "Rosbeef! devient HOMERUN",
         "banner.moreLink": "Lire le communiqué",
         "links.work": "/fr/work",
+        "links.work.consulting": "/fr/work?type=consulting",
+        "links.work.advertising": "/fr/work?type=advertising",
         "links.home": "/fr",
     },
 } as Record<string, Record<string, string>>;

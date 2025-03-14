@@ -60,12 +60,7 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         },
     } as const;
 
-    const filter = (e: MouseEvent) => {
-        const target = e.target as HTMLElement | null;
-        if (!target) return;
-
-        const selectedCategory = target.dataset.category || currentCategory;
-
+    const filter = (selectedCategory: string | undefined) => {
         currentCategory =
             selectedCategory === currentCategory ? undefined : selectedCategory;
 
@@ -79,8 +74,11 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
             featuredInfos?.style.setProperty("--show", "0");
             if (featuredInfos) featuredInfos.style.pointerEvents = "none";
         } else {
+            const selectedButton = page?.querySelector(
+                `.work-category-btn#${currentCategory}-button`,
+            );
             prevActiveButton?.classList.remove("active");
-            target.classList.add("active");
+            selectedButton?.classList.add("active");
             featuredInfos?.style.setProperty("--show", "1");
             if (featuredInfos) featuredInfos.style.pointerEvents = "auto";
         }
@@ -128,6 +126,25 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
             banner.style.setProperty("--banner-bg", bannerTheme.bg);
             banner.style.setProperty("--banner-text", bannerTheme.txt);
         }
+
+        // Update URL params
+        const url = new URL(location.href);
+        if (currentCategory) {
+            url.searchParams.set("type", currentCategory);
+            window.history.pushState(null, "", url.toString());
+        } else {
+            url.searchParams.delete("type");
+            window.history.pushState(null, "", url.toString());
+        }
+    };
+
+    const onFilterButtonClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const selectedCategory = target.dataset.category || currentCategory;
+
+        filter(selectedCategory);
     };
 
     const loadMoreArchived = () => {
@@ -150,6 +167,20 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         loadArchivedButton?.addEventListener("click", loadMoreArchived);
     };
 
+    const checkUrlFiltering = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const typeOfWork = urlParams.get("type");
+        if (!typeOfWork) return;
+        const isAPossibleType = ["consulting", "advertising"].includes(
+            typeOfWork,
+        );
+
+        if (isAPossibleType) {
+            filter(typeOfWork);
+        }
+        console.log(typeOfWork);
+    };
+
     const initFiltering = () => {
         if (!page) return;
         consultingButton = page?.querySelector("#consulting-button");
@@ -161,9 +192,11 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         featuredInfosTxt = page?.querySelectorAll(".featured-infos-txt");
         banner = document.querySelector("#layout-banner");
 
-        consultingButton?.addEventListener("click", filter);
-        advertisingButton?.addEventListener("click", filter);
-        allButton?.addEventListener("click", filter);
+        consultingButton?.addEventListener("click", onFilterButtonClick);
+        advertisingButton?.addEventListener("click", onFilterButtonClick);
+        allButton?.addEventListener("click", onFilterButtonClick);
+
+        checkUrlFiltering();
     };
     const init = () => {
         page = document.querySelector("#page-work");
@@ -210,9 +243,9 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
 
     const cleanup = () => {
         tlAppear?.kill();
-        consultingButton?.removeEventListener("click", filter);
-        advertisingButton?.removeEventListener("click", filter);
-        allButton?.removeEventListener("click", filter);
+        consultingButton?.removeEventListener("click", onFilterButtonClick);
+        advertisingButton?.removeEventListener("click", onFilterButtonClick);
+        allButton?.removeEventListener("click", onFilterButtonClick);
         loadArchivedButton?.removeEventListener("click", loadMoreArchived);
     };
 
