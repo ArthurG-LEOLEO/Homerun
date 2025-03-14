@@ -40,9 +40,9 @@ const { language, blok } = Astro.props;
                     class="flex flex-col gap-48 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120"
                 >
                     {
-                        blok.cases.map((item: { content: { category: string } }) => (
+                        blok.cases.map((item: { content: { category: string } }, index: number) => (
                             <div
-                                class="px-gutter work-featured-case"
+                                class={`px-gutter united-case ${index > 3 && "hidden"}`}
                                 data-category={item.content?.category}
                             >
                                 <Card caseItem={item} />
@@ -52,7 +52,7 @@ const { language, blok } = Astro.props;
                 </div>
                 <button
                     id="load-more-button"
-                    class="px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12"
+                    class={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${blok.cases.length <= 4 && 'hidden'}`}
                 >
                     <span class="text-cta-32 border-b-[0.2rem]">{t("work.archived.load")}</span>
                     <Icon name="cross-circle" class="size-28 rotate-[45deg] md:size-34" />
@@ -63,9 +63,42 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    const NB_INITIAL_CASES = 4;
+    const NB_LOAD_MORE_CASES = 4;
+    let shownCases = NB_INITIAL_CASES;
     let tlAppear: gsap.core.Timeline;
+    let page: HTMLElement | null;
+    let loadMoreButton: HTMLElement | null;
+    let cases: NodeListOf<HTMLElement> | null;
+
+    const loadMoreCases = () => {
+        if (!page || !cases?.length) return;
+        shownCases = shownCases + NB_LOAD_MORE_CASES;
+        cases.forEach((c, index) => {
+            if (index < shownCases) {
+                c.classList.remove("hidden");
+            }
+        });
+        if (shownCases >= cases.length) {
+            loadMoreButton?.classList.add("hidden");
+        }
+    };
+
+    const initLoadMore = () => {
+        if (!page) return;
+        
+        cases = page.querySelectorAll(".united-case");
+        loadMoreButton = page.querySelector("#load-more-button");
+        
+        if (cases.length <= NB_INITIAL_CASES && loadMoreButton) {
+            loadMoreButton.classList.add("hidden");
+        }
+        
+        loadMoreButton?.addEventListener("click", loadMoreCases);
+    };
+
     const init = () => {
-        const page = document.querySelector("#page-united");
+        page = document.querySelector("#page-united");
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
@@ -101,10 +134,13 @@ const { language, blok } = Astro.props;
                 },
                 "start",
             );
+            
+        initLoadMore();
     };
 
     const cleanup = () => {
         tlAppear?.kill();
+        loadMoreButton?.removeEventListener("click", loadMoreCases);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
