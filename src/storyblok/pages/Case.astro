@@ -9,13 +9,22 @@ const t = useTranslations(lang);
 import Title from "../../components/atoms/Title.astro";
 import OtherCases from "../../components/case/OtherCases.astro";
 import Cover from "../../components/case/Cover.astro";
+import { Icon } from "astro-icon/components";
 
 const { language, blok } = Astro.props;
 ---
 
 <div id="page-case" class="case" {...storyblokEditable(blok)}>
-    <div class="pt-105 pb-120 md:pt-150 md:pb-170">
+    <div class="pt-115 pb-120 md:pt-160 md:pb-170">
         <div class="container-main">
+            <div class="px-gutter mb-60">
+                <a
+                    href={t("work.selflink")}
+                    class="flex size-34 items-center justify-center rounded-full border-2"
+                >
+                    <Icon name="arrow-down" size="16" class="rotate-[90deg]" />
+                </a>
+            </div>
             <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
             <div
                 class="mt-17 flex flex-col gap-56 md:mt-24 lg:flex-row lg:items-baseline lg:justify-between lg:gap-0"
@@ -25,7 +34,9 @@ const { language, blok } = Astro.props;
                 </h1>
                 {
                     blok.intro && (
-                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">
+                            {blok.intro}
+                        </h3>
                     )
                 }
             </div>

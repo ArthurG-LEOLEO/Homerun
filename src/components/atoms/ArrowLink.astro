@@ -3,38 +3,60 @@ import Link from "../global/Link.astro";
 import { Icon } from "astro-icon/components";
 
 interface Props {
-    link: {
+    link?: {
         cached_url?: string;
         url?: string;
         linktype?: string;
         target?: string;
     };
+    id?: string;
     label: string;
     className?: string;
+    plus?: boolean;
 }
 
-const { link, label, className = "" } = Astro.props;
+const { link, label, className = "", id = "", plus = false } = Astro.props;
 
-const isExternal = link.linktype === "url";
+const isExternal = link?.linktype === "url";
 ---
 
-<Link
-    link={link}
-    className={`text-cta-32 inline-flex items-end gap-11 hover:opacity-80 ${className}`}
->
-    <span
-        class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
-        >{label}</span
-    >
-    <span
-        class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34"
-    >
-        <Icon
-            name="arrow-right"
-            class:list={[
-                "size-14 md:size-16",
-                { "rotate-[-45deg]": isExternal },
-            ]}
-        />
-    </span>
-</Link>
+{
+    link ? (
+        <Link
+            link={link}
+            className={`text-cta-32 inline-flex items-end gap-11 hover:opacity-80 ${className}`}
+        >
+            <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current">
+                {label}
+            </span>
+            <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
+                <Icon
+                    name={!plus ? "arrow-right" : "plus"}
+                    class:list={[
+                        "size-14 md:size-16",
+                        { "rotate-[-45deg]": isExternal && !plus },
+                    ]}
+                />
+            </span>
+        </Link>
+    ) : (
+        <button
+            type="button"
+            class={`text-cta-32 inline-flex cursor-pointer items-end gap-11 hover:opacity-80 ${className}`}
+            id={id}
+        >
+            <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current">
+                {label}
+            </span>
+            <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
+                <Icon
+                    name={!plus ? "arrow-right" : "plus"}
+                    class:list={[
+                        "size-14 md:size-16",
+                        { "rotate-[-45deg]": isExternal && !plus },
+                    ]}
+                />
+            </span>
+        </button>
+    )
+}

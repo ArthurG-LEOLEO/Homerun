@@ -1,5 +1,6 @@
 ---
 import { useTranslations } from "../../i18n/utils";
+import ArrowLink from "../atoms/ArrowLink.astro";
 import Card from "./Card.astro";
 
 const lang = Astro.currentLocale;
@@ -8,13 +9,34 @@ const t = useTranslations(lang);
 const { language, cases } = Astro.props;
 ---
 
-<div class="container-main bg-black text-white py-100 md:pt-125">
-    <h3 class="text-title-1 px-gutter">{t("case.other")}</h3>
-    <div class="flex flex-col gap-48 mt-48 md:flex-row mt:items-start md:gap-0 md:mt-72">
-        {cases.map((item) => (
-            <div class="px-gutter md:w-6/12">
-                <Card language={language} caseItem={item} />
-            </div>
-        ))}
+<div class="container-main bg-black py-100 text-white md:pt-125">
+    <div class="flex items-end justify-between">
+        <h3 class="text-title-1 px-gutter">{t("case.other")}</h3>
+        <div class="px-gutter mb-16 hidden md:block">
+            <ArrowLink
+                plus
+                label={t("work.all")}
+                link={{ url: t("work.selflink") }}
+            />
+        </div>
+    </div>
+    <div
+        class="mt:items-start mt-48 flex flex-col gap-48 md:mt-72 md:flex-row md:gap-0"
+    >
+        {
+            cases.map((item) => (
+                <div class="px-gutter md:w-6/12">
+                    <Card language={language} caseItem={item} />
+                </div>
+            ))
+        }
+    </div>
+    <div class="px-gutter mt-40 md:hidden">
+        <ArrowLink
+            plus
+            label={t("work.all")}
+            link={{ url: t("work.selflink") }}
+            className="md:hidden"
+        />
     </div>
 </div>

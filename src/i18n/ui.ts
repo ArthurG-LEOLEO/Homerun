@@ -23,6 +23,7 @@ export default {
         "work.all": "All cases",
         "work.consultingProjects": "Consulting projects",
         "work.advertisingProjects": "Advertising projects",
+        "work.selflink": "/work",
     },
     fr: {
         "case.challenges": "Enjeux strat’ :",
@@ -30,5 +31,6 @@ export default {
         "case.other": "Autres cases",
         "banner.title": "Rosbeef! devient HOMERUN",
         "banner.moreLink": "Lire le communiqué",
+        "work.selflink": "/fr/work",
     },
 } as Record<string, Record<string, string>>;

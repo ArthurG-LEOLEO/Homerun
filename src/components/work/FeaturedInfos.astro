@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
+import ArrowLink from "../atoms/ArrowLink.astro";
 
 const lang = Astro.currentLocale;
 const t = useTranslations(lang);
@@ -22,15 +23,8 @@ const { nbConsulting, nbAdvertising } = Astro.props;
                 >{nbAdvertising} {t("work.advertisingProjects")}</span
             >
         </div>
-        <button
-            id="all-button"
-            class="px-gutter flex cursor-pointer items-end gap-6 md:gap-12"
-        >
-            <span class="text-cta-32 border-b-[0.2rem]">{t("work.all")}</span>
-            <Icon
-                name="cross-circle"
-                class="size-28 rotate-[45deg] md:size-34"
-            />
-        </button>
+        <div class="px-gutter">
+            <ArrowLink id="all-button" plus label={t("work.all")} />
+        </div>
     </div>
 </div>
