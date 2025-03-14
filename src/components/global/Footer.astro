@@ -1,5 +1,6 @@
 ---
 import { renderRichText } from "@storyblok/astro";
+import { Image } from "astro:assets";
 
 import ArrowLink from "../atoms/ArrowLink.astro";
 import BasicLink from "../atoms/BasicLink.astro";
@@ -7,6 +8,9 @@ import Title from "../atoms/Title.astro";
 import CTA from "./CTA.astro";
 import LogoTypo from "./LogoTypo.astro";
 import SBImage from "./SBImage.astro";
+import { Icon } from "astro-icon/components";
+
+import changeYourHelmetImg from "../../img/change-your-helmet.png";
 
 interface FooterLink {
     label: string;
@@ -74,7 +78,7 @@ const { footerData } = Astro.props;
                 <div
                     class="px-gutter flex size-10/12 max-w-400 items-center justify-center lg:size-full lg:max-w-none lg:flex-grow lg:px-0"
                 >
-                    <div class="aspect-square w-full">
+                    <div class="relative aspect-square w-full">
                         <script
                             type="module"
                             src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"
@@ -84,6 +88,22 @@ const { footerData } = Astro.props;
                             loading="eager"
                             url="https://prod.spline.design/xRHNMQtBUPIjMLSM/scene.splinecode"
                             background="transparent"></spline-viewer>
+                        <div
+                            class="bg-pink pointer-events-none absolute top-0 right-0 size-84 rounded-full sm:size-122 lg:top-20 lg:right-20"
+                        >
+                            <Icon
+                                name="mouse"
+                                class="footer-cursor-click absolute top-26 left-26 size-32 sm:top-37 sm:left-37 sm:size-48"
+                            />
+                            <Image
+                                class="footer-cursor-text absolute top-7 left-7 size-70 sm:top-8 sm:left-8 sm:size-104"
+                                width="105"
+                                height="105"
+                                src={changeYourHelmetImg}
+                                alt=""
+                                draggable="false"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="hidden lg:flex lg:flex-col lg:gap-4 lg:self-end">
@@ -218,3 +238,39 @@ const { footerData } = Astro.props;
         </div>
     </div>
 </footer>
+
+<style>
+    .footer-cursor-text {
+        animation: infiniteRotate linear infinite;
+        animation-duration: 20s;
+    }
+
+    @keyframes infiniteRotate {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .footer-cursor-click {
+        transform-origin: bottom center;
+        animation: 5s ease-in-out infinite cursorClick;
+    }
+
+    @keyframes cursorClick {
+        0% {
+            transform: rotate(0);
+        }
+        95% {
+            transform: rotate(0);
+        }
+        98% {
+            transform: rotate(-7deg);
+        }
+        100% {
+            transform: rotate(0);
+        }
+    }
+</style>
