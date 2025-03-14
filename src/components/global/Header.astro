@@ -30,19 +30,19 @@ const { logoless, blok, alternates, white } = Astro.props;
                 <div class="px-gutter pointer-events-auto relative z-[2] ml-auto">
                     <button
                         id="menu-button"
-                        class="text-cta16 font-space relative flex cursor-pointer px-16 py-16 text-white transition-transform duration-100 ease-out will-change-transform active:scale-[0.95] sm:px-24"
+                        class="text-cta16 group font-space relative flex cursor-pointer px-16 py-16 text-white transition-transform duration-100 ease-out will-change-transform active:scale-[0.95] sm:px-24"
                     >
                         <div class="bg-orange absolute top-0 left-0 size-full rounded-full" />
                         <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
                             <div
                                 class="bg-pink menu-btn-layers size-full rounded-full will-change-transform"
-                                style="transform: translate3d(calc(-100%*var(--offset)),0,0); --offset: 1;"
+                                style="transform: translate3d(calc(-101%*var(--offset)),0,0); --offset: 1;"
                             />
                         </div>
                         <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
                             <div
                                 class="bg-blue menu-btn-layers size-full rounded-full will-change-transform"
-                                style="transform: translate3d(calc(-100%*var(--offset)),0,0); --offset: 1;"
+                                style="transform: translate3d(calc(-101%*var(--offset)),0,0); --offset: 1;"
                             />
                         </div>
                         <div class="absolute top-0 left-0 size-full overflow-hidden rounded-full">
@@ -58,9 +58,13 @@ const { logoless, blok, alternates, white } = Astro.props;
                             />
                         </div>
                         <div class="relative">
-                            <div class="hidden items-center gap-10 sm:flex">
+                            <div class="relative hidden items-center gap-10 sm:flex">
                                 <span>{blok.label}</span>
-                                <Icon name="open" size="16" />
+                                <div class="relative size-16">
+                                    <div class="menu-button-icon-1 absolute top-2 right-2 size-7 border-t-[0.2rem] border-r-[0.2rem] border-current transition-transform ease-out" />
+                                    <div class="menu-button-icon-2 absolute bottom-2 left-2 size-7 border-b-[0.2rem] border-l-[0.2rem] border-current transition-transform ease-out" />
+                                    <div class="menu-button-icon-3 absolute top-7 right-2 h-2 w-12 rotate-[-45deg] bg-current transition-[transform,opacity] ease-out" />
+                                </div>
                             </div>
                             <div class="sm:hidden">
                                 <Icon name="menu" size="16" />
@@ -126,6 +130,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 
     const openMenu = (m: HTMLElement) => {
         tlClose?.kill();
+        button?.classList.add("active");
         tlOpen = gsap
             .timeline()
             .to(m, {
@@ -166,6 +171,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 
     const closeMenu = (m: HTMLElement) => {
         tlOpen?.kill();
+        button?.classList.remove("active");
         tlClose = gsap
             .timeline()
             .to(m, {
@@ -230,6 +236,7 @@ const { logoless, blok, alternates, white } = Astro.props;
         const target = e.target as HTMLElement | null;
         if (!target || !menuBtnLayers) return;
         if (tlButtonUnhover) tlButtonUnhover.kill();
+        target.classList.add("hover");
         tlButtonHover = gsap.timeline().to(menuBtnLayers, {
             stagger: 0.1,
             duration: 0.4,
@@ -239,8 +246,11 @@ const { logoless, blok, alternates, white } = Astro.props;
     };
 
     const menuButtonUnhover = (e: MouseEvent) => {
-        if (!menuBtnLayers || !menu || menu.dataset.open === "true") return;
+        const target = e.target as HTMLElement | null;
+        if (!target || !menuBtnLayers || !menu || menu.dataset.open === "true")
+            return;
         if (tlButtonHover) tlButtonHover.kill();
+        target.classList.remove("hover");
         tlButtonUnhover = gsap.timeline().to([...menuBtnLayers].reverse(), {
             stagger: 0.1,
             duration: 0.4,
@@ -329,3 +339,32 @@ const { logoless, blok, alternates, white } = Astro.props;
         init();
     });
 </script>
+<style>
+    #menu-button.hover {
+        .menu-button-icon-1 {
+            transform: translateX(0.2rem) translateY(-0.2rem);
+            transition-delay: 0.2s;
+        }
+        .menu-button-icon-2 {
+            transform: translateX(-0.2rem) translateY(0.2rem);
+            transition-delay: 0.2s;
+        }
+        .menu-button-icon-3 {
+            transform: scale(0);
+            opacity: 0;
+            transition-delay: 0.2s;
+        }
+    }
+    #menu-button.active {
+        .menu-button-icon-1 {
+            transform: translateX(0.1rem) translateY(0.25rem) rotate(-45deg)
+                scaleX(-1);
+            transition-delay: 0.2s;
+        }
+        .menu-button-icon-2 {
+            transform: translateX(-0.1rem) translateY(-0.25rem) rotate(-45deg)
+                scaleX(-1);
+            transition-delay: 0.2s;
+        }
+    }
+</style>
