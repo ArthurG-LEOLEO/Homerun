@@ -32,6 +32,7 @@ export default defineConfig({
                           "case_study.other_cases",
                           "work.featured_cases",
                           "work.archived_cases",
+                          "united.cases",
                       ],
                   }
                 : false,
@@ -43,6 +44,7 @@ export default defineConfig({
                 contact: "storyblok/pages/Contact",
                 case_study: "storyblok/pages/Case",
                 work: "storyblok/pages/Work",
+                united: "storyblok/pages/United",
                 social_feed: "storyblok/sections/SocialFeed",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",

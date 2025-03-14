@@ -1,0 +1,121 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+import Title from "../../components/atoms/Title.astro";
+import Card from "../../components/case/Card.astro";
+import LogosGrid from "../sections/LogosGrid.astro";
+
+const { language, blok } = Astro.props;
+---
+
+<div id="page-united" class="united bg-green text-white">
+    <div class="container-main pt-200 pb-150">
+        <div class="text-title-1 px-gutter text-center">
+            United
+        </div>
+    </div>
+    {blok.logos[0] && (
+        <div class="container-main bg-black text-white">
+            <div class="pt-100 pb-125 md:py-140">
+                {blok.logos_title[0] && (
+                    <div class="container-main">
+                        <h2 class="text-title-1 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+                            <Title title={blok.logos_title[0]} />
+                        </h2>
+                    </div>
+                )}
+                <LogosGrid logos={blok.logos[0]} className="mt-55 md:mt-80" />
+            </div>
+        </div>
+    )}
+    {blok.cases.length && (
+        <div class="container-main">
+            <div class="flex flex-col gap-40 pt-70 pb-90 md:gap-70 md:pt-130 md:pb-100">
+                <h3 class="px-gutter text-title-2">{blok.cases_title}</h3>
+                <div
+                    class="flex flex-col gap-48 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120"
+                >
+                    {
+                        blok.cases.map((item: { content: { category: string } }) => (
+                            <div
+                                class="px-gutter work-featured-case"
+                                data-category={item.content?.category}
+                            >
+                                <Card caseItem={item} />
+                            </div>
+                        ))
+                    }
+                </div>
+                <button
+                    id="load-more-button"
+                    class="px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12"
+                >
+                    <span class="text-cta-32 border-b-[0.2rem]">{t("work.archived.load")}</span>
+                    <Icon name="cross-circle" class="size-28 rotate-[45deg] md:size-34" />
+                </button>
+            </div>
+        </div>
+    )}
+</div>
+
+<script>
+    let tlAppear: gsap.core.Timeline;
+    const init = () => {
+        const page = document.querySelector("#page-united");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelector("#layout-header");
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+    };
+
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

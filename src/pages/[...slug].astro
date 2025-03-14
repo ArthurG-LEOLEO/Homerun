@@ -33,6 +33,7 @@ if (liveStory) {
             "case_study.other_cases",
             "work.featured_cases",
             "work.archived_cases",
+            "united.cases",
         ],
     });
 
@@ -42,7 +43,7 @@ if (liveStory) {
 const alternates = story.alternates;
 
 const headerLogoless = story.content.component === "home";
-const whiteHeaderComponents = ["work", "contact"];
+const whiteHeaderComponents = ["work", "contact", "united"];
 const headerWhite = whiteHeaderComponents.includes(story.content.component);
 
 const bannerThemeComponents = {
