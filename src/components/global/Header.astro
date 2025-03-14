@@ -6,6 +6,10 @@ import Link from "./Link.astro";
 
 import { splitRoll } from "../../utils/splitString";
 import LangSwitcher from "./LangSwitcher.astro";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
 
 const { logoless, blok, alternates, white } = Astro.props;
 ---
@@ -18,7 +22,7 @@ const { logoless, blok, alternates, white } = Astro.props;
         {
             !logoless && (
                 <a
-                    href="/"
+                    href={t("links.home")}
                     class={`px-gutter pointer-events-auto flex h-36 w-237 items-center ${white ? "text-white" : "text-black"}`}
                 >
                     <LogoTypo className="size-full" />
