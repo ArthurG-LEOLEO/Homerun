@@ -1,4 +1,5 @@
 export const splitText = (text: String) => {
+    if (!text) return "";
     const splittedText = text
         .replace(/\r?\n\r?/g, "\n")
         .replace(/\r/g, "\n")

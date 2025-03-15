@@ -13,16 +13,24 @@ interface Props {
 const { title, className = "", reveal = "scroll" } = Astro.props;
 ---
 
-<span
-    data-reveal={reveal}
-    class={`title-wrap title-wrap-mobile whitespace-pre-wrap lg:hidden ${className}`}
-    set:html={splitText(title.mobile_title)}
-/>
-<span
-    data-reveal={reveal}
-    class={`title-wrap title-wrap-desktop whitespace-pre-wrap hidden lg:block ${className}`}
-    set:html={splitText(title.desktop_title)}
-/>
+{
+    title && title.mobile_title && (
+        <span
+            data-reveal={reveal}
+            class={`title-wrap title-wrap-mobile whitespace-pre-wrap lg:hidden ${className}`}
+            set:html={splitText(title.mobile_title)}
+        />
+    )
+}
+{
+    title && title.desktop_title && (
+        <span
+            data-reveal={reveal}
+            class={`title-wrap title-wrap-desktop hidden whitespace-pre-wrap lg:block ${className}`}
+            set:html={splitText(title.desktop_title)}
+        />
+    )
+}
 
 <script>
     let titlesTl: gsap.core.Timeline[] = [];
