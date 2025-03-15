@@ -1,0 +1,27 @@
+---
+import { useTranslations } from "../../i18n/utils";
+import Title from "../atoms/Title.astro";
+import LogosGrid from "../../storyblok/sections/LogosGrid.astro";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { blok } = Astro.props;
+---
+
+{
+    blok.logos[0] && (
+        <div class="container-main bg-black text-white">
+            <div class="pt-100 pb-125 md:py-140">
+                {blok.logos_title[0] && (
+                    <div class="container-main">
+                        <h2 class="text-title-1 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+                            <Title title={blok.logos_title[0]} />
+                        </h2>
+                    </div>
+                )}
+                <LogosGrid logos={blok.logos[0]} className="mt-55 md:mt-80" />
+            </div>
+        </div>
+    )
+}

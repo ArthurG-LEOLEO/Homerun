@@ -156,7 +156,8 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
             }
         });
         if (shownArchivedCases >= archivedCases.length) {
-            loadArchivedButton?.classList.add("hidden");
+            const btnWrapper = loadArchivedButton?.parentNode as HTMLElement;
+            btnWrapper.classList.add("hidden");
         }
     };
 

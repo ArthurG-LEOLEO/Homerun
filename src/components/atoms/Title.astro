@@ -1,14 +1,91 @@
 ---
+import { splitText } from "../../utils/splitString";
+
 interface Props {
     title: {
         mobile_title: string;
         desktop_title: string;
     };
     className?: string;
+    reveal?: string;
 }
 
-const { title, className = "" } = Astro.props;
+const { title, className = "", reveal = "scroll" } = Astro.props;
 ---
 
-<span class={`whitespace-pre-wrap lg:hidden ${className}`}>{title.mobile_title}</span>
-<span class={`whitespace-pre-wrap hidden lg:block ${className}`}>{title.desktop_title}</span>
+<span
+    data-reveal={reveal}
+    class={`title-wrap title-wrap-mobile whitespace-pre-wrap lg:hidden ${className}`}
+    set:html={splitText(title.mobile_title)}
+/>
+<span
+    data-reveal={reveal}
+    class={`title-wrap title-wrap-desktop whitespace-pre-wrap hidden lg:block ${className}`}
+    set:html={splitText(title.desktop_title)}
+/>
+
+<script>
+    let titlesTl: gsap.core.Timeline[] = [];
+
+    const initTitleAnim = (title: HTMLElement) => {
+        if (!title) return;
+
+        const isScrollReveal = title.dataset.reveal === "scroll";
+        if (!isScrollReveal) return;
+
+        const innerWords = title.querySelectorAll(".word-inner");
+
+        gsap.set(innerWords, {
+            y: "100%",
+            opacity: 1,
+        });
+
+        const tl = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top 80%",
+                    end: "bottom top",
+                },
+            })
+            .to(innerWords, {
+                duration: 0.8,
+                y: 0,
+                stagger: 0.05,
+                ease: "elastic.out(0.8,0.7)",
+            });
+
+        titlesTl.push(tl);
+    };
+
+    const init = () => {
+        const titles = document.querySelectorAll(
+            ".title-wrap",
+        ) as NodeListOf<HTMLElement>;
+        if (!titles) return;
+
+        titles.forEach((t) => {
+            initTitleAnim(t);
+        });
+    };
+
+    const cleanup = () => {
+        titlesTl?.forEach((tl) => {
+            tl.kill();
+        });
+        titlesTl = [];
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

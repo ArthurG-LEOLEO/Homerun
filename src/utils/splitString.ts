@@ -1,9 +1,20 @@
 export const splitText = (text: String) => {
     const splittedText = text
-        .split(" ")
-        .join("</span></span> <span class='word'><span class='word-inner'>");
+        .replace(/\r?\n\r?/g, "\n")
+        .replace(/\r/g, "\n")
+        .split(/\n/g)
+        .map((line) => {
+            const splittedLine = line
+                .replace(/\n/g, "")
+                .split(" ")
+                .join(
+                    "</span></span> <span class='word'><span class='word-inner'>",
+                );
+            return `<p><span class='word'><span class='word-inner'>${splittedLine}</span></span></p>`;
+        })
+        .join("");
 
-    return `<span class='word'><span class='word-inner'>${splittedText}</span></span>`;
+    return splittedText;
 };
 
 export const splitRoll = (text: String) => {

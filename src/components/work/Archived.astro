@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 import Line from "../case/Line.astro";
+import ArrowLink from "../atoms/ArrowLink.astro";
 
 const lang = Astro.currentLocale;
 const t = useTranslations(lang);
@@ -27,13 +28,12 @@ const casesDup = [...cases, ...cases, ...cases, ...cases, ...cases, ...cases];
             ))
         }
     </div>
-    <button
-        id="load-archived-button"
-        class=`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${casesDup.length <= 5 && 'hidden'}`
-    >
-        <span class="text-cta-32 border-b-[0.2rem]"
-            >{t("work.archived.load")}</span
-        >
-        <Icon name="cross-circle" class="size-28 rotate-[45deg] md:size-34" />
-    </button>
+    <div>
+        <ArrowLink
+            id="load-archived-button"
+            plus
+            label={t("work.archived.load")}
+            className={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${casesDup.length <= 5 && "hidden"}`}
+        />
+    </div>
 </div>

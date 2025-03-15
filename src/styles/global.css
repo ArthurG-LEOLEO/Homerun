@@ -146,6 +146,11 @@
     .word-inner {
         display: inline-block;
     }
+    .title-wrap {
+        .word-inner {
+            opacity: 0;
+        }
+    }
 
     .roll {
         display: inline-flex;

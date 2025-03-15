@@ -1,0 +1,279 @@
+---
+import SBVideo from "../../components/global/SBVideo.astro";
+
+import { splitText } from "../../utils/splitString";
+import Title from "../atoms/Title.astro";
+import SBImage from "../global/SBImage.astro";
+const { blok } = Astro.props;
+---
+
+<div id="united-hero" class="bg-green relative">
+    <div class="relative">
+        <div
+            class="container-main flex flex-col items-center pt-210 pb-280 md:pb-400 lg:pt-170"
+        >
+            <div id="united-logo" class="px-gutter mx-auto mb-24 opacity-0">
+                <SBImage
+                    class="w-105 md:w-150"
+                    loading="eager"
+                    image={blok.united_logo}
+                />
+            </div>
+            <h1 id="united-title" class="px-gutter text-title-1 text-center">
+                <Title reveal="manual" title={blok.title[0]} />
+            </h1>
+        </div>
+        <div
+            id="united-video-layer-2"
+            style="transform: translateX(-50%)  rotate(6deg) scale(0.99);"
+            class="bg-orange absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
+        >
+        </div>
+        <div
+            id="united-video-layer-1"
+            style="transform: translateX(-50%)  rotate(6deg) scale(0.99);"
+            class="bg-blue absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
+        >
+        </div>
+        <div
+            id="united-hero-video"
+            style="transform: translateX(-50%)  rotate(6deg);"
+            class="absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] bg-black md:h-[25vw] md:translate-y-[-140rem]"
+        >
+            <SBVideo
+                video={blok.showreel_video}
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+                class="absolute inset-0 bg-black/30 opacity-0"
+                id="united-video-overlay"
+            >
+            </div>
+        </div>
+    </div>
+    <div class="h-[100vh] w-full text-white" id="united-video-holder">
+        <div
+            id="united-hero-video-title"
+            class="container-main relative z-10 flex size-full h-[100vh] w-[100vw] items-center justify-center"
+        >
+            <h2
+                class="text-title-2 px-gutter w-8/12 text-center"
+                set:html={splitText(blok.showreel_title)}
+            />
+        </div>
+    </div>
+</div>
+
+<script>
+    let videoHolder: HTMLElement | null;
+    let video: HTMLElement | null;
+    let videoLayer1: HTMLElement | null;
+    let videoLayer2: HTMLElement | null;
+    let videoOverlay: HTMLElement | null;
+    let videoTextWords: NodeListOf<Element> | null;
+    let videoWithLayers: Array<HTMLElement | null> | null;
+    let logo: HTMLElement | null;
+    let titleWordsMobile: NodeListOf<Element> | null;
+    let titleWordsDesktop: NodeListOf<Element> | null;
+
+    let tlVideo: gsap.core.Timeline | null;
+    let tlVideoText: gsap.core.Timeline | null;
+
+    const setVariables = () => {
+        logo = document.querySelector("#united-hero #united-logo");
+        titleWordsDesktop = document.querySelectorAll(
+            "#united-hero #united-title .title-wrap-desktop .word-inner",
+        );
+        titleWordsMobile = document.querySelectorAll(
+            "#united-hero #united-title .title-wrap-mobile .word-inner",
+        );
+
+        videoHolder = document.querySelector(
+            "#united-hero #united-video-holder",
+        );
+
+        video = document.querySelector("#united-hero #united-hero-video");
+        videoLayer1 = document.querySelector(
+            "#united-hero #united-video-layer-1",
+        );
+        videoLayer2 = document.querySelector(
+            "#united-hero #united-video-layer-2",
+        );
+        videoWithLayers = [video, videoLayer1, videoLayer2];
+
+        videoTextWords = document.querySelectorAll(
+            "#united-hero #united-video-holder .word",
+        );
+        videoOverlay = document.querySelector(
+            "#united-hero #united-video-overlay",
+        );
+    };
+    const init = () => {
+        const wrapper = document.querySelector("#united-hero");
+        if (!wrapper) return;
+
+        setVariables();
+
+        gsap.timeline()
+            .set(videoOverlay, {
+                opacity: 0,
+            })
+            .set(videoTextWords, {
+                opacity: 0,
+                x: -20,
+            })
+            .set(videoWithLayers, {
+                rotate: 6,
+                y: () => {
+                    if (window.innerWidth < 768) {
+                        return "-100rem";
+                    } else {
+                        return "-140rem";
+                    }
+                },
+            })
+            .set(videoLayer1, {
+                transitionDuration: 0.03,
+            })
+            .set(videoLayer2, {
+                transitionDuration: 0.06,
+            })
+            .set(logo, {
+                opacity: 0,
+                y: "-100%",
+            })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "-100%",
+                opacity: 1,
+            });
+
+        const tlAppear = gsap.timeline({ paused: true }).to(logo, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "elastic.out(1.2,0.7)",
+        });
+
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+
+        tlAppear.play();
+
+        const videoAppear = gsap.to(videoWithLayers, {
+            rotate: -2.8,
+            duration: 1.3,
+            y: () => {
+                if (window.innerWidth < 768) {
+                    return "-25rem";
+                } else {
+                    return "-37rem";
+                }
+            },
+            ease: "elastic.out(0.8,0.7)",
+            delay: 0.7,
+        });
+
+        tlVideo = gsap.timeline().fromTo(
+            videoWithLayers,
+            {
+                rotate: -2.8,
+                y: () => {
+                    if (window.innerWidth < 768) {
+                        return "-25rem";
+                    } else {
+                        return "-37rem";
+                    }
+                },
+            },
+            {
+                scrollTrigger: {
+                    trigger: wrapper,
+                    endTrigger: videoHolder,
+                    start: "top top-=1",
+                    end: "bottom bottom+=20%",
+                    invalidateOnRefresh: true,
+                    scrub: true,
+                    onEnter: function () {
+                        videoAppear.kill();
+                    },
+                },
+                height: "100vh",
+                rotate: 0,
+                y: 0,
+                ease: "none",
+            },
+        );
+
+        tlVideoText = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top 50%",
+                    end: "top top",
+                    scrub: true,
+                },
+            })
+            .to(videoOverlay, {
+                opacity: 1,
+            })
+            .to(
+                videoTextWords,
+                {
+                    opacity: 1,
+                    x: 0,
+                    stagger: 0.1,
+                },
+                "<",
+            );
+    };
+
+    const cleanup = () => {
+        tlVideo?.kill();
+        tlVideo = null;
+        tlVideoText?.kill();
+        tlVideoText = null;
+        videoHolder = null;
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
