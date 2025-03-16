@@ -1,5 +1,5 @@
 ---
-import SBImage from "../../../components/global/SBImage.astro";
+import LayeredImage from "../../../components/global/LayeredImage.astro";
 import VideoEmbed from "../../../components/global/VideoEmbed.astro";
 
 interface AssetItem {
@@ -9,7 +9,7 @@ interface AssetItem {
 
 interface VideoBlock {
     youtube_url: string;
-    component: 'video';
+    component: "video";
 }
 
 interface Props {
@@ -21,46 +21,48 @@ interface Props {
 const { assets = [], moreSpacing, className = "" } = Astro.props;
 
 const isVideo = (asset: AssetItem | VideoBlock): asset is VideoBlock => {
-    return 'component' in asset && asset.component === 'video';
+    return "component" in asset && asset.component === "video";
 };
 
 const getGridClasses = (itemsCount: number): string => {
     switch (itemsCount) {
         case 2:
-            return 'grid grid-cols-1 md:grid-cols-2';
+            return "grid grid-cols-1 md:grid-cols-2";
         case 3:
-            return 'grid grid-cols-1 md:grid-cols-3';
+            return "grid grid-cols-1 md:grid-cols-3";
         case 4:
-            return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+            return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
         default:
-            return '';
+            return "";
     }
 };
 
 const getItemClasses = (itemsCount: number): string => {
     if (itemsCount === 1 && moreSpacing) {
-        return 'lg:px-[8.33333%]';
+        return "lg:px-[8.33333%]";
     } else if (itemsCount === 2 && moreSpacing) {
-        return 'lg:px-[16.6666%]';
+        return "lg:px-[16.6666%]";
     }
-    return '';
+    return "";
 };
 ---
 
 <div class="container-main">
-    <div class={`mx-auto gap-y-20 ${getGridClasses(assets.length)} ${className}`}>
-        {assets.map((asset) => (
-            <div class={`${getItemClasses(assets.length)}`}>
-                <div class='px-gutter'>
-                    {isVideo(asset) ? (
-                        <VideoEmbed url={asset.youtube_url} />
-                    ) : (
-                        <SBImage
-                            image={asset} class="w-full"
-                        />
-                    )}
+    <div
+        class={`mx-auto gap-y-20 ${getGridClasses(assets.length)} ${className}`}
+    >
+        {
+            assets.map((asset) => (
+                <div class={`${getItemClasses(assets.length)}`}>
+                    <div class="px-gutter">
+                        {isVideo(asset) ? (
+                            <VideoEmbed url={asset.youtube_url} />
+                        ) : (
+                            <LayeredImage image={asset} class="w-full" />
+                        )}
+                    </div>
                 </div>
-            </div>
-        ))}
+            ))
+        }
     </div>
 </div>

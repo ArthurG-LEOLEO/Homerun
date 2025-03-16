@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Title from "../../components/atoms/Title.astro";
-import SBImage from "../../components/global/SBImage.astro";
+import LayeredImage from "../global/LayeredImage.astro";
 
 const { blok } = Astro.props;
 ---
@@ -54,7 +54,7 @@ const { blok } = Astro.props;
     {
         blok.people_agency_photo && (
             <div class="px-gutter mx-auto mt-24 md:mt-45 lg:w-8/12 xl:w-6/12">
-                <SBImage
+                <LayeredImage
                     class="size-full lg:-ml-[2rem] lg:w-[calc(100%+4rem)] lg:max-w-none"
                     image={blok.people_agency_photo}
                 />

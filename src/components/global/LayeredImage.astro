@@ -1,0 +1,127 @@
+---
+import SBImage from "./SBImage.astro";
+
+const { image, class: className = "", imgClass = "" } = Astro.props;
+
+const possibleBgColors = ["#2d5a36", "#e56138", "#cdf0ff", "#edd4f8"];
+
+const indexColor1 = ~~(Math.random() * possibleBgColors.length);
+const layerColor1 = possibleBgColors[indexColor1];
+
+possibleBgColors.splice(indexColor1, 1);
+
+const layerColor2 =
+    possibleBgColors[~~(Math.random() * possibleBgColors.length)];
+---
+
+<div class={`layered-img relative perspective-normal ${className}`}>
+    <div
+        style={{ backgroundColor: layerColor2 }}
+        class="layered-img-layer layered-img-l2 absolute inset-0 z-[-1] origin-center"
+    >
+    </div>
+    <div
+        style={{ backgroundColor: layerColor1 }}
+        class="layered-img-layer layered-img-l1 absolute inset-0 z-[-1] origin-center"
+    >
+    </div>
+    <SBImage class=`sb-img relative size-full ${imgClass}` image={image} />
+</div>
+
+<script>
+    const SCROLL_DELTA_MIN = 10;
+    let st: ScrollTrigger;
+    let prevScroll = 0;
+    let layeredImages: LayeredImage[] = [];
+
+    class LayeredImage {
+        public element;
+        public layer1;
+        public layer2;
+        public img;
+        public yToLayer1: gsap.QuickToFunc;
+        public yToLayer2: gsap.QuickToFunc;
+        constructor(element: HTMLElement) {
+            this.element = element;
+            this.layer1 = this.element.querySelector(".layered-img-l1");
+            this.layer2 = this.element.querySelector(".layered-img-l2");
+
+            this.img = this.element.querySelector(".sb-img");
+            this.yToLayer1 = gsap.quickTo(this.layer1, "y", {
+                duration: 2,
+                ease: "elastic.out(1.2, 0.7)",
+            });
+            this.yToLayer2 = gsap.quickTo(this.layer2, "y", {
+                duration: 2,
+                ease: "elastic.out(1.2, 0.7)",
+            });
+        }
+    }
+
+    const init = () => {
+        const layeredImgs = document.querySelectorAll(
+            ".layered-img",
+        ) as NodeListOf<HTMLElement>;
+        if (!layeredImgs) return;
+
+        layeredImgs.forEach((i) => {
+            layeredImages.push(new LayeredImage(i));
+        });
+
+        st = window.ScrollTrigger.create({
+            id: "layered-img",
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self: ScrollTrigger) => {
+                const scroll = self.scroll();
+
+                let delta = (scroll - prevScroll) * 2;
+                if (Math.abs(delta) < SCROLL_DELTA_MIN) delta = 0;
+
+                const yTo = gsap.utils.clamp(-70, 70, delta);
+                const scaleTo = gsap.utils.clamp(0, 0.1, Math.abs(delta) / 300);
+                const rotateTo = gsap.utils.clamp(-1, 1, delta / -20);
+
+                //Keeping some comments just in case
+
+                layeredImages.forEach((li) => {
+                    // gsap.to(li.img, {
+                    //     rotate: rotateTo,
+                    //     ease: "elastic.out(2,0.7)",
+                    //     duration: 2,
+                    // });
+                    gsap.to(li.layer1, {
+                        y: yTo * 0.6,
+                        // rotate: rotateTo,
+                        ease: "elastic.out(1,0.7)",
+                        duration: 2,
+                        // scaleX: 1 - scaleTo * 0.6,
+                    });
+                    gsap.to(li.layer2, {
+                        y: yTo,
+                        // rotate: -rotateTo,
+                        ease: "elastic.out(1,0.7)",
+                        duration: 2,
+                        // scaleX: 1 - scaleTo,
+                    });
+                });
+
+                prevScroll = scroll;
+            },
+        });
+    };
+
+    const cleanup = () => {
+        if (st) st.kill();
+        layeredImages = [];
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

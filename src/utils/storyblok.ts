@@ -8,8 +8,8 @@ export function getImageSize(image: { filename: string }) {
     if (!url || url === "") return { width: 0, height: 0 };
 
     return {
-        width: url.split("/")[5].split("x")[0],
-        height: url.split("/")[5].split("x")[1],
+        width: parseInt(url.split("/")[5].split("x")[0]) as number,
+        height: parseInt(url.split("/")[5].split("x")[1]) as number,
     };
 }
 

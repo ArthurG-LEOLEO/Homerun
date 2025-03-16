@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 import Tag from "../../components/atoms/Tag.astro";
-import SBImage from "../../components/global/SBImage.astro";
+import LayeredImage from "../../components/global/LayeredImage.astro";
 
 const { language, caseItem } = Astro.props;
 ---
@@ -14,7 +14,11 @@ const { language, caseItem } = Astro.props;
             : "aspect-[1398/883]"
     }`}
 >
-    <SBImage class="size-full object-cover" image={caseItem.cover} />
+    <LayeredImage
+        imgClass="object-cover"
+        class="size-full"
+        image={caseItem.cover}
+    />
     {
         caseItem.united && (
             <Icon
