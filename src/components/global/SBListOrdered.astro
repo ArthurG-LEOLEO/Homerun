@@ -17,20 +17,86 @@ const { items = [], className = "" } = Astro.props;
 {
     Array.isArray(items) && items.length > 0 && (
         <ol
-            class={`flex flex-col ${className} max-w-620 gap-10 [counter-reset:section]`}
+            class={`sb-list-ordered flex flex-col ${className} max-w-620 [counter-reset:section]`}
         >
             {items.map((item) => (
-                <li class="-mt-4 flex items-start gap-16 bg-white py-24 pr-24 pl-15 text-black [counter-increment:section] md:-mt-2 md:gap-50 md:py-40 md:pr-40 md:pl-32">
-                    <span class="font-figtree font-16 md:font-20 inline-flex size-40 flex-none items-center justify-center rounded-full border-2 border-current font-black before:content-[counter(section,decimal-leading-zero)] md:size-56 md:border-3" />
-                    <div class="flex flex-1 flex-col gap-8 md:gap-16">
-                        <h4 class="text-title-4">{item.title}</h4>
-                        <div
-                            class="text-p-20"
-                            set:html={renderRichText(item.text)}
-                        />
+                <li class="sb-list-ordered-item">
+                    <div class="sb-list-ordered-item-inner flex items-start gap-16 bg-white py-24 pr-24 pl-15 text-black [counter-increment:section] md:gap-50 md:py-40 md:pr-40 md:pl-32">
+                        <span class="font-figtree font-16 md:font-20 inline-flex size-40 flex-none items-center justify-center rounded-full border-2 border-current font-black before:content-[counter(section,decimal-leading-zero)] md:size-56 md:border-3" />
+                        <div class="flex flex-1 flex-col gap-8 md:gap-16">
+                            <h4 class="text-title-4">{item.title}</h4>
+                            <div
+                                class="text-p-20"
+                                set:html={renderRichText(item.text)}
+                            />
+                        </div>
                     </div>
                 </li>
             ))}
         </ol>
     )
 }
+
+<script>
+    let items: NodeListOf<HTMLElement> | null;
+    let tls: gsap.core.Timeline[] = [];
+
+    const init = () => {
+        const lists = document.querySelectorAll(".sb-list-ordered");
+        if (!lists) return;
+
+        lists.forEach((list) => {
+            items = list.querySelectorAll(".sb-list-ordered-item");
+            items?.forEach((i, index) => {
+                const inverse = index % 2 !== 0 ? 1 : -1;
+                const rotateOffset = 5;
+                const inner = i.querySelector(".sb-list-ordered-item-inner");
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: i,
+                        start: "top 90%",
+                        end: "bottom top",
+                        scrub: true,
+                    },
+                });
+                tl.fromTo(
+                    inner,
+                    { rotate: rotateOffset * inverse, y: "20rem" },
+                    {
+                        duration: 1,
+                        rotate: -1.5 * inverse,
+                        y: 0,
+                        ease: "power2.out",
+                    },
+                ).to(inner, {
+                    duration: 1,
+                    rotate: -rotateOffset * inverse,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
+                tls.push(tl);
+            });
+        });
+    };
+
+    const cleanup = () => {
+        tls.forEach((tl) => {
+            tl.kill();
+        });
+        tls = [];
+        items = null;
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
