@@ -22,6 +22,7 @@ const adapter =
 export default defineConfig({
     output: isPreview ? "server" : "static",
     i18n,
+    site: 'https://homerun.com',
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
