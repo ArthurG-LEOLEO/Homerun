@@ -28,6 +28,11 @@ const hasVideo = caseItem.content?.has_case_study && caseItem.content?.cover_vid
 
 <script>
     const init = () => {
+        const hasHoverSupport = window.matchMedia('(hover: hover)').matches;
+        if (!hasHoverSupport) {
+            return;
+        }
+
         const caseCards = document.querySelectorAll('.case-card[data-has-video="true"]');
         
         caseCards.forEach(card => {

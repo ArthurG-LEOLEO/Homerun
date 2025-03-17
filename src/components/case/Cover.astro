@@ -27,7 +27,7 @@ const videoId = `case-video-${Math.random().toString(36).substring(2, 11)}`;
             <video
                 id={videoId}
                 class="w-full h-full object-cover" 
-                src={caseItem.cover_video.filename} 
+                data-video-src={caseItem.cover_video.filename} 
                 muted 
                 playsinline
                 preload="metadata"
@@ -45,3 +45,42 @@ const videoId = `case-video-${Math.random().toString(36).substring(2, 11)}`;
     }
     <Tag category={caseItem.category} class="absolute top-16 left-16" />
 </div>
+
+<script>
+    let videos: NodeListOf<HTMLVideoElement> | null;
+    let videoOverlays: NodeListOf<Element> | null;
+    
+    const init = () => {
+        const hasHoverCapability = window.matchMedia('(hover: hover)').matches;
+        
+        if (hasHoverCapability) {
+            videos = document.querySelectorAll('video[data-video-src]:not([src])');
+            videos.forEach((videoElement) => {
+                const video = videoElement as HTMLVideoElement;
+                const videoSrc = video.getAttribute('data-video-src');
+                if (videoSrc) {
+                    video.src = videoSrc;
+                    video.load();
+                }
+            });
+        } else {
+            videoOverlays = document.querySelectorAll('.video-overlay');
+            videoOverlays.forEach((overlay) => {
+                overlay.remove();
+            });
+        }
+    };
+
+    const cleanup = () => {
+        videos = null;
+        videoOverlays = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
