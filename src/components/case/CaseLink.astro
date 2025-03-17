@@ -1,7 +1,7 @@
 ---
 import Link from "../global/Link.astro";
 
-const { language, caseItem, className = "" } = Astro.props;
+const { language, caseItem, className = "", id = "", ...attrs } = Astro.props;
 
 const hasExternalLink = caseItem.content.external_link?.cached_url;
 ---
@@ -12,11 +12,11 @@ const hasExternalLink = caseItem.content.external_link?.cached_url;
       <slot />
     </div>
   ) : caseItem.content.has_case_study && !hasExternalLink ? (
-    <Link link={{url: caseItem.full_slug, linktype: "story"}} className={className}>
+    <Link link={{url: caseItem.full_slug, linktype: "story"}} className={className} id={id} {...attrs}>
       <slot />
     </Link>
   ) : (
-    <Link link={caseItem.content.external_link} className={className}>
+    <Link link={caseItem.content.external_link} className={className} id={id} {...attrs}>
       <slot />
     </Link>
   )

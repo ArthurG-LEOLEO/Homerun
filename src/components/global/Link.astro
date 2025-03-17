@@ -1,7 +1,7 @@
 ---
 import { defaultLocale } from "../../i18n/config";
 
-const { link, className = "" } = Astro.props;
+const { link, className = "", id = "", ...attrs } = Astro.props;
 
 let url = link?.cached_url || link?.url || "#";
 const target = link?.target || "_self";
@@ -15,6 +15,6 @@ if (link?.linktype === "story") {
 if (url === "") url = "/";
 ---
 
-<a href={url} target={target} class:list={[className]}>
+<a href={url} target={target} class:list={[className]} id={id} {...attrs}>
     <slot />
 </a>

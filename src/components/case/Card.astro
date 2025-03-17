@@ -3,9 +3,16 @@ import CaseLink from "./CaseLink.astro";
 import Cover from "./Cover.astro";
 
 const { language, caseItem, className = "" } = Astro.props;
+const cardId = `case-card-${Math.random().toString(36).substring(2, 11)}`;
+const hasVideo = caseItem.content?.has_case_study && caseItem.content?.cover_video && caseItem.content?.cover_video.filename;
 ---
 
-<CaseLink caseItem={caseItem} className={className}>
+<CaseLink
+    caseItem={caseItem}
+    className={`case-card ${className}`}
+    id={cardId}
+    data-has-video={hasVideo ? "true" : "false"}
+>
     <div class="flex flex-col gap-16 md:gap-24">
         <Cover caseItem={caseItem.content} />
         <div class="flex items-baseline gap-24">
@@ -18,3 +25,66 @@ const { language, caseItem, className = "" } = Astro.props;
         </div>
     </div>
 </CaseLink>
+
+<script>
+    const init = () => {
+        const caseCards = document.querySelectorAll('.case-card[data-has-video="true"]');
+        
+        caseCards.forEach(card => {
+            const videoOverlay = card.querySelector('.video-overlay');
+            const video = card.querySelector('video') as HTMLVideoElement;
+            if (!videoOverlay || !video) return;
+            let isPlaying = false;
+            
+            const showVideo = () => {
+                videoOverlay.classList.remove('opacity-0');
+                videoOverlay.classList.add('opacity-100');
+                
+                if (!isPlaying) {
+                    video.play()
+                        .then(() => {
+                            isPlaying = true;
+                        })
+                        .catch(err => {
+                            console.warn("Autoplay failed:", err);
+                        });
+                }
+            };
+            
+            const hideVideo = () => {
+                videoOverlay.classList.remove('opacity-100');
+                videoOverlay.classList.add('opacity-0');
+                
+                if (isPlaying) {
+                    video.pause();
+                    video.currentTime = 0;
+                    isPlaying = false;
+                }
+            };
+            
+            card.addEventListener('mouseenter', showVideo);
+            card.addEventListener('mouseleave', hideVideo);
+            
+            card.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+            }, { passive: true });
+        });
+    }
+
+    const cleanup = () => {
+        document.querySelectorAll('.case-card video').forEach((video) => {
+            const videoElement = video as HTMLVideoElement;
+            if (!videoElement.paused) {
+                videoElement.pause();
+            }
+        });
+    };
+    
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+    
+    document.addEventListener('astro:before-swap', () => {
+        cleanup();
+    });
+</script>
