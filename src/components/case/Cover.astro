@@ -5,6 +5,8 @@ import Tag from "../../components/atoms/Tag.astro";
 import LayeredImage from "../../components/global/LayeredImage.astro";
 
 const { language, caseItem } = Astro.props;
+const hasVideo = caseItem.has_case_study && caseItem.cover_video;
+const videoId = `case-video-${Math.random().toString(36).substring(2, 11)}`;
 ---
 
 <div
@@ -13,12 +15,26 @@ const { language, caseItem } = Astro.props;
             ? "aspect-square"
             : "aspect-[1398/883]"
     }`}
+    data-has-video={hasVideo ? "true" : "false"}
 >
     <LayeredImage
         imgClass="object-cover"
         class="size-full"
         image={caseItem.cover}
     />
+    {hasVideo && (
+        <div class="video-overlay absolute opacity-0 inset-0 transition-opacity duration-300">
+            <video
+                id={videoId}
+                class="w-full h-full object-cover" 
+                src={caseItem.cover_video.filename} 
+                muted 
+                playsinline
+                preload="metadata"
+                data-video-id={videoId}>
+            </video>
+        </div>
+    )}
     {
         caseItem.united && (
             <Icon
