@@ -8,17 +8,17 @@ const { blok } = Astro.props;
 
 {
     blok.clients_intro && (
-        <p class="text-p-24 px-gutter mx-auto mt-25 w-10/12 whitespace-pre-wrap md:mt-55 lg:w-8/12 xl:w-6/12">
-            {blok.clients_intro}
-        </p>
+        <p class="text-p-24 px-gutter mx-auto mt-25 w-10/12 whitespace-pre-wrap md:mt-55 lg:w-8/12 xl:w-6/12">{/*
+            */}{blok.clients_intro}{/*
+        */}</p>
     )
 }
 <LogosGrid logos={blok.clients_logos[0]} className="mt-55 md:mt-80" />
 {
     blok.clients_text && (
-        <p class="text-p-18 px-gutter mx-auto mt-56 w-10/12 max-w-276 whitespace-pre-wrap md:mt-72 md:max-w-none lg:w-8/12 xl:w-6/12 2xl:w-4/12">
-            {blok.clients_text}
-        </p>
+        <p class="text-p-18 px-gutter mx-auto mt-56 w-10/12 max-w-276 whitespace-pre-wrap md:mt-72 md:max-w-none lg:w-8/12 xl:w-6/12 2xl:w-4/12">{/*
+            */}{blok.clients_text}{/*
+        */}</p>
     )
 }
 <div

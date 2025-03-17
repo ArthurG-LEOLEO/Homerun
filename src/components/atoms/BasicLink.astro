@@ -5,5 +5,7 @@ const { link, className = "" } = Astro.props;
 ---
 
 <Link link={link.link} className={`hover:opacity-80 ${className}`}>
-    <span class="whitespace-pre-wrap">{link.label}</span>
+    <span class="whitespace-pre-wrap">{/*
+        */}{link.label}{/*
+    */}</span>
 </Link>

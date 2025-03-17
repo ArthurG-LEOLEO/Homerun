@@ -34,9 +34,9 @@ const { language, blok } = Astro.props;
                 </h1>
                 {
                     blok.intro && (
-                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">
-                            {blok.intro}
-                        </h3>
+                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{/*
+                            */}{blok.intro}{/*
+                        */}</h3>
                     )
                 }
             </div>
@@ -52,17 +52,17 @@ const { language, blok } = Astro.props;
                                 <h4 class="text-title-6">
                                     {t("case.challenges")}
                                 </h4>
-                                <p class="text-p-20 whitespace-pre-wrap text-black/70">
-                                    {blok.strategic_challenges}
-                                </p>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{/*
+                                    */}{blok.strategic_challenges}{/*
+                                */}</p>
                             </div>
                             <div class="flex flex-col gap-16">
                                 <h4 class="text-title-6">
                                     {t("case.response")}
                                 </h4>
-                                <p class="text-p-20 whitespace-pre-wrap text-black/70">
-                                    {blok.response}
-                                </p>
+                                <p class="text-p-20 whitespace-pre-wrap text-black/70">{/*
+                                    */}{blok.response}{/*
+                                */}</p>
                             </div>
                         </div>
                     </div>
