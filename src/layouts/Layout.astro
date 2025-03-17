@@ -9,6 +9,7 @@ import "../styles/global.css";
 import "lenis/dist/lenis.css";
 import { ClientRouter } from "astro:transitions";
 
+import SEO from "../components/global/SEO.astro";
 import Grid from "../components/global/Grid.astro";
 import Header from "../components/global/Header.astro";
 import Banner from "../components/global/Banner.astro";
@@ -26,6 +27,7 @@ const {
         txt: "#181817",
     },
     alternates,
+    seo = {},
 } = Astro.props;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
@@ -43,7 +45,7 @@ const headerData = data.story.content.menu[0];
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
-        <title>Astro Basics</title>
+        <SEO seo={seo} />
         <ClientRouter />
     </head>
     <body>

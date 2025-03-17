@@ -62,6 +62,8 @@ const bannerTheme = bannerThemeComponents[bannerThemeComponentKey] || {
     bg: "#edd4f8",
     txt: "#181817",
 };
+
+const seo = story.content.seo?.[0] || {};
 ---
 
 <Layout
@@ -70,6 +72,7 @@ const bannerTheme = bannerThemeComponents[bannerThemeComponentKey] || {
     headerLogoless={headerLogoless}
     headerWhite={headerWhite}
     bannerTheme={bannerTheme}
+    seo={seo}
 >
     <StoryblokComponent language={language} blok={story.content} />
 </Layout>
