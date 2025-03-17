@@ -14,15 +14,83 @@ interface Props {
 const { items = [], className = "" } = Astro.props;
 ---
 
-{Array.isArray(items) && items.length > 0 && (
-    <ul class={`flex flex-col max-w-600 ${className}`}>
-        {items.map(({ icon, text }) => (
-            <li class="flex items-center -mt-4 bg-black text-white gap-16 py-16 px-24 md:mt-10 md:py-24 md:px-32 md:gap-45">
-                <span class="flex-none inline-flex items-center justify-center rounded-full border-2 border-current size-40 md:size-56 md:border-3">
-                    <Icon name={icon} class="size-14 md:size-24" />
-                </span>
-                <span class="text-title-4">{text}</span>
-            </li>
-        ))}
-    </ul>
-)}
+{
+    Array.isArray(items) && items.length > 0 && (
+        <ul class={`sb-list-icon flex max-w-600 flex-col ${className}`}>
+            {items.map(({ icon, text }) => (
+                <li class="sb-list-icon-item">
+                    <div class="sb-list-icon-item-inner flex items-center gap-16 bg-black px-24 py-16 text-white md:gap-45 md:px-32 md:py-24">
+                        <span class="inline-flex size-40 flex-none items-center justify-center rounded-full border-2 border-current md:size-56 md:border-3">
+                            <Icon name={icon} class="size-14 md:size-24" />
+                        </span>
+                        <span class="text-title-4">{text}</span>
+                    </div>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+<script>
+    let items: NodeListOf<HTMLElement> | null;
+    let tls: gsap.core.Timeline[] = [];
+
+    const init = () => {
+        const lists = document.querySelectorAll(".sb-list-icon");
+        if (!lists) return;
+
+        lists.forEach((list) => {
+            items = list.querySelectorAll(".sb-list-icon-item");
+            items?.forEach((i, index) => {
+                const inverse = index % 2 !== 0 ? 1 : -1;
+                const rotateOffset = 5;
+                const inner = i.querySelector(".sb-list-icon-item-inner");
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: i,
+                        start: "top 90%",
+                        end: "bottom top",
+                        scrub: true,
+                    },
+                });
+                tl.fromTo(
+                    inner,
+                    { rotate: rotateOffset * inverse, y: "20rem" },
+                    {
+                        duration: 1,
+                        rotate: -1.5 * inverse,
+                        y: 0,
+                        ease: "power2.out",
+                    },
+                ).to(inner, {
+                    duration: 1,
+                    rotate: -rotateOffset * inverse,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
+                tls.push(tl);
+            });
+        });
+    };
+
+    const cleanup = () => {
+        tls.forEach((tl) => {
+            tl.kill();
+        });
+        tls = [];
+        items = null;
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

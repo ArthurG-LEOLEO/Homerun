@@ -17,13 +17,13 @@ const { blok } = Astro.props;
     </div>
     <div class="flex flex-col">
         {
-            blok.communication_items
-                .split(",")
-                .map((item: string) => (
-                    <div class="text-title-4 bold-ad-item bg-white px-24 py-16 text-black md:px-32 md:py-24">
+            blok.communication_items.split(",").map((item: string) => (
+                <div class="bold-ad-item">
+                    <div class="text-title-4 bold-ad-item-inner bg-white px-24 py-16 text-black md:px-32 md:py-24">
                         {item}
                     </div>
-                ))
+                </div>
+            ))
         }
     </div>
     {
@@ -38,57 +38,64 @@ const { blok } = Astro.props;
 </div>
 
 <script>
-    import { getRandomNumber } from "../../utils/number";
-
     let items: NodeListOf<HTMLElement> | null;
     let tl: gsap.core.Timeline | null;
+    let tls: gsap.core.Timeline[] = [];
 
-    const setVariables = () => {
-        items = document.querySelectorAll("#bold-advertising .bold-ad-item");
-    };
     const init = () => {
         const container = document.querySelector("#bold-advertising");
         if (!container) return;
 
-        setVariables();
+        items = container.querySelectorAll("#bold-advertising .bold-ad-item");
 
-        tl = gsap.timeline();
-
-        items?.forEach((item, index) => {
+        items?.forEach((i, index) => {
             const inverse = index % 2 !== 0 ? 1 : -1;
-            // const inverse = Math.random() > 0.5 ? 1 : -1;
-            const startR = getRandomNumber(2, 5) * inverse;
-            const endR = getRandomNumber(-2, 0) * inverse;
-            tl?.fromTo(
-                item,
-                { rotate: startR },
-                {
-                    scrollTrigger: {
-                        trigger: item,
-                        start: () =>
-                            window.innerWidth > 1024 ? "top top" : "top bottom",
-                        end: () =>
-                            window.innerWidth > 1024
-                                ? "bottom top-=100%"
-                                : "bottom top",
-                        scrub: true,
-                        invalidateOnRefresh: true,
-                    },
-                    ease: "linear",
-                    rotate: endR,
+            const rotateOffset = 5;
+            const inner = i.querySelector(".bold-ad-item-inner");
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: i,
+                    start: () =>
+                        window.innerWidth > 1024 ? "top top" : "top bottom",
+                    end: () =>
+                        window.innerWidth > 1024
+                            ? "bottom top-=100%"
+                            : "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
                 },
-                "start",
-            );
+            });
+            tl.fromTo(
+                inner,
+                { rotate: rotateOffset * inverse, y: "50rem" },
+                {
+                    duration: 1,
+                    rotate: -1.5 * inverse,
+                    y: 0,
+                    ease: "power2.out",
+                },
+            ).to(inner, {
+                duration: 1,
+                rotate: -rotateOffset * inverse,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+            tls.push(tl);
         });
     };
 
     const cleanup = () => {
-        if (tl) {
+        tls.forEach((tl) => {
             tl.kill();
-            tl = null;
-        }
+        });
+        tls = [];
         items = null;
     };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
 
     document.addEventListener("astro:page-load", () => {
         init();
