@@ -29,7 +29,9 @@ const { blok } = Astro.props as { blok: FormBlok };
 
             <!-- Form success -->
             <div id="form-success" class="hidden px-gutter flex-col gap-24">
-                <h2 class="whitespace-pre-wrap text-title-5">{blok.success_message}</h2>
+                <h2 class="whitespace-pre-wrap text-title-5">{/*
+                    */}{blok.success_message}{/*
+                */}</h2>
                 <div>
                     <button id="new-button" type="button" class="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16 cursor-pointer">
                         {blok.new_message_label}
@@ -143,7 +145,9 @@ const { blok } = Astro.props as { blok: FormBlok };
 
                 <!-- Form error -->
                 <div id="form-error" class="hidden px-gutter text-orange">
-                    <p class="whitespace-pre-wrap text-p-12">{blok.error_message}</p>
+                    <p class="whitespace-pre-wrap text-p-12">{/*
+                        */}{blok.error_message}{/*
+                    */}</p>
                 </div>
 
                 <!-- Submit -->
@@ -154,7 +158,9 @@ const { blok } = Astro.props as { blok: FormBlok };
                         class='flex-none text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80'
                     >
                         <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
-                        >{blok.send_label}</span>
+                        >{/*
+                            */}{blok.send_label}{/*
+                        */}</span>
                         <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
                             <Icon
                                 name="arrow-right"
