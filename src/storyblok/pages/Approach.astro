@@ -324,7 +324,9 @@ const { language, blok } = Astro.props;
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelector("#layout-header");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
 
         gsap.timeline()
             .set(banner, {

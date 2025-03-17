@@ -102,7 +102,10 @@ const { language, blok } = Astro.props;
     let navWhite: HTMLElement | null;
     let navBlack: HTMLElement | null;
 
-    const appear = (banner: Element | null, header: Element | null) => {
+    const appear = (
+        banner: Element | null,
+        header: NodeListOf<HTMLElement> | null,
+    ) => {
         if (!banner || !header) return;
         gsap.timeline()
             .set(banner, {
@@ -227,7 +230,9 @@ const { language, blok } = Astro.props;
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelector("#layout-header");
+        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
         nav = page.querySelector("#about-nav");
         navWhite = page.querySelector("#about-nav-white");
         navBlack = page.querySelector("#about-nav-black");

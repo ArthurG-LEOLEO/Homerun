@@ -17,23 +17,31 @@ const { logoless, blok, alternates, white } = Astro.props;
 ---
 
 <header
-    class="pointer-events-none fixed top-0 right-0 left-0 z-[100] translate-y-[-50] pt-50 opacity-0 md:pt-64"
     id="layout-header"
+    class="pointer-events-none absolute top-0 right-0 left-0 z-[100] pt-50 md:pt-64"
 >
-    <div class="container-main relative flex items-center">
-        {
-            !logoless && (
-                <a
-                    href={t("links.home")}
-                    class={`px-gutter pointer-events-auto flex h-36 w-237 items-center ${white ? "text-white" : "text-black"}`}
+    {
+        !logoless && (
+            <div class="layout-header opacity-0">
+                <div class="container-main flex items-center">
+                    <a
+                        href={t("links.home")}
+                        class={`px-gutter pointer-events-auto flex h-36 w-237 items-center ${white ? "text-white" : "text-black"}`}
+                    >
+                        <LogoTypo className="size-full" />
+                    </a>
+                    <div class="mr-gutter ml-auto size-48 sm:h-54 sm:w-117" />
+                </div>
+            </div>
+        )
+    }
+    {
+        blok && (
+            <div class="layout-header absolute top-50 right-0 left-0 flex opacity-0 md:top-64 lg:fixed">
+                <div
+                    class="pointer-events-auto relative z-[2] mr-20 ml-auto"
+                    id="menu-button-wrapper"
                 >
-                    <LogoTypo className="size-full" />
-                </a>
-            )
-        }
-        {
-            blok && (
-                <div class="px-gutter pointer-events-auto relative z-[2] ml-auto">
                     <button
                         id="menu-button"
                         class="text-cta16 group font-space relative flex size-48 cursor-pointer px-16 py-16 text-white transition-transform duration-100 ease-out active:scale-[0.95] sm:h-54 sm:w-117 sm:px-24"
@@ -55,10 +63,7 @@ const { logoless, blok, alternates, white } = Astro.props;
                         </div>
                     </button>
                 </div>
-            )
-        }
-        {
-            blok && (
+
                 <div
                     id="header-menu"
                     data-open="false"
@@ -92,24 +97,27 @@ const { logoless, blok, alternates, white } = Astro.props;
                         <path d="M20.885 64.5a8 8 0 0 1-5.657-2.343l-2.385-2.385a8 8 0 0 1-2.343-5.657V3a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v68.5a3 3 0 0 0 3 3H72a3 3 0 0 0 3-3v-4a3 3 0 0 0-3-3H20.885Z" />
                     </svg>
                 </div>
-            )
-        }
-    </div>
+            </div>
+        )
+    }
 </header>
 
 <script>
     const DIST_TO_HIDE_HEADER = 1;
     let headerIsShown = true;
+    let headerIsRetracted = false;
     let st: ScrollTrigger;
     let tlOpen: gsap.core.Timeline;
     let tlClose: gsap.core.Timeline;
     let tlButtonHover: gsap.core.Timeline;
     let tlButtonUnhover: gsap.core.Timeline;
     let button: HTMLElement | null;
+    let buttonWrapper: HTMLElement | null;
     let menuItems: NodeListOf<HTMLElement> | null;
     let menu: HTMLElement | null;
     let menuBtnLayers: NodeListOf<HTMLElement> | null;
     let menuBtnLayerOpen: NodeListOf<HTMLElement> | null;
+    let mm: gsap.MatchMedia;
 
     const openMenu = (m: HTMLElement) => {
         tlClose?.kill();
@@ -254,6 +262,9 @@ const { logoless, blok, alternates, white } = Astro.props;
 
         if (!header || !menu) return;
         button = document.querySelector("#layout-header #menu-button");
+        buttonWrapper = document.querySelector(
+            "#layout-header #menu-button-wrapper",
+        );
         menuBtnLayers = document.querySelectorAll(
             "#layout-header #menu-button .menu-btn-layers",
         );
@@ -264,34 +275,51 @@ const { logoless, blok, alternates, white } = Astro.props;
             "#layout-header .header-menu-item",
         );
 
-        st = ScrollTrigger.create({
-            trigger: "body",
-            start: "top top",
-            onUpdate: (self) => {
-                if (
-                    self.direction > 0 &&
-                    self.scroll() > DIST_TO_HIDE_HEADER &&
-                    headerIsShown
-                ) {
-                    headerIsShown = false;
-                    gsap.to(header, {
-                        y: "-100%",
-                        duration: 0.6,
-                        opacity: 1,
-                        overwrite: true,
-                        ease: "power4.out",
-                    });
-                } else if (self.direction < 0 && !headerIsShown) {
-                    headerIsShown = true;
-                    gsap.to(header, {
-                        y: "0%",
-                        duration: 0.6,
-                        opacity: 1,
-                        overwrite: true,
-                        ease: "power4.out",
-                    });
-                }
-            },
+        mm = gsap.matchMedia();
+
+        mm.add("(width > 1024px)", () => {
+            ScrollTrigger.create({
+                trigger: "body",
+                start: "top top",
+                onUpdate: (self) => {
+                    const headerIsAtTop = self.scroll() < 100;
+                    if (
+                        self.direction > 0 &&
+                        self.scroll() > DIST_TO_HIDE_HEADER &&
+                        headerIsShown
+                    ) {
+                        headerIsShown = false;
+                        gsap.to(buttonWrapper, {
+                            y: "-11.8rem",
+                            duration: 0.6,
+                            opacity: 1,
+                            ease: "power4.out",
+                        });
+                    } else if (self.direction < 0 && !headerIsShown) {
+                        headerIsShown = true;
+                        headerIsRetracted = headerIsAtTop ? false : true;
+                        gsap.to(buttonWrapper, {
+                            y: headerIsRetracted ? "-3rem" : 0,
+                            duration: 0.6,
+                            opacity: 1,
+                            ease: "power4.out",
+                        });
+                    } else if (
+                        self.direction < 0 &&
+                        headerIsShown &&
+                        headerIsRetracted &&
+                        headerIsAtTop
+                    ) {
+                        headerIsRetracted = false;
+                        gsap.to(buttonWrapper, {
+                            y: 0,
+                            duration: 0.6,
+                            opacity: 1,
+                            ease: "power4.out",
+                        });
+                    }
+                },
+            });
         });
 
         initButtonStates();
@@ -303,7 +331,7 @@ const { logoless, blok, alternates, white } = Astro.props;
     };
 
     const cleanup = () => {
-        st.kill();
+        mm.revert();
         button?.removeEventListener("click", toggleMenu);
         menuItems?.forEach((mi) => {
             mi.removeEventListener("mouseenter", menuItemHover);

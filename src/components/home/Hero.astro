@@ -91,7 +91,7 @@ const { blok } = Astro.props;
 
 <script>
     let banner: HTMLElement | null;
-    let header: HTMLElement | null;
+    let header: NodeListOf<HTMLElement> | null;
 
     let videoHolder: HTMLElement | null;
     let video: HTMLElement | null;
@@ -122,7 +122,7 @@ const { blok } = Astro.props;
     const setVariables = () => {
         overlay = document.querySelector("#home-hero #home-hero-overlay");
         banner = document.querySelector("#layout-banner");
-        header = document.querySelector("#layout-header");
+        header = document.querySelectorAll("#layout-header .layout-header");
         heroTexts = document.querySelector("#home-hero #home-hero-texts");
 
         title = document.querySelectorAll("#home-hero .home-hero-title");
