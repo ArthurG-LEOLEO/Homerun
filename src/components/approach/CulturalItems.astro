@@ -10,23 +10,27 @@ const { items } = Astro.props;
 >
     {
         items.map((item: SbBlokData, index: number) => (
-            <div
-                class:list={[
-                    "cultural-item flex w-full gap-16 py-24 pr-24 pl-16 md:gap-40 md:py-40 md:pr-40 md:pl-32",
-                    {
-                        "items-start bg-white": !item.highlight,
-                        "items-center bg-black text-white": item.highlight,
-                    },
-                ]}
-            >
-                <span class="flex size-40 shrink-0 items-center justify-center rounded-full border-2 text-[1.6rem]/[4rem] font-black md:size-56 md:border-3 md:text-[2rem]/[5.6rem]">
-                    {String(index + 1).padStart(2, "0")}
-                </span>
-                <div class="flex flex-col">
-                    <span class="text-title-4">{item.title}</span>
-                    {item.text && (
-                        <span class="text-p-20 mt-8 md:mt-16">{item.text}</span>
-                    )}
+            <div class="cultural-item">
+                <div
+                    class:list={[
+                        "cultural-item-inner flex w-full gap-16 py-24 pr-24 pl-16 md:gap-40 md:py-40 md:pr-40 md:pl-32",
+                        {
+                            "items-start bg-white": !item.highlight,
+                            "items-center bg-black text-white": item.highlight,
+                        },
+                    ]}
+                >
+                    <span class="flex size-40 shrink-0 items-center justify-center rounded-full border-2 text-[1.6rem]/[4rem] font-black md:size-56 md:border-3 md:text-[2rem]/[5.6rem]">
+                        {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div class="flex flex-col">
+                        <span class="text-title-4">{item.title}</span>
+                        {item.text && (
+                            <span class="text-p-20 mt-8 md:mt-16">
+                                {item.text}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
         ))
@@ -34,53 +38,58 @@ const { items } = Astro.props;
 </div>
 
 <script>
-    import { getRandomNumber } from "../../utils/number";
-
     let items: NodeListOf<HTMLElement> | null;
+    let tls: gsap.core.Timeline[] = [];
 
-    let tl: gsap.core.Timeline | null;
-
-    const setVariables = () => {
-        items = document.querySelectorAll("#cultural-items .cultural-item");
-    };
     const init = () => {
         const container = document.querySelector("#cultural-items");
         if (!container) return;
 
-        setVariables();
-
-        tl = gsap.timeline();
+        items = container.querySelectorAll("#cultural-items .cultural-item");
 
         items?.forEach((i, index) => {
             const inverse = index % 2 !== 0 ? 1 : -1;
-            // const inverse = Math.random() > 0.5 ? 1 : -1;
-            const startR = getRandomNumber(2, 5) * inverse;
-            const endR = getRandomNumber(-2, 0) * inverse;
-            tl?.fromTo(
-                i,
-                { rotate: startR },
-                {
-                    scrollTrigger: {
-                        trigger: i,
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: true,
-                    },
-                    rotate: endR,
-                    ease: "linear",
+            const rotateOffset = 5;
+            const inner = i.querySelector(".cultural-item-inner");
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: i,
+                    start: "top 90%",
+                    end: "bottom top",
+                    scrub: true,
                 },
-                "start",
-            );
+            });
+            tl.fromTo(
+                inner,
+                { rotate: rotateOffset * inverse, y: "20rem" },
+                {
+                    duration: 1,
+                    rotate: -1.5 * inverse,
+                    y: 0,
+                    ease: "power2.out",
+                },
+            ).to(inner, {
+                duration: 1,
+                rotate: -rotateOffset * inverse,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+            tls.push(tl);
         });
     };
 
     const cleanup = () => {
-        if (tl) {
+        tls.forEach((tl) => {
             tl.kill();
-            tl = null;
-        }
+        });
+        tls = [];
         items = null;
     };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
 
     document.addEventListener("astro:page-load", () => {
         init();
