@@ -18,14 +18,16 @@ const casesDup = [...cases, ...cases, ...cases, ...cases, ...cases, ...cases];
     </h3>
     <div class="flex flex-col">
         {
-            casesDup.map((item: { content: { category: string } }, index) => (
-                <div
-                    class={`work-archived-case w-full ${index > 4 && "hidden"}`}
-                    data-category={item.content?.category}
-                >
-                    <Line caseItem={item} />
-                </div>
-            ))
+            cases.map(
+                (item: { content: { category: string } }, index: number) => (
+                    <div
+                        class={`work-archived-case w-full ${index > 4 && "hidden"}`}
+                        data-category={item.content?.category}
+                    >
+                        <Line caseItem={item} />
+                    </div>
+                ),
+            )
         }
     </div>
     <div>
