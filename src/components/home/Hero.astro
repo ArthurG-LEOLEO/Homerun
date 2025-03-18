@@ -233,7 +233,9 @@ const { blok } = Astro.props;
             });
 
         tlBaseline = gsap
-            .timeline()
+            .timeline({
+                delay: 0.5,
+            })
             .to(
                 [titleLettersHom, titleLettersEr, titleLettersUn],
                 {
@@ -417,7 +419,7 @@ const { blok } = Astro.props;
                 }
             },
             ease: "elastic.out(0.8,0.7)",
-            delay: 3.8,
+            delay: 4.3,
         });
 
         tlVideo = gsap.timeline().fromTo(
