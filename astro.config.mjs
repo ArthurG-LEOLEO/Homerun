@@ -46,6 +46,7 @@ export default defineConfig({
                 case_study: "storyblok/pages/Case",
                 work: "storyblok/pages/Work",
                 united: "storyblok/pages/United",
+                shop: "storyblok/pages/Shop",
                 social_feed: "storyblok/sections/SocialFeed",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
