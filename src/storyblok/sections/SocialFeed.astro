@@ -197,7 +197,7 @@ import CTA from "../../components/global/CTA.astro";
                 },
                 scrollTrigger: {
                     trigger: container,
-                    start: "top 50%",
+                    start: "top 70%",
                     end: "bottom top",
                 },
             })
@@ -238,7 +238,34 @@ import CTA from "../../components/global/CTA.astro";
                     stagger: 0.1,
                     ease: "expo.out",
                 },
-                "start+=0.5",
+                "start+=0.3",
+            )
+            .to(
+                layers1,
+                {
+                    y: 33,
+                    duration: 0.2,
+                    ease: "power3.in",
+                },
+                "<",
+            )
+            .to(
+                layers2,
+                {
+                    y: 50,
+                    duration: 0.2,
+                    ease: "power3.in",
+                },
+                "<",
+            )
+            .to(
+                [layers1, layers2],
+                {
+                    y: 0,
+                    duration: 1.5,
+                    ease: "elastic.out(1.2, 0.7)",
+                },
+                "<+0.2",
             )
             .to(
                 scrollingSpeed,
