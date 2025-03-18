@@ -84,13 +84,43 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         }
 
         //Featured filtering
-        featuredCases?.forEach((c) => {
-            const caseCat = c.dataset.category;
-            if (!currentCategory || caseCat === currentCategory) {
-                c.classList.remove("hidden");
-            } else {
-                c.classList.add("hidden");
-            }
+        const casesToAnimateOut = featuredCases
+            ? [...featuredCases]
+                  .filter((fc) => !fc.classList.contains("hidden"))
+                  .slice(0, 2)
+            : [];
+        gsap.to(casesToAnimateOut, {
+            duration: 0.3,
+            stagger: 0.1,
+            ease: "power3",
+            y: 100,
+            opacity: 0,
+            onComplete: () => {
+                featuredCases?.forEach((c) => {
+                    const caseCat = c.dataset.category;
+                    if (!currentCategory || caseCat === currentCategory) {
+                        c.classList.remove("hidden");
+                    } else {
+                        c.classList.add("hidden");
+                    }
+                });
+                const casesToAnimateIn = featuredCases
+                    ? [...featuredCases]
+                          .filter((fc) => !fc.classList.contains("hidden"))
+                          .slice(0, 2)
+                    : [];
+                gsap.fromTo(
+                    casesToAnimateIn,
+                    { y: 100, opacity: 0 },
+                    {
+                        duration: 0.3,
+                        stagger: 0.1,
+                        ease: "power3",
+                        y: 0,
+                        opacity: 1,
+                    },
+                );
+            },
         });
 
         //Archived filtering
