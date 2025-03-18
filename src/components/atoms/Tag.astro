@@ -1,6 +1,11 @@
 ---
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
 interface Props {
-    category: 'consulting' | 'advertising';
+    category: 'consulting' | 'advertising' | 'myself' | 'brand';
     class?: string;
 }
 
@@ -8,10 +13,12 @@ const { category, class: className } = Astro.props;
 
 const styles = {
     consulting: 'bg-pink border-black text-black',
-    advertising: 'bg-orange border-white text-white'
+    advertising: 'bg-orange border-white text-white',
+    myself: 'bg-orange border-white text-white',
+    brand: 'bg-green border-white text-white',
 }
 ---
 
 <div class={`text-tag-lil inline-flex py-5 px-13 rounded-[6rem] border-3 ${styles[category]} ${className || ''}`}>
-    {category}
+    {t("category." + category)}
 </div>

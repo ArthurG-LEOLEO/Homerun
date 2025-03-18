@@ -1,11 +1,27 @@
 ---
 import Hero from "../../components/shop/Hero.astro";
+import Card from "../../components/shop/Card.astro";
 
 const { language, blok } = Astro.props;
 ---
 
 <div id="page-shop" class="shop bg-pink text-black">
     <Hero blok={blok} />
+    <div class="container-main pb-120 md:pb-170">
+        <div
+            class="mt-32 flex flex-col gap-48 md:mt-40 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120"
+        >
+            {
+                blok.shop_items.map((item) => (
+                    <div
+                        class="px-gutter"
+                    >
+                        <Card shopItem={item} />
+                    </div>
+                ))
+            }
+        </div>
+    </div>    
 </div>
 
 <script>

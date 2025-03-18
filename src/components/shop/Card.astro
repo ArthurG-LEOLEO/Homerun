@@ -1,0 +1,30 @@
+---
+import Tag from "../atoms/Tag.astro";
+import Link from "../global/Link.astro";
+import LayeredImage from "../global/LayeredImage.astro";
+
+const { language, shopItem, className = "" } = Astro.props;
+---
+
+<Link link={{url: shopItem.full_slug, linktype: "story"}} className={`shop-card ${className}`}>
+    <div class="flex flex-col gap-16 md:gap-24">
+        <div
+            class="relative aspect-square"
+        >
+            <LayeredImage
+                imgClass="object-cover"
+                class="size-full"
+                image={shopItem.content.cover}
+            />
+            <Tag category={shopItem.content.category} class="absolute top-16 left-16" />
+        </div>
+        <div class="flex items-baseline gap-24 md:gap-32">
+            <span class="text-p-24"
+                >{shopItem.content.title[0].mobile_title}</span
+            >
+            <span class="text-p-24"
+                >{shopItem.content.price}</span
+            >
+        </div>
+    </div>
+</Link>

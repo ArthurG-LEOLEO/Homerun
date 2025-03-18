@@ -27,6 +27,10 @@ export default {
         "links.work.consulting": "/work?type=consulting",
         "links.work.advertising": "/work?type=advertising",
         "links.home": "/",
+        "category.myself": "Pour oim",
+        "category.brand": "Pour ma marque",
+        "category.consulting": "Consulting",
+        "category.advertising": "Advertising",
     },
     fr: {
         "case.challenges": "Enjeux strat’ :",
@@ -38,5 +42,9 @@ export default {
         "links.work.consulting": "/fr/work?type=consulting",
         "links.work.advertising": "/fr/work?type=advertising",
         "links.home": "/fr",
+        "category.myself": "Pour oim",
+        "category.brand": "Pour ma marque",
+        "category.consulting": "Consulting",
+        "category.advertising": "Advertising",
     },
 } as Record<string, Record<string, string>>;
