@@ -1,16 +1,16 @@
 <div class="relative w-full">
-    <div class="flex w-full items-center justify-center">
+    <div class="pointer-events-none flex w-full items-center justify-center">
         <div
             class="home-hero-title relative z-[8] flex aspect-[1396/212] w-full items-center overflow-hidden"
         >
             <div
-                id="home-title-h"
+                data-index="0"
                 style="transform: translateY(100%);"
-                class="letters-hom mr-[1.42%] flex h-full w-[12.67%] items-center overflow-hidden"
+                class="letters-title letters-hom pointer-events-auto mr-[1.42%] flex h-full w-[12.67%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-hom relative aspect-[177/205] w-full"
-                    style="transform: translateX(200%);"
+                    class="title-inner-letter title-inner-letter-hom relative aspect-[177/205] w-full"
+                    style="--offset: 1; transform: translateX(calc(200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 177 205"
@@ -34,13 +34,13 @@
                 </div>
             </div>
             <div
-                id="home-title-o"
+                data-index="1"
                 style="transform: translateY(100%);"
-                class="letters-hom mr-[1.42%] flex h-full w-[15.18%] items-center overflow-hidden"
+                class="letters-title letters-hom pointer-events-auto mr-[1.42%] flex h-full w-[15.18%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-hom relative aspect-[212/212] w-full"
-                    style="transform: translateY(-200%);"
+                    class="title-inner-letter title-inner-letter-hom relative aspect-[212/212] w-full"
+                    style="--offset: 1; transform: translateY(calc(-200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 212 212"
@@ -64,13 +64,13 @@
                 </div>
             </div>
             <div
-                id="home-title-m"
+                data-index="2"
                 style="transform: translateY(100%);"
-                class="letters-hom mr-[1.63%] flex h-full w-[15.90%] items-center overflow-hidden"
+                class="letters-title letters-hom pointer-events-auto mr-[1.63%] flex h-full w-[15.90%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-hom relative aspect-[222/205] w-full"
-                    style="transform: translateX(-200%);"
+                    class="title-inner-letter title-inner-letter-hom relative aspect-[222/205] w-full"
+                    style="--offset: 1; transform: translateX(calc(-200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 222 205"
@@ -99,19 +99,18 @@
                 <div class="relative aspect-[148/205] w-full"></div>
             </div>
             <div
-                id="home-title-r"
                 class="mr-[0.85%] flex h-full w-[12.10%] items-center overflow-hidden opacity-0"
             >
                 <div class="relative aspect-[169/205] w-full"></div>
             </div>
             <div
-                id="home-title-u"
+                data-index="5"
                 style="transform: translateY(100%);"
-                class="letters-un mr-[1.63%] flex h-full w-[12.67%] items-center overflow-hidden"
+                class="letters-title letters-un pointer-events-auto mr-[1.63%] flex h-full w-[12.67%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-un relative aspect-[177/209] w-full"
-                    style="transform: translateY(-200%);"
+                    class="title-inner-letter title-inner-letter-un relative aspect-[177/209] w-full"
+                    style="--offset: 1; transform: translateY(calc(-200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 177 209"
@@ -135,13 +134,13 @@
                 </div>
             </div>
             <div
-                id="home-title-n"
+                data-index="6"
                 style="transform: translateY(100%);"
-                class="letters-un flex h-full w-[12.67%] items-center overflow-hidden"
+                class="letters-title letters-un pointer-events-auto flex h-full w-[12.67%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-un relative aspect-[177/205] w-full"
-                    style="transform: translateX(-200%);"
+                    class="title-inner-letter title-inner-letter-un relative aspect-[177/205] w-full"
+                    style="--offset: 1; transform: translateX(calc(-200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 177 205"
@@ -168,7 +167,7 @@
     </div>
 
     <div
-        class="absolute top-0 left-0 z-10 flex w-full items-center justify-center"
+        class="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-center"
     >
         <div
             class="home-hero-title flex aspect-[1396/212] w-full items-center overflow-hidden"
@@ -189,13 +188,13 @@
                 <div class="relative aspect-[222/205] w-full"></div>
             </div>
             <div
-                id="home-title-e"
+                data-index="3"
                 style="transform: translateY(100%);"
-                class="letters-er mr-[1.54%] flex h-full w-[10.6%] items-center overflow-hidden"
+                class="letters-title letters-er pointer-events-auto mr-[1.54%] flex h-full w-[10.6%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-er relative aspect-[148/205] w-full"
-                    style="transform: translateY(200%);"
+                    class="title-inner-letter title-inner-letter-er relative aspect-[148/205] w-full"
+                    style="--offset: 1; transform: translateY(calc(200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 148 205"
@@ -219,13 +218,13 @@
                 </div>
             </div>
             <div
-                id="home-title-r"
+                data-index="4"
                 style="transform: translateY(100%);"
-                class="letters-er mr-[0.85%] flex h-full w-[12.10%] items-center overflow-hidden"
+                class="letters-title letters-er pointer-events-auto mr-[0.85%] flex h-full w-[12.10%] items-center overflow-hidden"
             >
                 <div
-                    class="title-inner-letter-er relative aspect-[169/205] w-full"
-                    style="transform: translateX(200%);"
+                    class="title-inner-letter title-inner-letter-er relative aspect-[169/205] w-full"
+                    style="--offset: 1; transform: translateX(calc(200% * var(--offset)))"
                 >
                     <svg
                         viewBox="0 0 169 205"

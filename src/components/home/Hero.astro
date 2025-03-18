@@ -1,7 +1,5 @@
 ---
 import SBVideo from "../../components/global/SBVideo.astro";
-import TitleER from "./TitleER.astro";
-import TitleHOMUN from "./TitleHOMUN.astro";
 
 import { splitText } from "../../utils/splitString";
 import BaselineCreative from "./BaselineCreative.astro";
@@ -100,12 +98,13 @@ const { blok } = Astro.props;
     let videoOverlay: HTMLElement | null;
     let baseline: HTMLElement | null;
     let title: NodeListOf<Element> | null;
-    let titleLettersHom: NodeListOf<Element> | null;
-    let titleLettersEr: NodeListOf<Element> | null;
-    let titleLettersUn: NodeListOf<Element> | null;
+    let titleLettersHom: NodeListOf<HTMLElement>;
+    let titleLettersEr: NodeListOf<HTMLElement>;
+    let titleLettersUn: NodeListOf<HTMLElement>;
     let titleInnerLettersHom: NodeListOf<Element> | null;
     let titleInnerLettersEr: NodeListOf<Element> | null;
     let titleInnerLettersUn: NodeListOf<Element> | null;
+    let titleLetterHoverTls: gsap.core.Timeline[] = [];
     let overlay: HTMLElement | null;
     let heroTexts: HTMLElement | null;
     let baselineCreative: HTMLElement | null;
@@ -195,8 +194,6 @@ const { blok } = Astro.props;
                     const titleHeight = target.offsetHeight;
 
                     if (ww < 1536) {
-                        console.log("set: ", titleHeight / -2 + wh * 0.08);
-
                         return titleHeight / -2 + wh * 0.08;
                     } else {
                         const heroPaddingBottom = ww * 0.13888;
@@ -273,8 +270,7 @@ const { blok } = Astro.props;
                 ],
                 {
                     stagger: 0.1,
-                    x: 0,
-                    y: 0,
+                    "--offset": 0,
                     duration: 1.3,
                     ease: "power3.inOut",
                 },
@@ -493,6 +489,33 @@ const { blok } = Astro.props;
                 },
                 "<",
             );
+
+        [...titleLettersHom, ...titleLettersEr, ...titleLettersUn].forEach(
+            (l) => {
+                const innerLetter = l.querySelector(".title-inner-letter");
+
+                const tl = gsap.timeline({ paused: true }).fromTo(
+                    innerLetter,
+                    { "--offset": 1 },
+                    {
+                        "--offset": 0,
+                        duration: 1,
+                        ease: "power3.out",
+                    },
+                );
+                titleLetterHoverTls.push(tl);
+                l.addEventListener("mouseenter", logoLetterHover);
+            },
+        );
+    };
+
+    const logoLetterHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target || !target.dataset.index) return;
+
+        const tl = titleLetterHoverTls[parseInt(target.dataset.index)];
+
+        tl?.play(0);
     };
 
     const cleanup = () => {
@@ -503,6 +526,12 @@ const { blok } = Astro.props;
         tlBaseline?.kill();
         tlBaseline = null;
         videoHolder = null;
+        [...titleLettersHom, ...titleLettersEr, ...titleLettersUn].forEach(
+            (l, index) => {
+                titleLetterHoverTls[index].kill();
+                l.removeEventListener("mouseenter", logoLetterHover);
+            },
+        );
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
