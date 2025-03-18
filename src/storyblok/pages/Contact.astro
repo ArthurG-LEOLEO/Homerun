@@ -10,7 +10,9 @@ const { language, blok } = Astro.props;
 ---
 
 <div id="page-contact" class="contact bg-black text-white">
-    <div class="container-main pt-150 pb-70 overflow-hidden lg:pt-135 lg:pb-125">
+    <div
+        class="container-main overflow-hidden pt-150 pb-70 lg:pt-135 lg:pb-125"
+    >
         <div class="flex flex-col items-center">
             <span
                 class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
@@ -42,7 +44,9 @@ const { language, blok } = Astro.props;
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelector("#layout-header");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
 
         gsap.timeline()
             .set(banner, {
