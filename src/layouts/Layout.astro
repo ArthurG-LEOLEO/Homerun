@@ -15,6 +15,8 @@ import Header from "../components/global/Header.astro";
 import Banner from "../components/global/Banner.astro";
 import Footer from "../components/global/Footer.astro";
 import Loader from "../components/global/Loader.astro";
+import HrefLangs from "../components/global/HrefLangs.astro";
+import { defaultLocale } from "../i18n/config";
 
 const isDev = import.meta.env.DEV;
 const storyblokApi = useStoryblokApi();
@@ -29,6 +31,7 @@ const {
     alternates,
     seo = {},
 } = Astro.props;
+const currentLocale = Astro.currentLocale;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
     version: "draft",
@@ -36,16 +39,38 @@ const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
 
 const footerData = data.story.content.Footer[0];
 const headerData = data.story.content.menu[0];
+
+const fullAlternates = alternates.reduce(
+    (alts: { [x: string]: string }, alt: { full_slug: string }) => {
+        let fullSlug = alt.full_slug;
+        const altLang = fullSlug.split("/")[0];
+
+        if (altLang === defaultLocale) {
+            fullSlug = fullSlug?.replace(/^(en\/)/, "");
+        }
+
+        fullSlug = new URL(fullSlug, Astro.site).toString();
+
+        alts[altLang] = fullSlug;
+        return alts;
+    },
+    {},
+);
+
+if (currentLocale) {
+    fullAlternates[currentLocale] = new URL(Astro.url.pathname, Astro.site);
+}
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <SEO seo={seo} />
+        <HrefLangs alternates={fullAlternates} />
         <ClientRouter />
     </head>
     <body>
@@ -91,7 +116,37 @@ const headerData = data.story.content.menu[0];
     window.lenis = lenis;
     window.Observer = Observer;
     window.ScrollTrigger = ScrollTrigger;
+
+    const checkLangRedirect = () => {
+        const fullUserLang = navigator.language;
+        const userLang = fullUserLang.slice(0, 2);
+        const currentPageLang = document.documentElement.lang;
+
+        if (currentPageLang === userLang) return;
+
+        const hreflangs: NodeListOf<HTMLElement> = document.querySelectorAll(
+            'head link[rel="alternate"]',
+        );
+
+        const userLangPage = [...hreflangs].find((hl) => {
+            return hl.getAttribute("hreflang") === userLang;
+        });
+
+        if (userLangPage) {
+            const urlToRedirectTo = userLangPage.getAttribute("href");
+            if (!urlToRedirectTo) return;
+            const relativeUrlToRedirectTo = new URL(urlToRedirectTo).pathname;
+            window.location.replace(relativeUrlToRedirectTo);
+        }
+    };
+
     document.addEventListener("astro:page-load", (event) => {
         window.scrollTo(0, 0);
+        const preventBrowserLangRedirect = localStorage.getItem(
+            "preventBrowserLangRedirect",
+        );
+        if (!preventBrowserLangRedirect) {
+            checkLangRedirect();
+        }
     });
 </script>

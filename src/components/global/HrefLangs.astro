@@ -1,0 +1,10 @@
+---
+import { locales } from "../../i18n/config";
+const { alternates } = Astro.props;
+---
+
+{
+    locales.map((locale) => (
+        <link rel="alternate" hreflang={locale} href={alternates[locale]} />
+    ))
+}

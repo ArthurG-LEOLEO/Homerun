@@ -55,7 +55,6 @@ const { blok } = Astro.props;
         if (!page || !cases?.length) return;
 
         shownCases = shownCases + NB_LOAD_MORE_CASES;
-        console.log(shownCases, cases.length);
         cases.forEach((c, index) => {
             if (index < shownCases) {
                 c.classList.remove("hidden");

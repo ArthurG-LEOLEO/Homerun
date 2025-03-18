@@ -1,13 +1,16 @@
 ---
 interface Props {
     className?: string;
+    innerClassName?: string;
 }
 
-const { className = "" } = Astro.props;
+const { className = "", innerClassName = "" } = Astro.props;
 ---
 
 <div
     class={`contact-section w-full px-20 md:max-w-none md:px-0 md:w-10/12 lg:w-8/12 ${className}`}
 >
-    <slot />
+    <div class={`contact-section-inner ${innerClassName}`}>
+        <slot />
+    </div>
 </div>
