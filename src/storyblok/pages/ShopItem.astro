@@ -1,0 +1,75 @@
+---
+import Title from "../../components/atoms/Title.astro";
+
+const { language, blok } = Astro.props;
+---
+
+<div id="page-shop-item" class="shop-item bg-white text-black">
+    <div class="container-main">
+        <h1 class="text-title-1 px-gutter">
+            <Title title={blok.title[0]} />
+        </h1>
+    </div>
+</div>
+
+<script>
+    let tlAppear: gsap.core.Timeline;
+    let page: HTMLElement | null;
+
+    const init = () => {
+        page = document.querySelector("#page-shop-item");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+    };
+
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
