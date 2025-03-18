@@ -6,23 +6,20 @@ import BasicLink from "../atoms/BasicLink.astro";
 const { blok } = Astro.props;
 ---
 
-<div class="md:px-gutter">
-    <div class="flex flex-col gap-24 pt-24 px-24 pb-32 bg-white text-black md:p-40 md:flex-row md:gap-65 md:items-center">
+<div class="md:px-gutter mt-[-1rem]">
+    <div
+        class="flex flex-col gap-24 bg-white px-24 pt-24 pb-32 text-black md:flex-row md:items-center md:gap-65 md:p-40"
+    >
         <div class="flex-1">
-            <SBImage
-                class="w-full"
-                image={blok.jobs_image}
-            />
+            <SBImage class="w-full" image={blok.jobs_image} />
         </div>
         <div class="flex-1">
             <h6 class="text-title-6">
-                <Title
-                    title={blok.jobs_title[0]}
-                />
+                <Title title={blok.jobs_title[0]} />
             </h6>
             <BasicLink
                 link={blok.jobs_link[0]}
-                className="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16"
+                className="text-cta-16 relative mt-16 inline-flex after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current"
             />
         </div>
     </div>

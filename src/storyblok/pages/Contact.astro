@@ -15,7 +15,7 @@ const { language, blok } = Astro.props;
     >
         <div class="flex flex-col items-center">
             <span
-                class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+                class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
             >
                 {blok.subtitle}
             </span>
@@ -23,13 +23,16 @@ const { language, blok } = Astro.props;
                 <Title title={blok.title[0]} />
             </h1>
             <div class="flex flex-col items-center md:gap-8">
-                <Section>
+                <Section
+                    className="contact-section-1"
+                    innerClassName="translate-y-[20rem] rotate-[-5deg] opacity-0"
+                >
                     <Form blok={blok} />
                 </Section>
-                <Section className="rotate-[1deg]">
+                <Section className="contact-section-2 rotate-[1deg]">
                     <Jobs blok={blok} />
                 </Section>
-                <Section className="-rotate-[1.2deg]">
+                <Section className="contact-section-3 -rotate-[1.2deg]">
                     <Offices blok={blok} />
                 </Section>
             </div>
@@ -39,6 +42,104 @@ const { language, blok } = Astro.props;
 
 <script>
     let tlAppear: gsap.core.Timeline;
+    let tlSection1: gsap.core.Timeline;
+    let tlSection2: gsap.core.Timeline;
+    let tlSection3: gsap.core.Timeline;
+    let section1: HTMLElement | null;
+    let section2: HTMLElement | null;
+    let section3: HTMLElement | null;
+    let section1Inner: HTMLElement | null;
+
+    const initBlockScroll = () => {
+        tlSection1 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: section1,
+                    start: "bottom 40%",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                },
+            })
+            .to(section1, {
+                duration: 1,
+                rotate: 3,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+
+        tlSection1 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: section1,
+                    start: "bottom 40%",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                },
+            })
+            .to(section1, {
+                duration: 1,
+                rotate: 3,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+
+        tlSection2 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: section2,
+                    start: "top 100%",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                },
+            })
+            .fromTo(
+                section2,
+                { y: "10rem", rotate: -2 },
+                {
+                    duration: 1,
+                    rotate: 1,
+                    y: 0,
+                    ease: "power2.out",
+                },
+            )
+            .to(section2, {
+                duration: 1,
+                rotate: -3,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+
+        tlSection3 = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: section3,
+                    start: "top 100%",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                },
+            })
+            .fromTo(
+                section3,
+                { y: "10rem", rotate: 2 },
+                {
+                    duration: 1,
+                    rotate: -1.2,
+                    y: 0,
+                    ease: "power2.out",
+                },
+            )
+            .to(section3, {
+                duration: 1,
+                rotate: 3,
+                y: `-20rem`,
+                ease: "power2.in",
+            });
+    };
+
     const init = () => {
         const page = document.querySelector("#page-contact");
         if (!page) return;
@@ -47,6 +148,13 @@ const { language, blok } = Astro.props;
         const header = document.querySelectorAll(
             "#layout-header .layout-header",
         );
+        const subtitle = page.querySelectorAll(".page-subtitle");
+        section1 = page.querySelector(".contact-section-1");
+        section1Inner =
+            section1?.querySelector(".contact-section-inner") || null;
+
+        section2 = page.querySelector(".contact-section-2");
+        section3 = page.querySelector(".contact-section-3");
 
         gsap.timeline()
             .set(banner, {
@@ -55,6 +163,15 @@ const { language, blok } = Astro.props;
             .set(header, {
                 y: -50,
                 opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            })
+            .set(section1Inner, {
+                y: "20rem",
+                opacity: 0,
+                rotate: -5,
             });
 
         tlAppear = gsap
@@ -77,11 +194,37 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                section1Inner,
+                {
+                    rotate: 0,
+                    duration: 1,
+                    opacity: 1,
+                    y: 0,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "<+=0.5",
             );
+
+        initBlockScroll();
     };
 
     const cleanup = () => {
         tlAppear?.kill();
+        tlSection1?.kill();
+        tlSection2?.kill();
+        tlSection3?.kill();
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
