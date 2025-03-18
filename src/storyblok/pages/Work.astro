@@ -40,6 +40,7 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
     let advertisingButton: HTMLElement | null;
     let featuredInfos: HTMLElement | null;
     let allButton: HTMLElement | null;
+    let workGrid: HTMLElement | null;
     let loadArchivedButton: HTMLElement | null;
     let featuredCases: NodeListOf<HTMLElement> | null;
     let archivedCases: NodeListOf<HTMLElement> | null;
@@ -84,14 +85,8 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         }
 
         //Featured filtering
-        const casesToAnimateOut = featuredCases
-            ? [...featuredCases]
-                  .filter((fc) => !fc.classList.contains("hidden"))
-                  .slice(0, 2)
-            : [];
-        gsap.to(casesToAnimateOut, {
+        gsap.to(workGrid, {
             duration: 0.3,
-            stagger: 0.1,
             ease: "power3",
             y: 100,
             opacity: 0,
@@ -104,17 +99,11 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
                         c.classList.add("hidden");
                     }
                 });
-                const casesToAnimateIn = featuredCases
-                    ? [...featuredCases]
-                          .filter((fc) => !fc.classList.contains("hidden"))
-                          .slice(0, 2)
-                    : [];
                 gsap.fromTo(
-                    casesToAnimateIn,
+                    workGrid,
                     { y: 100, opacity: 0 },
                     {
                         duration: 0.3,
-                        stagger: 0.1,
                         ease: "power3",
                         y: 0,
                         opacity: 1,
@@ -218,6 +207,7 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         advertisingButton = page?.querySelector("#advertising-button");
         allButton = page?.querySelector("#all-button");
         featuredInfos = page?.querySelector("#featured-infos");
+        workGrid = page?.querySelector("#work-grid");
         featuredCases = page?.querySelectorAll(".work-featured-case");
         archivedCases = page?.querySelectorAll(".work-archived-case");
         featuredInfosTxt = page?.querySelectorAll(".featured-infos-txt");
