@@ -4,6 +4,29 @@ import Link from "../global/Link.astro";
 import LayeredImage from "../global/LayeredImage.astro";
 
 const { language, shopItem, className = "" } = Astro.props;
+
+const lang = Astro.currentLocale;
+
+function formatPrice(price: number | string, locale: string = "fr"): string {
+    if (price === null || price === undefined) return "";
+    
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    
+    const formatter = new Intl.NumberFormat(locale === "en" ? "en-US" : "fr-FR", {
+        style: "currency",
+        currency: "EUR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true,
+    });
+    
+    let formatted = formatter.format(numPrice);
+    
+    return formatted;
+}
+
+const formattedPrice = formatPrice(shopItem.content.price, lang);
+
 ---
 
 <Link link={{url: shopItem.full_slug, linktype: "story"}} className={`shop-card ${className}`}>
@@ -19,11 +42,11 @@ const { language, shopItem, className = "" } = Astro.props;
             <Tag category={shopItem.content.category} class="absolute top-16 left-16" />
         </div>
         <div class="flex items-baseline gap-24 md:gap-32">
-            <span class="text-p-24"
+            <span class="text-p-24 text-black"
                 >{shopItem.content.title[0].mobile_title}</span
             >
-            <span class="text-p-24"
-                >{shopItem.content.price}</span
+            <span class="text-p-24 text-black/70"
+                >{formattedPrice}</span
             >
         </div>
     </div>

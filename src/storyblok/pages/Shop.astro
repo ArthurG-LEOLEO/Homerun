@@ -2,6 +2,26 @@
 import Hero from "../../components/shop/Hero.astro";
 import Card from "../../components/shop/Card.astro";
 
+interface ShopItem {
+  _uid: string;
+  full_slug: string;
+  content: {
+    title: Array<{ mobile_title: string }>;
+    price: number;
+    cover: any;
+    category: string;
+  };
+}
+
+interface ShopBlok {
+  shop_items: ShopItem[];
+}
+
+interface Props {
+  language: string;
+  blok: ShopBlok;
+}
+
 const { language, blok } = Astro.props;
 ---
 
@@ -9,10 +29,10 @@ const { language, blok } = Astro.props;
     <Hero blok={blok} />
     <div class="container-main pb-120 md:pb-170">
         <div
-            class="mt-32 flex flex-col gap-48 md:mt-40 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120"
+            class="mt-32 flex flex-col gap-48 md:mt-40 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120 xl:grid-cols-3"
         >
             {
-                blok.shop_items.map((item) => (
+                blok.shop_items.map((item: ShopItem) => (
                     <div
                         class="px-gutter"
                     >
