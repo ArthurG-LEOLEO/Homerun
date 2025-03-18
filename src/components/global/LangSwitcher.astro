@@ -22,7 +22,10 @@ const currentAlternates = alternates.reduce(
 
 {
     availableLangs.length > 1 && (
-        <ul class="mt-16 flex font-black uppercase lg:text-[2rem]/[2.4rem]">
+        <ul
+            id="lang-switcher"
+            class="mt-16 flex font-black uppercase lg:text-[2rem]/[2.4rem]"
+        >
             {availableLangs.map((lang) => (
                 <li
                     class:list={[
@@ -36,6 +39,7 @@ const currentAlternates = alternates.reduce(
                         <span>{lang}</span>
                     ) : (
                         <Link
+                            className="lang-switch-link"
                             link={{
                                 url: currentAlternates[lang] || `${lang}/`,
                                 linktype: "story",
@@ -50,3 +54,37 @@ const currentAlternates = alternates.reduce(
         </ul>
     )
 }
+
+<script>
+    const onLslClick = (e: MouseEvent) => {
+        e.preventDefault();
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+        localStorage.setItem("preventBrowserLangRedirect", "true");
+        const href = target.getAttribute("href");
+        if (href) {
+            window.location.replace(href);
+        }
+    };
+    const init = () => {
+        const langSwitch = document.querySelector("#lang-switcher");
+        if (!langSwitch) return;
+
+        const langSwitchLinks: NodeListOf<HTMLElement> =
+            langSwitch.querySelectorAll(".lang-switch-link");
+
+        langSwitchLinks.forEach((lsl) => {
+            lsl.addEventListener("click", onLslClick);
+        });
+    };
+
+    const cleanup = () => {};
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
