@@ -25,27 +25,30 @@ const { blok } = Astro.props;
         </div>
         <div
             id="united-video-layer-2"
-            style="transform: translateX(-50%)  rotate(6deg) scale(0.99);"
-            class="bg-orange absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
+            class="absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] scale-[0.99] rotate-[6deg] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
         >
+            <div
+                class="bg-orange absolute inset-0 size-full translate-x-[-50%]"
+            >
+            </div>
         </div>
         <div
             id="united-video-layer-1"
-            style="transform: translateX(-50%)  rotate(6deg) scale(0.99);"
-            class="bg-blue absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
+            class="absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] scale-[0.99] rotate-[6deg] transition-all duration-0 ease-linear md:h-[25vw] md:translate-y-[-140rem]"
         >
+            <div class="bg-blue absolute inset-0 size-full translate-x-[-50%]">
+            </div>
         </div>
         <div
             id="united-hero-video"
-            style="transform: translateX(-50%)  rotate(6deg);"
-            class="absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] bg-black md:h-[25vw] md:translate-y-[-140rem]"
+            class="absolute top-[100%] left-[50%] z-[9] aspect-video h-144 origin-center translate-y-[-100rem] rotate-[6deg] md:h-[25vw] md:translate-y-[-140rem]"
         >
             <SBVideo
                 video={blok.showreel_video}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full translate-x-[-50%] object-cover"
             />
             <div
-                class="absolute inset-0 bg-black/30 opacity-0"
+                class="absolute inset-0 translate-x-[-50%] bg-black/30 opacity-0"
                 id="united-video-overlay"
             >
             </div>
