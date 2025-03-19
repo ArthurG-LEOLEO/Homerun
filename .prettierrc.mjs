@@ -9,4 +9,5 @@ export default {
         },
     ],
     tabWidth: 4,
+    htmlWhitespaceSensitivity: "strict",
 };
