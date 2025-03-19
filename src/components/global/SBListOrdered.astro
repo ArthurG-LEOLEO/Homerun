@@ -21,7 +21,7 @@ const { items = [], className = "" } = Astro.props;
         >
             {items.map((item) => (
                 <li class="sb-list-ordered-item">
-                    <div class="sb-list-ordered-item-inner flex items-start gap-16 bg-white py-24 pr-24 pl-15 text-black [counter-increment:section] md:gap-50 md:py-40 md:pr-40 md:pl-32">
+                    <div class="sb-list-ordered-item-inner flex flex-col items-start gap-16 bg-white py-24 pr-24 pl-15 text-black [counter-increment:section] sm:flex-row md:gap-50 md:py-40 md:pr-40 md:pl-32">
                         <span class="font-figtree font-16 md:font-20 inline-flex size-40 flex-none items-center justify-center rounded-full border-2 border-current font-black before:content-[counter(section,decimal-leading-zero)] md:size-56 md:border-3" />
                         <div class="flex flex-1 flex-col gap-8 md:gap-16">
                             <h4 class="text-title-4">{item.title}</h4>
