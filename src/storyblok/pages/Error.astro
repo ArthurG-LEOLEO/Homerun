@@ -1,0 +1,88 @@
+---
+import Title from "../../components/atoms/Title.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+
+import { useTranslations } from "../../i18n/utils";
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { language, blok } = Astro.props;
+---
+
+<div id="page-404" class="404 bg-black text-white">
+    <div
+        class="container-main lg:pt60 flex flex-col items-center gap-10 pt-150 pb-70 lg:pb-180"
+    >
+        <h1 class="text-enormous px-gutter text-center">
+            <Title title={blok.title[0]} />
+        </h1>
+        <div>
+            <ArrowLink
+                label={blok.home_link_label}
+                link={{ url: t("links.home") }}
+                className="mt-24 md:mt-40"
+            />
+        </div>
+    </div>
+</div>
+
+<script>
+    let tlAppear: gsap.core.Timeline;
+
+    const init = () => {
+        const page = document.querySelector("#page-404");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            });
+
+        tlAppear = gsap
+            .timeline()
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+    };
+
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
