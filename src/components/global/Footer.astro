@@ -11,6 +11,7 @@ import SBImage from "./SBImage.astro";
 import { Icon } from "astro-icon/components";
 
 import changeYourHelmetImg from "../../img/change-your-helmet.png";
+import footerSplineUrl from "../../spline/footer.splinecode";
 
 interface FooterLink {
     label: string;
@@ -83,7 +84,7 @@ const { footerData } = Astro.props;
                             id="SplineViewer"
                             events-target="global"
                             loading="eager"
-                            url="/spline/footer.splinecode"
+                            url={footerSplineUrl}
                             background="transparent"></spline-viewer>
                         <div
                             class="bg-pink pointer-events-none absolute top-0 right-0 size-84 rounded-full sm:size-122 lg:top-20 lg:right-20"

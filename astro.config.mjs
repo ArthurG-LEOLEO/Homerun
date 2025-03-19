@@ -62,6 +62,7 @@ export default defineConfig({
     ],
     vite: {
         plugins: [basicSsl(), tailwindcss()],
+        assetsInclude: ["**/*.splinecode"],
         server: {
             https: true,
         },
