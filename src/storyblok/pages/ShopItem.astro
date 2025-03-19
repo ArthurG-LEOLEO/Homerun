@@ -1,14 +1,66 @@
 ---
+import Tag from "../../components/atoms/Tag.astro";
 import Title from "../../components/atoms/Title.astro";
+import SBRichText from "../../components/global/SBRichText.astro";
+import LayeredImage from "../../components/global/LayeredImage.astro";
 
 const { language, blok } = Astro.props;
+
+const lang = Astro.currentLocale;
+
+function formatPrice(price: number | string, locale: string = "fr"): string {
+    if (price === null || price === undefined) return "";
+    
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    
+    const formatter = new Intl.NumberFormat(locale === "en" ? "en-US" : "fr-FR", {
+        style: "currency",
+        currency: "EUR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true,
+    });
+    
+    let formatted = formatter.format(numPrice);
+    
+    return formatted;
+}
+
+const formattedPrice = formatPrice(blok.price, lang);
 ---
 
 <div id="page-shop-item" class="shop-item bg-white text-black">
-    <div class="container-main">
-        <h1 class="text-title-1 px-gutter">
-            <Title title={blok.title[0]} />
-        </h1>
+    <div class="container-main flex flex-col gap-20 pt-115 pb-120 md:flex-row-reverse md:items-start md:gap-0 md:pt-160 md:pb-170">
+        <div class="md:w-6/12 md:sticky md:top-55 xl:flex xl:justify-center">
+            <div class="px-gutter xl:w-4/6">
+                <div class="flex flex-col gap-8">
+                    <div>
+                        <Tag category={blok.category} />
+                    </div>
+                    <h1 class="text-title-1">
+                        <Title title={blok.title[0]} />
+                    </h1>
+                    <div class="text-p-24 text-black/70"
+                        >{formattedPrice}</div
+                    >
+                </div>
+                <SBRichText content={blok.description} />
+            </div>
+        </div>
+        <div class="px-gutter flex flex-col gap-20 md:w-6/12">
+            <LayeredImage
+                class="w-full"
+                image={blok.cover}
+            />
+            {blok.other_images && blok.other_images.length > 0 && 
+                blok.other_images.map((image, index) => (
+                    <LayeredImage
+                        class="w-full"
+                        image={image}
+                    />
+                ))
+            }
+        </div>
     </div>
 </div>
 
