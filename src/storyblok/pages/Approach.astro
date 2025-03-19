@@ -6,6 +6,7 @@ import CulturalPhilosophy from "../../components/approach/CulturalPhilosophy.ast
 import CulturalItems from "../../components/approach/CulturalItems.astro";
 import CulturalProcess from "../../components/approach/CulturalProcess.astro";
 import BoldAdvertising from "../../components/approach/BoldAdvertising.astro";
+import Title from "../../components/atoms/Title.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -13,12 +14,12 @@ const { language, blok } = Astro.props;
 <div class="approach overflow-hidden" id="page-approach">
     <div class="container-main flex flex-col items-center pt-150 lg:pt-135">
         <span
-            class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+            class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
         >
             {blok.subtitle}
         </span>
         <h1 class="text-title-1 px-gutter w-10/12 text-center">
-            {blok.title}
+            <Title title={blok.title[0]} />
         </h1>
     </div>
     <div id="scroll-container">
@@ -54,7 +55,7 @@ const { language, blok } = Astro.props;
                 <div id="split-left" class="py-105 lg:py-130">
                     <div
                         id="split-left-inner"
-                        class="translate-x-[calc(100%*var(--progress)*-1)] pointer-events-auto lg:translate-x-[calc(70%*var(--progress)*-1)]"
+                        class="pointer-events-auto translate-x-[calc(100%*var(--progress)*-1)] lg:translate-x-[calc(70%*var(--progress)*-1)]"
                     >
                         <div class="container-main">
                             <div
@@ -86,10 +87,13 @@ const { language, blok } = Astro.props;
                 </div>
             </div>
             <div class="py-105 text-white lg:py-130">
-                <div id="split-right" class="lg:mt-[-100vh] pointer-events-none">
+                <div
+                    id="split-right"
+                    class="pointer-events-none lg:mt-[-100vh]"
+                >
                     <div
                         id="split-right-inner"
-                        class="translate-x-[calc(100%*(1-var(--progress)))] pointer-events-auto lg:translate-x-[calc(70%*(1-var(--progress)))]"
+                        class="pointer-events-auto translate-x-[calc(100%*(1-var(--progress)))] lg:translate-x-[calc(70%*(1-var(--progress)))]"
                     >
                         <div class="container-main flex justify-end">
                             <div
@@ -109,6 +113,7 @@ const { language, blok } = Astro.props;
     import { Application } from "@splinetool/runtime";
 
     // DOM Elements
+    let page: HTMLElement | null;
     let scrollContainer: HTMLElement | null;
     let splitContainer: HTMLElement | null;
     let hero: HTMLElement | null;
@@ -307,26 +312,25 @@ const { language, blok } = Astro.props;
     const initSpline = () => {
         if (!helmetCanvas) return;
         spline = new Application(helmetCanvas);
-        spline
-            .load(
-                "https://prod.spline.design/bx4Ts8cmnCB0NaCw/scene.splinecode",
-            )
-            .then(() => {
-                if (!spline) return;
-                spline.setBackgroundColor("transparent");
-                casqueBaseball = spline.findObjectByName("CasqueBaseball");
-            });
+        // spline
+        //     .load(
+        //         "https://prod.spline.design/bx4Ts8cmnCB0NaCw/scene.splinecode",
+        //     )
+        //     .then(() => {
+        //         if (!spline) return;
+        //         spline.setBackgroundColor("transparent");
+        //         casqueBaseball = spline.findObjectByName("CasqueBaseball");
+        //     });
     };
 
-    const init = () => {
-        const page = document.querySelector("#page-approach");
-
+    const initAppear = () => {
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
         const header = document.querySelectorAll(
             "#layout-header .layout-header",
         );
+        const subtitle = page.querySelectorAll(".page-subtitle");
 
         gsap.timeline()
             .set(banner, {
@@ -334,6 +338,10 @@ const { language, blok } = Astro.props;
             })
             .set(header, {
                 y: -50,
+                opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
                 opacity: 0,
             });
 
@@ -357,9 +365,27 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
             );
+    };
+
+    const init = () => {
+        page = document.querySelector("#page-approach");
+
+        if (!page) return;
 
         setDOMElements();
+
+        initAppear();
 
         mm = gsap.matchMedia();
 
