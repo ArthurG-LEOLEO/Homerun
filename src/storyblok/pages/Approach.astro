@@ -328,7 +328,10 @@ const { language, blok } = Astro.props;
             }
             spline = new Application(helmetCanvas);
             spline
-                .load("/spline/approach.splinecode")
+                .load("/spline/approach.splinecode", undefined, {
+                    credentials: "include",
+                    mode: "no-cors",
+                })
                 .then(() => {
                     if (!spline) {
                         reject("Can't initialized 3D, Spline not initialized");
