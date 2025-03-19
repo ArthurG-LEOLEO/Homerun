@@ -17,7 +17,7 @@ const { blok } = Astro.props;
     id="home-approach"
 >
     <div
-        class="text-p86-mobile px-gutter mx-auto w-full md:text-[5.5rem]/[7.4rem] lg:w-[71vw] lg:px-0 lg:text-[8.6em]/[1.27em]"
+        class="text-p86-mobile px-gutter mx-auto w-full md:text-[5.5rem]/[7.4rem] lg:w-[84vw] lg:px-0 lg:text-[8.6em]/[1.27em]"
     >
         <span set:html={splitText(blok.title_first_part)} />
         <a
@@ -129,9 +129,7 @@ const { blok } = Astro.props;
                     style="--underline: 0;"
                     class="relative inline-block after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:origin-left after:scale-x-[var(--underline)] after:bg-current"
                 >
-                    <span class="word">
-                        {blok.second_category_first_part}
-                    </span>
+                    <span class="word"> communications </span>
                 </span>
             </div>
             <div
@@ -183,15 +181,19 @@ const { blok } = Astro.props;
                     >
                     </div>
                 </div>
-                <span
-                    id="second-cat-p2"
-                    style="--underline: 0;"
-                    class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:origin-left after:scale-x-[var(--underline)] after:bg-current"
-                >
-                    <span class="word">
-                        {blok.second_category_second_part}
-                    </span>
-                </span>
+                {
+                    blok.second_category_second_part && (
+                        <span
+                            id="second-cat-p2"
+                            style="--underline: 0;"
+                            class="relative after:absolute after:right-0 after:bottom-2 after:left-0 after:h-[0.05em] after:origin-left after:scale-x-[var(--underline)] after:bg-current"
+                        >
+                            <span class="word">
+                                {blok.second_category_second_part}
+                            </span>
+                        </span>
+                    )
+                }
             </div>
         </a>
         <span set:html={splitText(blok.title_third_part)} />
