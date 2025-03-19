@@ -38,7 +38,13 @@ const { language, blok } = Astro.props;
                 class="pointer-events-none absolute top-[-22vw] left-[50%] size-[70vw] lg:size-[70vw]"
                 style="--c: #2D5A36"
             >
-                <div id="inner-helmet" class="size-full translate-x-[-50%]">
+                <div
+                    class="bg-green size-1/2 translate-x-[-50%] translate-y-[50%] lg:hidden"
+                ></div>
+                <div
+                    id="inner-helmet"
+                    class="hidden size-full translate-x-[-50%] lg:block"
+                >
                     <canvas id="helmet-canvas" class="size-full opacity-0"
                     ></canvas>
                 </div>
@@ -88,10 +94,11 @@ const { language, blok } = Astro.props;
             </div>
             <div
                 id="second-mobile-helmet"
-                style="--c: #2D5A36"
-                class="flex w-full items-center justify-center lg:hidden"
+                class="pointer-events-none mt-[-30vw] mb-[-30vw] flex size-[100vw] w-full items-center justify-center lg:hidden"
             >
-                <div id="second-inner-helmet" class="size-[40vw] bg-[var(--c)]">
+                <div id="second-inner-helmet" class="size-full">
+                    <canvas id="second-helmet-canvas" class="size-full"
+                    ></canvas>
                 </div>
             </div>
             <div class="py-105 text-white lg:py-130">
@@ -129,6 +136,7 @@ const { language, blok } = Astro.props;
     let splitLeft: HTMLElement | null;
     let helmet: HTMLElement | null;
     let helmetCanvas: HTMLCanvasElement | null;
+    let secondHelmetCanvas: HTMLCanvasElement | null;
     let secondMobileHelmet: HTMLElement | null;
 
     //Spline stuff
@@ -163,50 +171,44 @@ const { language, blok } = Astro.props;
         splitLeft = document.querySelector(".approach #split-left");
         helmet = document.querySelector(".approach #helmet");
         helmetCanvas = document.querySelector(".approach #helmet-canvas");
+        secondHelmetCanvas = document.querySelector(
+            ".approach #second-helmet-canvas",
+        );
         secondMobileHelmet = document.querySelector(
             ".approach #second-mobile-helmet",
         );
     };
 
-    const mobileAnimations = () => {
-        mTlHelmet1 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: hero,
-                    start: "top center",
-                    end: "bottom 80%",
-                    pin: helmet,
-                    scrub: true,
-                },
-            })
-            .fromTo(
-                helmet,
-                {
-                    "--c": "#2D5A36",
-                },
-                {
-                    "--c": "#2D5A36",
-                },
-            );
+    const mobileAnimations = async () => {
+        const { splineHelmet } = await initSpline(secondHelmetCanvas);
 
-        mTlHelmet2 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: secondMobileHelmet,
-                    start: "top bottom",
-                    end: "top top",
-                    scrub: true,
+        splineHelmet.rotation.x = Math.PI * 1.25;
+        splineHelmet.rotation.z = Math.PI / 2;
+
+        mTlHelmet1 = gsap.timeline({
+            scrollTrigger: {
+                trigger: hero,
+                start: "top center",
+                end: "bottom 80%",
+                pin: helmet,
+                scrub: true,
+            },
+        });
+
+        mTlHelmet2 = gsap.timeline({
+            scrollTrigger: {
+                trigger: secondMobileHelmet,
+                start: () => `top+=${window.innerWidth * 0.3}px bottom`,
+                end: () => `bottom-=${window.innerWidth * 0.3}px top`,
+                scrub: true,
+                onUpdate: (self) => {
+                    if (!spline || !splineHelmet) return;
+                    const p = self.progress;
+                    splineHelmet.rotation.x =
+                        Math.PI * 1.25 + Math.PI * -0.5 * p;
                 },
-            })
-            .fromTo(
-                secondMobileHelmet,
-                {
-                    "--c": "#2D5A36",
-                },
-                {
-                    "--c": "#EDD4F8",
-                },
-            );
+            },
+        });
 
         mTlSplit2 = gsap
             .timeline({
@@ -222,7 +224,9 @@ const { language, blok } = Astro.props;
             });
     };
 
-    const desktopAnimations = () => {
+    const desktopAnimations = async () => {
+        const { splineHelmet } = await initSpline(helmetCanvas);
+
         dTlSplit2Left = gsap
             .timeline({
                 scrollTrigger: {
@@ -233,10 +237,10 @@ const { language, blok } = Astro.props;
                     pinSpacing: false,
                     pin: splitLeft,
                     onUpdate: (self) => {
-                        if (!spline || !casqueBaseball) return;
+                        if (!spline || !splineHelmet) return;
 
                         const p = self.progress;
-                        casqueBaseball.rotation.x =
+                        splineHelmet.rotation.x =
                             Math.PI * 1.25 + Math.PI * -0.5 * p;
                     },
                 },
@@ -287,11 +291,11 @@ const { language, blok } = Astro.props;
                     scrub: true,
                     invalidateOnRefresh: true,
                     onUpdate: (self) => {
-                        if (!spline || !casqueBaseball) return;
+                        if (!spline || !splineHelmet) return;
 
                         const p = self.progress;
-                        casqueBaseball.rotation.x = Math.PI * 1.25 * p;
-                        casqueBaseball.rotation.z =
+                        splineHelmet.rotation.x = Math.PI * 1.25 * p;
+                        splineHelmet.rotation.z =
                             (Math.PI / 2) * Math.min(p * 2, 1);
                     },
                 },
@@ -320,13 +324,15 @@ const { language, blok } = Astro.props;
             });
     };
 
-    const initSpline = (): Promise<{ splineHelmet: any }> => {
+    const initSpline = (
+        canvas: HTMLCanvasElement | null,
+    ): Promise<{ splineHelmet: any }> => {
         return new Promise((resolve, reject) => {
-            if (!helmetCanvas) {
+            if (!canvas) {
                 reject("Can't initialized 3D, no canvas present");
                 return;
             }
-            spline = new Application(helmetCanvas);
+            spline = new Application(canvas);
             spline
                 .load("/spline/approach.splinecode", undefined, {
                     credentials: "include",
@@ -503,19 +509,20 @@ const { language, blok } = Astro.props;
 
         setDOMElements();
 
-        const { splineHelmet } = await initSpline();
-        casqueBaseball = splineHelmet;
-
-        console.log("after spline is loaded");
-
         mm = gsap.matchMedia();
 
         mm.add("(width < 1024px )", () => {
             mobileAnimations();
+            return () => {
+                cleanupMobile();
+            };
         });
 
         mm.add("(width > 1024px )", () => {
             desktopAnimations();
+            return () => {
+                cleanupDesktop();
+            };
         });
 
         gTlSplit1 = gsap
@@ -541,19 +548,19 @@ const { language, blok } = Astro.props;
         initAppear();
     };
 
-    const cleanup = () => {
+    const cleanupMobile = () => {
         if (spline) spline.stop();
         spline = null;
-        mm?.revert();
-        mm = null;
-        gTlSplit1?.kill();
-        gTlSplit1 = null;
         mTlHelmet1?.kill();
         mTlHelmet1 = null;
         mTlHelmet2?.kill();
         mTlHelmet2 = null;
         mTlSplit2?.kill();
         mTlSplit2 = null;
+    };
+    const cleanupDesktop = () => {
+        if (spline) spline.stop();
+        spline = null;
         dTlSplit2Left?.kill();
         dTlSplit2Left = null;
         dTlSplit2Right?.kill();
@@ -564,6 +571,13 @@ const { language, blok } = Astro.props;
         dTlHelmet1 = null;
         dTlHelmet2?.kill();
         dTlHelmet2 = null;
+    };
+
+    const cleanup = () => {
+        mm?.revert();
+        mm = null;
+        gTlSplit1?.kill();
+        gTlSplit1 = null;
 
         scrollContainer = null;
         splitContainer = null;
