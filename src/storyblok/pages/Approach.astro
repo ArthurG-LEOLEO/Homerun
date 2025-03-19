@@ -127,8 +127,9 @@ const { language, blok } = Astro.props;
 <script>
     import { Application } from "@splinetool/runtime";
 
-    // 10 deg
-    const MOUSE_PARALLAX_ROTATION = (Math.PI / 180) * 10;
+    // we keep them separated if we need to change values
+    const MOUSE_PARALLAX_ROTATION = (Math.PI / 180) * 10; // 10 deg
+    const SCROLL_PARALLAX_ROTATION = (Math.PI / 180) * 10; // 10 deg
 
     // DOM Elements
     let page: HTMLElement | null;
@@ -167,6 +168,10 @@ const { language, blok } = Astro.props;
     let dTlHelmet2: gsap.core.Timeline | null;
     let dTlSplit2Left: gsap.core.Timeline | null;
     let dTlSplit2Right: gsap.core.Timeline | null;
+
+    //Desktop scroll parallax
+    let parallaxScroll: ScrollTrigger | null;
+    let prevScroll = 0;
 
     const setDOMElements = () => {
         scrollContainer = document.querySelector(".approach #scroll-container");
@@ -244,18 +249,33 @@ const { language, blok } = Astro.props;
         const { splineHelmet, helmetEmpty } = await initSpline(helmetCanvas);
 
         splineHelmetEmpty = helmetEmpty;
-
         helmetEmptyRotateX = gsap.quickTo(splineHelmetEmpty.rotation, "x", {
             duration: 0.6,
             ease: "power3",
         });
-
         helmetEmptyRotateZ = gsap.quickTo(splineHelmetEmpty.rotation, "z", {
             duration: 0.6,
             ease: "power3",
         });
 
         page?.addEventListener("mousemove", onApproachMouseMove);
+
+        parallaxScroll = window.ScrollTrigger.create({
+            id: "approach-scroll-paralalx",
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self: ScrollTrigger) => {
+                const scroll = self.scroll();
+                let delta = (scroll - prevScroll) * 2;
+
+                const verticalOffset = gsap.utils.clamp(-1, 1, delta / -20);
+
+                helmetEmptyRotateZ(-SCROLL_PARALLAX_ROTATION * verticalOffset);
+
+                prevScroll = scroll;
+            },
+        });
 
         dTlSplit2Left = gsap
             .timeline({
@@ -593,6 +613,7 @@ const { language, blok } = Astro.props;
         page?.removeEventListener("mousemove", onApproachMouseMove);
         if (spline) spline.stop();
         spline = null;
+        parallaxScroll?.kill();
         dTlSplit2Left?.kill();
         dTlSplit2Left = null;
         dTlSplit2Right?.kill();
