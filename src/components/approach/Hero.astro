@@ -9,29 +9,37 @@ const { blok } = Astro.props;
     <div class="container-main z-[1] text-center" id="approach-hero-inner">
         <div class="flex w-full lg:translate-y-[-20%]">
             <div
-                class="px-gutter flex w-1/2 translate-x-[calc(50%*var(--offset))] flex-col items-center justify-center gap-15 lg:translate-x-[calc(16.66%*var(--offset))] lg:gap-55"
+                class="px-gutter flex w-1/2 translate-x-[calc(50%*var(--offset))] justify-center lg:translate-x-[calc(16.66%*var(--offset))]"
             >
                 <div
-                    class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
-                    set:html={renderRichText(blok.left_description)}
-                />
-                <div
-                    class="flex size-34 items-center justify-center rounded-full border-2"
+                    class="flex w-full flex-col items-center justify-center gap-15 lg:mr-90 lg:gap-55"
                 >
-                    <Icon name="arrow-down" size="12" />
+                    <div
+                        class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                        set:html={renderRichText(blok.left_description)}
+                    />
+                    <div
+                        class="flex size-34 items-center justify-center rounded-full border-[0.2rem]"
+                    >
+                        <Icon name="arrow-down" class="size-12" />
+                    </div>
                 </div>
             </div>
             <div
-                class="px-gutter flex w-1/2 translate-x-[calc(50vw*var(--offset))] flex-col items-center justify-center gap-15 text-white lg:gap-55"
+                class="px-gutter flex w-1/2 translate-x-[calc(50vw*var(--offset))] justify-center text-white"
             >
                 <div
-                    class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
-                    set:html={renderRichText(blok.right_description)}
-                />
-                <div
-                    class="flex size-34 items-center justify-center rounded-full border-2"
+                    class="flex w-full flex-col items-center justify-center gap-15 lg:ml-90 lg:gap-55"
                 >
-                    <Icon name="arrow-down" size="12" />
+                    <div
+                        class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                        set:html={renderRichText(blok.right_description)}
+                    />
+                    <div
+                        class="flex size-34 items-center justify-center rounded-full border-[0.2rem]"
+                    >
+                        <Icon name="arrow-down" class="size-12" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,6 +67,7 @@ const { blok } = Astro.props;
                 start: "center-=20% center",
                 endTrigger: hero,
                 end: "bottom 70%",
+                invalidateOnRefresh: true,
                 pin: heroInner,
             },
         });

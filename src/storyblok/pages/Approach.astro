@@ -136,6 +136,7 @@ const { language, blok } = Astro.props;
     let scrollContainer: HTMLElement | null;
     let splitContainer: HTMLElement | null;
     let hero: HTMLElement | null;
+    let heroInner: HTMLElement | null;
     let splitRight: HTMLElement | null;
     let splitLeft: HTMLElement | null;
     let helmet: HTMLElement | null;
@@ -165,6 +166,7 @@ const { language, blok } = Astro.props;
     // desktop Timelines
     let dTlHelmetPin: gsap.core.Timeline | null;
     let dTlHelmet1: gsap.core.Timeline | null;
+    let dTlHelmetTopToFace: gsap.core.Timeline | null;
     let dTlHelmet2: gsap.core.Timeline | null;
     let dTlSplit2Left: gsap.core.Timeline | null;
     let dTlSplit2Right: gsap.core.Timeline | null;
@@ -177,6 +179,7 @@ const { language, blok } = Astro.props;
         scrollContainer = document.querySelector(".approach #scroll-container");
         splitContainer = document.querySelector(".approach #split-container");
         hero = document.querySelector(".approach #approach-hero");
+        heroInner = document.querySelector(".approach #approach-hero-inner");
         splitRight = document.querySelector(".approach #split-right");
         splitLeft = document.querySelector(".approach #split-left");
         helmet = document.querySelector(".approach #helmet");
@@ -260,20 +263,20 @@ const { language, blok } = Astro.props;
 
         page?.addEventListener("mousemove", onApproachMouseMove);
 
-        parallaxScroll = window.ScrollTrigger.create({
-            id: "approach-scroll-paralalx",
-            trigger: "body",
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: (self: ScrollTrigger) => {
-                const scroll = self.scroll();
-                let delta = (scroll - prevScroll) * 2;
+        dTlHelmetTopToFace = gsap.timeline({
+            scrollTrigger: {
+                trigger: helmet,
+                start: "center center",
+                endTrigger: heroInner,
+                end: "center-=20% center",
+                invalidateOnRefresh: true,
+                onUpdate: (self) => {
+                    if (!spline || !splineHelmet) return;
 
-                const verticalOffset = gsap.utils.clamp(-1, 1, delta / -20);
-
-                helmetEmptyRotateZ(-SCROLL_PARALLAX_ROTATION * verticalOffset);
-
-                prevScroll = scroll;
+                    const p = self.progress;
+                    splineHelmet.rotation.x = Math.PI * p;
+                    splineHelmet.rotation.z = (Math.PI / 2) * p;
+                },
             },
         });
 
@@ -286,27 +289,17 @@ const { language, blok } = Astro.props;
                     scrub: true,
                     pinSpacing: false,
                     pin: splitLeft,
+                    invalidateOnRefresh: true,
                     onUpdate: (self) => {
                         if (!spline || !splineHelmet) return;
-
                         const p = self.progress;
                         splineHelmet.rotation.x =
                             Math.PI * 1.25 + Math.PI * -0.5 * p;
                     },
                 },
             })
-            .to(splitContainer, {
-                "--progress": 0.99,
-            })
-            .to(
-                helmet,
-                {
-                    "--c": "#EDD4F8",
-                    x: "-30vw",
-                },
-
-                "<",
-            );
+            .to(splitContainer, { "--progress": 0.99 })
+            .to(helmet, { x: "-30vw" }, "<");
 
         dTlSplit2Right = gsap.timeline({
             scrollTrigger: {
@@ -331,35 +324,6 @@ const { language, blok } = Astro.props;
             },
         });
 
-        dTlHelmet1 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: helmet,
-                    start: "center-=50px center",
-                    endTrigger: hero,
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                    onUpdate: (self) => {
-                        if (!spline || !splineHelmet) return;
-
-                        const p = self.progress;
-                        splineHelmet.rotation.x = Math.PI * 1.25 * p;
-                        splineHelmet.rotation.z =
-                            (Math.PI / 2) * Math.min(p * 2, 1);
-                    },
-                },
-            })
-            .fromTo(
-                helmet,
-                {
-                    "--c": "#2D5A36",
-                },
-                {
-                    "--c": "#E56138",
-                },
-            );
-
         dTlHelmet2 = gsap
             .timeline({
                 scrollTrigger: {
@@ -367,11 +331,36 @@ const { language, blok } = Astro.props;
                     start: "top top",
                     end: "bottom top",
                     scrub: true,
+                    invalidateOnRefresh: true,
+                    onUpdate: (self) => {
+                        if (!spline || !splineHelmet) return;
+                        const p = self.progress;
+                        splineHelmet.rotation.x = Math.PI + Math.PI * 0.25 * p;
+                    },
                 },
             })
             .to(helmet, {
                 x: "30vw",
             });
+
+        parallaxScroll = window.ScrollTrigger.create({
+            id: "approach-scroll-paralalx",
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self: ScrollTrigger) => {
+                console.log("para scroll");
+
+                const scroll = self.scroll();
+                let delta = (scroll - prevScroll) * 2;
+
+                const verticalOffset = gsap.utils.clamp(-1, 1, delta / -20);
+
+                helmetEmptyRotateZ(-SCROLL_PARALLAX_ROTATION * verticalOffset);
+
+                prevScroll = scroll;
+            },
+        });
     };
 
     const initSpline = (
@@ -631,10 +620,10 @@ const { language, blok } = Astro.props;
         mm = null;
         gTlSplit1?.kill();
         gTlSplit1 = null;
-
         scrollContainer = null;
         splitContainer = null;
         hero = null;
+        heroInner = null;
         splitRight = null;
         splitLeft = null;
         helmet = null;
