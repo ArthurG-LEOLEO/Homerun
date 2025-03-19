@@ -18,21 +18,29 @@ const { language, blok } = Astro.props;
         >
             {blok.subtitle}
         </span>
-        <h1 class="text-title-1 px-gutter w-10/12 text-center">
-            <Title title={blok.title[0]} />
+        <h1
+            id="approach-title"
+            class="text-title-1 px-gutter w-10/12 text-center"
+        >
+            <Title reveal="manual" title={blok.title[0]} />
         </h1>
     </div>
     <div id="scroll-container">
         <div class="relative mt-105 flex aspect-[1440/660] w-full lg:mt-130">
-            <div class="bg-pink w-1/2 rounded-tl-[100%]"></div>
-            <div class="bg-orange w-1/2 rounded-tr-[100%]"></div>
+            <div
+                class="bg-pink approach-peak w-1/2 origin-bottom rounded-tl-[100%] opacity-0"
+            ></div>
+            <div
+                class="bg-orange approach-peak w-1/2 origin-bottom rounded-tr-[100%] opacity-0"
+            ></div>
             <div
                 id="helmet"
                 class="pointer-events-none absolute top-[-22vw] left-[50%] size-[70vw] lg:size-[70vw]"
                 style="--c: #2D5A36"
             >
                 <div id="inner-helmet" class="size-full translate-x-[-50%]">
-                    <canvas id="helmet-canvas" class="size-full"></canvas>
+                    <canvas id="helmet-canvas" class="size-full opacity-0"
+                    ></canvas>
                 </div>
             </div>
         </div>
@@ -253,6 +261,7 @@ const { language, blok } = Astro.props;
                 end: "bottom top",
                 pin: splitRight,
                 scrub: true,
+                invalidateOnRefresh: true,
             },
         });
 
@@ -264,6 +273,7 @@ const { language, blok } = Astro.props;
                 end: "bottom bottom",
                 pin: helmet,
                 scrub: true,
+                invalidateOnRefresh: true,
             },
         });
 
@@ -275,6 +285,7 @@ const { language, blok } = Astro.props;
                     endTrigger: hero,
                     end: "bottom top",
                     scrub: true,
+                    invalidateOnRefresh: true,
                     onUpdate: (self) => {
                         if (!spline || !casqueBaseball) return;
 
@@ -309,18 +320,31 @@ const { language, blok } = Astro.props;
             });
     };
 
-    const initSpline = () => {
-        if (!helmetCanvas) return;
-        spline = new Application(helmetCanvas);
-        // spline
-        //     .load(
-        //         "https://prod.spline.design/bx4Ts8cmnCB0NaCw/scene.splinecode",
-        //     )
-        //     .then(() => {
-        //         if (!spline) return;
-        //         spline.setBackgroundColor("transparent");
-        //         casqueBaseball = spline.findObjectByName("CasqueBaseball");
-        //     });
+    const initSpline = (): Promise<{ splineHelmet: any }> => {
+        return new Promise((resolve, reject) => {
+            if (!helmetCanvas) {
+                reject("Can't initialized 3D, no canvas present");
+                return;
+            }
+            spline = new Application(helmetCanvas);
+            spline
+                .load("/spline/approach.splinecode")
+                .then(() => {
+                    if (!spline) {
+                        reject("Can't initialized 3D, Spline not initialized");
+                        return;
+                    }
+                    spline.setBackgroundColor("transparent");
+                    console.log("spline is loaded");
+
+                    resolve({
+                        splineHelmet: spline.findObjectByName("CasqueBaseball"),
+                    });
+                })
+                .catch(() => {
+                    reject("Can't initialized 3D, Spline doesn't respond");
+                });
+        });
     };
 
     const initAppear = () => {
@@ -330,7 +354,14 @@ const { language, blok } = Astro.props;
         const header = document.querySelectorAll(
             "#layout-header .layout-header",
         );
-        const subtitle = page.querySelectorAll(".page-subtitle");
+        const subtitle = page.querySelector(".page-subtitle");
+        const approachPeak = page.querySelectorAll(".approach-peak");
+        const titleWordsDesktop = page.querySelectorAll(
+            "#approach-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#approach-title .title-wrap-mobile .word-inner",
+        );
 
         gsap.timeline()
             .set(banner, {
@@ -343,10 +374,22 @@ const { language, blok } = Astro.props;
             .set(subtitle, {
                 scale: 0.7,
                 opacity: 0,
+            })
+            .set(approachPeak, {
+                scaleY: 0,
+                opacity: 0,
+            })
+            .set(helmetCanvas, {
+                y: "10rem",
+                opacity: 0,
+            })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "100%",
+                opacity: 1,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({ delay: 0.3, paused: true })
             .to(
                 banner,
                 {
@@ -375,17 +418,92 @@ const { language, blok } = Astro.props;
                     ease: "elastic.out(1.2,0.7)",
                 },
                 "start+=0.1",
+            )
+            .to(
+                approachPeak,
+                {
+                    opacity: 1,
+                    scaleY: 1,
+                    duration: 1,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.3",
+            )
+            .to(
+                helmetCanvas,
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.3",
             );
+
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+        tlAppear.play();
     };
 
-    const init = () => {
-        page = document.querySelector("#page-approach");
+    const waitForFooterSplineLoad = () => {
+        return new Promise<void>((resolve, reject) => {
+            const splineViewer: any | null =
+                document.getElementById("SplineViewer");
 
+            if (splineViewer?._loaded) {
+                console.log("splineViewer is already Laoded");
+                resolve();
+            }
+
+            splineViewer?.addEventListener("load-complete", () => {
+                console.log("splineViewer load complete");
+
+                resolve();
+            });
+        });
+    };
+
+    const init = async () => {
+        page = document.querySelector("#page-approach");
         if (!page) return;
+
+        await waitForFooterSplineLoad();
 
         setDOMElements();
 
-        initAppear();
+        const { splineHelmet } = await initSpline();
+        casqueBaseball = splineHelmet;
+
+        console.log("after spline is loaded");
 
         mm = gsap.matchMedia();
 
@@ -417,7 +535,7 @@ const { language, blok } = Astro.props;
                 "<",
             );
 
-        initSpline();
+        initAppear();
     };
 
     const cleanup = () => {
