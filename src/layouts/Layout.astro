@@ -19,6 +19,7 @@ import HrefLangs from "../components/global/HrefLangs.astro";
 import { defaultLocale } from "../i18n/config";
 
 const isDev = import.meta.env.DEV;
+const isProd = import.meta.env.CONTEXT === 'production';
 const storyblokApi = useStoryblokApi();
 const {
     language,
@@ -63,7 +64,7 @@ if (currentLocale) {
 ---
 
 <!doctype html>
-<html lang={language}>
+<html lang={language} data-prod={isProd}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -145,7 +146,9 @@ if (currentLocale) {
         const preventBrowserLangRedirect = localStorage.getItem(
             "preventBrowserLangRedirect",
         );
-        if (!preventBrowserLangRedirect) {
+        const isProdEnv = document.documentElement.dataset.prod === 'true'
+
+        if (!preventBrowserLangRedirect && isProdEnv) {
             checkLangRedirect();
         }
     });
