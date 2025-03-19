@@ -127,6 +127,9 @@ const { language, blok } = Astro.props;
 <script>
     import { Application } from "@splinetool/runtime";
 
+    // 10 deg
+    const MOUSE_PARALLAX_ROTATION = (Math.PI / 180) * 10;
+
     // DOM Elements
     let page: HTMLElement | null;
     let scrollContainer: HTMLElement | null;
@@ -141,7 +144,9 @@ const { language, blok } = Astro.props;
 
     //Spline stuff
     let spline: Application | null;
-    let casqueBaseball;
+    let splineHelmetEmpty: any;
+    let helmetEmptyRotateX: gsap.QuickToFunc | ((arg0: number) => void);
+    let helmetEmptyRotateZ: gsap.QuickToFunc | ((arg0: number) => void);
 
     let tlAppear: gsap.core.Timeline | null;
 
@@ -224,8 +229,33 @@ const { language, blok } = Astro.props;
             });
     };
 
+    const onApproachMouseMove = (e: MouseEvent) => {
+        if (!spline || !splineHelmetEmpty) return;
+
+        // Get normalized positions between -1 and 1. Where middle of the screen is 0,0
+        const normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+        const normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+        helmetEmptyRotateX(-MOUSE_PARALLAX_ROTATION * normalizedX);
+        helmetEmptyRotateZ(-MOUSE_PARALLAX_ROTATION * normalizedY);
+    };
+
     const desktopAnimations = async () => {
-        const { splineHelmet } = await initSpline(helmetCanvas);
+        const { splineHelmet, helmetEmpty } = await initSpline(helmetCanvas);
+
+        splineHelmetEmpty = helmetEmpty;
+
+        helmetEmptyRotateX = gsap.quickTo(splineHelmetEmpty.rotation, "x", {
+            duration: 0.6,
+            ease: "power3",
+        });
+
+        helmetEmptyRotateZ = gsap.quickTo(splineHelmetEmpty.rotation, "z", {
+            duration: 0.6,
+            ease: "power3",
+        });
+
+        page?.addEventListener("mousemove", onApproachMouseMove);
 
         dTlSplit2Left = gsap
             .timeline({
@@ -326,7 +356,7 @@ const { language, blok } = Astro.props;
 
     const initSpline = (
         canvas: HTMLCanvasElement | null,
-    ): Promise<{ splineHelmet: any }> => {
+    ): Promise<{ splineHelmet: any; helmetEmpty: any }> => {
         return new Promise((resolve, reject) => {
             if (!canvas) {
                 reject("Can't initialized 3D, no canvas present");
@@ -348,6 +378,7 @@ const { language, blok } = Astro.props;
 
                     resolve({
                         splineHelmet: spline.findObjectByName("CasqueBaseball"),
+                        helmetEmpty: spline.findObjectByName("CasqueBaseball6"),
                     });
                 })
                 .catch(() => {
@@ -559,6 +590,7 @@ const { language, blok } = Astro.props;
         mTlSplit2 = null;
     };
     const cleanupDesktop = () => {
+        page?.removeEventListener("mousemove", onApproachMouseMove);
         if (spline) spline.stop();
         spline = null;
         dTlSplit2Left?.kill();
