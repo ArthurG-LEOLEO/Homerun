@@ -19,8 +19,11 @@ const { language, blok } = Astro.props;
             >
                 {blok.subtitle}
             </span>
-            <h1 class="text-title-1 px-gutter w-10/12 text-center">
-                <Title title={blok.title[0]} />
+            <h1
+                id="contact-title"
+                class="text-title-1 px-gutter w-10/12 text-center"
+            >
+                <Title reveal="manual" title={blok.title[0]} />
             </h1>
             <div class="flex flex-col items-center md:gap-8">
                 <Section
@@ -49,6 +52,23 @@ const { language, blok } = Astro.props;
     let section2: HTMLElement | null;
     let section3: HTMLElement | null;
     let section1Inner: HTMLElement | null;
+
+    const waitForFooterSplineLoad = () => {
+        return new Promise<void>((resolve, reject) => {
+            const splineViewer: any | null =
+                document.getElementById("SplineViewer");
+
+            if (splineViewer?._loaded) {
+                console.log("splineViewer is already Laoded");
+                resolve();
+            }
+
+            splineViewer?.addEventListener("load-complete", () => {
+                console.log("splineViewer load complete");
+                resolve();
+            });
+        });
+    };
 
     const initBlockScroll = () => {
         tlSection1 = gsap
@@ -140,7 +160,7 @@ const { language, blok } = Astro.props;
             });
     };
 
-    const init = () => {
+    const init = async () => {
         const page = document.querySelector("#page-contact");
         if (!page) return;
 
@@ -155,6 +175,15 @@ const { language, blok } = Astro.props;
 
         section2 = page.querySelector(".contact-section-2");
         section3 = page.querySelector(".contact-section-3");
+
+        const titleWordsDesktop = page.querySelectorAll(
+            "#contact-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#contact-title .title-wrap-mobile .word-inner",
+        );
+
+        await waitForFooterSplineLoad();
 
         gsap.timeline()
             .set(banner, {
@@ -172,10 +201,14 @@ const { language, blok } = Astro.props;
                 y: "20rem",
                 opacity: 0,
                 rotate: -5,
+            })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "100%",
+                opacity: 1,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({ paused: true, delay: 0.3 })
             .to(
                 banner,
                 {
@@ -216,6 +249,38 @@ const { language, blok } = Astro.props;
                 },
                 "<+=0.5",
             );
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+        tlAppear.play();
 
         initBlockScroll();
     };
