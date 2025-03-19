@@ -7,7 +7,6 @@ const { language, blok } = Astro.props;
 <div class="container-main" {...storyblokEditable(blok)}>
     <h4
         class="px-gutter text-title-2 mx-auto w-10/12 text-center whitespace-pre-wrap text-black lg:w-8/12"
-    >{/*
-        */}{blok.text}{/*
-    */}</h4>
+        >{blok.text}</h4
+    >
 </div>

@@ -11,8 +11,10 @@ const { language, items } = Astro.props;
 
 <div class="container-main bg-pink py-100 text-black md:pt-125">
     <div class="flex items-end justify-between">
-        <h3 class="text-title-1 px-gutter whitespace-pre-wrap">{t("shop.other")}</h3>
-        <div class="flex-none px-gutter mb-16 hidden md:block">
+        <h3 class="text-title-1 px-gutter whitespace-pre-wrap"
+            >{t("shop.other")}</h3
+        >
+        <div class="px-gutter mb-16 hidden flex-none md:block">
             <ArrowLink
                 plus
                 label={t("shop.all")}

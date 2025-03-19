@@ -16,12 +16,8 @@ const { blok } = Astro.props;
         class="-right-gutter before:bg-orange after:bg-orange absolute top-0 left-1/2 flex h-full flex-col before:aspect-187/171 before:w-full before:flex-none before:rounded-tr-full after:flex-1"
     >
     </div>
-    <div
-        class="px-gutter relative mx-auto mb-80 w-6/12 max-w-300 md:mb-45"
-    >
-        <div
-            class="flex aspect-174/240 items-center justify-center bg-black"
-        >
+    <div class="px-gutter relative mx-auto mb-80 w-6/12 max-w-300 md:mb-45">
+        <div class="flex aspect-174/240 items-center justify-center bg-black">
             <span class="text-white">SPLINE</span>
         </div>
     </div>
@@ -32,17 +28,14 @@ const { blok } = Astro.props;
             {
                 blok.approach_left_col_title[0] && (
                     <h5 class="text-title-5">
-                        <Title
-                            title={blok.approach_left_col_title[0]}
-                        />
+                        <Title title={blok.approach_left_col_title[0]} />
                     </h5>
                 )
             }
             {
+                // prettier-ignore
                 blok.approach_left_col_text && (
-                    <p class="text-p-18 flex whitespace-pre-wrap">{/*
-                        */}{blok.approach_left_col_text}{/*
-                    */}</p>
+                    <p class="text-p-18 flex whitespace-pre-wrap">{blok.approach_left_col_text}</p>
                 )
             }
         </div>
@@ -52,17 +45,14 @@ const { blok } = Astro.props;
             {
                 blok.approach_right_col_title[0] && (
                     <h5 class="text-title-5">
-                        <Title
-                            title={blok.approach_right_col_title[0]}
-                        />
+                        <Title title={blok.approach_right_col_title[0]} />
                     </h5>
                 )
             }
             {
+                // prettier-ignore
                 blok.approach_right_col_text && (
-                    <p class="text-p-18 whitespace-pre-wrap">{/*
-                        */}{blok.approach_right_col_text}{/*
-                    */}</p>
+                    <p class="text-p-18 whitespace-pre-wrap">{blok.approach_right_col_text}</p>
                 )
             }
         </div>

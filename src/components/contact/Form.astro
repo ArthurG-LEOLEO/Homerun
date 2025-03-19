@@ -2,38 +2,44 @@
 import { Icon } from "astro-icon/components";
 
 interface SubjectOption {
-  id: string;
-  label: string;
+    id: string;
+    label: string;
 }
 
 interface FormBlok {
-  first_name_label: string;
-  last_name_label: string;
-  email_label: string;
-  subject_label: string;
-  message_label: string;
-  subject_options: SubjectOption[];
-  send_label: string;
-  required_fields_label: string;
-  success_message: string;
-  new_message_label: string;
-  error_message: string;
+    first_name_label: string;
+    last_name_label: string;
+    email_label: string;
+    subject_label: string;
+    message_label: string;
+    subject_options: SubjectOption[];
+    send_label: string;
+    required_fields_label: string;
+    success_message: string;
+    new_message_label: string;
+    error_message: string;
 }
 
 const { blok } = Astro.props as { blok: FormBlok };
 ---
 
 <div class="mt-50 md:mt-60">
-    <div id="form-container" class="relative py-75 before:bg-pink before:absolute before:inset-0 text-black md:py-100 md:before:left-gutter md:before:right-gutter">
-        <div class="relative px-24 md:px-0 md:mx-auto md:w-8/10 lg:w-6/8">
-
+    <div
+        id="form-container"
+        class="before:bg-pink md:before:left-gutter md:before:right-gutter relative py-75 text-black before:absolute before:inset-0 md:py-100"
+    >
+        <div class="relative px-24 md:mx-auto md:w-8/10 md:px-0 lg:w-6/8">
             <!-- Form success -->
-            <div id="form-success" class="hidden px-gutter flex-col gap-24">
-                <h2 class="whitespace-pre-wrap text-title-5">{/*
-                    */}{blok.success_message}{/*
-                */}</h2>
+            <div id="form-success" class="px-gutter hidden flex-col gap-24">
+                <h2 class="text-title-5 whitespace-pre-wrap"
+                    >{blok.success_message}</h2
+                >
                 <div>
-                    <button id="new-button" type="button" class="relative inline-flex mt-16 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current text-cta-16 cursor-pointer">
+                    <button
+                        id="new-button"
+                        type="button"
+                        class="text-cta-16 relative mt-16 inline-flex cursor-pointer after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:bg-current"
+                    >
                         {blok.new_message_label}
                     </button>
                 </div>
@@ -56,112 +62,134 @@ const { blok } = Astro.props as { blok: FormBlok };
 
                 <!-- Name -->
                 <div class="flex flex-col gap-40 md:flex-row md:gap-0">
-                    <div class="flex flex-col flex-1 px-gutter md:gap-8">
-                        <label for="lastname" class="text-title-7">{blok.first_name_label}*</label>
-                        <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                    <div class="px-gutter flex flex-1 flex-col md:gap-8">
+                        <label for="lastname" class="text-title-7"
+                            >{blok.first_name_label}*</label
+                        >
+                        <div
+                            class="relative before:pointer-events-none before:absolute before:inset-0 before:border-b before:border-black"
+                        >
                             <input
                                 type="text"
                                 id="lastname"
                                 name="lastname"
                                 required
-                                class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                                class="text-p-24 w-full border-b-3 border-transparent bg-transparent py-6 outline-none focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-8"
                             />
                         </div>
                     </div>
-                    <div class="flex flex-col flex-1 px-gutter md:gap-8">
-                        <label for="firstname" class="text-title-7">{blok.last_name_label}*</label>
-                        <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                    <div class="px-gutter flex flex-1 flex-col md:gap-8">
+                        <label for="firstname" class="text-title-7"
+                            >{blok.last_name_label}*</label
+                        >
+                        <div
+                            class="relative before:pointer-events-none before:absolute before:inset-0 before:border-b before:border-black"
+                        >
                             <input
                                 type="text"
                                 id="firstname"
                                 name="firstname"
                                 required
-                                class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                                class="text-p-24 w-full border-b-3 border-transparent bg-transparent py-6 outline-none focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-8"
                             />
                         </div>
                     </div>
                 </div>
 
                 <!-- Email -->
-                <div class="flex flex-col px-gutter md:gap-8">
-                    <label for="email" class="text-title-7">{blok.email_label}*</label>
-                    <div class="relative before:absolute before:inset-0 before:border-b before:border-black before:pointer-events-none">
+                <div class="px-gutter flex flex-col md:gap-8">
+                    <label for="email" class="text-title-7"
+                        >{blok.email_label}*</label
+                    >
+                    <div
+                        class="relative before:pointer-events-none before:absolute before:inset-0 before:border-b before:border-black"
+                    >
                         <input
                             type="email"
                             id="email"
                             name="email"
                             required
-                            class="text-p-24 py-6 bg-transparent md:py-8 w-full outline-none border-b-3 border-transparent focus-visible:border-black focus-visible:outline-0 focus:border-black"
+                            class="text-p-24 w-full border-b-3 border-transparent bg-transparent py-6 outline-none focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-8"
                         />
                     </div>
                 </div>
 
                 <!-- Subject -->
-                <div class="flex flex-col px-gutter md:gap-8">
+                <div class="px-gutter flex flex-col md:gap-8">
                     <p class="text-title-7">{blok.subject_label}*</p>
                     <div class="flex flex-wrap gap-4">
-                        {(blok.subject_options || []).map((option: SubjectOption, index: number) => (
-                            <div class="subject-option">
-                                <input
-                                    type="radio"
-                                    id={option.id}
-                                    name="subject"
-                                    value={option.label}
-                                    class="topic-radio peer hidden"
-                                    required={index === 0}
-                                />
-                                <label
-                                    for={option.id}
-                                    class="topic-label inline-flex items-center gap-6 text-tag-lil px-10 py-1 border-3 border-black rounded-[6rem] cursor-pointer inline-block transition-all md:gap-10 md:px-13 md:py-5 peer-checked:bg-blue"
-                                >
-                                    <span class="arrow-icon relative -top-1">
-                                        <Icon 
-                                            name="arrow-right" 
-                                            class="size-12 md:size-16" 
+                        {
+                            (blok.subject_options || []).map(
+                                (option: SubjectOption, index: number) => (
+                                    <div class="subject-option">
+                                        <input
+                                            type="radio"
+                                            id={option.id}
+                                            name="subject"
+                                            value={option.label}
+                                            class="topic-radio peer hidden"
+                                            required={index === 0}
                                         />
-                                    </span>
-                                    <span>
-                                        {option.label}
-                                    </span>
-                                </label>
-                            </div>
-                        ))}
+                                        <label
+                                            for={option.id}
+                                            class="topic-label text-tag-lil peer-checked:bg-blue inline-block inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
+                                        >
+                                            <span class="arrow-icon relative -top-1">
+                                                <Icon
+                                                    name="arrow-right"
+                                                    class="size-12 md:size-16"
+                                                />
+                                            </span>
+                                            <span>{option.label}</span>
+                                        </label>
+                                    </div>
+                                ),
+                            )
+                        }
                     </div>
                 </div>
 
                 <!-- Message -->
-                <div class="flex flex-col px-gutter md:gap-8">
-                    <label for="message" class="text-title-7">{blok.message_label}*</label>
-                        <div class="relative before:absolute before:inset-0 before:border before:border-black before:pointer-events-none">
-                            <textarea
-                                id="message"
-                                name="message"
-                                rows="3"
-                                required
-                                class="relative block w-full text-p-24 border border-3 border-transparent p-8 bg-transparent md:py-13 resize-none focus-visible:outline-0 focus-visible:border-black focus:border-black"
-                            ></textarea>
+                <div class="px-gutter flex flex-col md:gap-8">
+                    <label for="message" class="text-title-7"
+                        >{blok.message_label}*</label
+                    >
+                    <div
+                        class="relative before:pointer-events-none before:absolute before:inset-0 before:border before:border-black"
+                    >
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="3"
+                            required
+                            class="text-p-24 relative block w-full resize-none border border-3 border-transparent bg-transparent p-8 focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-13"
+                        ></textarea>
                     </div>
                 </div>
 
                 <!-- Form error -->
-                <div id="form-error" class="hidden px-gutter text-orange">
-                    <p class="whitespace-pre-wrap text-p-12">{/*
-                        */}{blok.error_message}{/*
-                    */}</p>
+                <div id="form-error" class="px-gutter text-orange hidden">
+                    <p class="text-p-12 whitespace-pre-wrap"
+                        >{blok.error_message}</p
+                    >
                 </div>
 
                 <!-- Submit -->
-                <div class="flex items-end gap-24 justify-between mt-40 px-gutter md:mt-24">
+                <div
+                    class="px-gutter mt-40 flex items-end justify-between gap-24 md:mt-24"
+                >
                     <button
                         type="submit"
                         id="submit-button"
-                        class='flex-none text-cta-32 inline-flex items-end gap-11 cursor-pointer hover:opacity-80'
+                        class="text-cta-32 inline-flex flex-none cursor-pointer items-end gap-11 hover:opacity-80"
                     >
-                        <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
-                        >{/*
-                            */}{blok.send_label}{/*
-                        */}</span>
-                        <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
+                        <span
+                            class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current"
+                            >{blok.send_label}</span
+                        >
+                        <span
+                            class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34"
+                        >
                             <Icon
                                 name="arrow-right"
                                 class="size-14 md:size-16"
@@ -185,57 +213,70 @@ const { blok } = Astro.props as { blok: FormBlok };
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const formContainer = document.getElementById('form-container') as HTMLFormElement;
-        const form = document.getElementById('contact-form') as HTMLFormElement;
-        const successMessage = document.getElementById('form-success') as HTMLDivElement;
-        const errorMessage = document.getElementById('form-error') as HTMLDivElement;
-        const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
-        const newButton = document.getElementById('new-button');
+    document.addEventListener("DOMContentLoaded", () => {
+        const formContainer = document.getElementById(
+            "form-container",
+        ) as HTMLFormElement;
+        const form = document.getElementById("contact-form") as HTMLFormElement;
+        const successMessage = document.getElementById(
+            "form-success",
+        ) as HTMLDivElement;
+        const errorMessage = document.getElementById(
+            "form-error",
+        ) as HTMLDivElement;
+        const submitButton = document.getElementById(
+            "submit-button",
+        ) as HTMLButtonElement;
+        const newButton = document.getElementById("new-button");
 
         if (form && successMessage && errorMessage) {
-            form.addEventListener('submit', async (e) => {
+            form.addEventListener("submit", async (e) => {
                 e.preventDefault();
-                
+
                 if (submitButton) {
                     submitButton.disabled = true;
                 }
-                
+
                 try {
                     const formData = new FormData(form);
-                    
-                    const response = await fetch('/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(formData as any).toString()
+
+                    const response = await fetch("/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: new URLSearchParams(formData as any).toString(),
                     });
-                    
+
                     if (response.ok) {
-                        form.classList.add('hidden');
-                        successMessage.classList.remove('hidden');
-                        successMessage.classList.add('flex');
-                        
-                        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        
+                        form.classList.add("hidden");
+                        successMessage.classList.remove("hidden");
+                        successMessage.classList.add("flex");
+
+                        formContainer.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+
                         form.reset();
                     } else {
-                        throw new Error('Error during submission');
+                        throw new Error("Error during submission");
                     }
                 } catch (error) {
-                    form.classList.add('hidden');
-                    errorMessage.classList.remove('hidden');
-                    errorMessage.classList.add('flex');
-                    
-                    console.error('Submission error:', error);
+                    form.classList.add("hidden");
+                    errorMessage.classList.remove("hidden");
+                    errorMessage.classList.add("flex");
+
+                    console.error("Submission error:", error);
                 }
             });
-            
+
             if (newButton) {
-                newButton.addEventListener('click', () => {
-                    successMessage.classList.add('hidden');
-                    successMessage.classList.remove('flex');
-                    form.classList.remove('hidden');
-                    
+                newButton.addEventListener("click", () => {
+                    successMessage.classList.add("hidden");
+                    successMessage.classList.remove("flex");
+                    form.classList.remove("hidden");
+
                     if (submitButton) {
                         submitButton.disabled = false;
                     }
