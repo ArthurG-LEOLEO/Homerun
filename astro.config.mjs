@@ -22,7 +22,7 @@ const adapter =
 export default defineConfig({
     output: isPreview ? "server" : "static",
     i18n,
-    site: 'https://homerun.today',
+    site: "https://homerun.today",
     integrations: [
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
@@ -50,6 +50,7 @@ export default defineConfig({
                 united: "storyblok/pages/United",
                 shop: "storyblok/pages/Shop",
                 shop_item: "storyblok/pages/ShopItem",
+                error: "storyblok/pages/Error",
                 social_feed: "storyblok/sections/SocialFeed",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",

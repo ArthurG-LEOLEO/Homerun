@@ -41,6 +41,10 @@
     --text-p86--line-height: 10.9rem;
     --text-p86-mobile: 3.8rem;
     --text-p86-mobile--line-height: 4.6rem;
+    --text-p216: 21.6rem;
+    --text-p216--line-height: 27.4rem;
+    --text-p216-mobile: 4rem;
+    --text-p216-mobile--line-height: 4.3rem;
     --text-h1: 7rem;
     --text-h1--line-height: 8.9rem;
     --text-h1-tablet: 6rem;
@@ -243,5 +247,8 @@
     .text-huge {
         @apply text-h1-mobile md:text-h1-tablet lg:text-h1 2xl:text-p86;
         @apply font-space;
+    }
+    .text-enormous {
+        @apply text-h1 md:text-p86 lg:text-p216;
     }
 }
