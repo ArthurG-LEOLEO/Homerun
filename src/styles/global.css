@@ -41,8 +41,10 @@
     --text-p86--line-height: 10.9rem;
     --text-p86-mobile: 3.8rem;
     --text-p86-mobile--line-height: 4.6rem;
-    --text-h1: 7.6rem;
-    --text-h1--line-height: 9.7rem;
+    --text-h1: 7rem;
+    --text-h1--line-height: 8.9rem;
+    --text-h1-tablet: 6rem;
+    --text-h1-tablet--line-height: 7.2rem;
     --text-h1-mobile: 4rem;
     --text-h1-mobile--line-height: 4.3rem;
     --text-h2: 5.6rem;
@@ -174,7 +176,7 @@
     }
 
     .text-title-1 {
-        @apply text-h1-mobile md:text-h1;
+        @apply text-h1-mobile md:text-h1-tablet 2xl:text-h1;
         @apply font-space;
     }
     .text-title-2 {
@@ -239,7 +241,7 @@
         @apply uppercase;
     }
     .text-huge {
-        @apply text-h1-mobile md:text-h1 lg:text-p86;
+        @apply text-h1-mobile md:text-h1-tablet lg:text-h1 2xl:text-p86;
         @apply font-space;
     }
 }
