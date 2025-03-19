@@ -34,6 +34,8 @@ export default {
         "category.advertising": "Advertising",
         "shop.other": "You might\nalso like:",
         "shop.all": "All products",
+        "seo.description":
+            "At the crossroad of consulting & advertising, we design cultural innovations that create value and cross channel communications that spark conversations.",
     },
     fr: {
         "case.challenges": "Enjeux strat’ :",
@@ -60,5 +62,7 @@ export default {
         "category.advertising": "Advertising",
         "shop.other": "Vous pourriez\naimer aussi :",
         "shop.all": "Tous les produits",
+        "seo.description":
+            "À la croisée du conseil et de la publicité, nous concevons des innovations culturelles qui créent de la valeur et des communications audacieuses qui engagent des conversations.",
     },
 } as Record<string, Record<string, string>>;

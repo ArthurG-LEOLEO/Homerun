@@ -1,42 +1,48 @@
 ---
+import { useTranslations } from "../../i18n/utils";
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
 export interface Props {
-  seo: {
-    meta_title?: string;
-    meta_description?: string;
-    og_image?: {
-      filename: string;
-      alt?: string;
+    seo: {
+        meta_title?: string;
+        meta_description?: string;
+        og_image?: {
+            filename: string;
+            alt?: string;
+        };
+        no_index?: boolean;
+        no_follow?: boolean;
+        og_title?: string;
+        og_description?: string;
+        twitter_title?: string;
+        twitter_description?: string;
     };
-    no_index?: boolean;
-    no_follow?: boolean;
-    og_title?: string;
-    og_description?: string;
-    twitter_title?: string;
-    twitter_description?: string;
-  };
-  pagePath?: string;
-  siteName?: string;
+    pagePath?: string;
+    siteName?: string;
 }
 
-const { 
-  seo,
-  pagePath = Astro.url.pathname,
-  siteName = "Homerun"
+const {
+    seo,
+    pagePath = Astro.url.pathname,
+    siteName = "Homerun",
 } = Astro.props;
 
 const title = seo?.meta_title || siteName;
-const description = seo?.meta_description || "";
+const description = seo?.meta_description || t("seo.description");
 const ogTitle = seo?.og_title || title;
 const ogDescription = seo?.og_description || description;
 const twitterTitle = seo?.twitter_title || ogTitle;
 const twitterDescription = seo?.twitter_description || ogDescription;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = seo?.og_image?.filename || new URL('/images/default-og-image.jpg', Astro.url);
+const ogImage =
+    seo?.og_image?.filename ||
+    new URL("/images/default-og-image.jpg", Astro.url);
 
 const robotsContent = [
-  seo?.no_index ? "noindex" : "index",
-  seo?.no_follow ? "nofollow" : "follow"
+    seo?.no_index ? "noindex" : "index",
+    seo?.no_follow ? "nofollow" : "follow",
 ].join(", ");
 ---
 
