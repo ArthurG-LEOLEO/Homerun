@@ -54,7 +54,7 @@ const { language, blok } = Astro.props;
                 <div id="split-left" class="py-105 lg:py-130">
                     <div
                         id="split-left-inner"
-                        class="translate-x-[calc(100%*var(--progress)*-1)] lg:translate-x-[calc(70%*var(--progress)*-1)]"
+                        class="translate-x-[calc(100%*var(--progress)*-1)] pointer-events-auto lg:translate-x-[calc(70%*var(--progress)*-1)]"
                     >
                         <div class="container-main">
                             <div
@@ -86,10 +86,10 @@ const { language, blok } = Astro.props;
                 </div>
             </div>
             <div class="py-105 text-white lg:py-130">
-                <div id="split-right" class="lg:mt-[-100vh]">
+                <div id="split-right" class="lg:mt-[-100vh] pointer-events-none">
                     <div
                         id="split-right-inner"
-                        class="translate-x-[calc(100%*(1-var(--progress)))] lg:translate-x-[calc(70%*(1-var(--progress)))]"
+                        class="translate-x-[calc(100%*(1-var(--progress)))] pointer-events-auto lg:translate-x-[calc(70%*(1-var(--progress)))]"
                     >
                         <div class="container-main flex justify-end">
                             <div
@@ -440,3 +440,8 @@ const { language, blok } = Astro.props;
         cleanup();
     });
 </script>
+<style>
+    #page-approach :global(.pin-spacer) {
+        pointer-events: none;
+    }
+</style>
