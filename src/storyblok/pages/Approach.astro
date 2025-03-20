@@ -28,10 +28,10 @@ const { language, blok } = Astro.props;
     <div id="scroll-container">
         <div class="relative mt-105 flex aspect-[1440/660] w-full lg:mt-130">
             <div
-                class="bg-pink approach-peak w-1/2 origin-bottom rounded-tl-[100%] opacity-0"
+                class="bg-pink after:bg-pink approach-peak w-1/2 origin-bottom rounded-tl-[100%] opacity-0 after:absolute after:inset-x-0 after:bottom-[-0.3rem] after:h-3"
             ></div>
             <div
-                class="bg-orange approach-peak w-1/2 origin-bottom rounded-tr-[100%] opacity-0"
+                class="bg-orange after:bg-orange approach-peak w-1/2 origin-bottom rounded-tr-[100%] opacity-0 after:absolute after:inset-x-0 after:bottom-[-0.3rem] after:h-3"
             ></div>
             <div
                 id="helmet"
@@ -39,8 +39,14 @@ const { language, blok } = Astro.props;
                 style="--c: #2D5A36"
             >
                 <div
-                    class="bg-green size-1/2 translate-x-[-50%] translate-y-[50%] lg:hidden"
-                ></div>
+                    class="size-1/2 translate-x-[-50%] translate-y-[50%] lg:hidden"
+                >
+                    <div
+                        id="helmet-mobile-render"
+                        class="bg-green size-full opacity-0"
+                    >
+                    </div>
+                </div>
                 <div
                     id="inner-helmet"
                     class="hidden size-full translate-x-[-50%] lg:block"
@@ -52,14 +58,14 @@ const { language, blok } = Astro.props;
         </div>
         <div id="split-container" class="relative" style="--progress: 0.5;">
             <div
-                id="left-split"
-                class="bg-pink absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))]"
+                id="hero-left-split"
+                class="bg-pink absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))] opacity-0"
             >
             </div>
 
             <div
-                id="right-split"
-                class="bg-orange absolute top-0 right-0 bottom-0 z-[-1] w-[calc(100%*var(--progress))]"
+                id="hero-right-split"
+                class="bg-orange absolute top-0 right-0 bottom-0 z-[-1] w-[calc(100%*var(--progress))] opacity-0"
             >
             </div>
 
@@ -137,10 +143,13 @@ const { language, blok } = Astro.props;
     let splitContainer: HTMLElement | null;
     let hero: HTMLElement | null;
     let heroInner: HTMLElement | null;
+    let heroRightSplit: HTMLElement | null;
+    let heroLeftSplit: HTMLElement | null;
     let splitRight: HTMLElement | null;
     let splitLeft: HTMLElement | null;
     let helmet: HTMLElement | null;
     let helmetCanvas: HTMLCanvasElement | null;
+    let helmetMobileRender: HTMLCanvasElement | null;
     let secondHelmetCanvas: HTMLCanvasElement | null;
     let secondMobileHelmet: HTMLElement | null;
 
@@ -180,10 +189,15 @@ const { language, blok } = Astro.props;
         splitContainer = document.querySelector(".approach #split-container");
         hero = document.querySelector(".approach #approach-hero");
         heroInner = document.querySelector(".approach #approach-hero-inner");
+        heroRightSplit = document.querySelector(".approach #hero-right-split");
+        heroLeftSplit = document.querySelector(".approach #hero-left-split");
         splitRight = document.querySelector(".approach #split-right");
         splitLeft = document.querySelector(".approach #split-left");
         helmet = document.querySelector(".approach #helmet");
         helmetCanvas = document.querySelector(".approach #helmet-canvas");
+        helmetMobileRender = document.querySelector(
+            ".approach #helmet-mobile-render",
+        );
         secondHelmetCanvas = document.querySelector(
             ".approach #second-helmet-canvas",
         );
@@ -423,9 +437,14 @@ const { language, blok } = Astro.props;
             })
             .set(approachPeak, {
                 scaleY: 0,
+                y: "10rem",
                 opacity: 0,
             })
-            .set(helmetCanvas, {
+            .set([helmetCanvas, helmetMobileRender], {
+                y: "10rem",
+                opacity: 0,
+            })
+            .set([heroRightSplit, heroLeftSplit], {
                 y: "10rem",
                 opacity: 0,
             })
@@ -466,17 +485,37 @@ const { language, blok } = Astro.props;
                 "start+=0.1",
             )
             .to(
-                approachPeak,
+                [heroRightSplit, heroLeftSplit],
                 {
                     opacity: 1,
-                    scaleY: 1,
+                    y: 0,
                     duration: 1,
                     ease: "elastic.out(1,0.7)",
                 },
                 "start+=0.3",
             )
             .to(
-                helmetCanvas,
+                approachPeak,
+                {
+                    opacity: 1,
+                    scaleY: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.3",
+            )
+            .to(
+                heroInner,
+                {
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3",
+                },
+                "start+=0.3",
+            )
+            .to(
+                [helmetCanvas, helmetMobileRender],
                 {
                     opacity: 1,
                     y: 0,
