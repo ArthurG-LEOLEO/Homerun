@@ -93,6 +93,7 @@
     --text-taglil-mobile--line-height: 2.4rem;
 
     --breakpoint-container: 1440px;
+    --breakpoint-xs: 500px;
 
     --spacing: 0.1rem;
     --spacing-gutter: 1rem;

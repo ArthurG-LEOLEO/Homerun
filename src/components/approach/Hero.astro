@@ -15,10 +15,10 @@ const { blok } = Astro.props;
                 class="px-gutter flex w-1/2 translate-x-[calc(50%*var(--offset))] justify-center lg:translate-x-[calc(16.66%*var(--offset))]"
             >
                 <div
-                    class="flex w-full flex-col items-center justify-center gap-15 lg:mr-90 lg:gap-55"
+                    class="flex w-full flex-col items-center justify-between gap-15 lg:mr-90 lg:justify-center lg:gap-55"
                 >
                     <div
-                        class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                        class="xs:text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375 text-[1.6rem]/[2rem]"
                         set:html={renderRichText(blok.left_description)}
                     />
                     <div
@@ -32,10 +32,10 @@ const { blok } = Astro.props;
                 class="px-gutter flex w-1/2 translate-x-[calc(50vw*var(--offset))] justify-center text-white"
             >
                 <div
-                    class="flex w-full flex-col items-center justify-center gap-15 lg:ml-90 lg:gap-55"
+                    class="flex w-full flex-col items-center justify-between gap-15 lg:ml-90 lg:justify-center lg:gap-55"
                 >
                     <div
-                        class="text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375"
+                        class="xs:text-h3-mobile md:text-h3-tablet lg:text-h3 font-space max-w-375 text-[1.6rem]/[2rem]"
                         set:html={renderRichText(blok.right_description)}
                     />
                     <div
