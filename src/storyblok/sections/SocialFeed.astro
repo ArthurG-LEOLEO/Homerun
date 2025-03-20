@@ -34,7 +34,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.twitter}
                             label="Twitter"
                             icon="twitter"
-                            className="bg-blue text-white el"
+                            color="blue"
                         />
                     )
                 }
@@ -44,7 +44,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.facebook}
                             label="Facebook"
                             icon="facebook"
-                            className="bg-blue text-white el"
+                            color="blue"
                         />
                     )
                 }
@@ -54,7 +54,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.linkedin}
                             label="LinkedIn"
                             icon="linkedin"
-                            className="bg-green text-white el"
+                            color="green"
                         />
                     )
                 }
@@ -64,7 +64,7 @@ import CTA from "../../components/global/CTA.astro";
                             link={blok.instagram}
                             label="Instagram"
                             icon="instagram"
-                            className="bg-blue text-black el"
+                            color="blue"
                         />
                     )
                 }
@@ -88,38 +88,22 @@ import CTA from "../../components/global/CTA.astro";
     <div class="px-gutter mt-40 flex items-center gap-8 md:hidden">
         {
             blok.twitter && (
-                <CTA
-                    link={blok.twitter}
-                    icon="twitter"
-                    className="bg-blue text-white el"
-                />
+                <CTA link={blok.twitter} icon="twitter" color="blue" />
             )
         }
         {
             blok.facebook && (
-                <CTA
-                    link={blok.facebook}
-                    icon="facebook"
-                    className="bg-blue text-white el"
-                />
+                <CTA link={blok.facebook} icon="facebook" color="blue" />
             )
         }
         {
             blok.linkedin && (
-                <CTA
-                    link={blok.linkedin}
-                    icon="linkedin"
-                    className="bg-green text-white el"
-                />
+                <CTA link={blok.linkedin} icon="linkedin" color="green" />
             )
         }
         {
             blok.instagram && (
-                <CTA
-                    link={blok.instagram}
-                    icon="instagram"
-                    className="bg-blue text-black el"
-                />
+                <CTA link={blok.instagram} icon="instagram" color="blue" />
             )
         }
     </div>
