@@ -59,12 +59,10 @@ const { language, blok } = Astro.props;
                 document.getElementById("SplineViewer");
 
             if (splineViewer?._loaded) {
-                console.log("splineViewer is already Laoded");
                 resolve();
             }
 
             splineViewer?.addEventListener("load-complete", () => {
-                console.log("splineViewer load complete");
                 resolve();
             });
         });

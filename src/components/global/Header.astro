@@ -292,7 +292,6 @@ const { logoless, blok, alternates, white } = Astro.props;
                     ) {
                         headerIsShown = false;
                         if (menu?.dataset.open === "true") {
-                            console.log("close menu");
                             closeMenu();
                             menuButtonUnhover();
                         }
@@ -335,11 +334,26 @@ const { logoless, blok, alternates, white } = Astro.props;
             mi.addEventListener("mouseenter", menuItemHover);
         });
         button?.addEventListener("click", toggleMenu);
+        document.addEventListener("click", checkClickOutsideMenu);
+    };
+
+    const checkClickOutsideMenu = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target || !menu || !button) return;
+
+        const isOutsideMenu = !menu.contains(target);
+        const isOutsideButton = !button.contains(target);
+
+        if (isOutsideMenu && isOutsideButton) {
+            closeMenu();
+            menuButtonUnhover();
+        }
     };
 
     const cleanup = () => {
         mm.revert();
         button?.removeEventListener("click", toggleMenu);
+        document.removeEventListener("click", checkClickOutsideMenu);
         menuItems?.forEach((mi) => {
             mi.removeEventListener("mouseenter", menuItemHover);
         });
