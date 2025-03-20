@@ -119,18 +119,19 @@ const { logoless, blok, alternates, white } = Astro.props;
     let menuBtnLayerOpen: NodeListOf<HTMLElement> | null;
     let mm: gsap.MatchMedia;
 
-    const openMenu = (m: HTMLElement) => {
+    const openMenu = () => {
+        if (!menu) return;
         tlClose?.kill();
         button?.classList.add("active");
         tlOpen = gsap
             .timeline()
-            .to(m, {
+            .to(menu, {
                 autoAlpha: 1,
                 duration: 0.3,
                 ease: "power3",
             })
             .to(
-                m,
+                menu,
                 {
                     scaleY: 1,
                     scaleX: 1,
@@ -157,15 +158,16 @@ const { logoless, blok, alternates, white } = Astro.props;
                 },
                 "<",
             );
-        m.dataset.open = "true";
+        menu.dataset.open = "true";
     };
 
-    const closeMenu = (m: HTMLElement) => {
+    const closeMenu = () => {
+        if (!menu) return;
         tlOpen?.kill();
         button?.classList.remove("active");
         tlClose = gsap
             .timeline()
-            .to(m, {
+            .to(menu, {
                 scaleY: 0.7,
                 scaleX: 0.95,
                 autoAlpha: 0,
@@ -190,7 +192,7 @@ const { logoless, blok, alternates, white } = Astro.props;
                 },
                 "<",
             );
-        m.dataset.open = "false";
+        menu.dataset.open = "false";
     };
 
     const toggleMenu = () => {
@@ -199,9 +201,9 @@ const { logoless, blok, alternates, white } = Astro.props;
         const open = menu.dataset.open === "true";
 
         if (open) {
-            closeMenu(menu);
+            closeMenu();
         } else {
-            openMenu(menu);
+            openMenu();
         }
     };
 
@@ -236,12 +238,11 @@ const { logoless, blok, alternates, white } = Astro.props;
         });
     };
 
-    const menuButtonUnhover = (e: MouseEvent) => {
-        const target = e.target as HTMLElement | null;
-        if (!target || !menuBtnLayers || !menu || menu.dataset.open === "true")
+    const menuButtonUnhover = () => {
+        if (!button || !menuBtnLayers || !menu || menu.dataset.open === "true")
             return;
         if (tlButtonHover) tlButtonHover.kill();
-        target.classList.remove("hover");
+        button.classList.remove("hover");
         tlButtonUnhover = gsap.timeline().to([...menuBtnLayers].reverse(), {
             stagger: 0.1,
             duration: 0.4,
@@ -283,12 +284,18 @@ const { logoless, blok, alternates, white } = Astro.props;
                 start: "top top",
                 onUpdate: (self) => {
                     const headerIsAtTop = self.scroll() < 100;
+
                     if (
                         self.direction > 0 &&
                         self.scroll() > DIST_TO_HIDE_HEADER &&
                         headerIsShown
                     ) {
                         headerIsShown = false;
+                        if (menu?.dataset.open === "true") {
+                            console.log("close menu");
+                            closeMenu();
+                            menuButtonUnhover();
+                        }
                         gsap.to(buttonWrapper, {
                             y: "-11.8rem",
                             duration: 0.6,
@@ -298,7 +305,7 @@ const { logoless, blok, alternates, white } = Astro.props;
                     } else if (self.direction < 0 && !headerIsShown) {
                         headerIsShown = true;
                         headerIsRetracted = headerIsAtTop ? false : true;
-                        gsap.to(buttonWrapper, {
+                        gsap.to([buttonWrapper, menu], {
                             y: headerIsRetracted ? "-3rem" : 0,
                             duration: 0.6,
                             opacity: 1,
@@ -311,7 +318,7 @@ const { logoless, blok, alternates, white } = Astro.props;
                         headerIsAtTop
                     ) {
                         headerIsRetracted = false;
-                        gsap.to(buttonWrapper, {
+                        gsap.to([buttonWrapper, menu], {
                             y: 0,
                             duration: 0.6,
                             opacity: 1,
