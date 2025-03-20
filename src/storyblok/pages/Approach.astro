@@ -225,8 +225,8 @@ const { language, blok } = Astro.props;
         mTlHelmet2 = gsap.timeline({
             scrollTrigger: {
                 trigger: secondMobileHelmet,
-                start: () => `top+=${window.innerWidth * 0.3}px bottom`,
-                end: () => `bottom-=${window.innerWidth * 0.3}px top`,
+                start: () => `bottom-=${window.innerWidth * 0.3}px bottom`,
+                end: () => `top+=${window.innerWidth * 0.3}px top`,
                 scrub: true,
                 onUpdate: (self) => {
                     if (!spline || !splineHelmet) return;
