@@ -92,22 +92,44 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 <script>
     let ctas: NodeListOf<HTMLElement> | null;
     let appearTls: gsap.core.Timeline[] = [];
+    let hoverTls: { [key: string]: gsap.core.Timeline } = {};
+    let unhoverTls: { [key: string]: gsap.core.Timeline } = {};
 
     const onCTAUnhover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
         if (!target) return;
 
         const bgInner = target.querySelectorAll(".cta-inner-bg");
+        const bg = target.querySelector(".cta-bg");
 
-        const tl = gsap.timeline().to(
-            bgInner,
-            {
-                y: 0,
-                duration: 0.2,
-                ease: "power3.inOut",
-            },
-            "start",
-        );
+        const ctaId = target.dataset.ctaid;
+        if (ctaId) {
+            const hoverTl = hoverTls[ctaId];
+            if (hoverTl) hoverTl.kill();
+        }
+
+        const tl = gsap
+            .timeline()
+            .to(
+                bgInner,
+                {
+                    y: 0,
+                    duration: 0.2,
+                    ease: "power3.inOut",
+                },
+                "start",
+            )
+            .to(
+                bg,
+                {
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start",
+            );
+
+        if (ctaId) unhoverTls[ctaId] = tl;
     };
 
     const onCTAHover = (e: MouseEvent) => {
@@ -116,6 +138,12 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
         const bg = target.querySelector(".cta-bg");
         const bgInner = target.querySelectorAll(".cta-inner-bg");
+
+        const ctaId = target.dataset.ctaid;
+        if (ctaId) {
+            const unhoverTl = unhoverTls[ctaId];
+            if (unhoverTl) unhoverTl.kill();
+        }
 
         const tl = gsap
             .timeline()
@@ -147,6 +175,8 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
                 },
                 "start",
             );
+
+        if (ctaId) hoverTls[ctaId] = tl;
     };
 
     const initLinksAppear = (cta: HTMLElement) => {
@@ -209,8 +239,9 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
         ctas = document.querySelectorAll(".cta-btn");
         if (!ctas) return;
 
-        ctas.forEach((cta) => {
+        ctas.forEach((cta, index) => {
             initLinksAppear(cta);
+            cta.dataset.ctaid = index.toString();
             cta.addEventListener("mouseenter", onCTAHover);
             cta.addEventListener("mouseleave", onCTAUnhover);
         });
@@ -224,6 +255,8 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
             tl.kill();
         });
         appearTls = [];
+        unhoverTls = {};
+        hoverTls = {};
         ctas = null;
     };
 
