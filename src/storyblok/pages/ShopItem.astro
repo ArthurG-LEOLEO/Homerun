@@ -4,6 +4,7 @@ import Title from "../../components/atoms/Title.astro";
 import SBRichText from "../../components/global/SBRichText.astro";
 import LayeredImage from "../../components/global/LayeredImage.astro";
 import OtherItems from "../../components/shop/OtherItems.astro";
+import CTA from "../../components/global/CTA.astro";
 
 const { language, blok } = Astro.props;
 
@@ -11,19 +12,22 @@ const lang = Astro.currentLocale;
 
 function formatPrice(price: number | string, locale: string = "fr"): string {
     if (price === null || price === undefined) return "";
-    
+
     const numPrice = typeof price === "string" ? parseFloat(price) : price;
-    
-    const formatter = new Intl.NumberFormat(locale === "en" ? "en-US" : "fr-FR", {
-        style: "currency",
-        currency: "EUR",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-        useGrouping: true,
-    });
-    
+
+    const formatter = new Intl.NumberFormat(
+        locale === "en" ? "en-US" : "fr-FR",
+        {
+            style: "currency",
+            currency: "EUR",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+        },
+    );
+
     let formatted = formatter.format(numPrice);
-    
+
     return formatted;
 }
 
@@ -31,35 +35,77 @@ const formattedPrice = formatPrice(blok.price, lang);
 ---
 
 <div id="page-shop-item" class="shop-item bg-white text-black">
-    <div class="container-main flex flex-col gap-20 pt-115 pb-120 md:flex-row-reverse md:items-start md:gap-0 md:pt-160 md:pb-170">
-        <div class="md:w-6/12 md:sticky md:top-55 xl:flex xl:justify-center">
-            <div class="px-gutter xl:w-4/6">
-                <div class="flex flex-col gap-8">
+    <div
+        class="container-main flex flex-col gap-20 pt-115 pb-120 md:flex-row-reverse md:items-start md:gap-0 md:pt-160 md:pb-170"
+    >
+        <div class="md:sticky md:top-55 md:w-6/12 xl:flex xl:justify-center">
+            <div class="xl:w-4/6">
+                <div class="px-gutter flex flex-col gap-8">
                     <div>
                         <Tag category={blok.category} />
                     </div>
                     <h1 class="text-title-1">
                         <Title title={blok.title[0]} />
                     </h1>
-                    <div class="text-p-24 text-black/70"
-                        >{formattedPrice}</div
-                    >
+                    <div class="text-p-24 text-black/70">{formattedPrice}</div>
                 </div>
-                <SBRichText content={blok.description} />
+                <div class="px-gutter">
+                    <SBRichText content={blok.description} />
+                </div>
+                <div class="px-gutter mt-24 mb-32 md:w-3/6 xl:w-3/4">
+                    <div class="flex flex-col gap-8">
+                        <label class="text-title-7">Quantité:</label>
+                        <div
+                            class="quantity-selector flex items-center gap-16 border-b border-black py-13"
+                        >
+                            <div
+                                class="quantity-display flex items-center gap-8"
+                            >
+                                <span class="quantity-value text-p-24">1</span>
+                                <span class="quantity-unit text-p-24">
+                                    {blok.unit_label}
+                                </span>
+                            </div>
+                            <div class="flex flex-none items-center gap-8">
+                                <button
+                                    type="button"
+                                    class="quantity-btn decrease flex size-34 items-center justify-center rounded-full border-2 transition-colors hover:bg-gray-100"
+                                    aria-label="Diminuer la quantité"
+                                >
+                                    <span class="block h-[2px] w-12 bg-black"
+                                    ></span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="quantity-btn increase flex size-34 items-center justify-center rounded-full border-2 transition-colors hover:bg-gray-100"
+                                    aria-label="Augmenter la quantité"
+                                >
+                                    <span class="block h-[2px] w-12 bg-black"
+                                    ></span>
+                                    <span
+                                        class="absolute block h-12 w-[2px] bg-black"
+                                    ></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-gutter">
+                    <CTA
+                        label={blok.button_label}
+                        className="bg-orange text-white"
+                    />
+                </div>
             </div>
         </div>
         <div class="px-gutter flex flex-col gap-20 md:w-6/12">
-            <LayeredImage
-                class="w-full"
-                image={blok.cover}
-            />
-            {blok.other_images && blok.other_images.length > 0 && 
-                blok.other_images.map((image) => (
-                    <LayeredImage
-                        class="w-full"
-                        image={image}
-                    />
-                ))
+            <LayeredImage class="w-full" image={blok.cover} />
+            {
+                blok.other_images &&
+                    blok.other_images.length > 0 &&
+                    blok.other_images.map((image) => (
+                        <LayeredImage class="w-full" image={image} />
+                    ))
             }
         </div>
     </div>
@@ -109,6 +155,58 @@ const formattedPrice = formatPrice(blok.price, lang);
                 },
                 "start",
             );
+
+        const quantitySelector = document.querySelector(".quantity-selector");
+        if (!quantitySelector) return;
+
+        const decreaseBtn = quantitySelector.querySelector(".decrease");
+        const increaseBtn = quantitySelector.querySelector(".increase");
+        const quantityValue = quantitySelector.querySelector(".quantity-value");
+        const quantityUnit = quantitySelector.querySelector(".quantity-unit");
+
+        const unitSingular =
+            quantityUnit?.getAttribute("data-singular") || "article";
+        const unitPlural =
+            quantityUnit?.getAttribute("data-plural") || "articles";
+
+        let quantity = 1;
+
+        const updateQuantity = (value) => {
+            quantity = Math.max(1, value);
+            if (quantityValue) quantityValue.textContent = quantity;
+
+            if (quantityUnit) {
+                const unitText =
+                    quantity > 1
+                        ? quantityUnit.getAttribute("data-plural") || unitPlural
+                        : quantityUnit.getAttribute("data-singular") ||
+                          unitSingular;
+                quantityUnit.textContent = unitText;
+            }
+        };
+
+        decreaseBtn?.addEventListener("click", () =>
+            updateQuantity(quantity - 1),
+        );
+        increaseBtn?.addEventListener("click", () =>
+            updateQuantity(quantity + 1),
+        );
+
+        if (quantityUnit) {
+            const shopItem = document.getElementById("page-shop-item");
+            if (shopItem) {
+                const singularLabel =
+                    shopItem.getAttribute("data-unit-singular");
+                const pluralLabel = shopItem.getAttribute("data-unit-plural");
+
+                if (singularLabel)
+                    quantityUnit.setAttribute("data-singular", singularLabel);
+                if (pluralLabel)
+                    quantityUnit.setAttribute("data-plural", pluralLabel);
+
+                quantityUnit.textContent = singularLabel || unitSingular;
+            }
+        }
     };
 
     const cleanup = () => {
