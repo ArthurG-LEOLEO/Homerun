@@ -67,7 +67,7 @@ const { logoless, blok, alternates, white } = Astro.props;
                 <div
                     id="header-menu"
                     data-open="false"
-                    class="bg-green right-gutter left-gutter pointer-events-auto invisible absolute top-[-0.8rem] z-[1] origin-top-right scale-x-[0.95] scale-y-[0.7] rounded-[3rem] py-70 pr-70 pl-70 text-white opacity-0 sm:left-auto sm:pr-170 lg:py-75 lg:pr-270 lg:pl-110"
+                    class="bg-green right-gutter left-gutter invisible absolute top-[-0.8rem] z-[1] origin-top-right scale-x-[0.95] scale-y-[0.7] rounded-[3rem] py-70 pr-70 pl-70 text-white opacity-0 data-[open=true]:pointer-events-auto sm:left-auto sm:pr-170 lg:py-75 lg:pr-270 lg:pl-110"
                 >
                     {blok.links.length && (
                         <ul class="font-space text-cta32 flex flex-col font-medium lg:text-[6.4rem]/[8.8rem]">
@@ -339,7 +339,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 
     const checkClickOutsideMenu = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target || !menu || !button) return;
+        if (!target || !menu || !button || menu.dataset.open !== "true") return;
 
         const isOutsideMenu = !menu.contains(target);
         const isOutsideButton = !button.contains(target);
