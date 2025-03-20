@@ -8,6 +8,7 @@ export const splitText = (text: String) => {
             const splittedLine = line
                 .replace(/\n/g, "")
                 .split(" ")
+                .filter((c) => c !== "")
                 .join(
                     "</span></span> <span class='word'><span class='word-inner'>",
                 );
