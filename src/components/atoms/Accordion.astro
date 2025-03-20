@@ -7,21 +7,26 @@ const { blok } = Astro.props;
 
 <div class="border border-current/40 transition-colors duration-200">
     <button
-        class="accordion-button w-full flex justify-between text-left cursor-pointer px-16 py-24 md:px-40 md:py-40"
+        class="accordion-button flex w-full cursor-pointer justify-between px-16 py-24 text-left md:px-40 md:py-40"
         aria-expanded="false"
     >
         <div>
             <div class="text-p-22">{blok.title}</div>
         </div>
-        <div class="flex-none w-75 flex justify-end">
+        <div class="flex w-75 flex-none justify-end">
             <div
                 class="flex size-28 shrink-0 items-center justify-center rounded-full border-2 md:size-34"
             >
-                <Icon name="arrow-down" class="accordion-icon size-12 md:size-16" />
+                <Icon
+                    name="arrow-down"
+                    class="accordion-icon size-12 md:size-16"
+                />
             </div>
         </div>
     </button>
-    <div class="accordion-content h-0 overflow-hidden transition-[height] duration-200 ease-out pr-75">
+    <div
+        class="accordion-content h-0 overflow-hidden pr-40 transition-[height] duration-200 ease-out md:pr-75"
+    >
         <div
             class="px-16 pb-24 md:px-40 md:pb-40"
             set:html={renderRichText(blok.text as ISbRichtext)}
@@ -33,35 +38,41 @@ const { blok } = Astro.props;
     let buttons: NodeListOf<Element>;
     let resizeObserver: ResizeObserver | null = null;
     let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
-    
+
     let isInitialized = false;
 
     const init = () => {
         cleanup();
-        
+
         buttons = document.querySelectorAll(".accordion-button");
-        
+
         buttons.forEach((button) => {
             const content = button.nextElementSibling as HTMLElement;
             const inner = content.querySelector("div") as HTMLElement;
             const accordionContainer = button.parentElement as HTMLElement;
 
             const handleClick = (event: Event) => {
-                const isExpanded = button.getAttribute("aria-expanded") === "true";
-                const icon = button.querySelector(".accordion-icon") as HTMLElement;
+                const isExpanded =
+                    button.getAttribute("aria-expanded") === "true";
+                const icon = button.querySelector(
+                    ".accordion-icon",
+                ) as HTMLElement;
 
                 if (!isExpanded) {
                     button.setAttribute("aria-expanded", "true");
                     content.style.height = `${inner.offsetHeight}px`;
-                    if(icon) icon.style.transform = "rotate(180deg)";
+                    if (icon) icon.style.transform = "rotate(180deg)";
                     accordionContainer.classList.add("bg-black", "text-white");
                     accordionContainer.classList.remove("border-current/40");
                     accordionContainer.classList.add("border-black");
                 } else {
                     button.setAttribute("aria-expanded", "false");
                     content.style.height = "0px";
-                    if(icon) icon.style.transform = "rotate(0deg)";
-                    accordionContainer.classList.remove("bg-black", "text-white");
+                    if (icon) icon.style.transform = "rotate(0deg)";
+                    accordionContainer.classList.remove(
+                        "bg-black",
+                        "text-white",
+                    );
                     accordionContainer.classList.remove("border-black");
                     accordionContainer.classList.add("border-current/40");
                 }
@@ -72,31 +83,32 @@ const { blok } = Astro.props;
         });
 
         resizeObserver = new ResizeObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 const content = entry.target as HTMLElement;
-                const button = content.previousElementSibling as HTMLButtonElement;
-                
+                const button =
+                    content.previousElementSibling as HTMLButtonElement;
+
                 if (button && button.getAttribute("aria-expanded") === "true") {
                     const inner = content.querySelector("div") as HTMLElement;
-                    
+
                     // Temporarily disable transition for immediate size update
                     content.style.transition = "none";
                     content.style.height = `${inner.offsetHeight}px`;
-                    
+
                     // Force reflow to apply the height immediately
                     content.offsetHeight;
-                    
+
                     if (resizeTimeout) {
                         clearTimeout(resizeTimeout);
                     }
-                    
+
                     resizeTimeout = setTimeout(() => {
                         content.style.transition = "height 200ms ease-out";
                     }, 50);
                 }
             });
         });
-        
+
         buttons.forEach((button) => {
             const content = button.nextElementSibling as HTMLElement;
             if (resizeObserver) {
@@ -112,24 +124,27 @@ const { blok } = Astro.props;
             resizeObserver.disconnect();
             resizeObserver = null;
         }
-        
+
         if (resizeTimeout) {
             clearTimeout(resizeTimeout);
             resizeTimeout = null;
         }
-        
+
         if (buttons) {
             buttons.forEach((button) => {
                 if ((button as any)._accordionClickHandler) {
-                    button.removeEventListener("click", (button as any)._accordionClickHandler);
+                    button.removeEventListener(
+                        "click",
+                        (button as any)._accordionClickHandler,
+                    );
                     delete (button as any)._accordionClickHandler;
                 }
             });
         }
-        
+
         isInitialized = false;
     };
-    
+
     document.addEventListener("storyblok-live-preview-updated", () => {
         init();
     });
@@ -137,7 +152,7 @@ const { blok } = Astro.props;
     document.addEventListener("astro:page-load", () => {
         if (!isInitialized) init();
     });
-    
+
     document.addEventListener("astro:before-swap", () => {
         cleanup();
     });
