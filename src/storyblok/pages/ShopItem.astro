@@ -1,4 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "../../i18n/utils";
 import Tag from "../../components/atoms/Tag.astro";
 import Title from "../../components/atoms/Title.astro";
 import SBRichText from "../../components/global/SBRichText.astro";
@@ -9,6 +11,7 @@ import CTA from "../../components/global/CTA.astro";
 const { language, blok } = Astro.props;
 
 const lang = Astro.currentLocale;
+const t = useTranslations(lang);
 
 function formatPrice(price: number | string, locale: string = "fr"): string {
     if (price === null || price === undefined) return "";
@@ -52,40 +55,41 @@ const formattedPrice = formatPrice(blok.price, lang);
                 <div class="px-gutter">
                     <SBRichText content={blok.description} />
                 </div>
-                <div class="px-gutter mt-24 mb-32 md:w-3/6 xl:w-3/4">
+                <div class="px-gutter mt-24 mb-32">
                     <div class="flex flex-col gap-8">
-                        <label class="text-title-7">Quantité:</label>
-                        <div
-                            class="quantity-selector flex items-center gap-16 border-b border-black py-13"
-                        >
+                        <label class="text-title-7">{t("shop.quantity")}</label>
+                        <div>
                             <div
-                                class="quantity-display flex items-center gap-8"
+                                class="quantity-selector inline-flex min-w-10/12 items-center gap-16 border-b border-black py-13 sm:min-w-5/12 md:min-w-3/6 xl:min-w-3/4"
                             >
-                                <span class="quantity-value text-p-24">1</span>
-                                <span class="quantity-unit text-p-24">
-                                    {blok.unit_label}
-                                </span>
-                            </div>
-                            <div class="flex flex-none items-center gap-8">
-                                <button
-                                    type="button"
-                                    class="quantity-btn decrease flex size-34 items-center justify-center rounded-full border-2 transition-colors hover:bg-gray-100"
-                                    aria-label="Diminuer la quantité"
+                                <div
+                                    class="quantity-display flex flex-1 items-center gap-8"
                                 >
-                                    <span class="block h-[2px] w-12 bg-black"
-                                    ></span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="quantity-btn increase flex size-34 items-center justify-center rounded-full border-2 transition-colors hover:bg-gray-100"
-                                    aria-label="Augmenter la quantité"
-                                >
-                                    <span class="block h-[2px] w-12 bg-black"
-                                    ></span>
                                     <span
-                                        class="absolute block h-12 w-[2px] bg-black"
-                                    ></span>
-                                </button>
+                                        class="quantity-value text-p-24 tabular-nums"
+                                        >1</span
+                                    >
+                                    <span class="quantity-unit text-p-24">
+                                        {blok.unit_label}
+                                    </span>
+                                </div>
+                                <div class="flex flex-none items-center gap-8">
+                                    <button
+                                        type="button"
+                                        class="quantity-btn decrease flex size-34 cursor-not-allowed items-center justify-center rounded-full border-2 opacity-50"
+                                        aria-label={t("shop.quantity.down")}
+                                        disabled
+                                    >
+                                        <Icon name="minus" class="size-16" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="quantity-btn increase flex size-34 cursor-pointer items-center justify-center rounded-full border-2"
+                                        aria-label={t("shop.quantity.up")}
+                                    >
+                                        <Icon name="plus" class="size-16" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -174,6 +178,24 @@ const formattedPrice = formatPrice(blok.price, lang);
         const updateQuantity = (value) => {
             quantity = Math.max(1, value);
             if (quantityValue) quantityValue.textContent = quantity;
+
+            if (decreaseBtn) {
+                if (quantity <= 1) {
+                    decreaseBtn.classList.remove("cursor-pointer");
+                    decreaseBtn.classList.add(
+                        "opacity-50",
+                        "cursor-not-allowed",
+                    );
+                    decreaseBtn.setAttribute("disabled", "disabled");
+                } else {
+                    decreaseBtn.classList.remove(
+                        "opacity-50",
+                        "cursor-not-allowed",
+                    );
+                    decreaseBtn.classList.add("cursor-pointer");
+                    decreaseBtn.removeAttribute("disabled");
+                }
+            }
 
             if (quantityUnit) {
                 const unitText =
