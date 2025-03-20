@@ -24,37 +24,192 @@ const isExternal = link?.linktype === "url";
     link ? (
         <Link
             link={link}
-            className={`text-cta-32 inline-flex items-end gap-11 hover:opacity-80 ${className}`}
+            className={`arrow-link text-cta-32 inline-flex gap-11 ${className}`}
         >
             {/* prettier-ignore */}
-            <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current">{label}</span>
-            <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
-                <Icon
-                    name={!plus ? "arrow-right" : "plus"}
+            <span style="--offset: 0;" class="arrow-link-text opacity-0 overflow-hidden relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current after:origin-right after:translate-x-[calc((100%+5rem)*var(--offset))] before:absolute before:left-0 before:right-0 before:bottom-0 before:h-2 before:bg-current before:origin-left before:translate-x-[calc((-100%-5rem)*(1-var(--offset)))]">{label}</span>
+            <div class="arrow-link-icon-wrap inline-flex items-end opacity-0">
+                <span
                     class:list={[
-                        "size-14 md:size-16",
-                        { "rotate-[-45deg]": isExternal && !plus },
+                        "arrow-link-icon flex size-28 justify-end overflow-hidden rounded-full border-2 border-current md:size-34",
+                        {
+                            "rotate-[-45deg]": isExternal && !plus,
+                            "rotate-[-90deg]": plus,
+                        },
                     ]}
-                />
-            </span>
+                >
+                    <div class="arrow-link-icon-inner flex size-full shrink-0 items-center justify-center">
+                        <Icon
+                            name={!plus ? "arrow-right" : "plus"}
+                            class:list={["size-14 md:size-16"]}
+                        />
+                    </div>
+                    <div class="arrow-link-icon-inner flex size-full shrink-0 items-center justify-center">
+                        <Icon
+                            name={!plus ? "arrow-right" : "plus"}
+                            class:list={["size-14 md:size-16"]}
+                        />
+                    </div>
+                </span>
+            </div>
         </Link>
     ) : (
         <button
             type="button"
-            class={`text-cta-32 inline-flex cursor-pointer items-end gap-11 hover:opacity-80 ${className}`}
+            class={`arrow-link text-cta-32 inline-flex cursor-pointer gap-11 ${className}`}
             id={id}
         >
             {/* prettier-ignore */}
-            <span class="relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current">{label}</span>
-            <span class="flex size-28 items-center justify-center rounded-full border-2 border-current md:size-34">
-                <Icon
-                    name={!plus ? "arrow-right" : "plus"}
+            <span style="--offset: 0;" class="arrow-link-text opacity-0 overflow-hidden relative whitespace-pre-wrap after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-current after:origin-right after:translate-x-[calc((100%+5rem)*var(--offset))] before:absolute before:left-0 before:right-0 before:bottom-0 before:h-2 before:bg-current before:origin-left before:translate-x-[calc((-100%-5rem)*(1-var(--offset)))]">{label}</span>
+            <div class="arrow-link-icon-wrap inline-flex items-end opacity-0">
+                <span
                     class:list={[
-                        "size-14 md:size-16",
-                        { "rotate-[-45deg]": isExternal && !plus },
+                        "arrow-link-icon flex size-28 justify-end overflow-hidden rounded-full border-2 border-current md:size-34",
+                        {
+                            "rotate-[-45deg]": isExternal && !plus,
+                            "rotate-[-90deg]": plus,
+                        },
                     ]}
-                />
-            </span>
+                >
+                    <div class="arrow-link-icon-inner flex size-full shrink-0 items-center justify-center">
+                        <Icon
+                            name={!plus ? "arrow-right" : "plus"}
+                            class:list={["size-14 md:size-16"]}
+                        />
+                    </div>
+                    <div class="arrow-link-icon-inner flex size-full shrink-0 items-center justify-center">
+                        <Icon
+                            name={!plus ? "arrow-right" : "plus"}
+                            class:list={["size-14 md:size-16"]}
+                        />
+                    </div>
+                </span>
+            </div>
         </button>
     )
 }
+
+<script>
+    let links: NodeListOf<HTMLElement> | null;
+    let appearTls: gsap.core.Timeline[] = [];
+
+    const onLinkHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const text = target.querySelector(".arrow-link-text");
+        const icon = target.querySelector(".arrow-link-icon");
+        const iconInner = target.querySelectorAll(".arrow-link-icon-inner");
+
+        const tl = gsap
+            .timeline()
+            .fromTo(
+                text,
+                { "--offset": 0 },
+                {
+                    "--offset": 1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                },
+                "start",
+            )
+            .fromTo(
+                icon,
+                { scale: 1 },
+                {
+                    scale: 1.1,
+                    duration: 0.3,
+                },
+                "start+=0.15",
+            )
+            .to(icon, { scale: 1, duration: 0.3 }, ">")
+            .fromTo(
+                iconInner,
+                { x: 0 },
+                {
+                    x: "100%",
+                    duration: 0.5,
+                },
+                "start+=0.15",
+            )
+            .fromTo(
+                iconInner,
+                { scaleY: 1 },
+                {
+                    scaleY: 0.5,
+                    duration: 0.25,
+                },
+                "<",
+            )
+            .to(
+                iconInner,
+                {
+                    scaleY: 1,
+                    duration: 0.25,
+                },
+                ">",
+            );
+    };
+
+    const initLinksAppear = (link: HTMLElement) => {
+        if (!link) return;
+
+        const text = link.querySelector(".arrow-link-text");
+        const icon = link.querySelector(".arrow-link-icon-wrap");
+
+        gsap.set([text, icon], {
+            y: "100%",
+        });
+        const tl = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: link,
+                    start: "top 80%",
+                    end: "bottom top",
+                },
+            })
+            .to([text, icon], {
+                duration: 0.8,
+                y: 0,
+                opacity: 1,
+                stagger: 0.1,
+                ease: "elastic.out(0.8,0.7)",
+            });
+
+        appearTls.push(tl);
+    };
+
+    const init = () => {
+        links = document.querySelectorAll(".arrow-link");
+        if (!links) return;
+
+        links.forEach((l) => {
+            initLinksAppear(l);
+            l.addEventListener("mouseenter", onLinkHover);
+        });
+    };
+
+    const cleanup = () => {
+        links?.forEach((l) => {
+            l.removeEventListener("mouseenter", onLinkHover);
+        });
+        appearTls?.forEach((tl) => {
+            tl.kill();
+        });
+        appearTls = [];
+        links = null;
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
