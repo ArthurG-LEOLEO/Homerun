@@ -37,7 +37,12 @@ function formatPrice(price: number | string, locale: string = "fr"): string {
 const formattedPrice = formatPrice(blok.price, lang);
 ---
 
-<div id="page-shop-item" class="shop-item bg-white text-black">
+<div
+    id="page-shop-item"
+    class="shop-item bg-white text-black"
+    data-unit-singular={blok.unit_label || "article"}
+    data-unit-plural={blok.unit_plural_label || "articles"}
+>
     <div
         class="container-main flex flex-col gap-20 pt-115 pb-120 md:flex-row-reverse md:items-start md:gap-0 md:pt-160 md:pb-170"
     >
@@ -55,7 +60,51 @@ const formattedPrice = formatPrice(blok.price, lang);
                 <div class="px-gutter">
                     <SBRichText content={blok.description} />
                 </div>
-                <div class="px-gutter mt-24 mb-32">
+                <div class="px-gutter mt-32 flex flex-col gap-32">
+                    <!-- Select -->
+                    {
+                        blok.select_label &&
+                            Array.isArray(blok.select_options) &&
+                            blok.select_options.length > 0 && (
+                                <div class="flex flex-col gap-8">
+                                    <label class="text-title-7">
+                                        {blok.select_label}
+                                    </label>
+                                    <div class="flex flex-wrap gap-4">
+                                        {(blok.select_options || []).map(
+                                            (option, index: number) => (
+                                                <div class="subject-option">
+                                                    <input
+                                                        type="radio"
+                                                        id={option.id}
+                                                        name="subject"
+                                                        value={option.label}
+                                                        class="topic-radio peer hidden"
+                                                        required={index === 0}
+                                                    />
+                                                    <label
+                                                        for={option.id}
+                                                        class="topic-label text-tag-lil peer-checked:bg-pink inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
+                                                    >
+                                                        <span class="arrow-icon relative -top-1">
+                                                            <Icon
+                                                                name="arrow-right"
+                                                                class="size-12 md:size-16"
+                                                            />
+                                                        </span>
+                                                        <span>
+                                                            {option.label}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                    }
+
+                    <!-- Quantity -->
                     <div class="flex flex-col gap-8">
                         <label class="text-title-7">{t("shop.quantity")}</label>
                         <div>
@@ -69,7 +118,13 @@ const formattedPrice = formatPrice(blok.price, lang);
                                         class="quantity-value text-p-24 tabular-nums"
                                         >1</span
                                     >
-                                    <span class="quantity-unit text-p-24">
+                                    <span
+                                        class="quantity-unit text-p-24"
+                                        data-singular={blok.unit_label ||
+                                            "article"}
+                                        data-plural={blok.unit_plural_label ||
+                                            "articles"}
+                                    >
                                         {blok.unit_label}
                                     </span>
                                 </div>
@@ -94,7 +149,7 @@ const formattedPrice = formatPrice(blok.price, lang);
                         </div>
                     </div>
                 </div>
-                <div class="px-gutter">
+                <div class="px-gutter mt-32">
                     <CTA
                         label={blok.button_label}
                         className="bg-orange text-white"
@@ -115,6 +170,15 @@ const formattedPrice = formatPrice(blok.price, lang);
     </div>
     {blok.other_items?.length > 0 && <OtherItems items={blok.other_items} />}
 </div>
+
+<style>
+    .topic-label .arrow-icon {
+        display: none;
+    }
+    .topic-radio:checked + .topic-label .arrow-icon {
+        display: inline-flex;
+    }
+</style>
 
 <script>
     let tlAppear: gsap.core.Timeline;
@@ -215,19 +279,12 @@ const formattedPrice = formatPrice(blok.price, lang);
         );
 
         if (quantityUnit) {
-            const shopItem = document.getElementById("page-shop-item");
-            if (shopItem) {
-                const singularLabel =
-                    shopItem.getAttribute("data-unit-singular");
-                const pluralLabel = shopItem.getAttribute("data-unit-plural");
+            const singularLabel =
+                quantityUnit.getAttribute("data-singular") || "article";
+            const pluralLabel =
+                quantityUnit.getAttribute("data-plural") || "articles";
 
-                if (singularLabel)
-                    quantityUnit.setAttribute("data-singular", singularLabel);
-                if (pluralLabel)
-                    quantityUnit.setAttribute("data-plural", pluralLabel);
-
-                quantityUnit.textContent = singularLabel || unitSingular;
-            }
+            quantityUnit.textContent = singularLabel;
         }
     };
 
