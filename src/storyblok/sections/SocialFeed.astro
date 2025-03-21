@@ -96,22 +96,42 @@ const t = useTranslations(lang);
     <div class="px-gutter mt-40 flex items-center gap-8 md:hidden">
         {
             blok.twitter && (
-                <CTA link={blok.twitter} icon="twitter" color="blue" />
+                <CTA
+                    link={blok.twitter}
+                    icon="twitter"
+                    color="blue"
+                    aria-label={t("social.x")}
+                />
             )
         }
         {
             blok.facebook && (
-                <CTA link={blok.facebook} icon="facebook" color="blue" />
+                <CTA
+                    link={blok.facebook}
+                    icon="facebook"
+                    color="blue"
+                    aria-label={t("social.facebook")}
+                />
             )
         }
         {
             blok.linkedin && (
-                <CTA link={blok.linkedin} icon="linkedin" color="green" />
+                <CTA
+                    link={blok.linkedin}
+                    icon="linkedin"
+                    color="green"
+                    aria-label={t("social.linkedin")}
+                />
             )
         }
         {
             blok.instagram && (
-                <CTA link={blok.instagram} icon="instagram" color="blue" />
+                <CTA
+                    link={blok.instagram}
+                    icon="instagram"
+                    color="blue"
+                    aria-label={t("social.instagram")}
+                />
             )
         }
     </div>
