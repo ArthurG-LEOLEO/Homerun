@@ -4,6 +4,10 @@ const { language, blok } = Astro.props;
 import type { SbBlokData } from "@storyblok/astro";
 import SocialPost from "../../components/atoms/SocialPost.astro";
 import CTA from "../../components/global/CTA.astro";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
 ---
 
 <div
@@ -35,6 +39,7 @@ import CTA from "../../components/global/CTA.astro";
                             label="Twitter"
                             icon="twitter"
                             color="blue"
+                            aria-label={t("social.x")}
                         />
                     )
                 }
@@ -45,6 +50,7 @@ import CTA from "../../components/global/CTA.astro";
                             label="Facebook"
                             icon="facebook"
                             color="blue"
+                            aria-label={t("social.facebook")}
                         />
                     )
                 }
@@ -55,6 +61,7 @@ import CTA from "../../components/global/CTA.astro";
                             label="LinkedIn"
                             icon="linkedin"
                             color="green"
+                            aria-label={t("social.linkedin")}
                         />
                     )
                 }
@@ -65,6 +72,7 @@ import CTA from "../../components/global/CTA.astro";
                             label="Instagram"
                             icon="instagram"
                             color="blue"
+                            aria-label={t("social.instagram")}
                         />
                     )
                 }
