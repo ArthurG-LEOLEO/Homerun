@@ -45,6 +45,9 @@ const { logoless, blok, alternates, white } = Astro.props;
                     <button
                         id="menu-button"
                         class="text-cta16 group font-space relative flex size-48 cursor-pointer px-16 py-16 text-white transition-transform duration-100 ease-out active:scale-[0.95] sm:h-54 sm:w-117 sm:px-24"
+                        aria-expanded="false"
+                        aria-controls="header-menu"
+                        aria-label="Menu"
                     >
                         <MenuButtonDesktop />
                         <MenuButtonMobile />
@@ -123,6 +126,7 @@ const { logoless, blok, alternates, white } = Astro.props;
         if (!menu) return;
         tlClose?.kill();
         button?.classList.add("active");
+        button?.setAttribute("aria-expanded", "true");
         tlOpen = gsap
             .timeline()
             .to(menu, {
@@ -165,6 +169,7 @@ const { logoless, blok, alternates, white } = Astro.props;
         if (!menu) return;
         tlOpen?.kill();
         button?.classList.remove("active");
+        button?.setAttribute("aria-expanded", "false");
         tlClose = gsap
             .timeline()
             .to(menu, {
