@@ -25,15 +25,6 @@ export default defineConfig({
     i18n,
     site: "https://homerun.today",
     integrations: [
-        sitemap({
-            i18n: {
-                defaultLocale: "en",
-                locales: {
-                    en: "en-US",
-                    fr: "fr-FR",
-                },
-            },
-        }),
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
             livePreview: isPreview,
