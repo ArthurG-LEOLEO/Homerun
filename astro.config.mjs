@@ -9,6 +9,7 @@ import node from "@astrojs/node";
 import icon from "astro-icon";
 
 import i18n from "./src/i18n/config";
+import sitemap from "@astrojs/sitemap";
 
 const env = loadEnv("", process.cwd(), ["STORYBLOK", "NETLIFY"]);
 
@@ -24,6 +25,15 @@ export default defineConfig({
     i18n,
     site: "https://homerun.today",
     integrations: [
+        sitemap({
+            i18n: {
+                defaultLocale: "en",
+                locales: {
+                    en: "en-US",
+                    fr: "fr-FR",
+                },
+            },
+        }),
         storyblok({
             accessToken: env.STORYBLOK_TOKEN,
             livePreview: isPreview,
