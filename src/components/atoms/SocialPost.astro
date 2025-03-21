@@ -3,6 +3,10 @@ import { Icon } from "astro-icon/components";
 
 import SBImage from "../global/SBImage.astro";
 import { getImageSize } from "../../utils/storyblok";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
 
 const { post } = Astro.props;
 
@@ -47,11 +51,22 @@ const layerColor2 =
             backgroundColor: hasImage ? "#181817" : post.color,
             aspectRatio,
         }}
+        aria-label={post.text
+            ? post.text
+            : post.type === "linkedin"
+              ? t("socialfeed.linkedin")
+              : t("socialfeed.instagram")}
     >
         <div
             class="relative z-[1] flex size-48 items-center justify-center rounded-full bg-black p-17 text-white"
         >
-            {post.type === "linkedin" ? <Icon name="linkedin" size="16" /> : <Icon name="instagram" size="16" />}
+            {
+                post.type === "linkedin" ? (
+                    <Icon name="linkedin" size="16" />
+                ) : (
+                    <Icon name="instagram" size="16" />
+                )
+            }
         </div>
 
         {post.text && <p class="mt-46 md:mt-88">{post.text}</p>}

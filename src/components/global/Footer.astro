@@ -10,6 +10,11 @@ import LogoTypo from "./LogoTypo.astro";
 import SBImage from "./SBImage.astro";
 import { Icon } from "astro-icon/components";
 
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
 import changeYourHelmetImg from "../../img/change-your-helmet.png";
 import footerSplineUrl from "../../spline/footer.splinecode";
 
@@ -111,6 +116,7 @@ const { footerData } = Astro.props;
                                 link={footerData.linkedin}
                                 icon="linkedin"
                                 color="green"
+                                aria-label={t("footer.linkedin")}
                             />
                         )
                     }
@@ -120,6 +126,7 @@ const { footerData } = Astro.props;
                                 link={footerData.instagram}
                                 icon="instagram"
                                 color="blue"
+                                aria-label={t("footer.instagram")}
                             />
                         )
                     }

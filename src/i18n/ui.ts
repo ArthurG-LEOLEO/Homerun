@@ -39,6 +39,10 @@ export default {
         "shop.quantity.up": "Increase quantity",
         "seo.description":
             "At the crossroad of consulting & advertising, we design cultural innovations that create value and cross channel communications that spark conversations.",
+        "footer.linkedin": "Visit our LinkedIn page",
+        "footer.instagram": "Follow us on Instagram",
+        "socialfeed.linkedin": "See the LinkedIn post",
+        "socialfeed.instagram": "See the Instagram post",
     },
     fr: {
         "case.challenges": "Enjeux strat’ :",
@@ -70,5 +74,9 @@ export default {
         "shop.quantity.up": "Augmenter la quantité",
         "seo.description":
             "À la croisée du conseil et de la publicité, nous concevons des innovations culturelles qui créent de la valeur et des communications audacieuses qui engagent des conversations.",
+        "footer.linkedin": "Visitez notre page LinkedIn",
+        "footer.instagram": "Suivez-nous sur Instagram",
+        "socialfeed.linkedin": "Voir le post LinkedIn",
+        "socialfeed.instagram": "Voir le post Instagram",
     },
 } as Record<string, Record<string, string>>;

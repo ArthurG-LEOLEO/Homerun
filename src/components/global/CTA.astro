@@ -25,6 +25,7 @@ const {
     onClick,
     className = "",
     color = "orange",
+    ...attrs
 } = Astro.props;
 
 const textColor = {
@@ -45,7 +46,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
 {
     link ? (
-        <Link link={link} className={`${baseClasses} ${className}`}>
+        <Link link={link} className={`${baseClasses} ${className}`} {...attrs}>
             <div class="cta-text flex items-center gap-10 opacity-0">
                 {label && (
                     <span class="font-space text-cta16 font-medium">
