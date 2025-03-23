@@ -2,6 +2,7 @@
 import Cases from "../../components/united/Cases.astro";
 import Hero from "../../components/united/Hero.astro";
 import Logos from "../../components/united/Logos.astro";
+import Cards from "../../storyblok/sections/Cards.astro";
 import { useTranslations } from "../../i18n/utils";
 
 const lang = Astro.currentLocale;
@@ -12,6 +13,7 @@ const { language, blok } = Astro.props;
 
 <div id="page-united" class="united bg-green text-white">
     <Hero blok={blok} />
+    {blok.cards[0] && <Cards blok={blok.cards[0]} />}
     <Logos blok={blok} />
     <Cases blok={blok} />
 </div>

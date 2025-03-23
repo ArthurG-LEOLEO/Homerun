@@ -1,0 +1,113 @@
+---
+import SBRichText from "../../components/global/SBRichText.astro";
+import { Icon } from "astro-icon/components";
+import SBImage from "../../components/global/SBImage.astro";
+
+const { language, blok } = Astro.props;
+
+const cardStyles = [
+    {
+        card: "-rotate-3",
+        back: "bg-orange text-white",
+    },
+    {
+        card: "rotate-2",
+        back: "bg-pink text-black",
+    },
+    {
+        card: "rotate-7",
+        back: "bg-blue text-black",
+    },
+];
+---
+
+<div
+    class="container-main flex flex-col items-center gap-75 pt-40 pb-70 md:pt-130 md:pb-140 xl:flex-row xl:justify-start xl:gap-0"
+>
+    <div class="px-gutter w-full xl:w-7/12">
+        {
+            blok.cards && blok.cards.length > 0 && (
+                <div class="cards-container flex flex-col items-center justify-center sm:flex-row sm:items-stretch">
+                    {blok.cards.map((card, index) => {
+                        const cardStyle = cardStyles[index];
+                        return (
+                            <div class="flip-card perspective-1000 max-w-228 flex-1">
+                                <div
+                                    class={`flip-card-inner relative h-full w-full text-center transition-transform duration-700 transform-3d ${cardStyle.card}`}
+                                >
+                                    {/* FRONT */}
+                                    <div class="flip-card-front absolute h-full w-full backface-hidden">
+                                        <div class="card-content relative h-full overflow-hidden">
+                                            {card.cover && (
+                                                <SBImage
+                                                    image={card.cover}
+                                                    class="size-full object-cover"
+                                                />
+                                            )}
+                                            <div class="absolute inset-0 bg-black/50" />
+                                            <div class="absolute inset-0 flex items-end justify-between px-24 py-35">
+                                                <div class="flex flex-col items-center gap-24">
+                                                    <h3 class="text-p-24 w-full font-bold text-white">
+                                                        {card.title}
+                                                    </h3>
+                                                    <div class="flex size-28 items-center justify-center rounded-full border-2 border-white md:size-34">
+                                                        <Icon
+                                                            name="arrow-right"
+                                                            class="size-12 md:size-16"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* BACK */}
+                                    <div
+                                        class={`flip-card-back flex size-full min-h-350 rotate-y-180 items-center ${cardStyle.back} px-24 py-35 backface-hidden sm:min-h-0`}
+                                    >
+                                        <p class="text-p-16 font-bold whitespace-pre-wrap">
+                                            {card.content}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )
+        }
+    </div>
+    <div class="px-gutter w-10/12 xl:w-4/12">
+        <SBRichText content={blok.text} />
+    </div>
+</div>
+
+<style>
+    @media (hover: hover) {
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+    }
+</style>
+
+<script>
+    // Gestion du clic pour les appareils tactiles
+    document.addEventListener("astro:page-load", () => {
+        const flipCards = document.querySelectorAll(".flip-card");
+
+        flipCards.forEach((card) => {
+            card.addEventListener("click", () => {
+                // Vérifie si l'appareil ne supporte pas le hover
+                const isTouch = window.matchMedia("(hover: none)").matches;
+
+                if (isTouch) {
+                    const inner = card.querySelector(".flip-card-inner");
+                    if (inner.style.transform === "rotateY(180deg)") {
+                        inner.style.transform = "";
+                    } else {
+                        inner.style.transform = "rotateY(180deg)";
+                    }
+                }
+            });
+        });
+    });
+</script>

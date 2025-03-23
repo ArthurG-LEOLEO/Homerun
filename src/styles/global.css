@@ -210,6 +210,9 @@
         @apply font-space;
         @apply font-bold;
     }
+    .text-p-16 {
+        @apply text-p16;
+    }
     .text-p-18 {
         @apply text-p18-mobile md:text-p18;
     }
