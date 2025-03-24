@@ -70,6 +70,7 @@ const { blok } = Astro.props;
 <script>
     import { waitForFooterSplineLoad } from "../../scripts/spline";
 
+    let wrapper: HTMLElement | null;
     let videoHolder: HTMLElement | null;
     let video: HTMLElement | null;
     let videoLayer1: HTMLElement | null;
@@ -113,8 +114,64 @@ const { blok } = Astro.props;
             "#united-hero #united-video-overlay",
         );
     };
+
+    const initScrollVideo = () => {
+        tlVideo = gsap.timeline().fromTo(
+            videoWithLayers,
+            {
+                rotate: -2.8,
+                y: () => {
+                    if (window.innerWidth < 768) {
+                        return "-25rem";
+                    } else {
+                        return "-37rem";
+                    }
+                },
+            },
+            {
+                scrollTrigger: {
+                    trigger: wrapper,
+                    endTrigger: videoHolder,
+                    start: "top top-=1",
+                    end: "bottom bottom+=20%",
+                    invalidateOnRefresh: true,
+                    scrub: true,
+                    onEnter: function () {
+                        gsap.killTweensOf(videoWithLayers);
+                    },
+                },
+                height: "100vh",
+                rotate: 0,
+                y: 0,
+                ease: "none",
+            },
+        );
+
+        tlVideoText = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top 50%",
+                    end: "top top",
+                    scrub: true,
+                },
+            })
+            .to(videoOverlay, {
+                opacity: 1,
+            })
+            .to(
+                videoTextWords,
+                {
+                    opacity: 1,
+                    x: 0,
+                    stagger: 0.1,
+                },
+                "<",
+            );
+    };
+
     const init = async () => {
-        const wrapper = document.querySelector("#united-hero");
+        wrapper = document.querySelector("#united-hero");
         if (!wrapper) return;
 
         setVariables();
@@ -131,7 +188,31 @@ const { blok } = Astro.props;
             .set(videoTextWords, {
                 opacity: 0,
                 x: -20,
-            })
+            });
+
+        if (window.innerWidth < 1024) {
+            gsap.timeline()
+                .set([titleWordsMobile, header, banner, logo], {
+                    opacity: 1,
+                    rotate: 0,
+                    y: 0,
+                })
+                .set(videoWithLayers, {
+                    rotate: -2.8,
+                    y: () => {
+                        if (window.innerWidth < 768) {
+                            return "-25rem";
+                        } else {
+                            return "-37rem";
+                        }
+                    },
+                });
+
+            initScrollVideo();
+            return;
+        }
+
+        gsap.timeline()
             .set(videoWithLayers, {
                 rotate: 6,
                 y: () => {
@@ -152,7 +233,7 @@ const { blok } = Astro.props;
                 opacity: 0,
                 y: "-100%",
             })
-            .set([titleWordsMobile, titleWordsDesktop], {
+            .set(titleWordsDesktop, {
                 y: "-100%",
                 opacity: 1,
             })
@@ -194,39 +275,20 @@ const { blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
-            );
-
-        if (window.innerWidth > 1024) {
-            tlAppear
-                .to(
-                    titleWordsDesktop,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "<+=0.2",
-                )
-                .set(titleWordsMobile, {
+            )
+            .to(
+                titleWordsDesktop,
+                {
+                    duration: 0.8,
                     y: 0,
-                });
-        } else {
-            tlAppear
-                .to(
-                    titleWordsMobile,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "<+=0.2",
-                )
-                .set(titleWordsDesktop, {
-                    y: 0,
-                });
-        }
+                    stagger: 0.05,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "<+=0.2",
+            )
+            .set(titleWordsMobile, {
+                y: 0,
+            });
 
         await waitForFooterSplineLoad();
         tlAppear.play();
@@ -245,58 +307,7 @@ const { blok } = Astro.props;
             delay: 0.7,
         });
 
-        tlVideo = gsap.timeline().fromTo(
-            videoWithLayers,
-            {
-                rotate: -2.8,
-                y: () => {
-                    if (window.innerWidth < 768) {
-                        return "-25rem";
-                    } else {
-                        return "-37rem";
-                    }
-                },
-            },
-            {
-                scrollTrigger: {
-                    trigger: wrapper,
-                    endTrigger: videoHolder,
-                    start: "top top-=1",
-                    end: "bottom bottom+=20%",
-                    invalidateOnRefresh: true,
-                    scrub: true,
-                    onEnter: function () {
-                        videoAppear.kill();
-                    },
-                },
-                height: "100vh",
-                rotate: 0,
-                y: 0,
-                ease: "none",
-            },
-        );
-
-        tlVideoText = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: videoHolder,
-                    start: "top 50%",
-                    end: "top top",
-                    scrub: true,
-                },
-            })
-            .to(videoOverlay, {
-                opacity: 1,
-            })
-            .to(
-                videoTextWords,
-                {
-                    opacity: 1,
-                    x: 0,
-                    stagger: 0.1,
-                },
-                "<",
-            );
+        initScrollVideo();
     };
 
     const cleanup = () => {

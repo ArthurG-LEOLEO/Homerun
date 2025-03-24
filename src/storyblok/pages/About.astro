@@ -120,11 +120,14 @@ const { language, blok } = Astro.props;
         const cards = page.querySelectorAll(".about-hero-cards");
 
         if (window.innerWidth < 1024) {
-            gsap.timeline().set([cards, titleWordsMobile, header, banner], {
-                opacity: 1,
-                rotate: 0,
-                y: 0,
-            });
+            gsap.timeline().set(
+                [cards, titleWordsMobile, subtitle, header, banner],
+                {
+                    opacity: 1,
+                    rotate: 0,
+                    y: 0,
+                },
+            );
             return;
         }
 
