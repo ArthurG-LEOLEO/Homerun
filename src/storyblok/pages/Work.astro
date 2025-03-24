@@ -30,6 +30,8 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
     const NB_REP_ARCH_CASES = 5;
     let shownArchivedCases = 5;
     let currentCategory: string | undefined;
@@ -218,15 +220,16 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
 
         checkUrlFiltering();
     };
-    const init = () => {
-        page = document.querySelector("#page-work");
 
+    const initAppear = async () => {
         if (!page) return;
-
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelectorAll(
+        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
             "#layout-header .layout-header",
         );
+
+        const titleEls = page.querySelectorAll(".work-title-el");
+        const subtitle = page.querySelectorAll(".page-subtitle");
 
         gsap.timeline()
             .set(banner, {
@@ -235,10 +238,21 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
             .set(header, {
                 y: -50,
                 opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            })
+            .set(titleEls, {
+                y: "3rem",
+                opacity: 0,
+            })
+            .set(workGrid, {
+                opacity: 0,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({ paused: true, delay: 0.3 })
             .to(
                 banner,
                 {
@@ -257,10 +271,51 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                titleEls,
+                {
+                    duration: 0.8,
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.05,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                workGrid,
+                {
+                    duration: 0.3,
+                    opacity: 1,
+                    ease: "power2",
+                },
+                "start+=0.3",
             );
+
+        await waitForFooterSplineLoad();
+
+        tlAppear.play();
+    };
+
+    const init = () => {
+        page = document.querySelector("#page-work");
+
+        if (!page) return;
 
         initFiltering();
         initLoadArchived();
+        initAppear();
     };
 
     const cleanup = () => {

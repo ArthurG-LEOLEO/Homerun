@@ -9,7 +9,7 @@ const { subtitle } = Astro.props;
 
 <div class="container-main flex flex-col items-center pt-150 pb-30 lg:pb-60">
     <span
-        class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+        class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
     >
         {subtitle}
     </span>
@@ -17,21 +17,27 @@ const { subtitle } = Astro.props;
         <button
             data-category="consulting"
             id="consulting-button"
-            class="work-category-btn before:bg-pink relative z-[1] cursor-pointer text-white transition-[color] duration-300 before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-0.9deg] before:transition-[scale,rotate] before:duration-300 before:ease-out after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:text-black hover:before:scale-x-[1] hover:before:rotate-[-1.8deg] hover:before:duration-[350ms] hover:before:ease-[cubic-bezier(0.34,1.36,0.64,1)]"
+            class="work-title-el work-category-btn before:bg-pink relative z-[1] cursor-pointer text-white opacity-0 transition-[color] duration-300 before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-0.9deg] before:transition-[scale,rotate] before:duration-300 before:ease-out after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:text-black hover:before:scale-x-[1] hover:before:rotate-[-1.8deg] hover:before:duration-[350ms] hover:before:ease-[cubic-bezier(0.34,1.36,0.64,1)]"
             >{t("work.title.consulting")}</button
         >
         <br class="lg:hidden" />
-        <span>{t("work.title.middle1")}</span>
+        <span class="work-title-el inline-block opacity-0"
+            >{t("work.title.middle1")}</span
+        >
         <br />
-        <span>{t("work.title.middle2")}</span>
+        <span class="work-title-el inline-block opacity-0"
+            >{t("work.title.middle2")}</span
+        >
         <button
             data-category="advertising"
             id="advertising-button"
-            class="work-category-btn before:bg-orange relative z-[1] cursor-pointer before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-0.9deg] before:transition-[scale,rotate] before:duration-300 before:ease-out after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:before:scale-x-[1] hover:before:rotate-[-1.8deg] hover:before:duration-[350ms] hover:before:ease-[cubic-bezier(0.34,1.36,0.64,1)]"
+            class="work-title-el work-category-btn before:bg-orange relative z-[1] cursor-pointer opacity-0 before:absolute before:top-0 before:right-[-1rem] before:bottom-0 before:left-[-1rem] before:z-[-1] before:origin-left before:translate-y-10 before:scale-x-0 before:rotate-[-0.9deg] before:transition-[scale,rotate] before:duration-300 before:ease-out after:absolute after:right-0 after:bottom-4 after:left-0 after:h-2 after:origin-left after:bg-current hover:before:scale-x-[1] hover:before:rotate-[-1.8deg] hover:before:duration-[350ms] hover:before:ease-[cubic-bezier(0.34,1.36,0.64,1)]"
             >{t("work.title.advertising")}</button
         >
         <br />
-        <span>{t("work.title.end")}</span>
+        <span class="work-title-el inline-block opacity-0"
+            >{t("work.title.end")}</span
+        >
     </h1>
 </div>
 
