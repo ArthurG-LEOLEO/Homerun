@@ -68,6 +68,8 @@ const { blok } = Astro.props;
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
     let videoHolder: HTMLElement | null;
     let video: HTMLElement | null;
     let videoLayer1: HTMLElement | null;
@@ -111,11 +113,16 @@ const { blok } = Astro.props;
             "#united-hero #united-video-overlay",
         );
     };
-    const init = () => {
+    const init = async () => {
         const wrapper = document.querySelector("#united-hero");
         if (!wrapper) return;
 
         setVariables();
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
 
         gsap.timeline()
             .set(videoOverlay, {
@@ -148,14 +155,46 @@ const { blok } = Astro.props;
             .set([titleWordsMobile, titleWordsDesktop], {
                 y: "-100%",
                 opacity: 1,
+            })
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
             });
 
-        const tlAppear = gsap.timeline({ paused: true }).to(logo, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "elastic.out(1.2,0.7)",
-        });
+        const tlAppear = gsap
+            .timeline({ delay: 0.3, paused: true })
+            .to(
+                logo,
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start",
+            )
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
 
         if (window.innerWidth > 1024) {
             tlAppear
@@ -189,6 +228,7 @@ const { blok } = Astro.props;
                 });
         }
 
+        await waitForFooterSplineLoad();
         tlAppear.play();
 
         const videoAppear = gsap.to(videoWithLayers, {

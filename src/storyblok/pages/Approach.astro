@@ -132,6 +132,7 @@ const { language, blok } = Astro.props;
 
 <script>
     import { Application } from "@splinetool/runtime";
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
 
     // we keep them separated if we need to change values
     const MOUSE_PARALLAX_ROTATION = (Math.PI / 180) * 10; // 10 deg
@@ -556,26 +557,9 @@ const { language, blok } = Astro.props;
         tlAppear.play();
     };
 
-    const waitForFooterSplineLoad = () => {
-        return new Promise<void>((resolve, reject) => {
-            const splineViewer: any | null =
-                document.getElementById("SplineViewer");
-
-            if (splineViewer?._loaded) {
-                resolve();
-            }
-
-            splineViewer?.addEventListener("load-complete", () => {
-                resolve();
-            });
-        });
-    };
-
     const init = async () => {
         page = document.querySelector("#page-approach");
         if (!page) return;
-
-        await waitForFooterSplineLoad();
 
         setDOMElements();
 
@@ -615,6 +599,7 @@ const { language, blok } = Astro.props;
                 "<",
             );
 
+        await waitForFooterSplineLoad();
         initAppear();
     };
 
