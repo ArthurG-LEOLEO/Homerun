@@ -1,0 +1,99 @@
+<div id="cursor-area" class="pointer-events-none fixed inset-0 z-[102]">
+    <div
+        id="cursor-3"
+        class="bg-green absolute top-0 left-0 size-26 rounded-full opacity-0"
+    ></div>
+    <div
+        id="cursor-2"
+        class="bg-orange absolute top-0 left-0 size-28 rounded-full opacity-0"
+    ></div>
+    <div
+        id="cursor-1"
+        class="bg-pink absolute top-0 left-0 size-30 rounded-full opacity-0"
+    ></div>
+</div>
+
+<script>
+    const Y_OFFSET = 20;
+    const X_OFFSET = 20;
+    let area: HTMLElement | null;
+    let cursor1: HTMLElement | null;
+    let cursor2: HTMLElement | null;
+    let cursor3: HTMLElement | null;
+
+    let lastPos = {
+        x: 0,
+        y: 0,
+    };
+
+    const onCursorMouseEnter = (e: MouseEvent) => {
+        gsap.set([cursor1, cursor2, cursor3], {
+            x: e.clientX + X_OFFSET,
+            y: e.clientY + Y_OFFSET,
+            xPercent: -50,
+            yPercent: -50,
+        });
+        lastPos = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+    };
+
+    const onCursorMouseMove = (e: MouseEvent) => {
+        const velocity = {
+            x: Math.abs(e.clientX - lastPos.x),
+            y: Math.abs(e.clientY - lastPos.y),
+        };
+
+        const maxVelocity = 5;
+
+        let v = Math.min(Math.max(velocity.x, velocity.y), maxVelocity);
+        if (v === 1) v = 0;
+        const scale = 1 * (v / maxVelocity);
+
+        gsap.to([cursor1, cursor2, cursor3], {
+            opacity: 1,
+            x: e.clientX + X_OFFSET,
+            y: e.clientY + Y_OFFSET,
+            xPercent: -50,
+            yPercent: -50,
+            stagger: 0.02,
+            duration: 0.5,
+            scale: 1,
+            ease: "power3",
+        });
+        gsap.to([cursor1, cursor2, cursor3], {
+            duration: 0.55,
+            scale,
+        });
+        lastPos = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+    };
+
+    const init = () => {
+        const hasHoverSupport = window.matchMedia("(hover: hover)").matches;
+        if (!hasHoverSupport) return;
+        area = document.querySelector("#cursor-area");
+        if (!area) return;
+        cursor1 = area.querySelector("#cursor-1");
+        cursor2 = area.querySelector("#cursor-2");
+        cursor3 = area.querySelector("#cursor-3");
+
+        document.addEventListener("mouseenter", onCursorMouseEnter);
+        document.addEventListener("mousemove", onCursorMouseMove);
+    };
+
+    const cleanup = () => {
+        document.removeEventListener("mouseenter", onCursorMouseEnter);
+        document.removeEventListener("mousemove", onCursorMouseMove);
+    };
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>
