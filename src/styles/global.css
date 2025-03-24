@@ -153,7 +153,7 @@
     .word-inner {
         display: inline-block;
     }
-    .title-wrap {
+    .title-wrap-desktop {
         .word-inner {
             opacity: 0;
         }

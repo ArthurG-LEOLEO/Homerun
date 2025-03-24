@@ -98,7 +98,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
     const onCTAUnhover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target) return;
+        if (!target || window.innerWidth < 1024) return;
 
         const bgInner = target.querySelectorAll(".cta-inner-bg");
         const bg = target.querySelector(".cta-bg");
@@ -135,7 +135,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
     const onCTAHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target) return;
+        if (!target || window.innerWidth < 1024) return;
 
         const bg = target.querySelector(".cta-bg");
         const bgInner = target.querySelectorAll(".cta-inner-bg");
@@ -185,6 +185,13 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
         const text = cta.querySelector(".cta-text");
         const bg = cta.querySelector(".cta-bg");
+
+        if (window.innerWidth < 1024) {
+            gsap.set([text, bg], {
+                opacity: 1,
+            });
+            return;
+        }
 
         gsap.timeline()
             .set(text, {

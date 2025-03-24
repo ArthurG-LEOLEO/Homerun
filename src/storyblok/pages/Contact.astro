@@ -25,7 +25,7 @@ const { language, blok } = Astro.props;
             >
                 <Title reveal="manual" title={blok.title[0]} />
             </h1>
-            <div class="flex flex-col items-center md:gap-8">
+            <div class="flex flex-col items-center gap-15 lg:gap-8">
                 <Section
                     className="contact-section-1"
                     innerClassName="translate-y-[20rem] rotate-[-5deg] opacity-0"
@@ -53,95 +53,99 @@ const { language, blok } = Astro.props;
     let section2: HTMLElement | null;
     let section3: HTMLElement | null;
     let section1Inner: HTMLElement | null;
+    let mm: gsap.MatchMedia;
 
     const initBlockScroll = () => {
-        tlSection1 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: section1,
-                    start: "bottom 40%",
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                },
-            })
-            .to(section1, {
-                duration: 1,
-                rotate: 3,
-                y: `-20rem`,
-                ease: "power2.in",
-            });
-
-        tlSection1 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: section1,
-                    start: "bottom 40%",
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                },
-            })
-            .to(section1, {
-                duration: 1,
-                rotate: 3,
-                y: `-20rem`,
-                ease: "power2.in",
-            });
-
-        tlSection2 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: section2,
-                    start: "top 100%",
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                },
-            })
-            .fromTo(
-                section2,
-                { y: "10rem", rotate: -2 },
-                {
+        mm = gsap.matchMedia();
+        mm.add("(width > 1024px)", () => {
+            tlSection1 = gsap
+                .timeline({
+                    scrollTrigger: {
+                        trigger: section1,
+                        start: "bottom 40%",
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                })
+                .to(section1, {
                     duration: 1,
-                    rotate: 1,
-                    y: 0,
-                    ease: "power2.out",
-                },
-            )
-            .to(section2, {
-                duration: 1,
-                rotate: -3,
-                y: `-20rem`,
-                ease: "power2.in",
-            });
+                    rotate: 3,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
 
-        tlSection3 = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: section3,
-                    start: "top 100%",
-                    end: "bottom top",
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                },
-            })
-            .fromTo(
-                section3,
-                { y: "10rem", rotate: 2 },
-                {
+            tlSection1 = gsap
+                .timeline({
+                    scrollTrigger: {
+                        trigger: section1,
+                        start: "bottom 40%",
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                })
+                .to(section1, {
                     duration: 1,
-                    rotate: -1.2,
-                    y: 0,
-                    ease: "power2.out",
-                },
-            )
-            .to(section3, {
-                duration: 1,
-                rotate: 3,
-                y: `-20rem`,
-                ease: "power2.in",
-            });
+                    rotate: 3,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
+
+            tlSection2 = gsap
+                .timeline({
+                    scrollTrigger: {
+                        trigger: section2,
+                        start: "top 100%",
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                })
+                .fromTo(
+                    section2,
+                    { y: "10rem", rotate: -2 },
+                    {
+                        duration: 1,
+                        rotate: 1,
+                        y: 0,
+                        ease: "power2.out",
+                    },
+                )
+                .to(section2, {
+                    duration: 1,
+                    rotate: -3,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
+
+            tlSection3 = gsap
+                .timeline({
+                    scrollTrigger: {
+                        trigger: section3,
+                        start: "top 100%",
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                })
+                .fromTo(
+                    section3,
+                    { y: "10rem", rotate: 2 },
+                    {
+                        duration: 1,
+                        rotate: -1.2,
+                        y: 0,
+                        ease: "power2.out",
+                    },
+                )
+                .to(section3, {
+                    duration: 1,
+                    rotate: 3,
+                    y: `-20rem`,
+                    ease: "power2.in",
+                });
+        });
     };
 
     const init = async () => {
@@ -167,6 +171,20 @@ const { language, blok } = Astro.props;
             "#contact-title .title-wrap-mobile .word-inner",
         );
 
+        initBlockScroll();
+
+        if (window.innerWidth < 1024) {
+            gsap.timeline().set(
+                [subtitle, section1Inner, titleWordsMobile, header, banner],
+                {
+                    opacity: 1,
+                    rotate: 0,
+                    y: 0,
+                },
+            );
+            return;
+        }
+
         await waitForFooterSplineLoad();
 
         gsap.timeline()
@@ -186,7 +204,7 @@ const { language, blok } = Astro.props;
                 opacity: 0,
                 rotate: -5,
             })
-            .set([titleWordsMobile, titleWordsDesktop], {
+            .set([titleWordsDesktop], {
                 y: "100%",
                 opacity: 1,
             });
@@ -233,43 +251,22 @@ const { language, blok } = Astro.props;
                 },
                 "<+=0.5",
             );
-        if (window.innerWidth > 1024) {
-            tlAppear
-                .to(
-                    titleWordsDesktop,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "start+=0.1",
-                )
-                .set(titleWordsMobile, {
-                    y: 0,
-                });
-        } else {
-            tlAppear
-                .to(
-                    titleWordsMobile,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "start+=0.1",
-                )
-                .set(titleWordsDesktop, {
-                    y: 0,
-                });
-        }
-        tlAppear.play();
 
-        initBlockScroll();
+        tlAppear.to(
+            titleWordsDesktop,
+            {
+                duration: 0.8,
+                y: 0,
+                stagger: 0.05,
+                ease: "elastic.out(1,0.7)",
+            },
+            "start+=0.1",
+        );
+        tlAppear.play();
     };
 
     const cleanup = () => {
+        mm?.revert();
         tlAppear?.kill();
         tlSection1?.kill();
         tlSection2?.kill();

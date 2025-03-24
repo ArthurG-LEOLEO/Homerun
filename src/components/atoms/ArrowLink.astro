@@ -95,7 +95,7 @@ const isExternal = link?.linktype === "url";
 
     const onLinkHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target) return;
+        if (!target || window.innerWidth < 1024) return;
 
         const text = target.querySelector(".arrow-link-text");
         const icon = target.querySelector(".arrow-link-icon");
@@ -156,6 +156,13 @@ const isExternal = link?.linktype === "url";
 
         const text = link.querySelector(".arrow-link-text");
         const icon = link.querySelector(".arrow-link-icon-wrap");
+
+        if (window.innerWidth < 1024) {
+            gsap.set([text, icon], {
+                opacity: 1,
+            });
+            return;
+        }
 
         gsap.set([text, icon], {
             y: "100%",

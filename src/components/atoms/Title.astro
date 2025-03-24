@@ -38,10 +38,23 @@ const { title, className = "", reveal = "scroll" } = Astro.props;
     const initTitleAnim = (title: HTMLElement) => {
         if (!title) return;
 
+        const innerWords = title.querySelectorAll(".word-inner");
+        if (window.innerWidth < 1024) {
+            gsap.set(innerWords, {
+                opacity: 1,
+            });
+            return;
+        }
+
         const isScrollReveal = title.dataset.reveal === "scroll";
         if (!isScrollReveal) return;
 
-        const innerWords = title.querySelectorAll(".word-inner");
+        if (window.innerWidth < 1024) {
+            gsap.set(innerWords, {
+                opacity: 1,
+            });
+            return;
+        }
 
         gsap.set(innerWords, {
             y: "100%",

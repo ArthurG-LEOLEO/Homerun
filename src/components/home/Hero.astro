@@ -178,6 +178,8 @@ const { blok } = Astro.props;
 
         setVariables();
 
+        await waitForFooterSplineLoad();
+
         gsap.timeline()
             .set(banner, {
                 y: "-100%",
@@ -232,10 +234,7 @@ const { blok } = Astro.props;
             });
 
         tlBaseline = gsap
-            .timeline({
-                delay: 0.3,
-                paused: true,
-            })
+            .timeline()
             .to(
                 [titleLettersHom, titleLettersEr, titleLettersUn],
                 {
@@ -392,10 +391,6 @@ const { blok } = Astro.props;
                 },
                 "<",
             );
-
-        await waitForFooterSplineLoad();
-
-        tlBaseline.play();
 
         const videoAppear = gsap.to(videoWithLayers, {
             rotate: -6,

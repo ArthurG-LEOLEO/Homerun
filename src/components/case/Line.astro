@@ -66,6 +66,16 @@ const category: "consulting" | "advertising" = caseItem.content.category;
         const inner = line.querySelectorAll(".case-line-inner");
         const img = line.querySelectorAll(".case-line-img");
 
+        if (window.innerWidth < 1024) {
+            gsap.set([els, img], {
+                opacity: 1,
+            });
+            gsap.set(inner, {
+                "--underline": 1,
+            });
+            return;
+        }
+
         gsap.timeline()
             .set(els, {
                 opacity: 0,

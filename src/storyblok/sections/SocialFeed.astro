@@ -157,6 +157,18 @@ const t = useTranslations(lang);
 
     let scrollingSpeed = { x: 0 };
 
+    const initAppear = () => {
+        if (window.innerWidth < 1024) {
+            gsap.set([els, img], {
+                opacity: 1,
+            });
+            gsap.set(inner, {
+                "--underline": 1,
+            });
+            return;
+        }
+    };
+
     const init = () => {
         container = document.querySelector(".feed-slider-container");
         wrapper = document.querySelector(".feed-slider-wrapper");
@@ -201,93 +213,101 @@ const t = useTranslations(lang);
             ease: "elastic.out(1.2, 0.7)",
         });
 
-        tlAppearSlider = gsap
-            .timeline({
-                default: {
-                    duration: 0.4,
-                    ease: "power4.out",
-                },
-                scrollTrigger: {
-                    trigger: container,
-                    start: "top 70%",
-                    end: "bottom top",
-                },
-            })
-            .set(wrapper, {
-                x: -1,
-                modifiers: {
-                    x: gsap.utils.unitize(wrap),
-                },
-            })
-            .from(
-                ".feed-slider-container .el",
-                {
-                    duration: 0.4,
-                    opacity: 0,
-                    y: 50,
-                    stagger: 0.1,
-                },
-                "start",
-            )
-            .add(() => {
-                gsap.ticker.add(tick);
-            }, "start")
-            .to(
-                ".feed-slider-container",
-                {
-                    "--underline": 1,
-                    duration: 1,
-                    ease: "expo.inOut",
-                },
-                "start+=0.3",
-            )
-            .from(
-                [...posts].slice(0, 4),
-                {
-                    opacity: 0,
-                    y: 300,
-                    duration: 1,
-                    stagger: 0.1,
-                    ease: "expo.out",
-                },
-                "start+=0.3",
-            )
-            .to(
-                layers1,
-                {
-                    y: 33,
-                    duration: 0.2,
-                    ease: "power3.in",
-                },
-                "<",
-            )
-            .to(
-                layers2,
-                {
-                    y: 50,
-                    duration: 0.2,
-                    ease: "power3.in",
-                },
-                "<",
-            )
-            .to(
-                [layers1, layers2],
-                {
-                    y: 0,
-                    duration: 1.5,
-                    ease: "elastic.out(1.2, 0.7)",
-                },
-                "<+0.2",
-            )
-            .to(
-                scrollingSpeed,
-                {
-                    x: 1,
-                    duration: 1,
-                    ease: "power3.in",
-                },
-                "start",
-            );
+        if (window.innerWidth > 1024) {
+            tlAppearSlider = gsap
+                .timeline({
+                    default: {
+                        duration: 0.4,
+                        ease: "power4.out",
+                    },
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top 70%",
+                        end: "bottom top",
+                    },
+                })
+                .set(wrapper, {
+                    x: -1,
+                    modifiers: {
+                        x: gsap.utils.unitize(wrap),
+                    },
+                })
+                .from(
+                    ".feed-slider-container .el",
+                    {
+                        duration: 0.4,
+                        opacity: 0,
+                        y: 50,
+                        stagger: 0.1,
+                    },
+                    "start",
+                )
+                .add(() => {
+                    gsap.ticker.add(tick);
+                }, "start")
+                .to(
+                    ".feed-slider-container",
+                    {
+                        "--underline": 1,
+                        duration: 1,
+                        ease: "expo.inOut",
+                    },
+                    "start+=0.3",
+                )
+                .from(
+                    [...posts].slice(0, 4),
+                    {
+                        opacity: 0,
+                        y: 300,
+                        duration: 1,
+                        stagger: 0.1,
+                        ease: "expo.out",
+                    },
+                    "start+=0.3",
+                )
+                .to(
+                    layers1,
+                    {
+                        y: 33,
+                        duration: 0.2,
+                        ease: "power3.in",
+                    },
+                    "<",
+                )
+                .to(
+                    layers2,
+                    {
+                        y: 50,
+                        duration: 0.2,
+                        ease: "power3.in",
+                    },
+                    "<",
+                )
+                .to(
+                    [layers1, layers2],
+                    {
+                        y: 0,
+                        duration: 1.5,
+                        ease: "elastic.out(1.2, 0.7)",
+                    },
+                    "<+0.2",
+                )
+                .to(
+                    scrollingSpeed,
+                    {
+                        x: 1,
+                        duration: 1,
+                        ease: "power3.in",
+                    },
+                    "start",
+                );
+        } else {
+            gsap.set(".feed-slider-container", {
+                "--underline": 1,
+            });
+            scrollingSpeed.x = 1;
+            gsap.ticker.add(tick);
+        }
 
         gsapObserver = Observer.create({
             target: wrapper,
