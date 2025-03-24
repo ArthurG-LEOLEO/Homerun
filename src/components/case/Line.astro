@@ -18,7 +18,7 @@ const { language, caseItem } = Astro.props;
             <Tag category={caseItem.content.category} />
         </div>
         <div
-            class="px-gutter relative aspect-[115/70] w-4/12 max-w-230 md:order-3"
+            class="px-gutter case-line-img relative aspect-[115/70] w-4/12 max-w-230 opacity-0 md:order-3"
         >
             <SBImage
                 class="size-full object-cover"
@@ -139,11 +139,18 @@ const { language, caseItem } = Astro.props;
 
         const els = line.querySelectorAll(".case-line-el");
         const inner = line.querySelectorAll(".case-line-inner");
+        const img = line.querySelectorAll(".case-line-img");
 
-        gsap.timeline().set(els, {
-            opacity: 0,
-            y: "5rem",
-        });
+        gsap.timeline()
+            .set(els, {
+                opacity: 0,
+                y: "5rem",
+            })
+            .set(img, {
+                opacity: 0,
+                y: "10rem",
+                rotate: -4,
+            });
 
         const tl = gsap
             .timeline({
@@ -163,6 +170,17 @@ const { language, caseItem } = Astro.props;
                     ease: "power3.inOut",
                 },
                 "start",
+            )
+            .to(
+                img,
+                {
+                    duration: 1.2,
+                    y: 0,
+                    opacity: 1,
+                    rotate: 0,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.3",
             )
             .to(
                 inner,
