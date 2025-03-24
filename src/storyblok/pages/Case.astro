@@ -17,7 +17,7 @@ const { language, blok } = Astro.props;
 <div id="page-case" class="case" {...storyblokEditable(blok)}>
     <div class="pt-115 pb-120 md:pt-160 md:pb-170">
         <div class="container-main">
-            <div class="px-gutter mb-60">
+            <div class="px-gutter case-hero-el mb-60 opacity-0">
                 <a
                     href={t("links.work")}
                     class="flex size-34 items-center justify-center rounded-full border-2"
@@ -25,21 +25,24 @@ const { language, blok } = Astro.props;
                     <Icon name="arrow-down" size="16" class="rotate-[90deg]" />
                 </a>
             </div>
-            <h2 class="px-gutter text-title-6 text-black/70">{blok.client}</h2>
+            <h2
+                class="px-gutter text-title-6 case-hero-el text-black/70 opacity-0"
+                >{blok.client}</h2
+            >
             <div
                 class="mt-17 flex flex-col gap-56 md:mt-24 lg:flex-row lg:items-baseline lg:justify-between lg:gap-0"
             >
-                <h1 class="text-title-1 px-gutter lg:w-5/12">
-                    <Title title={blok.title[0]} />
+                <h1 id="case-title" class="text-title-1 px-gutter lg:w-5/12">
+                    <Title reveal="manual" title={blok.title[0]} />
                 </h1>
                 {
                     // prettier-ignore
                     blok.intro && (
-                        <h3 class="px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
+                        <h3 class="case-hero-el opacity-0 px-gutter text-title-5 whitespace-pre-wrap lg:w-6/12">{blok.intro}</h3>
                     )
                 }
             </div>
-            <div class="px-gutter mt-40 lg:mt-55">
+            <div class="px-gutter case-cover mt-40 opacity-0 lg:mt-55">
                 <Cover caseItem={blok} />
             </div>
 
@@ -80,15 +83,25 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
     let tlAppear: gsap.core.Timeline;
-    const init = () => {
+    const init = async () => {
         const page = document.querySelector("#page-case");
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelectorAll(
+        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
             "#layout-header .layout-header",
         );
+        const titleWordsDesktop = page.querySelectorAll(
+            "#case-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#case-title .title-wrap-mobile .word-inner",
+        );
+        const caseHeroEls = page.querySelectorAll(".case-hero-el");
+        const caseCover = page.querySelector(".case-cover");
 
         gsap.timeline()
             .set(banner, {
@@ -97,10 +110,22 @@ const { language, blok } = Astro.props;
             .set(header, {
                 y: -50,
                 opacity: 0,
+            })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "100%",
+                opacity: 1,
+            })
+            .set(caseHeroEls, {
+                y: "3rem",
+                opacity: 0,
+            })
+            .set(caseCover, {
+                y: "3rem",
+                opacity: 0,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({ paused: true, delay: 0.3 })
             .to(
                 banner,
                 {
@@ -119,7 +144,63 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                caseHeroEls,
+                {
+                    duration: 0.8,
+                    y: 0,
+                    stagger: 0.1,
+                    opacity: 1,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                caseCover,
+                {
+                    duration: 0.4,
+                    y: 0,
+                    opacity: 1,
+                    ease: "power3",
+                },
+                "start+=0.5",
             );
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+
+        await waitForFooterSplineLoad();
+
+        tlAppear.play();
     };
 
     const cleanup = () => {
