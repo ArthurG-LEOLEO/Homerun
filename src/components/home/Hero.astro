@@ -118,7 +118,7 @@ const { blok } = Astro.props;
 
     let tlVideo: gsap.core.Timeline | null;
     let tlVideoText: gsap.core.Timeline | null;
-    let tlBaseline: gsap.core.Timeline | null;
+    let tlAppear: gsap.core.Timeline | null;
 
     const setVariables = () => {
         overlay = document.querySelector("#home-hero #home-hero-overlay");
@@ -172,13 +172,153 @@ const { blok } = Astro.props;
         );
         videoOverlay = document.querySelector("#home-hero #home-video-overlay");
     };
+
+    const initLogoHover = () => {
+        [...titleLettersHom, ...titleLettersEr, ...titleLettersUn].forEach(
+            (l) => {
+                const innerLetter = l.querySelector(".title-inner-letter");
+
+                const tl = gsap.timeline({ paused: true }).fromTo(
+                    innerLetter,
+                    { "--offset": 1 },
+                    {
+                        "--offset": 0,
+                        duration: 1,
+                        ease: "power3.out",
+                    },
+                );
+                titleLetterHoverTls.push(tl);
+                l.addEventListener("mouseenter", logoLetterHover);
+            },
+        );
+    };
+
+    const initScrollVideo = () => {
+        tlVideo = gsap.timeline().fromTo(
+            videoWithLayers,
+            {
+                rotate: -6,
+                y: function () {
+                    const ww = window.innerWidth;
+                    const wh = window.innerHeight;
+                    const videoHeight = video ? video.offsetHeight : 0;
+                    if (ww >= 1536) {
+                        // ww * 0.13888 = 20rem = pb-200
+                        const heroPaddingBottom = ww * 0.13888;
+                        const baselineHeight = ww * 0.042;
+                        const titleHeight = ww * 0.1456;
+                        const y =
+                            wh -
+                            heroPaddingBottom -
+                            baselineHeight -
+                            titleHeight * 0.6 -
+                            videoHeight;
+
+                        return y;
+                    } else {
+                        return wh * 0.42 - videoHeight + ww * 0.06;
+                    }
+                },
+                x: function () {
+                    return window.innerWidth < 500 ? "-5vw" : "-32vw";
+                },
+            },
+            {
+                duration: 1,
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top bottom",
+                    end: "bottom bottom+=50%",
+                    invalidateOnRefresh: true,
+                    scrub: true,
+                    onEnter: function () {
+                        gsap.killTweensOf(videoWithLayers);
+                    },
+                },
+                height: "100vh",
+                width: "100vw",
+                rotate: 0,
+                x: 0,
+                y: "100vh",
+                ease: "none",
+            },
+        );
+
+        tlVideoText = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: videoHolder,
+                    start: "top 50%",
+                    end: "top top",
+                    scrub: true,
+                },
+            })
+            .to(videoOverlay, {
+                opacity: 1,
+            })
+            .to(
+                videoTextWords,
+                {
+                    opacity: 1,
+                    x: 0,
+                    stagger: 0.1,
+                },
+                "<",
+            );
+    };
+
     const init = async () => {
         const wrapper = document.querySelector("#home-hero");
         if (!wrapper) return;
 
         setVariables();
 
-        await waitForFooterSplineLoad();
+        if (window.innerWidth < 1024) {
+            gsap.timeline()
+                .set(
+                    [
+                        header,
+                        banner,
+                        titleLettersHom,
+                        titleLettersEr,
+                        titleLettersUn,
+                    ],
+                    { opacity: 1, y: 0 },
+                )
+                .set(overlay, { scaleY: 0 })
+                .set(title, { width: "100%" })
+                .set(heroTexts, { color: "#EDD4F8" })
+                .set(baseline, { gap: "62.5vw" })
+                .set(baselineCreative, { x: 20 })
+                .set(baselineThings, { x: -20 })
+                .set(videoWithLayers, {
+                    rotate: -6,
+                    y: function () {
+                        const ww = window.innerWidth;
+                        const wh = window.innerHeight;
+                        const videoHeight = video ? video.offsetHeight : 0;
+                        if (ww >= 1536) {
+                            // ww * 0.13888 = 20rem = pb-200
+                            const heroPaddingBottom = ww * 0.13888;
+                            const baselineHeight = ww * 0.042;
+                            const titleHeight = ww * 0.1456;
+                            const y =
+                                wh -
+                                heroPaddingBottom -
+                                baselineHeight -
+                                titleHeight * 0.6 -
+                                videoHeight;
+
+                            return y;
+                        } else {
+                            return wh * 0.42 - videoHeight + ww * 0.06;
+                        }
+                    },
+                });
+
+            initScrollVideo();
+            return;
+        }
 
         gsap.timeline()
             .set(banner, {
@@ -233,8 +373,8 @@ const { blok } = Astro.props;
                 transitionDuration: 0.06,
             });
 
-        tlBaseline = gsap
-            .timeline()
+        tlAppear = gsap
+            .timeline({ delay: 0.3, paused: true })
             .to(
                 [titleLettersHom, titleLettersEr, titleLettersUn],
                 {
@@ -392,6 +532,9 @@ const { blok } = Astro.props;
                 "<",
             );
 
+        await waitForFooterSplineLoad();
+        tlAppear.play();
+
         const videoAppear = gsap.to(videoWithLayers, {
             rotate: -6,
             duration: 1.3,
@@ -420,100 +563,14 @@ const { blok } = Astro.props;
             delay: 4.3,
         });
 
-        tlVideo = gsap.timeline().fromTo(
-            videoWithLayers,
-            {
-                rotate: -6,
-                y: function () {
-                    const ww = window.innerWidth;
-                    const wh = window.innerHeight;
-                    const videoHeight = video ? video.offsetHeight : 0;
-                    if (ww >= 1536) {
-                        // ww * 0.13888 = 20rem = pb-200
-                        const heroPaddingBottom = ww * 0.13888;
-                        const baselineHeight = ww * 0.042;
-                        const titleHeight = ww * 0.1456;
-                        const y =
-                            wh -
-                            heroPaddingBottom -
-                            baselineHeight -
-                            titleHeight * 0.6 -
-                            videoHeight;
-
-                        return y;
-                    } else {
-                        return wh * 0.42 - videoHeight + ww * 0.06;
-                    }
-                },
-                x: function () {
-                    return window.innerWidth < 500 ? "-5vw" : "-32vw";
-                },
-            },
-            {
-                duration: 1,
-                scrollTrigger: {
-                    trigger: videoHolder,
-                    start: "top bottom",
-                    end: "bottom bottom+=50%",
-                    invalidateOnRefresh: true,
-                    scrub: true,
-                    onEnter: function () {
-                        videoAppear.kill();
-                    },
-                },
-                height: "100vh",
-                width: "100vw",
-                rotate: 0,
-                x: 0,
-                y: "100vh",
-                ease: "none",
-            },
-        );
-
-        tlVideoText = gsap
-            .timeline({
-                scrollTrigger: {
-                    trigger: videoHolder,
-                    start: "top 50%",
-                    end: "top top",
-                    scrub: true,
-                },
-            })
-            .to(videoOverlay, {
-                opacity: 1,
-            })
-            .to(
-                videoTextWords,
-                {
-                    opacity: 1,
-                    x: 0,
-                    stagger: 0.1,
-                },
-                "<",
-            );
-
-        [...titleLettersHom, ...titleLettersEr, ...titleLettersUn].forEach(
-            (l) => {
-                const innerLetter = l.querySelector(".title-inner-letter");
-
-                const tl = gsap.timeline({ paused: true }).fromTo(
-                    innerLetter,
-                    { "--offset": 1 },
-                    {
-                        "--offset": 0,
-                        duration: 1,
-                        ease: "power3.out",
-                    },
-                );
-                titleLetterHoverTls.push(tl);
-                l.addEventListener("mouseenter", logoLetterHover);
-            },
-        );
+        initScrollVideo();
+        initLogoHover();
     };
 
     const logoLetterHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target || !target.dataset.index) return;
+        if (!target || !target.dataset.index || window.innerWidth < 1024)
+            return;
 
         const tl = titleLetterHoverTls[parseInt(target.dataset.index)];
 
@@ -525,12 +582,12 @@ const { blok } = Astro.props;
         tlVideo = null;
         tlVideoText?.kill();
         tlVideoText = null;
-        tlBaseline?.kill();
-        tlBaseline = null;
+        tlAppear?.kill();
+        tlAppear = null;
         videoHolder = null;
         [...titleLettersHom, ...titleLettersEr, ...titleLettersUn].forEach(
             (l, index) => {
-                titleLetterHoverTls[index].kill();
+                titleLetterHoverTls[index]?.kill();
                 l.removeEventListener("mouseenter", logoLetterHover);
             },
         );
