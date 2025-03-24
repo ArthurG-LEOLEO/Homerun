@@ -7,15 +7,18 @@ const { language, blok } = Astro.props;
 
 const cardStyles = [
     {
-        card: "-rotate-3",
+        card: "",
+        cardInner: "-rotate-3",
         back: "bg-orange text-white",
     },
     {
-        card: "rotate-2",
+        card: "self-end sm:self-auto sm:relative sm:-top-50",
+        cardInner: "rotate-2",
         back: "bg-pink text-black",
     },
     {
-        card: "rotate-7",
+        card: "",
+        cardInner: "rotate-7",
         back: "bg-blue text-black",
     },
 ];
@@ -27,13 +30,15 @@ const cardStyles = [
     <div class="px-gutter w-full xl:w-7/12">
         {
             blok.cards && blok.cards.length > 0 && (
-                <div class="cards-container flex flex-col items-center justify-center sm:flex-row sm:items-stretch">
+                <div class="cards-container mx-auto flex max-w-400 flex-col items-start justify-center sm:max-w-none sm:flex-row sm:items-stretch">
                     {blok.cards.map((card, index) => {
                         const cardStyle = cardStyles[index];
                         return (
-                            <div class="flip-card perspective-1000 max-w-228 flex-1">
+                            <div
+                                class={`flip-card perspective-1000 max-w-228 flex-1 [&:not(:first-child)]:-mt-20 sm:[&:not(:first-child)]:mt-0 ${cardStyle.card}`}
+                            >
                                 <div
-                                    class={`flip-card-inner relative h-full w-full text-center will-change-transform transform-3d ${cardStyle.card}`}
+                                    class={`flip-card-inner relative h-full w-full text-center will-change-transform transform-3d ${cardStyle.cardInner}`}
                                 >
                                     {/* FRONT */}
                                     <div class="flip-card-front absolute h-full w-full backface-hidden">
