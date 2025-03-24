@@ -87,6 +87,7 @@ const { footerData } = Astro.props;
                     <div class="relative aspect-square w-full">
                         <spline-viewer
                             id="SplineViewer"
+                            loading="eager"
                             url={footerSplineUrl}
                             background="transparent"></spline-viewer>
                         <div
