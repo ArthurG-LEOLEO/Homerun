@@ -89,59 +89,76 @@ const cardStyles = [
 <script>
     import { gsap } from "gsap";
 
-    document.addEventListener("astro:page-load", () => {
-        const flipCards = document.querySelectorAll(".flip-card");
+    let flipCards: NodeListOf<HTMLElement> | null;
+    let allInnerElements: NodeListOf<HTMLElement> | null;
 
-        // Animation function
-        const flipCard = (card, isFlipped) => {
-            const inner = card.querySelector(".flip-card-inner");
+    const onCardHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
 
-            // Kill any running animations
-            gsap.killTweensOf(inner);
+        let inner = target.querySelector(".flip-card-inner");
+        gsap.killTweensOf(inner);
+        gsap.to(inner, {
+            zIndex: 20,
+            scale: 1.1,
+            rotationY: 180,
+            z: 50,
+            duration: 0.3,
+            ease: "power3.inOut",
+        });
+    };
 
-            if (isFlipped) {
-                gsap.timeline().to(inner, {
-                    zIndex: 20,
-                    scale: 1.1,
-                    rotationY: 180,
-                    z: 50,
-                    duration: 0.3,
-                    ease: "power3.inOut",
-                });
-            } else {
-                gsap.timeline().to(inner, {
-                    zIndex: 1,
-                    scale: 1,
-                    rotationY: 0,
-                    z: 0,
-                    duration: 0.3,
-                    ease: "power3.out",
-                });
-            }
-        };
+    const onCardUnhover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
 
-        // Track card state
-        const cardState = new Map();
+        let inner = target.querySelector(".flip-card-inner");
+        gsap.killTweensOf(inner);
+        gsap.to(inner, {
+            zIndex: 1,
+            scale: 1,
+            rotationY: 0,
+            z: 0,
+            duration: 0.3,
+            ease: "power3.out",
+        });
+    };
 
-        // Event Listeners
+    const init = () => {
+        flipCards = document.querySelectorAll(".flip-card");
+        if (!flipCards) return;
+
         flipCards.forEach((card) => {
-            // Initialize state
-            cardState.set(card, false);
+            card.addEventListener("mouseenter", onCardHover);
+            card.addEventListener("mouseleave", onCardUnhover);
+        });
+    };
 
-            card.addEventListener("mouseenter", () => {
-                flipCard(card, true);
-            });
-
-            card.addEventListener("mouseleave", () => {
-                flipCard(card, false);
+    const cleanup = () => {
+        allInnerElements = document.querySelectorAll(".flip-card-inner");
+        allInnerElements?.forEach((inner) => {
+            gsap.killTweensOf(inner);
+            gsap.set(inner, {
+                clearProps: "all",
             });
         });
+        flipCards?.forEach((l) => {
+            l.removeEventListener("mouseenter", onCardHover);
+            l.removeEventListener("mouseleave", onCardUnhover);
+        });
+        flipCards = null;
+    };
 
-        // Reset on page change
-        return () => {
-            flipCards.forEach((card) => {
-                gsap.killTweensOf(card.querySelector(".flip-card-inner"));
-            });
-        };
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
