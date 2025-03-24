@@ -7,17 +7,17 @@ const { blok } = Astro.props;
 ---
 
 <div class="px-gutter mt-45 md:mt-75">
-    <div class="md:flex md:items-end md:max-w-1030 md:mx-auto">
+    <div class="md:mx-auto md:flex md:max-w-1030 md:items-end">
         <div
-            class="text-p-20 p-32 bg-green text-white -rotate-2 md:flex-1 md:-mr-10 lg:p-64"
+            class="about-hero-cards text-p-20 bg-green -rotate-2 p-32 text-white opacity-0 md:-mr-10 md:flex-1 lg:p-64"
             set:html={renderRichText(blok.left_frame)}
         />
         <div
-            class="text-p-20 p-32 bg-blue rotate-2 md:flex-1 md:relative md:bottom-23 md:-ml-10 lg:p-64"
+            class="about-hero-cards text-p-20 bg-blue rotate-2 p-32 opacity-0 md:relative md:bottom-23 md:-ml-10 md:flex-1 lg:p-64"
             set:html={renderRichText(blok.right_frame)}
         />
     </div>
-    <h2 class="text-huge text-center mt-80 md:mt-105">
+    <h2 class="text-huge mt-80 text-center md:mt-105">
         <Title title={blok.huge_title[0]} />
     </h2>
 </div>

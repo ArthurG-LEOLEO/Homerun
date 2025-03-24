@@ -44,6 +44,7 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
     let tlAppear: gsap.core.Timeline;
     let tlSection1: gsap.core.Timeline;
     let tlSection2: gsap.core.Timeline;
@@ -52,21 +53,6 @@ const { language, blok } = Astro.props;
     let section2: HTMLElement | null;
     let section3: HTMLElement | null;
     let section1Inner: HTMLElement | null;
-
-    const waitForFooterSplineLoad = () => {
-        return new Promise<void>((resolve, reject) => {
-            const splineViewer: any | null =
-                document.getElementById("SplineViewer");
-
-            if (splineViewer?._loaded) {
-                resolve();
-            }
-
-            splineViewer?.addEventListener("load-complete", () => {
-                resolve();
-            });
-        });
-    };
 
     const initBlockScroll = () => {
         tlSection1 = gsap

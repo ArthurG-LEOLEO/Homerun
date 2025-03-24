@@ -20,12 +20,12 @@ const { language, blok } = Astro.props;
         class="container-main flex flex-col items-center pt-150 pb-120 lg:pt-135 lg:pb-145"
     >
         <span
-            class="text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 lg:mb-65 lg:px-24 lg:py-13"
+            class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
         >
             {blok.subtitle}
         </span>
-        <h1 class="text-title-1 px-gutter w-10/12 text-center">
-            <Title title={blok.title[0]} />
+        <h1 id="about-title" class="text-title-1 px-gutter w-10/12 text-center">
+            <Title reveal="manual" title={blok.title[0]} />
         </h1>
         <Hero blok={blok} />
     </div>
@@ -95,6 +95,8 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
     let tlAppear: gsap.core.Timeline;
     let mm: gsap.MatchMedia;
     let page: HTMLElement | null;
@@ -102,11 +104,21 @@ const { language, blok } = Astro.props;
     let navWhite: HTMLElement | null;
     let navBlack: HTMLElement | null;
 
-    const appear = (
-        banner: Element | null,
-        header: NodeListOf<HTMLElement> | null,
-    ) => {
-        if (!banner || !header) return;
+    const initAppear = async () => {
+        if (!page) return;
+        const banner = document.querySelector("#layout-banner");
+        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
+        const subtitle = page.querySelectorAll(".page-subtitle");
+        const titleWordsDesktop = page.querySelectorAll(
+            "#about-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#about-title .title-wrap-mobile .word-inner",
+        );
+        const cards = page.querySelectorAll(".about-hero-cards");
+
         gsap.timeline()
             .set(banner, {
                 y: "-100%",
@@ -114,10 +126,22 @@ const { language, blok } = Astro.props;
             .set(header, {
                 y: -50,
                 opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "100%",
+                opacity: 1,
+            })
+            .set(cards, {
+                y: "20rem",
+                opacity: 0,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({ paused: true, delay: 0.3 })
             .to(
                 banner,
                 {
@@ -136,7 +160,63 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                cards,
+                {
+                    duration: 1,
+                    stagger: 0.1,
+                    opacity: 1,
+                    y: 0,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "<+=0.2",
             );
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+
+        await waitForFooterSplineLoad();
+
+        tlAppear.play();
     };
 
     const setupNavUpdates = (sections: NodeListOf<HTMLElement> | null) => {
@@ -228,16 +308,11 @@ const { language, blok } = Astro.props;
     const init = () => {
         page = document.querySelector("#page-about");
         if (!page) return;
-
-        const banner = document.querySelector("#layout-banner");
-        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
-            "#layout-header .layout-header",
-        );
         nav = page.querySelector("#about-nav");
         navWhite = page.querySelector("#about-nav-white");
         navBlack = page.querySelector("#about-nav-black");
 
-        appear(banner, header);
+        initAppear();
 
         const sections: NodeListOf<HTMLElement> =
             page.querySelectorAll(".about-section");
