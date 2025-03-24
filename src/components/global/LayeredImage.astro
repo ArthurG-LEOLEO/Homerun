@@ -62,7 +62,7 @@ const layerColor2 =
         const layeredImgs = document.querySelectorAll(
             ".layered-img",
         ) as NodeListOf<HTMLElement>;
-        if (!layeredImgs) return;
+        if (!layeredImgs || window.innerWidth < 1024) return;
 
         layeredImgs.forEach((i) => {
             layeredImages.push(new LayeredImage(i));
