@@ -1,4 +1,7 @@
-<div id="cursor-area" class="pointer-events-none fixed inset-0 z-[102]">
+<div
+    id="cursor-area"
+    class="pointer-events-none fixed inset-0 z-[102] hidden md:block"
+>
     <div
         id="cursor-3"
         class="bg-green absolute top-0 left-0 size-26 rounded-full opacity-0"
@@ -27,6 +30,8 @@
     };
 
     const onCursorMouseLeave = (e: MouseEvent) => {
+        const hasHoverSupport = window.matchMedia("(hover: hover)").matches;
+        if (!hasHoverSupport) return;
         gsap.set([cursor1, cursor2, cursor3], {
             scale: 0,
             overwrite: true,
@@ -34,6 +39,8 @@
     };
 
     const onCursorMouseEnter = (e: MouseEvent) => {
+        const hasHoverSupport = window.matchMedia("(hover: hover)").matches;
+        if (!hasHoverSupport) return;
         gsap.set([cursor1, cursor2, cursor3], {
             x: e.clientX + X_OFFSET,
             y: e.clientY + Y_OFFSET,
@@ -47,6 +54,9 @@
     };
 
     const onCursorMouseMove = (e: MouseEvent) => {
+        const hasHoverSupport = window.matchMedia("(hover: hover)").matches;
+        if (!hasHoverSupport) return;
+
         const velocity = {
             x: Math.abs(e.clientX - lastPos.x),
             y: Math.abs(e.clientY - lastPos.y),
