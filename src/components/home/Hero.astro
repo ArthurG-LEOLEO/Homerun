@@ -200,7 +200,7 @@ const { blok } = Astro.props;
                 rotate: -6,
                 y: function () {
                     const ww = window.innerWidth;
-                    const wh = window.innerHeight;
+                    const wh = videoHolder?.offsetHeight || window.innerHeight;
                     const videoHeight = video ? video.offsetHeight : 0;
                     if (ww >= 1536) {
                         // ww * 0.13888 = 20rem = pb-200
@@ -295,7 +295,7 @@ const { blok } = Astro.props;
                     rotate: -6,
                     y: function () {
                         const ww = window.innerWidth;
-                        const wh = window.innerHeight;
+                        const wh = videoHolder?.offsetHeight;
                         const videoHeight = video ? video.offsetHeight : 0;
                         if (ww >= 1536) {
                             // ww * 0.13888 = 20rem = pb-200
@@ -334,7 +334,7 @@ const { blok } = Astro.props;
             .set(title, {
                 y: (i, target) => {
                     const ww = window.innerWidth;
-                    const wh = window.innerHeight;
+                    const wh = videoHolder?.offsetHeight;
                     const titleHeight = target.offsetHeight;
 
                     if (ww < 1536) {
@@ -540,7 +540,7 @@ const { blok } = Astro.props;
             duration: 1.3,
             y: function () {
                 const ww = window.innerWidth;
-                const wh = window.innerHeight;
+                const wh = videoHolder?.offsetHeight;
                 const videoHeight = video ? video.offsetHeight : 0;
                 if (ww >= 1536) {
                     // ww * 0.13888 = 20rem = pb-200
