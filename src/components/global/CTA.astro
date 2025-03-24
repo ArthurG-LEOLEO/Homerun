@@ -251,6 +251,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
     const cleanup = () => {
         ctas?.forEach((l) => {
             l.removeEventListener("mouseenter", onCTAHover);
+            l.removeEventListener("mouseleave", onCTAUnhover);
         });
         appearTls?.forEach((tl) => {
             tl.kill();
