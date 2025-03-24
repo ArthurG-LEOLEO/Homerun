@@ -1,6 +1,10 @@
 ---
+import { Image } from "astro:assets";
+
 import Title from "../../components/atoms/Title.astro";
 import ArrowLink from "../../components/atoms/ArrowLink.astro";
+
+import approachHelmetImg from "../../img/approach_helmet.png";
 
 const { blok } = Astro.props;
 ---
@@ -17,9 +21,14 @@ const { blok } = Astro.props;
     >
     </div>
     <div class="px-gutter relative mx-auto mb-80 w-6/12 max-w-300 md:mb-45">
-        <div class="flex aspect-174/240 items-center justify-center bg-black">
-            <span class="text-white">SPLINE</span>
-        </div>
+        <Image
+            class="w-full"
+            width="902"
+            height="1257"
+            src={approachHelmetImg}
+            alt="Top down view of a baseball helmet"
+            draggable="false"
+        />
     </div>
     <div class="relative flex">
         <div

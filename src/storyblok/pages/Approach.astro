@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 import ArrowLink from "../../components/atoms/ArrowLink.astro";
 
 import Hero from "../../components/approach/Hero.astro";
@@ -7,6 +9,8 @@ import CulturalItems from "../../components/approach/CulturalItems.astro";
 import CulturalProcess from "../../components/approach/CulturalProcess.astro";
 import BoldAdvertising from "../../components/approach/BoldAdvertising.astro";
 import Title from "../../components/atoms/Title.astro";
+
+import approachHelmetImg from "../../img/approach_helmet.png";
 
 const { language, blok } = Astro.props;
 ---
@@ -39,12 +43,17 @@ const { language, blok } = Astro.props;
                 style="--c: #2D5A36"
             >
                 <div
-                    class="size-1/2 translate-x-[-50%] translate-y-[50%] lg:hidden"
+                    class="flex size-full translate-x-[-50%] items-center justify-center lg:hidden"
                 >
-                    <div
-                        id="helmet-mobile-render"
-                        class="bg-green size-full opacity-0"
-                    >
+                    <div id="helmet-mobile-render" class="size-8/10 opacity-0">
+                        <Image
+                            class="size-full object-contain"
+                            width="902"
+                            height="1257"
+                            src={approachHelmetImg}
+                            alt="Top down view of a baseball helmet"
+                            draggable="false"
+                        />
                     </div>
                 </div>
                 <div
@@ -56,7 +65,11 @@ const { language, blok } = Astro.props;
                 </div>
             </div>
         </div>
-        <div id="split-container" class="relative" style="--progress: 0.5;">
+        <div
+            id="split-container"
+            class="relative pt-70 lg:pt-0"
+            style="--progress: 0.5;"
+        >
             <div
                 id="hero-left-split"
                 class="bg-pink absolute top-0 bottom-0 left-0 z-[-1] w-[calc(100%*(1-var(--progress)))] opacity-0"
