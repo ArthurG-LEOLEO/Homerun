@@ -123,24 +123,12 @@ const cardStyles = [
             // Initialize state
             cardState.set(card, false);
 
-            // Handle mouse events for desktop
-            if (window.matchMedia("(hover: hover)").matches) {
-                card.addEventListener("mouseenter", () => {
-                    flipCard(card, true);
-                });
+            card.addEventListener("mouseenter", () => {
+                flipCard(card, true);
+            });
 
-                card.addEventListener("mouseleave", () => {
-                    flipCard(card, false);
-                });
-            }
-
-            // Handle click for all devices (especially touch)
-            card.addEventListener("click", () => {
-                const currentState = cardState.get(card);
-                const newState = !currentState;
-
-                cardState.set(card, newState);
-                flipCard(card, newState);
+            card.addEventListener("mouseleave", () => {
+                flipCard(card, false);
             });
         });
 
