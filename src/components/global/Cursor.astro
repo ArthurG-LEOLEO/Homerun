@@ -55,7 +55,8 @@
         const maxVelocity = 5;
 
         let v = Math.min(Math.max(velocity.x, velocity.y), maxVelocity);
-        if (v === 1) v = 0;
+
+        if (v <= 2) v = 0;
         const scale = 1 * (v / maxVelocity);
 
         gsap.to([cursor1, cursor2, cursor3], {
