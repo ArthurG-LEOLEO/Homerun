@@ -33,7 +33,7 @@ const cardStyles = [
                         return (
                             <div class="flip-card perspective-1000 max-w-228 flex-1">
                                 <div
-                                    class={`flip-card-inner relative h-full w-full text-center transition-transform duration-700 transform-3d ${cardStyle.card}`}
+                                    class={`flip-card-inner relative h-full w-full text-center will-change-transform transform-3d ${cardStyle.card}`}
                                 >
                                     {/* FRONT */}
                                     <div class="flip-card-front absolute h-full w-full backface-hidden">
@@ -81,33 +81,74 @@ const cardStyles = [
     </div>
 </div>
 
-<style>
-    @media (hover: hover) {
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-    }
-</style>
-
 <script>
-    // Gestion du clic pour les appareils tactiles
+    import { gsap } from "gsap";
+
     document.addEventListener("astro:page-load", () => {
         const flipCards = document.querySelectorAll(".flip-card");
 
-        flipCards.forEach((card) => {
-            card.addEventListener("click", () => {
-                // Vérifie si l'appareil ne supporte pas le hover
-                const isTouch = window.matchMedia("(hover: none)").matches;
+        // Animation function
+        const flipCard = (card, isFlipped) => {
+            const inner = card.querySelector(".flip-card-inner");
 
-                if (isTouch) {
-                    const inner = card.querySelector(".flip-card-inner");
-                    if (inner.style.transform === "rotateY(180deg)") {
-                        inner.style.transform = "";
-                    } else {
-                        inner.style.transform = "rotateY(180deg)";
-                    }
-                }
+            // Kill any running animations
+            gsap.killTweensOf(inner);
+
+            if (isFlipped) {
+                gsap.timeline().to(inner, {
+                    zIndex: 20,
+                    scale: 1.1,
+                    rotationY: 180,
+                    z: 50,
+                    duration: 0.3,
+                    ease: "power3.inOut",
+                });
+            } else {
+                gsap.timeline().to(inner, {
+                    zIndex: 1,
+                    scale: 1,
+                    rotationY: 0,
+                    z: 0,
+                    duration: 0.3,
+                    ease: "power3.out",
+                });
+            }
+        };
+
+        // Track card state
+        const cardState = new Map();
+
+        // Event Listeners
+        flipCards.forEach((card) => {
+            // Initialize state
+            cardState.set(card, false);
+
+            // Handle mouse events for desktop
+            if (window.matchMedia("(hover: hover)").matches) {
+                card.addEventListener("mouseenter", () => {
+                    flipCard(card, true);
+                });
+
+                card.addEventListener("mouseleave", () => {
+                    flipCard(card, false);
+                });
+            }
+
+            // Handle click for all devices (especially touch)
+            card.addEventListener("click", () => {
+                const currentState = cardState.get(card);
+                const newState = !currentState;
+
+                cardState.set(card, newState);
+                flipCard(card, newState);
             });
         });
+
+        // Reset on page change
+        return () => {
+            flipCards.forEach((card) => {
+                gsap.killTweensOf(card.querySelector(".flip-card-inner"));
+            });
+        };
     });
 </script>
