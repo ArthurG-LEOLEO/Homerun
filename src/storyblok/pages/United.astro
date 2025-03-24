@@ -13,7 +13,7 @@ const { language, blok } = Astro.props;
 
 <div id="page-united" class="united bg-green text-white">
     <Hero blok={blok} />
-    {blok.cards[0] && <Cards blok={blok.cards[0]} />}
+    {blok.cards && blok.cards[0] && <Cards blok={blok.cards[0]} />}
     <Logos blok={blok} />
     <Cases blok={blok} />
 </div>

@@ -9,11 +9,12 @@ import Tag from "../atoms/Tag.astro";
 const { language, caseItem } = Astro.props;
 ---
 
-<CaseLink class="w-full" caseItem={caseItem}>
+<CaseLink class="case-line w-full" caseItem={caseItem}>
     <div
-        class="flex items-end border-b border-b-white/40 py-30 md:items-center md:py-16"
+        style="--underline: 0;"
+        class="case-line-inner relative flex items-end py-30 after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:origin-left after:scale-x-[var(--underline)] after:bg-white/40 md:items-center md:py-16"
     >
-        <div class="px-gutter hidden md:block lg:w-2/12">
+        <div class="px-gutter case-line-el hidden opacity-0 md:block lg:w-2/12">
             <Tag category={caseItem.content.category} />
         </div>
         <div
@@ -25,7 +26,9 @@ const { language, caseItem } = Astro.props;
             />
         </div>
 
-        <div class="px-gutter flex flex-col gap-4 md:mr-auto">
+        <div
+            class="px-gutter case-line-el flex flex-col gap-4 opacity-0 md:mr-auto"
+        >
             <span class="text-p-24 text-white/70"
                 >{caseItem.content.client}</span
             >
@@ -34,9 +37,181 @@ const { language, caseItem } = Astro.props;
             >
         </div>
         <div
-            class="px-gutter ml-auto rotate-[-90deg] md:order-4 md:ml-12 md:rotate-[-135deg]"
+            class="px-gutter case-line-el ml-auto rotate-[-90deg] opacity-0 md:order-4 md:ml-12 md:rotate-[-135deg]"
         >
             <Icon name="arrow-circle" class="size-28 md:size-34" />
         </div>
     </div>
 </CaseLink>
+
+<script>
+    let lines: NodeListOf<HTMLElement> | null;
+    let appearTls: gsap.core.Timeline[] = [];
+    let hoverTls: { [key: string]: gsap.core.Timeline } = {};
+    let unhoverTls: { [key: string]: gsap.core.Timeline } = {};
+
+    const onCTAUnhover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const bgInner = target.querySelectorAll(".cta-inner-bg");
+        const bg = target.querySelector(".cta-bg");
+
+        const ctaId = target.dataset.ctaid;
+        if (ctaId) {
+            const hoverTl = hoverTls[ctaId];
+            if (hoverTl) hoverTl.kill();
+        }
+
+        const tl = gsap
+            .timeline()
+            .to(
+                bgInner,
+                {
+                    y: 0,
+                    duration: 0.2,
+                    ease: "power3.inOut",
+                },
+                "start",
+            )
+            .to(
+                bg,
+                {
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start",
+            );
+
+        if (ctaId) unhoverTls[ctaId] = tl;
+    };
+
+    const onCTAHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const bg = target.querySelector(".cta-bg");
+        const bgInner = target.querySelectorAll(".cta-inner-bg");
+
+        const ctaId = target.dataset.ctaid;
+        if (ctaId) {
+            const unhoverTl = unhoverTls[ctaId];
+            if (unhoverTl) unhoverTl.kill();
+        }
+
+        const tl = gsap
+            .timeline()
+            .fromTo(
+                bg,
+                { scale: 1 },
+                {
+                    scale: 1.12,
+                    duration: 0.1,
+                    ease: "power2",
+                },
+                "start",
+            )
+            .to(
+                bg,
+                {
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                ">",
+            )
+            .to(
+                bgInner,
+                {
+                    y: "-100%",
+                    duration: 0.3,
+                    ease: "power3.out",
+                },
+                "start",
+            );
+
+        if (ctaId) hoverTls[ctaId] = tl;
+    };
+
+    const initLineAppear = (line: HTMLElement) => {
+        if (!line) return;
+
+        const els = line.querySelectorAll(".case-line-el");
+        const inner = line.querySelectorAll(".case-line-inner");
+
+        gsap.timeline().set(els, {
+            opacity: 0,
+            y: "5rem",
+        });
+
+        const tl = gsap
+            .timeline({
+                scrollTrigger: {
+                    trigger: line,
+                    start: "top 90%",
+                    end: "bottom top",
+                },
+            })
+            .to(
+                els,
+                {
+                    duration: 0.7,
+                    stagger: 0.1,
+                    y: 0,
+                    opacity: 1,
+                    ease: "power3.inOut",
+                },
+                "start",
+            )
+            .to(
+                inner,
+                {
+                    duration: 1.2,
+                    "--underline": 1,
+                    ease: "expo.inOut",
+                },
+                "start",
+            );
+
+        appearTls.push(tl);
+    };
+
+    const init = () => {
+        lines = document.querySelectorAll(".case-line");
+        if (!lines) return;
+
+        lines.forEach((line, index) => {
+            initLineAppear(line);
+            // cta.dataset.ctaid = index.toString();
+            // cta.addEventListener("mouseenter", onCTAHover);
+            // cta.addEventListener("mouseleave", onCTAUnhover);
+        });
+    };
+
+    const cleanup = () => {
+        lines?.forEach((l) => {
+            l.removeEventListener("mouseenter", onCTAHover);
+        });
+        appearTls?.forEach((tl) => {
+            tl.kill();
+        });
+        appearTls = [];
+        unhoverTls = {};
+        hoverTls = {};
+        lines = null;
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
