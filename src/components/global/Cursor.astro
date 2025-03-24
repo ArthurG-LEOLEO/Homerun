@@ -26,6 +26,13 @@
         y: 0,
     };
 
+    const onCursorMouseLeave = (e: MouseEvent) => {
+        gsap.set([cursor1, cursor2, cursor3], {
+            scale: 0,
+            overwrite: true,
+        });
+    };
+
     const onCursorMouseEnter = (e: MouseEvent) => {
         gsap.set([cursor1, cursor2, cursor3], {
             x: e.clientX + X_OFFSET,
@@ -82,11 +89,13 @@
         cursor3 = area.querySelector("#cursor-3");
 
         document.addEventListener("mouseenter", onCursorMouseEnter);
+        document.addEventListener("mouseleave", onCursorMouseLeave);
         document.addEventListener("mousemove", onCursorMouseMove);
     };
 
     const cleanup = () => {
         document.removeEventListener("mouseenter", onCursorMouseEnter);
+        document.removeEventListener("mouseleave", onCursorMouseLeave);
         document.removeEventListener("mousemove", onCursorMouseMove);
     };
 
