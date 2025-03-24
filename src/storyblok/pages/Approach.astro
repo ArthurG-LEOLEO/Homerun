@@ -418,7 +418,7 @@ const { language, blok } = Astro.props;
         });
     };
 
-    const initAppear = () => {
+    const initAppear = async () => {
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
@@ -433,6 +433,32 @@ const { language, blok } = Astro.props;
         const titleWordsMobile = page.querySelectorAll(
             "#approach-title .title-wrap-mobile .word-inner",
         );
+
+        if (window.innerWidth < 1024) {
+            gsap.timeline()
+                .set(
+                    [
+                        titleWordsMobile,
+                        subtitle,
+                        header,
+                        banner,
+                        heroInner,
+                        approachPeak,
+                        heroRightSplit,
+                        heroLeftSplit,
+                        helmetCanvas,
+                        helmetMobileRender,
+                    ],
+                    {
+                        opacity: 1,
+                        y: 0,
+                    },
+                )
+                .set(approachPeak, {
+                    scaleY: 1,
+                });
+            return;
+        }
 
         gsap.timeline()
             .set(banner, {
@@ -459,7 +485,7 @@ const { language, blok } = Astro.props;
                 y: "10rem",
                 opacity: 0,
             })
-            .set([titleWordsMobile, titleWordsDesktop], {
+            .set([titleWordsDesktop], {
                 y: "100%",
                 opacity: 1,
             });
@@ -534,43 +560,27 @@ const { language, blok } = Astro.props;
                     ease: "elastic.out(1,0.7)",
                 },
                 "start+=0.3",
-            );
+            )
+            .to(
+                titleWordsDesktop,
+                {
+                    duration: 0.8,
+                    y: 0,
+                    stagger: 0.05,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "<+=0.2",
+            )
+            .set(titleWordsMobile, {
+                y: 0,
+            });
 
-        if (window.innerWidth > 1024) {
-            tlAppear
-                .to(
-                    titleWordsDesktop,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "<+=0.2",
-                )
-                .set(titleWordsMobile, {
-                    y: 0,
-                });
-        } else {
-            tlAppear
-                .to(
-                    titleWordsMobile,
-                    {
-                        duration: 0.8,
-                        y: 0,
-                        stagger: 0.05,
-                        ease: "elastic.out(1,0.7)",
-                    },
-                    "<+=0.2",
-                )
-                .set(titleWordsDesktop, {
-                    y: 0,
-                });
-        }
+        await waitForFooterSplineLoad();
+
         tlAppear.play();
     };
 
-    const init = async () => {
+    const init = () => {
         page = document.querySelector("#page-approach");
         if (!page) return;
 
@@ -612,7 +622,6 @@ const { language, blok } = Astro.props;
                 "<",
             );
 
-        await waitForFooterSplineLoad();
         initAppear();
     };
 

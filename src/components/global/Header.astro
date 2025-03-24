@@ -214,7 +214,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 
     const menuItemHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target) return;
+        if (!target || window.innerWidth < 1024) return;
 
         const letters = target.querySelectorAll(".roll-letter");
 
@@ -232,7 +232,7 @@ const { logoless, blok, alternates, white } = Astro.props;
 
     const menuButtonHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (!target || !menuBtnLayers) return;
+        if (!target || !menuBtnLayers || window.innerWidth < 1024) return;
         if (tlButtonUnhover) tlButtonUnhover.kill();
         target.classList.add("hover");
         tlButtonHover = gsap.timeline().to(menuBtnLayers, {
@@ -244,7 +244,13 @@ const { logoless, blok, alternates, white } = Astro.props;
     };
 
     const menuButtonUnhover = () => {
-        if (!button || !menuBtnLayers || !menu || menu.dataset.open === "true")
+        if (
+            !button ||
+            !menuBtnLayers ||
+            !menu ||
+            menu.dataset.open === "true" ||
+            window.innerWidth < 1024
+        )
             return;
         if (tlButtonHover) tlButtonHover.kill();
         button.classList.remove("hover");
