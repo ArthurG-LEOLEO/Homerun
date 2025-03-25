@@ -14,6 +14,13 @@ const { subtitle } = Astro.props;
         {subtitle}
     </span>
     <h1 class="text-title-2 m-auto text-center">
+        {
+            t("work.title.beforeConsulting") !== "[empty]" && (
+                <span class="work-title-el inline-block opacity-0">
+                    {t("work.title.beforeConsulting")}
+                </span>
+            )
+        }
         <button
             data-category="consulting"
             id="consulting-button"
