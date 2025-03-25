@@ -29,7 +29,7 @@ export async function generateStaticPaths() {
     const storyblokApi = useStoryblokApi();
 
     const links = await storyblokApi.getAll("cdn/links", {
-        version: "draft",
+        version: isPreview() ? "draft" : "published",
     });
 
     return links
