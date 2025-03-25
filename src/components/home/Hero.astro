@@ -50,13 +50,13 @@ const { blok } = Astro.props;
     <div
         id="home-video-layer-2"
         style="transform: translateY(-120%) rotate(6deg) scale(0.99);"
-        class="bg-orange absolute top-0 right-0 z-[9] h-144 w-230 origin-center transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw]"
+        class="bg-orange absolute top-0 right-0 z-[9] h-144 w-230 origin-center opacity-0 transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw] lg:opacity-100"
     >
     </div>
     <div
         id="home-video-layer-1"
         style="transform: translateY(-120%) rotate(6deg) scale(0.99);"
-        class="bg-blue absolute top-0 right-0 z-[9] h-144 w-230 origin-center transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw]"
+        class="bg-blue absolute top-0 right-0 z-[9] h-144 w-230 origin-center opacity-0 transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw] lg:opacity-100"
     >
     </div>
     <div
@@ -216,6 +216,7 @@ const { blok } = Astro.props;
     };
 
     const updateVideoLayers = () => {
+        if (window.innerWidth < 1024) return;
         const x = gsap.getProperty(video, "x", "px");
         const y = gsap.getProperty(video, "y", "px");
         const height = gsap.getProperty(video, "height", "px");
