@@ -10,9 +10,10 @@ const t = useTranslations(lang);
 
 const { language, blok } = Astro.props;
 
-const numberFeaturedConsulting = blok.featured_cases.filter(
-    (c: any) => c.content.category === "consulting",
-).length;
+const numberFeaturedConsulting = blok.featured_cases.filter((c: any) => {
+    console.log(c.content);
+    return c.category === "consulting";
+}).length;
 const numberFeaturedAdvertising = blok.featured_cases.filter(
     (c: any) => c.content.category === "advertising",
 ).length;

@@ -1,5 +1,5 @@
 import { useStoryblokApi } from "@storyblok/astro";
-import isPreview from "./isPreview";
+import isProd from "./isProd";
 import { locales, defaultLocale } from "../i18n/config";
 
 export function getImageSize(image: { filename: string }) {
@@ -29,7 +29,7 @@ export async function generateStaticPaths() {
     const storyblokApi = useStoryblokApi();
 
     const links = await storyblokApi.getAll("cdn/links", {
-        version: isPreview() ? "draft" : "published",
+        version: !isProd() ? "draft" : "published",
     });
 
     return links

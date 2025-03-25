@@ -85,10 +85,10 @@ const { footerData } = Astro.props;
                 >
                     <div class="relative aspect-square w-full">
                         <spline-viewer
+                            transition:persist="SplineViewer"
                             id="SplineViewer"
                             events-target="global"
                             loading="eager"
-                            url={footerSplineUrl}
                             background="transparent"></spline-viewer>
                         <div
                             class="bg-pink pointer-events-none absolute top-0 right-0 size-84 rounded-full sm:size-122 lg:top-20 lg:right-20"
@@ -244,6 +244,25 @@ const { footerData } = Astro.props;
         </div>
     </div>
 </footer>
+
+<script>
+    import "@splinetool/viewer";
+
+    const init = () => {
+        const splineViewer: any = document.querySelector("#SplineViewer");
+        if (!splineViewer || window.innerWidth < 1024) return;
+        splineViewer.url = "/spline/footer.splinecode";
+    };
+
+    const cleanup = () => {};
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+</script>
 
 <style>
     .footer-cursor-text {

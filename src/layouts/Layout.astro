@@ -8,7 +8,7 @@ import "../styles/global.css";
 
 import "lenis/dist/lenis.css";
 import { ClientRouter } from "astro:transitions";
-import isPreview from "../utils/isPreview";
+import isProd from "../utils/isProd";
 
 import SEO from "../components/global/SEO.astro";
 import Grid from "../components/global/Grid.astro";
@@ -21,7 +21,6 @@ import HrefLangs from "../components/global/HrefLangs.astro";
 import { defaultLocale } from "../i18n/config";
 
 const isDev = import.meta.env.DEV;
-const isProd = import.meta.env.CONTEXT === "production";
 const storyblokApi = useStoryblokApi();
 const {
     language,
@@ -37,7 +36,7 @@ const {
 const currentLocale = Astro.currentLocale;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
-    version: isPreview() ? "draft" : "published",
+    version: !isProd() ? "draft" : "published",
 });
 
 const footerData = data.story.content.Footer[0];
@@ -100,7 +99,6 @@ if (currentLocale) {
     import ScrollTrigger from "gsap/ScrollTrigger";
     import Observer from "gsap/Observer";
     import Lenis from "lenis";
-    import "@splinetool/viewer";
 
     gsap.registerPlugin(ScrollTrigger);
     gsap.registerPlugin(Observer);
