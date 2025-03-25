@@ -93,8 +93,6 @@ const { blok } = Astro.props;
     let banner: HTMLElement | null;
     let header: NodeListOf<HTMLElement> | null;
 
-    let scrollStarted = false;
-
     let videoHolder: HTMLElement | null;
     let video: HTMLElement | null;
     let videoLayer1: HTMLElement | null;
@@ -258,69 +256,6 @@ const { blok } = Astro.props;
                 ease: "none",
                 onUpdate: () => updateVideoLayers(),
             });
-
-        // tlVideo = gsap.timeline({
-        //     scrollTrigger: {
-        //         trigger: videoHolder,
-        //         start: "top bottom",
-        //         end: "bottom bottom+=50%",
-        //         invalidateOnRefresh: true,
-        //         markers: true,
-        //         scrub: true,
-        //         onRefresh: () => {
-        //             proxyTl?.kill();
-        //             proxyTl = gsap
-        //                 .timeline({ paused: true })
-        //                 .set(video, {
-        //                     rotate: -6,
-        //                     y: () => getVideoVerticalPlacement(),
-        //                     x: () =>
-        //                         window.innerWidth < 500 ? "-5vw" : "-32vw",
-        //                 })
-        //                 .to(video, {
-        //                     height: "100vh",
-        //                     width: "100vw",
-        //                     rotate: 0,
-        //                     x: 0,
-        //                     y: "100vh",
-        //                     ease: "none",
-        //                     onUpdate: () => updateVideoLayers(),
-        //                 });
-        //         },
-        //         onUpdate: (self) => {
-        //             if (!proxyTl) return;
-        //             console.log(self.progress);
-        //             proxyTl.progress(self.progress);
-        //         },
-        //         onEnter: function () {
-        //             console.log("on enter scroll video");
-        //             if (proxyTl) return;
-
-        //             gsap.killTweensOf(videoWithLayers);
-        //             proxyTl = gsap
-        //                 .timeline({ paused: true })
-        //                 .set(video, {
-        //                     rotate: -6,
-        //                     y: () => getVideoVerticalPlacement(),
-        //                     x: () =>
-        //                         window.innerWidth < 500 ? "-5vw" : "-32vw",
-        //                 })
-        //                 .to(video, {
-        //                     height: "100vh",
-        //                     width: "100vw",
-        //                     rotate: 0,
-        //                     x: 0,
-        //                     y: "100vh",
-        //                     ease: "none",
-        //                     onUpdate: () => updateVideoLayers(),
-        //                 });
-
-        //             gsap.timeline()
-        //                 .set(videoLayer1, { transitionDuration: 0.03 })
-        //                 .set(videoLayer2, { transitionDuration: 0.06 });
-        //         },
-        //     },
-        // });
 
         tlVideoText = gsap
             .timeline({
