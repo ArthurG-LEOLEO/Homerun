@@ -8,6 +8,7 @@ import "../styles/global.css";
 
 import "lenis/dist/lenis.css";
 import { ClientRouter } from "astro:transitions";
+import isPreview from "../utils/isPreview";
 
 import SEO from "../components/global/SEO.astro";
 import Grid from "../components/global/Grid.astro";
@@ -36,7 +37,7 @@ const {
 const currentLocale = Astro.currentLocale;
 
 const { data } = await storyblokApi.get(`cdn/stories/${language}/_global`, {
-    version: "draft",
+    version: isPreview() ? "draft" : "published",
 });
 
 const footerData = data.story.content.Footer[0];
