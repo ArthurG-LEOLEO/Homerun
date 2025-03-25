@@ -176,6 +176,9 @@ const { blok } = Astro.props;
 
         setVariables();
 
+        // For iOS and Safari, force the autoplay video to play on page change
+        video?.querySelector("video")?.play();
+
         const banner = document.querySelector("#layout-banner");
         const header = document.querySelectorAll(
             "#layout-header .layout-header",
