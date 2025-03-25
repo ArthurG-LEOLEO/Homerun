@@ -60,8 +60,13 @@ const { logoless, blok, alternates, white } = Astro.props;
                                     <div class="menu-button-icon-3 absolute top-7 right-2 h-2 w-12 rotate-[-45deg] bg-current transition-[transform,opacity] ease-out" />
                                 </div>
                             </div>
-                            <div class="sm:hidden">
-                                <Icon name="menu" size="16" />
+                            <div class="relative sm:hidden">
+                                <Icon
+                                    name="cross"
+                                    size="12"
+                                    class="icon-close absolute top-2 left-2 opacity-0"
+                                />
+                                <Icon class="icon-menu" name="menu" size="16" />
                             </div>
                         </div>
                     </button>
@@ -408,6 +413,14 @@ const { logoless, blok, alternates, white } = Astro.props;
             transform: translateX(-0.15rem) translateY(-0.25rem) rotate(-45deg)
                 scaleX(-1);
             transition-delay: 0.2s;
+        }
+    }
+    #menu-button[aria-expanded="true"] {
+        .icon-close {
+            opacity: 1 !important;
+        }
+        .icon-menu {
+            opacity: 0;
         }
     }
 </style>
