@@ -77,19 +77,19 @@ const { footerData } = Astro.props;
 <footer class="border-orange border-b-11 pt-25 pb-10 lg:pt-90">
     <div class="container-main flex flex-col lg:flex-row-reverse">
         <div
-            class="lg:px-gutter flex flex-grow flex-col justify-between gap-25 lg:w-5/12"
+            class="lg:px-gutter hidden w-5/12 flex-grow flex-col justify-between gap-25 lg:flex"
         >
             <div class="flex w-full flex-grow justify-end">
                 <div
                     class="px-gutter flex size-10/12 max-w-400 items-center justify-center lg:size-full lg:max-w-none lg:flex-grow lg:px-0"
                 >
                     <div class="relative aspect-square w-full">
-                        <!-- <spline-viewer
+                        <spline-viewer
                             id="SplineViewer"
                             events-target="global"
                             loading="eager"
                             url={footerSplineUrl}
-                            background="transparent"></spline-viewer> -->
+                            background="transparent"></spline-viewer>
                         <div
                             class="bg-pink pointer-events-none absolute top-0 right-0 size-84 rounded-full sm:size-122 lg:top-20 lg:right-20"
                         >

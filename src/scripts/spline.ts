@@ -3,7 +3,11 @@ export const waitForFooterSplineLoad = () => {
         const splineViewer: any | null =
             document.getElementById("SplineViewer");
 
-        if (!splineViewer || splineViewer?._loaded) {
+        if (
+            !splineViewer ||
+            splineViewer?._loaded ||
+            window.innerWidth < 1024
+        ) {
             console.log("footer spline is loaded");
             resolve();
         }
