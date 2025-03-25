@@ -4,9 +4,10 @@ export default {
         "case.response": "Response:",
         "case.other": "Other cases",
         "banner.title": "Rosbeef! is now HOMERUN",
-        "banner.moreText": "Why is that? Here is the press release.",
-        "banner.moreLabel": "Read more",
-        "banner.moreLink": "https://www.google.com",
+        "banner.moreText": "Why is that?",
+        "banner.moreLabel": "Read the press release",
+        "banner.moreLink":
+            "https://a.storyblok.com/f/325490/x/dc2be65682/cp.pdf",
         "about.nav.creative": "Creative",
         "about.nav.people": "People",
         "about.nav.clients": "Clients",
@@ -57,7 +58,8 @@ export default {
         "banner.moreText":
             "On vous explique tout dans le communiqué de presse.",
         "banner.moreLabel": "En savoir plus",
-        "banner.moreLink": "https://www.google.com",
+        "banner.moreLink":
+            "https://a.storyblok.com/f/325490/x/dc2be65682/cp.pdf",
         "about.nav.creative": "Creative",
         "about.nav.people": "Collectif",
         "about.nav.clients": "Clients",

@@ -50,13 +50,13 @@ const { blok } = Astro.props;
     <div
         id="home-video-layer-2"
         style="transform: translateY(-120%) rotate(6deg) scale(0.99);"
-        class="bg-orange absolute top-0 right-0 z-[9] h-144 w-230 origin-center transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw]"
+        class="bg-orange absolute top-0 right-0 z-[9] h-144 w-230 origin-center opacity-0 transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw] lg:opacity-100"
     >
     </div>
     <div
         id="home-video-layer-1"
         style="transform: translateY(-120%) rotate(6deg) scale(0.99);"
-        class="bg-blue absolute top-0 right-0 z-[9] h-144 w-230 origin-center transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw]"
+        class="bg-blue absolute top-0 right-0 z-[9] h-144 w-230 origin-center opacity-0 transition-all duration-0 ease-linear lg:h-[15vw] lg:w-[24vw] lg:opacity-100"
     >
     </div>
     <div
@@ -216,6 +216,7 @@ const { blok } = Astro.props;
     };
 
     const updateVideoLayers = () => {
+        if (window.innerWidth < 1024) return;
         const x = gsap.getProperty(video, "x", "px");
         const y = gsap.getProperty(video, "y", "px");
         const height = gsap.getProperty(video, "height", "px");
@@ -225,37 +226,36 @@ const { blok } = Astro.props;
     };
 
     const initScrollVideo = () => {
-        tlVideo = gsap.timeline().fromTo(
-            video,
-            {
-                rotate: -6,
-                y: () => getVideoVerticalPlacement(),
-                x: () => (window.innerWidth < 500 ? "-5vw" : "-32vw"),
-            },
-            {
-                duration: 1,
+        tlVideo = gsap
+            .timeline({
                 scrollTrigger: {
                     trigger: videoHolder,
                     start: "top bottom",
                     end: "bottom bottom+=50%",
                     invalidateOnRefresh: true,
                     scrub: true,
-                    onEnter: function () {
-                        gsap.killTweensOf(videoWithLayers);
+                    onEnter: () => {
+                        gsap.getById("videoAppear")?.kill();
                         gsap.timeline()
                             .set(videoLayer1, { transitionDuration: 0.03 })
                             .set(videoLayer2, { transitionDuration: 0.06 });
                     },
-                    onUpdate: () => updateVideoLayers(),
                 },
+            })
+            .set(video, {
+                rotate: -6,
+                y: () => getVideoVerticalPlacement(),
+                x: () => (window.innerWidth < 500 ? "-5vw" : "-32vw"),
+            })
+            .to(video, {
                 height: "100vh",
                 width: "100vw",
                 rotate: 0,
                 x: 0,
                 y: "100vh",
                 ease: "none",
-            },
-        );
+                onUpdate: () => updateVideoLayers(),
+            });
 
         tlVideoText = gsap
             .timeline({
@@ -444,6 +444,7 @@ const { blok } = Astro.props;
             .to(
                 videoWithLayers,
                 {
+                    id: "videoAppear",
                     rotate: -6,
                     duration: 1.3,
                     stagger: 0.03,
