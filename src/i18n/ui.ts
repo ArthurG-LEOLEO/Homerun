@@ -4,8 +4,8 @@ export default {
         "case.response": "Response:",
         "case.other": "Other cases",
         "banner.title": "Rosbeef! is now HOMERUN",
-        "banner.moreText": "Why is that? Here is the press release.",
-        "banner.moreLabel": "Read more",
+        "banner.moreText": "Why is that?",
+        "banner.moreLabel": "Read the press release",
         "banner.moreLink":
             "https://a.storyblok.com/f/325490/x/dc2be65682/cp.pdf",
         "about.nav.creative": "Creative",
