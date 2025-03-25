@@ -6,6 +6,7 @@ import { locales, defaultLocale } from "../i18n/config";
 
 import { parseUrl, generateStaticPaths } from "../utils/storyblok";
 import isPreview from "../utils/isPreview";
+import isProd from "../utils/isProd";
 
 const storyblokApi = useStoryblokApi();
 
@@ -28,7 +29,7 @@ if (liveStory) {
     story = liveStory;
 } else {
     const { data } = await storyblokApi.get(`cdn/stories/${fullSlug}`, {
-        version: isPreview() ? "draft" : "published",
+        version: !isProd() ? "draft" : "published",
         resolve_relations: [
             "case_study.other_cases",
             "work.featured_cases",
