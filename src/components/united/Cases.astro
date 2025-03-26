@@ -8,15 +8,16 @@ const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
 const { blok } = Astro.props;
+const cases = blok.cases.filter((c) => c.content);
 ---
 
 {
-    blok.cases.length && (
+    cases.length && (
         <div id="united-cases" class="container-main">
             <div class="flex flex-col gap-40 pt-70 pb-90 md:gap-70 md:pt-130 md:pb-100">
                 <h3 class="px-gutter text-title-2">{blok.cases_title}</h3>
                 <div class="flex flex-col gap-48 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120">
-                    {blok.cases.map(
+                    {cases.map(
                         (
                             item: { content: { category: string } },
                             index: number,
