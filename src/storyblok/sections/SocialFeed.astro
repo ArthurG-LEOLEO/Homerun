@@ -55,13 +55,13 @@ const t = useTranslations(lang);
                     )
                 }
                 {
-                    blok.linkedin && (
+                    blok.spotify && (
                         <CTA
-                            link={blok.linkedin}
-                            label="LinkedIn"
-                            icon="linkedin"
+                            link={blok.spotify}
+                            label="Spotify"
+                            icon="spotify"
                             color="green"
-                            aria-label={t("social.linkedin")}
+                            aria-label={t("social.spotify")}
                         />
                     )
                 }
@@ -73,6 +73,17 @@ const t = useTranslations(lang);
                             icon="instagram"
                             color="blue"
                             aria-label={t("social.instagram")}
+                        />
+                    )
+                }
+                {
+                    blok.linkedin && (
+                        <CTA
+                            link={blok.linkedin}
+                            label="LinkedIn"
+                            icon="linkedin"
+                            color="green"
+                            aria-label={t("social.linkedin")}
                         />
                     )
                 }
@@ -115,12 +126,12 @@ const t = useTranslations(lang);
             )
         }
         {
-            blok.linkedin && (
+            blok.spotify && (
                 <CTA
-                    link={blok.linkedin}
-                    icon="linkedin"
+                    link={blok.spotify}
+                    icon="spotify"
                     color="green"
-                    aria-label={t("social.linkedin")}
+                    aria-label={t("social.spotify")}
                 />
             )
         }
@@ -131,6 +142,16 @@ const t = useTranslations(lang);
                     icon="instagram"
                     color="blue"
                     aria-label={t("social.instagram")}
+                />
+            )
+        }
+        {
+            blok.linkedin && (
+                <CTA
+                    link={blok.linkedin}
+                    icon="linkedin"
+                    color="green"
+                    aria-label={t("social.linkedin")}
                 />
             )
         }
