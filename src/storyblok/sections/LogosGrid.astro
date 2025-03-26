@@ -18,7 +18,7 @@ const { logos, className = "" } = Astro.props;
 const logosArray = logos.logos || [];
 
 const MAX_LOGOS_MOBILE = 6;
-const MAX_LOGOS_DESKTOP = 12;
+const MAX_LOGOS_DESKTOP = 8;
 ---
 
 <div class={`px-gutter mx-auto sm:w-10/12 lg:w-8/12 ${className}`}>
@@ -79,7 +79,7 @@ const MAX_LOGOS_DESKTOP = 12;
     const setupLogos = (allLogos: any[]) => {
         const totalLogos = allLogos.length;
         const mobile = isMobile();
-        const maxLogos = mobile ? 6 : 12;
+        const maxLogos = mobile ? 6 : 8;
 
         // Si on a assez de logos pour remplir la grille, pas besoin d'animation
         if (totalLogos <= maxLogos) {
