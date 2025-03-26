@@ -251,8 +251,7 @@ const { footerData } = Astro.props;
     const init = () => {
         const splineViewer: any = document.querySelector("#SplineViewer");
         if (!splineViewer || window.innerWidth < 1024) return;
-        splineViewer.url =
-            "https://prod.spline.design/0fplVowadQojZ720/scene.splinecode";
+        splineViewer.url = "/spline/footer.splinecode";
     };
 
     const cleanup = () => {};
