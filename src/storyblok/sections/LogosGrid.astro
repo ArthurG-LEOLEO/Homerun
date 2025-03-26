@@ -18,27 +18,34 @@ const { logos, className = "" } = Astro.props;
 const logosArray = logos.logos || [];
 
 const MAX_LOGOS_MOBILE = 6;
-const MAX_LOGOS_DESKTOP = 8;
+const MAX_LOGOS_DESKTOP = 12;
 ---
 
 <div class={`px-gutter mx-auto sm:w-10/12 lg:w-8/12 ${className}`}>
     <div class="grid-logos-wrapper" data-logos={JSON.stringify(logosArray)}>
         <div class="grid grid-cols-2 gap-1 md:grid-cols-4">
             {
-                Array.from({ length: MAX_LOGOS_DESKTOP }, (_, index) => (
-                    <div
-                        class={`relative aspect-square outline-1 outline-current ${index >= MAX_LOGOS_MOBILE ? "hidden md:block" : ""}`}
-                    >
-                        <div class="logo-container absolute inset-0 p-30 lg:p-40">
-                            <div class="relative flex h-full w-full items-center justify-center">
-                                <SBImage
-                                    image={logosArray[index]}
-                                    class="h-auto max-h-full w-auto max-w-full object-contain"
-                                />
+                // Mapper uniquement sur les logos disponibles
+                logosArray
+                    .slice(0, Math.min(logosArray.length, MAX_LOGOS_DESKTOP))
+                    .map((logo, index) => (
+                        <div
+                            class={`relative aspect-square outline-1 outline-current ${
+                                index >= MAX_LOGOS_MOBILE
+                                    ? "hidden md:block"
+                                    : ""
+                            }`}
+                        >
+                            <div class="logo-container absolute inset-0 p-30 lg:p-40">
+                                <div class="relative flex h-full w-full items-center justify-center">
+                                    <SBImage
+                                        image={logo}
+                                        class="h-auto max-h-full w-auto max-w-full object-contain"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))
+                    ))
             }
         </div>
     </div>
@@ -79,7 +86,7 @@ const MAX_LOGOS_DESKTOP = 8;
     const setupLogos = (allLogos: any[]) => {
         const totalLogos = allLogos.length;
         const mobile = isMobile();
-        const maxLogos = mobile ? 6 : 8;
+        const maxLogos = mobile ? 6 : 12;
 
         // Si on a assez de logos pour remplir la grille, pas besoin d'animation
         if (totalLogos <= maxLogos) {
@@ -201,7 +208,6 @@ const MAX_LOGOS_DESKTOP = 8;
         init();
     });
 
-    // Event listeners
     document.addEventListener("astro:page-load", init);
     document.addEventListener("astro:before-swap", cleanup);
 </script>
