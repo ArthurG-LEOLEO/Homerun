@@ -15,7 +15,7 @@ const { theme } = Astro.props;
 >
     <div
         id="banner-button"
-        class="flex size-full cursor-pointer items-center justify-end overflow-hidden bg-[var(--banner-bg)] text-[1.3rem]/[1.8rem] font-medium text-[var(--banner-text)] uppercase"
+        class="flex size-full cursor-pointer items-center justify-end overflow-hidden bg-[var(--banner-bg)] text-[1.3rem]/[1.8rem] font-medium text-[var(--banner-text)] uppercase select-none"
     >
         <div
             class="banner-slide flex h-full shrink-0 items-center gap-56 pl-56"
@@ -138,6 +138,24 @@ const { theme } = Astro.props;
         isOpen = false;
     };
 
+    const checkClickOutsideBanner = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target || !banner || !bannerPopup || !isOpen) return;
+
+        const isOutsidePopup = !bannerPopup.contains(target);
+        const isOutsideBanner = !banner.contains(target);
+
+        if (isOutsidePopup && isOutsideBanner) closePopup();
+    };
+
+    const toggleBanner = () => {
+        if (isOpen) {
+            closePopup();
+        } else {
+            openPopup();
+        }
+    };
+
     const init = () => {
         banner = document.querySelector("#banner-button");
         bannerPopup = document.querySelector("#banner-popup");
@@ -146,13 +164,15 @@ const { theme } = Astro.props;
 
         buttonClose = document.querySelector("#banner-close-button");
 
-        banner?.addEventListener("click", openPopup);
+        banner?.addEventListener("click", toggleBanner);
         buttonClose?.addEventListener("click", closePopup);
+        document.addEventListener("click", checkClickOutsideBanner);
     };
 
     const cleanup = () => {
-        banner?.removeEventListener("click", openPopup);
+        banner?.removeEventListener("click", toggleBanner);
         buttonClose?.removeEventListener("click", closePopup);
+        document.removeEventListener("click", checkClickOutsideBanner);
     };
 
     document.addEventListener("astro:before-swap", () => {
