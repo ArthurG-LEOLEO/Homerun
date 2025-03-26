@@ -28,6 +28,12 @@ export function parseUrl(
 export async function generateStaticPaths() {
     const storyblokApi = useStoryblokApi();
 
+    const cases = await storyblokApi.get("cdn/stories", {
+        by_slugs: "en/cases/*,fr/cases/*",
+        per_page: 100,
+        version: !isProd() ? "draft" : "published",
+    });
+
     const links = await storyblokApi.getAll("cdn/links", {
         version: !isProd() ? "draft" : "published",
     });
@@ -35,6 +41,12 @@ export async function generateStaticPaths() {
     return links
         .filter((link) => !link.is_folder)
         .filter((link) => !link.slug.includes("_global"))
+        .filter((link) => {
+            const isCase = cases.data.stories.find(
+                (c) => c.full_slug === link.slug,
+            );
+            return !isCase || isCase.content.has_case_study;
+        })
         .map((link: { slug: string }) => {
             const fullSlug = link.slug;
             const language = fullSlug.split("/")[0];
