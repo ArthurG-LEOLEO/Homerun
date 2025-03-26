@@ -10,15 +10,15 @@ const t = useTranslations(lang);
 
 const { language, blok } = Astro.props;
 
-const numberFeaturedConsulting = blok.featured_cases.filter((c: any) => {
-    return c.category === "consulting";
-}).length;
-const numberFeaturedAdvertising = blok.featured_cases.filter(
-    (c: any) => c.content.category === "advertising",
-).length;
-
 const featuredCases = blok.featured_cases.filter((c) => c.content);
 const archivedCases = blok.archived_cases.filter((c) => c.content);
+
+const numberFeaturedConsulting = featuredCases.filter((c: any) => {
+    return c.content.category === "consulting";
+}).length;
+const numberFeaturedAdvertising = featuredCases.filter(
+    (c: any) => c.content.category === "advertising",
+).length;
 ---
 
 <div id="page-work" class="bg-black text-white">
