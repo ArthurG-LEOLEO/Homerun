@@ -1,5 +1,6 @@
 export default {
     en: {
+        "post.more": "See more",
         "case.challenges": "Strategic challenges:",
         "case.response": "Response:",
         "case.other": "Other cases",
@@ -51,6 +52,7 @@ export default {
         "socialfeed.instagram": "See the Instagram post",
     },
     fr: {
+        "post.more": "En savoir plus",
         "case.challenges": "Enjeux strat’ :",
         "case.response": "Réponse :",
         "case.other": "Autres cases",
