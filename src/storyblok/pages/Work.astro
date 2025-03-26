@@ -16,6 +16,9 @@ const numberFeaturedConsulting = blok.featured_cases.filter((c: any) => {
 const numberFeaturedAdvertising = blok.featured_cases.filter(
     (c: any) => c.content.category === "advertising",
 ).length;
+
+const featuredCases = blok.featured_cases.filter((c) => c.content);
+const archivedCases = blok.archived_cases.filter((c) => c.content);
 ---
 
 <div id="page-work" class="bg-black text-white">
@@ -25,8 +28,8 @@ const numberFeaturedAdvertising = blok.featured_cases.filter(
         nbAdvertising={numberFeaturedAdvertising}
     />
 
-    <Featured cases={blok.featured_cases} />
-    <Archived cases={blok.archived_cases} />
+    <Featured cases={featuredCases} />
+    <Archived cases={archivedCases} />
 </div>
 
 <script>
