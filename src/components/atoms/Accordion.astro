@@ -24,9 +24,7 @@ const { blok } = Astro.props;
             </div>
         </div>
     </button>
-    <div
-        class="accordion-content h-0 overflow-hidden pr-40 transition-[height] duration-200 ease-out md:pr-75"
-    >
+    <div class="accordion-content h-0 overflow-hidden pr-40 md:pr-75">
         <div
             class="px-16 pb-24 md:px-40 md:pb-40"
             set:html={renderRichText(blok.text as ISbRichtext)}
@@ -39,7 +37,19 @@ const { blok } = Astro.props;
     let resizeObserver: ResizeObserver | null = null;
     let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
+    let stToRefresh = [];
+
     let isInitialized = false;
+
+    const refreshScrollTriggersBelow = () => {
+        const sts = ScrollTrigger.getAll().filter((st) => {
+            return st.vars.id && st.vars.id.startsWith("accordionRefreshed");
+        });
+
+        sts.forEach((st) => {
+            st.refresh();
+        });
+    };
 
     const init = () => {
         cleanup();
@@ -60,14 +70,22 @@ const { blok } = Astro.props;
 
                 if (!isExpanded) {
                     button.setAttribute("aria-expanded", "true");
-                    content.style.height = `${inner.offsetHeight}px`;
+                    gsap.to(content, {
+                        height: inner.offsetHeight,
+                        duration: 0.2,
+                        onComplete: refreshScrollTriggersBelow,
+                    });
                     if (icon) icon.style.transform = "rotate(180deg)";
                     accordionContainer.classList.add("bg-black", "text-white");
                     accordionContainer.classList.remove("border-current/40");
                     accordionContainer.classList.add("border-black");
                 } else {
                     button.setAttribute("aria-expanded", "false");
-                    content.style.height = "0px";
+                    gsap.to(content, {
+                        height: 0,
+                        duration: 0.1,
+                        onComplete: refreshScrollTriggersBelow,
+                    });
                     if (icon) icon.style.transform = "rotate(0deg)";
                     accordionContainer.classList.remove(
                         "bg-black",

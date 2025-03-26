@@ -238,6 +238,7 @@ const { language, blok } = Astro.props;
 
         mTlHelmet2 = gsap.timeline({
             scrollTrigger: {
+                id: "accordionRefreshedMH",
                 trigger: secondMobileHelmet,
                 start: () => `bottom-=${window.innerWidth * 0.3}px bottom`,
                 end: () => `top+=${window.innerWidth * 0.3}px top`,
@@ -254,6 +255,7 @@ const { language, blok } = Astro.props;
         mTlSplit2 = gsap
             .timeline({
                 scrollTrigger: {
+                    id: "accordionRefreshedMSR",
                     trigger: splitRight,
                     start: "top bottom",
                     end: "top top",

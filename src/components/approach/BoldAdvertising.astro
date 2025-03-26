@@ -54,6 +54,7 @@ const { blok } = Astro.props;
             const inner = i.querySelector(".bold-ad-item-inner");
             const tl = gsap.timeline({
                 scrollTrigger: {
+                    id: "accordionRefreshedBA" + index,
                     trigger: i,
                     start: () =>
                         window.innerWidth > 1024 ? "top top" : "top bottom",
