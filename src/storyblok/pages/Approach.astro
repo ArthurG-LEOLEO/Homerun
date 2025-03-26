@@ -313,6 +313,7 @@ const { language, blok } = Astro.props;
         dTlSplit2Left = gsap
             .timeline({
                 scrollTrigger: {
+                    id: "accordionRefreshedDSL",
                     trigger: splitLeft,
                     start: "bottom bottom",
                     end: "bottom top",
@@ -333,6 +334,7 @@ const { language, blok } = Astro.props;
 
         dTlSplit2Right = gsap.timeline({
             scrollTrigger: {
+                id: "accordionRefreshedDSR",
                 trigger: splitLeft,
                 start: "bottom bottom",
                 end: "bottom top",
@@ -357,6 +359,7 @@ const { language, blok } = Astro.props;
         dTlHelmet2 = gsap
             .timeline({
                 scrollTrigger: {
+                    id: "accordionRefreshedDH2",
                     trigger: hero,
                     start: "top top",
                     end: "bottom top",
