@@ -1,5 +1,5 @@
-https://rosbeef.fr https://homerun.today/new 301!
-https://www.rosbeef.fr https://homerun.today/new 301!
+https://rosbeef.fr/* https://homerun.today/new 301!
+https://www.rosbeef.fr/* https://homerun.today/new 301!
 
 /en/* /:splat 301!
 /* /error/index.html 404
