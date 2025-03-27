@@ -112,22 +112,33 @@ const numberFeaturedAdvertising = featuredCases.filter(
                         ease: "power3",
                         y: 0,
                         opacity: 1,
+                        onComplete: refreshScrollTriggers,
                     },
                 );
             },
         });
 
         //Archived filtering
+        let archivedCaseFutureIndex = 0;
         archivedCases?.forEach((c) => {
             const caseCat = c.dataset.category;
-            if (!currentCategory) {
-                c.classList.remove("hidden");
-            } else if (caseCat === currentCategory) {
-                c.classList.remove("hidden");
+            if (!currentCategory || caseCat === currentCategory) {
+                if (archivedCaseFutureIndex + 1 <= shownArchivedCases) {
+                    c.classList.remove("hidden");
+                }
+                archivedCaseFutureIndex++;
             } else {
                 c.classList.add("hidden");
             }
         });
+
+        //Update archives load more button visibility
+        const btnWrapper = loadArchivedButton?.parentNode as HTMLElement;
+        if (shownArchivedCases >= archivedCaseFutureIndex) {
+            btnWrapper.classList.add("hidden");
+        } else {
+            btnWrapper.classList.remove("hidden");
+        }
 
         // Featured additional infos
         if (currentCategory) {
@@ -171,24 +182,38 @@ const numberFeaturedAdvertising = featuredCases.filter(
         filter(selectedCategory);
     };
 
+    const refreshScrollTriggers = () => {
+        const sts = ScrollTrigger.getAll();
+
+        sts.forEach((st) => {
+            st.refresh();
+        });
+    };
+
     const loadMoreArchived = () => {
         if (!page || !archivedCases?.length) return;
+
         shownArchivedCases = shownArchivedCases + NB_REP_ARCH_CASES;
+
+        let nbOfFilteredArchivedCasesToShow = 0;
         archivedCases.forEach((ac, index) => {
-            if (index + 1 <= shownArchivedCases) {
-                ac.classList.remove("hidden");
+            if (ac.dataset.category === currentCategory || !currentCategory) {
+                if (index + 1 <= shownArchivedCases) {
+                    ac.classList.remove("hidden");
+                }
+                nbOfFilteredArchivedCasesToShow++;
             }
         });
-        if (shownArchivedCases >= archivedCases.length) {
+        if (shownArchivedCases >= nbOfFilteredArchivedCasesToShow) {
             const btnWrapper = loadArchivedButton?.parentNode as HTMLElement;
             btnWrapper.classList.add("hidden");
         }
+        refreshScrollTriggers();
     };
 
     const initLoadArchived = () => {
         if (!page || !archivedCases?.length) return;
 
-        loadArchivedButton = page?.querySelector("#load-archived-button");
         loadArchivedButton?.addEventListener("click", loadMoreArchived);
     };
 
@@ -205,17 +230,23 @@ const numberFeaturedAdvertising = featuredCases.filter(
         }
     };
 
+    const setDOMVariables = () => {
+        if (!page) return;
+
+        loadArchivedButton = page.querySelector("#load-archived-button");
+        consultingButton = page.querySelector("#consulting-button");
+        advertisingButton = page.querySelector("#advertising-button");
+        allButton = page.querySelector("#all-button");
+        featuredInfos = page.querySelector("#featured-infos");
+        workGrid = page.querySelector("#work-grid");
+        featuredCases = page.querySelectorAll(".work-featured-case");
+        archivedCases = page.querySelectorAll(".work-archived-case");
+        featuredInfosTxt = page.querySelectorAll(".featured-infos-txt");
+        banner = document.querySelector("#layout-banner");
+    };
+
     const initFiltering = () => {
         if (!page) return;
-        consultingButton = page?.querySelector("#consulting-button");
-        advertisingButton = page?.querySelector("#advertising-button");
-        allButton = page?.querySelector("#all-button");
-        featuredInfos = page?.querySelector("#featured-infos");
-        workGrid = page?.querySelector("#work-grid");
-        featuredCases = page?.querySelectorAll(".work-featured-case");
-        archivedCases = page?.querySelectorAll(".work-archived-case");
-        featuredInfosTxt = page?.querySelectorAll(".featured-infos-txt");
-        banner = document.querySelector("#layout-banner");
 
         consultingButton?.addEventListener("click", onFilterButtonClick);
         advertisingButton?.addEventListener("click", onFilterButtonClick);
@@ -327,6 +358,7 @@ const numberFeaturedAdvertising = featuredCases.filter(
 
         if (!page) return;
 
+        setDOMVariables();
         initFiltering();
         initLoadArchived();
         initAppear();

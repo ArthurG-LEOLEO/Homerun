@@ -8,8 +8,6 @@ const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
 const { cases } = Astro.props;
-
-const casesDup = [...cases, ...cases, ...cases, ...cases, ...cases, ...cases];
 ---
 
 <div class="container-main pt-110 pb-100 md:pt-175 md:pb-130">
@@ -35,7 +33,7 @@ const casesDup = [...cases, ...cases, ...cases, ...cases, ...cases, ...cases];
             id="load-archived-button"
             plus
             label={t("work.archived.load")}
-            className={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${casesDup.length <= 5 && "hidden"}`}
+            className={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${cases.length <= 5 && "hidden"}`}
         />
     </div>
 </div>

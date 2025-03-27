@@ -59,9 +59,7 @@ const category: "consulting" | "advertising" = caseItem.content.category;
     let lines: NodeListOf<HTMLElement> | null;
     let appearTls: gsap.core.Timeline[] = [];
 
-    const initLineAppear = (line: HTMLElement) => {
-        console.log("line init");
-
+    const initLineAppear = (line: HTMLElement, index: number) => {
         if (!line) return;
 
         const els = line.querySelectorAll(".case-line-el");
@@ -92,6 +90,7 @@ const category: "consulting" | "advertising" = caseItem.content.category;
         const tl = gsap
             .timeline({
                 scrollTrigger: {
+                    id: "archivedCases" + index,
                     trigger: line,
                     start: "top 90%",
                     end: "bottom top",
@@ -137,7 +136,7 @@ const category: "consulting" | "advertising" = caseItem.content.category;
         if (!lines) return;
 
         lines.forEach((line, index) => {
-            initLineAppear(line);
+            initLineAppear(line, index);
         });
     };
 
