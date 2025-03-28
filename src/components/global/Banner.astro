@@ -1,4 +1,6 @@
 ---
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 
@@ -61,11 +63,7 @@ const { theme } = Astro.props;
         <div class="flex w-full flex-col">
             <h3 class="text-title-3">{t("banner.title")}</h3>
             <div class="mt-20 aspect-video w-full">
-                <iframe
-                    src="https://www.youtube.com/embed/2iLqjGcSfwk?si=PviwPdZ39f3Glcjb"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    class="h-full w-full"></iframe>
+                <YouTube id="2iLqjGcSfwk" class="size-full" />
             </div>
             <a
                 class="font-space mt-22 text-[1.8rem]/[2.3rem] font-medium underline underline-offset-5"
