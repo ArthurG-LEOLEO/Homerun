@@ -23,7 +23,7 @@ const cases = blok.cases.filter((c) => c.content);
                             index: number,
                         ) => (
                             <div
-                                class={`px-gutter united-case ${index > 3 && "hidden"}`}
+                                class="px-gutter united-case"
                                 data-category={item.content?.category}
                             >
                                 <Card caseItem={item} />
@@ -31,70 +31,7 @@ const cases = blok.cases.filter((c) => c.content);
                         ),
                     )}
                 </div>
-                <div>
-                    <ArrowLink
-                        id="load-more-button"
-                        plus
-                        label={t("work.archived.load")}
-                        className={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${blok.cases.length <= 4 && "hidden"}`}
-                    />
-                </div>
             </div>
         </div>
     )
 }
-
-<script>
-    const NB_INITIAL_CASES = 4;
-    const NB_LOAD_MORE_CASES = 4;
-    let shownCases = NB_INITIAL_CASES;
-    let page: HTMLElement | null;
-    let loadMoreButton: HTMLElement | null;
-    let cases: NodeListOf<HTMLElement> | null;
-
-    const loadMoreCases = () => {
-        if (!page || !cases?.length) return;
-
-        shownCases = shownCases + NB_LOAD_MORE_CASES;
-        cases.forEach((c, index) => {
-            if (index < shownCases) {
-                c.classList.remove("hidden");
-            }
-        });
-        if (shownCases >= cases.length) {
-            const btnWrapper = loadMoreButton?.parentNode as HTMLElement;
-            btnWrapper.classList.add("hidden");
-        }
-    };
-
-    const init = () => {
-        page = document.querySelector("#united-cases");
-        if (!page) return;
-
-        cases = page.querySelectorAll(".united-case");
-        loadMoreButton = page.querySelector("#load-more-button");
-
-        if (cases.length <= NB_INITIAL_CASES && loadMoreButton) {
-            const btnWrapper = loadMoreButton.parentNode as HTMLElement;
-            btnWrapper.classList.add("hidden");
-        }
-
-        loadMoreButton?.addEventListener("click", loadMoreCases);
-    };
-
-    const cleanup = () => {
-        loadMoreButton?.removeEventListener("click", loadMoreCases);
-    };
-
-    document.addEventListener("storyblok-live-preview-updated", () => {
-        cleanup();
-        init();
-    });
-
-    document.addEventListener("astro:page-load", () => {
-        init();
-    });
-    document.addEventListener("astro:before-swap", () => {
-        cleanup();
-    });
-</script>

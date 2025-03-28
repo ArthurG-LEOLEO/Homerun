@@ -44,6 +44,7 @@ export default defineConfig({
                           "work.featured_cases",
                           "work.archived_cases",
                           "united.cases",
+                          "united.archived_cases",
                           "shop.shop_items",
                           "shop_item.other_items",
                       ],

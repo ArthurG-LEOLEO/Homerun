@@ -48,9 +48,16 @@ const category: "consulting" | "advertising" = caseItem.content.category;
             >
         </div>
         <div
-            class="px-gutter case-line-el ml-auto rotate-[-90deg] opacity-0 md:order-4 md:ml-12 md:rotate-[-135deg]"
+            class="px-gutter case-line-el ml-auto w-48 opacity-0 md:order-4 md:ml-12 md:w-54"
         >
-            <Icon name="arrow-circle" class="size-28 md:size-34" />
+            {
+                (caseItem.content.has_case_study ||
+                    caseItem.content.external_link?.cached_url) && (
+                    <div class="rotate-[-90deg] md:rotate-[-135deg]">
+                        <Icon name="arrow-circle" class="size-28 md:size-34" />
+                    </div>
+                )
+            }
         </div>
     </div>
 </CaseLink>

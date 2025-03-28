@@ -2,6 +2,7 @@
 import Cases from "../../components/united/Cases.astro";
 import Hero from "../../components/united/Hero.astro";
 import Logos from "../../components/united/Logos.astro";
+import Archived from "../../components/united/Archived.astro";
 import Cards from "../../storyblok/sections/Cards.astro";
 import { useTranslations } from "../../i18n/utils";
 
@@ -16,4 +17,9 @@ const { language, blok } = Astro.props;
     {blok.cards && blok.cards[0] && <Cards blok={blok.cards[0]} />}
     <Logos blok={blok} />
     <Cases blok={blok} />
+    {
+        blok.archived_cases && blok.archived_cases.length > 0 && (
+            <Archived blok={blok} />
+        )
+    }
 </div>
