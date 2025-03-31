@@ -1,0 +1,73 @@
+---
+import RichTextRenderer from "storyblok-rich-text-astro-renderer/RichTextRenderer.astro";
+import { storyblokEditable } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+interface Props {
+    content: any;
+    blok?: any;
+}
+
+const { content, blok } = Astro.props;
+---
+
+<RichTextRenderer
+    content={content}
+    schema={{
+        nodes: {
+            paragraph: () => ({
+                component: "p",
+                props: {
+                    class: "text-p-20 my-[1em] first:mt-0 last:mb-0",
+                },
+            }),
+            bullet_list: () => ({
+                component: "ul",
+                props: {
+                    class: "my-[1em] space-y-[0.4em] first:mt-0 last:mb-0 text-p-20",
+                },
+            }),
+            list_item: () => ({
+                component: "li",
+                props: {
+                    class: "pl-[1.2em] relative before:bg-black before:rounded-full before:size-5 before:content-[''] before:absolute before:left-2 before:top-[calc(0.5em+0.2rem)] before:mr-[8px]",
+                },
+            }),
+            heading: ({ attrs }) => {
+                const level = attrs.level || 3;
+                let headingClass = "";
+
+                switch (level) {
+                    case 2:
+                        headingClass =
+                            "text-title-6 mt-[2em] mb-[1em] first:mt-0 last:mb-0";
+                        break;
+                    case 3:
+                        headingClass =
+                            "text-p-20 font-medium mt-[1em] first:mt-0";
+                        break;
+                    case 4:
+                        headingClass =
+                            "text-p-12 my-[1em] first:mt-0 last:mb-0";
+                        break;
+                    default:
+                        headingClass = "first:mt-0 last:mb-0";
+                }
+
+                return {
+                    component: `h${level}`,
+                    props: {
+                        class: headingClass,
+                    },
+                };
+            },
+        },
+    }}
+    resolver={(blok) => {
+        return {
+            component: StoryblokComponent,
+            props: { blok },
+        };
+    }}
+    {...storyblokEditable(blok)}
+/>

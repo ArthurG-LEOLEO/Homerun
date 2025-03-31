@@ -3,8 +3,8 @@ import { Icon } from "astro-icon/components";
 import { useTranslations } from "../../i18n/utils";
 import Tag from "../../components/atoms/Tag.astro";
 import Title from "../../components/atoms/Title.astro";
-import SBRichText from "../../components/global/SBRichText.astro";
 import LayeredImage from "../../components/global/LayeredImage.astro";
+import RichText from "../../components/shop/RichText.astro";
 import OtherItems from "../../components/shop/OtherItems.astro";
 import CTA from "../../components/global/CTA.astro";
 
@@ -57,8 +57,8 @@ const formattedPrice = formatPrice(blok.price, lang);
                     </h1>
                     <div class="text-p-24 text-black/70">{formattedPrice}</div>
                 </div>
-                <div class="px-gutter">
-                    <SBRichText content={blok.description} />
+                <div class="px-gutter mt-24">
+                    <RichText content={blok.description} />
                 </div>
                 <div class="px-gutter mt-32 flex flex-col gap-32">
                     <!-- Select -->
