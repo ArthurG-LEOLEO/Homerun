@@ -471,7 +471,7 @@ const { language, blok } = Astro.props;
 
         tlAppear = gsap
             .timeline({
-                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+                delay: 0.3,
                 paused: true,
             })
             .to(
