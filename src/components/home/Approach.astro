@@ -593,13 +593,6 @@ const { blok } = Astro.props;
             };
         });
 
-        if (window.innerWidth < 1024) {
-            gsap.set([firstCatP1, firstCatP2, secondCatP1, secondCatP2], {
-                "--underline": 1,
-            });
-            return;
-        }
-
         tlAppear = gsap
             .timeline({
                 default: {
@@ -669,6 +662,18 @@ const { blok } = Astro.props;
                 },
                 "start+=0.6",
             );
+
+        if (window.innerWidth < 1024) {
+            tlAppear.from(
+                wordHls,
+                {
+                    scaleX: 0,
+                    duration: 0.4,
+                    stagger: 0.1,
+                },
+                "start+=0.6",
+            );
+        }
     };
 
     const cleanup = () => {
