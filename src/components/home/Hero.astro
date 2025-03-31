@@ -464,10 +464,10 @@ const { blok } = Astro.props;
         // For iOS and Safari, force the autoplay video to play on page change
         video?.querySelector("video")?.play();
 
-        if (window.innerWidth < 1024) {
-            skipAppearOnMobile();
-            return;
-        }
+        // if (window.innerWidth < 1024) {
+        //     skipAppearOnMobile();
+        //     return;
+        // }
 
         setInitialAppearState();
 

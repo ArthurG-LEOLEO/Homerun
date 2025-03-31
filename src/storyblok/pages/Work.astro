@@ -265,17 +265,6 @@ const numberFeaturedAdvertising = featuredCases.filter(
         const titleEls = page.querySelectorAll(".work-title-el");
         const subtitle = page.querySelectorAll(".page-subtitle");
 
-        if (window.innerWidth < 1024) {
-            gsap.timeline().set(
-                [subtitle, titleEls, header, banner, workGrid],
-                {
-                    opacity: 1,
-                    y: 0,
-                },
-            );
-            return;
-        }
-
         gsap.timeline()
             .set(banner, {
                 y: "-100%",
@@ -297,7 +286,10 @@ const numberFeaturedAdvertising = featuredCases.filter(
             });
 
         tlAppear = gsap
-            .timeline({ paused: true, delay: 0.3 })
+            .timeline({
+                paused: true,
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+            })
             .to(
                 banner,
                 {
