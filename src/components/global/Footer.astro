@@ -56,7 +56,7 @@ interface FooterData {
     title: string[];
     top_link?: FooterLink[];
     copy?: string;
-    made_by?: string;
+    who_made?: any; // RichText content
     cols?: FooterCol[];
     linkedin?: {
         cached_url?: string;
@@ -240,7 +240,14 @@ const { footerData } = Astro.props;
         </div>
         <div class="pl-gutter flex items-baseline gap-14 lg:w-7/12 lg:pr-42">
             <p class="text-p14">{footerData.copy}</p>
-            {footerData.made_by && <p class="text-p12">{footerData.made_by}</p>}
+            {
+                footerData.who_made && (
+                    <div
+                        class="text-p12"
+                        set:html={renderRichText(footerData.who_made)}
+                    />
+                )
+            }
         </div>
     </div>
 </footer>
