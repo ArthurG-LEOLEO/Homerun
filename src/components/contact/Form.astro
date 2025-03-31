@@ -213,24 +213,28 @@ const { blok } = Astro.props as { blok: FormBlok };
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const formContainer = document.getElementById(
-            "form-container",
-        ) as HTMLFormElement;
-        const form = document.getElementById("contact-form") as HTMLFormElement;
-        const successMessage = document.getElementById(
-            "form-success",
-        ) as HTMLDivElement;
-        const errorMessage = document.getElementById(
-            "form-error",
-        ) as HTMLDivElement;
-        const submitButton = document.getElementById(
+    let formContainer: HTMLElement | null = null;
+    let form: HTMLFormElement | null = null;
+    let successMessage: HTMLElement | null = null;
+    let errorMessage: HTMLElement | null = null;
+    let submitButton: HTMLButtonElement | null = null;
+    let newButton: HTMLElement | null = null;
+
+    let handleSubmit: ((e: SubmitEvent) => Promise<void>) | null = null;
+    let handleNewButton: (() => void) | null = null;
+
+    const init = () => {
+        formContainer = document.getElementById("form-container");
+        form = document.getElementById("contact-form") as HTMLFormElement;
+        successMessage = document.getElementById("form-success");
+        errorMessage = document.getElementById("form-error");
+        submitButton = document.getElementById(
             "submit-button",
         ) as HTMLButtonElement;
-        const newButton = document.getElementById("new-button");
+        newButton = document.getElementById("new-button");
 
         if (form && successMessage && errorMessage) {
-            form.addEventListener("submit", async (e) => {
+            handleSubmit = async (e) => {
                 e.preventDefault();
 
                 if (submitButton) {
@@ -269,19 +273,52 @@ const { blok } = Astro.props as { blok: FormBlok };
 
                     console.error("Submission error:", error);
                 }
-            });
+            };
+
+            form.addEventListener("submit", handleSubmit);
 
             if (newButton) {
-                newButton.addEventListener("click", () => {
+                handleNewButton = () => {
                     successMessage.classList.add("hidden");
                     successMessage.classList.remove("flex");
+                    errorMessage.classList.add("hidden");
+                    errorMessage.classList.remove("flex");
                     form.classList.remove("hidden");
 
                     if (submitButton) {
                         submitButton.disabled = false;
                     }
-                });
+                };
+
+                newButton.addEventListener("click", handleNewButton);
             }
         }
+    };
+
+    const cleanup = () => {
+        if (form && handleSubmit) {
+            form.removeEventListener("submit", handleSubmit);
+        }
+
+        if (newButton && handleNewButton) {
+            newButton.removeEventListener("click", handleNewButton);
+        }
+
+        formContainer = null;
+        form = null;
+        successMessage = null;
+        errorMessage = null;
+        submitButton = null;
+        newButton = null;
+        handleSubmit = null;
+        handleNewButton = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
     });
 </script>
