@@ -9,6 +9,7 @@ interface Logo {
 
 interface Props {
     logos: {
+        animation_interval: number;
         logos: Logo[];
     };
     className?: string;
@@ -16,13 +17,18 @@ interface Props {
 
 const { logos, className = "" } = Astro.props;
 const logosArray = logos.logos || [];
+const animationInterval = logos.animation_interval || 3000;
 
 const MAX_LOGOS_MOBILE = 6;
 const MAX_LOGOS_DESKTOP = 12;
 ---
 
 <div class={`px-gutter mx-auto sm:w-10/12 lg:w-8/12 ${className}`}>
-    <div class="grid-logos-wrapper" data-logos={JSON.stringify(logosArray)}>
+    <div
+        class="grid-logos-wrapper"
+        data-logos={JSON.stringify(logosArray)}
+        data-interval={animationInterval}
+    >
         <div class="grid grid-cols-2 gap-1 md:grid-cols-4">
             {
                 // Mapper uniquement sur les logos disponibles
@@ -152,7 +158,15 @@ const MAX_LOGOS_DESKTOP = 12;
     };
 
     const startLogoRotation = () => {
-        intervalId = setInterval(animateNextLogo, 3000);
+        const gridWrapper = document.querySelector(".grid-logos-wrapper");
+        if (!gridWrapper) return;
+
+        const interval = parseInt(
+            gridWrapper.getAttribute("data-interval") || "3000",
+            10,
+        );
+
+        intervalId = setInterval(animateNextLogo, interval);
     };
 
     const animateNextLogo = async () => {
