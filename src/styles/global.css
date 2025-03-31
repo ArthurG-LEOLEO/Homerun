@@ -210,6 +210,9 @@
         @apply font-space;
         @apply font-bold;
     }
+    .text-p-12 {
+        @apply text-p12/[1.6rem];
+    }
     .text-p-16 {
         @apply text-p16;
     }
