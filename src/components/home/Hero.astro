@@ -305,11 +305,12 @@ const { blok } = Astro.props;
             .set(title, {
                 y: (i, target) => {
                     const ww = window.innerWidth;
-                    const wh = videoHolder?.offsetHeight || window.innerHeight;
+                    const wh = window.innerHeight;
+                    const vh = videoHolder?.offsetHeight || window.innerHeight;
                     const titleHeight = target.offsetHeight;
 
                     if (ww < 1536) {
-                        return titleHeight / -2 + wh * 0.08;
+                        return -vh * 0.42 + wh * 0.5 - titleHeight / 2;
                     } else {
                         const heroPaddingBottom = ww * 0.13888;
                         const baselineHeight = ww * 0.042;
