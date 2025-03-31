@@ -193,28 +193,6 @@ const { blok } = Astro.props;
                 x: -20,
             });
 
-        if (window.innerWidth < 1024) {
-            gsap.timeline()
-                .set([titleWordsMobile, header, banner, logo], {
-                    opacity: 1,
-                    rotate: 0,
-                    y: 0,
-                })
-                .set(videoWithLayers, {
-                    rotate: -2.8,
-                    y: () => {
-                        if (window.innerWidth < 768) {
-                            return "-25rem";
-                        } else {
-                            return "-37rem";
-                        }
-                    },
-                });
-
-            initScrollVideo();
-            return;
-        }
-
         gsap.timeline()
             .set(videoWithLayers, {
                 rotate: 6,
@@ -236,7 +214,7 @@ const { blok } = Astro.props;
                 opacity: 0,
                 y: "-100%",
             })
-            .set(titleWordsDesktop, {
+            .set([titleWordsDesktop, titleWordsMobile], {
                 y: "-100%",
                 opacity: 1,
             })
@@ -249,7 +227,10 @@ const { blok } = Astro.props;
             });
 
         const tlAppear = gsap
-            .timeline({ delay: 0.3, paused: true })
+            .timeline({
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+                paused: true,
+            })
             .to(
                 logo,
                 {
@@ -278,20 +259,39 @@ const { blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
-            )
-            .to(
-                titleWordsDesktop,
-                {
-                    duration: 0.8,
+            );
+
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsMobile, {
                     y: 0,
-                    stagger: 0.05,
-                    ease: "elastic.out(1,0.7)",
-                },
-                "<+=0.2",
-            )
-            .set(titleWordsMobile, {
-                y: 0,
-            });
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "<+=0.2",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
 
         await waitForFooterSplineLoad();
         tlAppear.play();
