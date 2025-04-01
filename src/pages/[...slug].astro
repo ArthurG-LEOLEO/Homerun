@@ -67,9 +67,24 @@ const bannerThemeComponents = {
         txt: "#F8F7EC",
         bg: "#E56138",
     },
+    shop_item_brand: {
+        txt: "#F8F7EC",
+        bg: "#2d5a36",
+    },
+    shop_item_myself: {
+        txt: "#F8F7EC",
+        bg: "#E56138",
+    },
 };
-const bannerThemeComponentKey = story?.content
+let bannerThemeComponentKey = story?.content
     ?.component as keyof typeof bannerThemeComponents;
+
+if (bannerThemeComponentKey === "shop_item") {
+    bannerThemeComponentKey = ("shop_item_" + story?.content?.category) as
+        | "shop_item_brand"
+        | "shop_item_myself";
+}
+
 const bannerTheme = bannerThemeComponents[bannerThemeComponentKey] || {
     bg: "#edd4f8",
     txt: "#181817",
