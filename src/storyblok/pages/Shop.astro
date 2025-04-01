@@ -1,61 +1,201 @@
 ---
 import Hero from "../../components/shop/Hero.astro";
 import Card from "../../components/shop/Card.astro";
+import ShopGridInfos from "../../components/shop/ShopGridInfos.astro";
 
 interface ShopItem {
-  _uid: string;
-  full_slug: string;
-  content: {
-    title: Array<{ mobile_title: string }>;
-    price: number;
-    cover: any;
-    category: string;
-  };
+    _uid: string;
+    full_slug: string;
+    content: {
+        title: Array<{ mobile_title: string }>;
+        price: number;
+        cover: any;
+        category: string;
+    };
 }
 
 interface ShopBlok {
-  shop_items: ShopItem[];
+    shop_items: ShopItem[];
 }
 
 interface Props {
-  language: string;
-  blok: ShopBlok;
+    language: string;
+    blok: ShopBlok;
 }
 
 const { language, blok } = Astro.props;
+
+const shopItems = blok.shop_items.filter((c) => c.content);
+
+const numberItemBrand = shopItems.filter((c: any) => {
+    return c.content.category === "brand";
+}).length;
+const numberItemMyself = shopItems.filter(
+    (c: any) => c.content.category === "myself",
+).length;
 ---
 
 <div id="page-shop" class="shop bg-pink text-black">
     <Hero blok={blok} />
-    <div class="container-main pb-120 md:pb-170">
+    <ShopGridInfos nbBrand={numberItemBrand} nbMyself={numberItemMyself} />
+    <div class="container-main pb-120 opacity-0 md:pb-170" id="shop-grid">
         <div
             class="mt-32 flex flex-col gap-48 md:mt-40 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120 xl:grid-cols-3"
         >
             {
                 blok.shop_items.map((item: ShopItem) => (
                     <div
-                        class="px-gutter"
+                        class="px-gutter shop-item"
+                        data-category={item.content?.category}
                     >
                         <Card shopItem={item} />
                     </div>
                 ))
             }
         </div>
-    </div>    
+    </div>
 </div>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
+    let currentCategory: string | undefined;
     let tlAppear: gsap.core.Timeline;
     let page: HTMLElement | null;
+    let banner: HTMLElement | null;
+    let brandButton: HTMLElement | null;
+    let myselfButton: HTMLElement | null;
+    let shopGridInfos: HTMLElement | null;
+    let allButton: HTMLElement | null;
+    let shopGrid: HTMLElement | null;
+    let shopItems: NodeListOf<HTMLElement> | null;
+    let shopGridTxt: NodeListOf<HTMLElement> | null;
 
-    const init = () => {
-        page = document.querySelector("#page-shop");
+    const filter = (selectedCategory: string | undefined) => {
+        currentCategory =
+            selectedCategory === currentCategory ? undefined : selectedCategory;
+
+        const prevActiveButton = page?.querySelector(
+            ".shop-category-btn.active",
+        );
+
+        // Hero buttons
+        if (!currentCategory) {
+            prevActiveButton?.classList.remove("active");
+            shopGridInfos?.style.setProperty("--show", "0");
+            if (shopGridInfos) shopGridInfos.style.pointerEvents = "none";
+        } else {
+            const selectedButton = page?.querySelector(
+                `.shop-category-btn#${currentCategory}-button`,
+            );
+            prevActiveButton?.classList.remove("active");
+            selectedButton?.classList.add("active");
+            shopGridInfos?.style.setProperty("--show", "1");
+            if (shopGridInfos) shopGridInfos.style.pointerEvents = "auto";
+        }
+
+        //Featured filtering
+        gsap.to(shopGrid, {
+            duration: 0.3,
+            ease: "power3",
+            y: 100,
+            opacity: 0,
+            onComplete: () => {
+                shopItems?.forEach((c) => {
+                    const caseCat = c.dataset.category;
+                    if (!currentCategory || caseCat === currentCategory) {
+                        c.classList.remove("hidden");
+                    } else {
+                        c.classList.add("hidden");
+                    }
+                });
+                gsap.fromTo(
+                    shopGrid,
+                    { y: 100, opacity: 0 },
+                    {
+                        duration: 0.3,
+                        ease: "power3",
+                        y: 0,
+                        opacity: 1,
+                    },
+                );
+            },
+        });
+
+        // Featured additional infos
+        if (currentCategory) {
+            shopGridTxt?.forEach((txt) => {
+                if (txt.dataset.category === currentCategory) {
+                    txt.classList.remove("hidden");
+                } else {
+                    txt.classList.add("hidden");
+                }
+            });
+        }
+
+        // Update URL params
+        const url = new URL(location.href);
+        if (currentCategory) {
+            url.searchParams.set("type", currentCategory);
+            window.history.pushState(null, "", url.toString());
+        } else {
+            url.searchParams.delete("type");
+            window.history.pushState(null, "", url.toString());
+        }
+    };
+
+    const onFilterButtonClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const selectedCategory = target.dataset.category || currentCategory;
+
+        filter(selectedCategory);
+    };
+
+    const setDOMVariables = () => {
         if (!page) return;
 
+        brandButton = page.querySelector("#brand-button");
+        myselfButton = page.querySelector("#myself-button");
+        allButton = page.querySelector("#all-button");
+        shopGridInfos = page.querySelector("#shop-grid-infos");
+        shopGrid = page.querySelector("#shop-grid");
+        shopItems = page.querySelectorAll(".shop-item");
+        shopGridTxt = page.querySelectorAll(".shop-infos-txt");
+        banner = document.querySelector("#layout-banner");
+    };
+
+    const checkUrlFiltering = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const typeOfWork = urlParams.get("type");
+        if (!typeOfWork) return;
+        const isAPossibleType = ["brand", "myself"].includes(typeOfWork);
+
+        if (isAPossibleType) {
+            filter(typeOfWork);
+        }
+    };
+
+    const initFiltering = () => {
+        if (!page) return;
+
+        brandButton?.addEventListener("click", onFilterButtonClick);
+        myselfButton?.addEventListener("click", onFilterButtonClick);
+        allButton?.addEventListener("click", onFilterButtonClick);
+
+        checkUrlFiltering();
+    };
+
+    const initAppear = async () => {
+        if (!page) return;
         const banner = document.querySelector("#layout-banner");
-        const header = document.querySelectorAll(
+        const header: NodeListOf<HTMLElement> = document.querySelectorAll(
             "#layout-header .layout-header",
         );
+
+        const titleEls = page.querySelectorAll(".shop-title-el");
+        const subtitle = page.querySelectorAll(".page-subtitle");
 
         gsap.timeline()
             .set(banner, {
@@ -64,10 +204,24 @@ const { language, blok } = Astro.props;
             .set(header, {
                 y: -50,
                 opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            })
+            .set(titleEls, {
+                y: "3rem",
+                opacity: 0,
+            })
+            .set(shopGrid, {
+                opacity: 0,
             });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({
+                paused: true,
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+            })
             .to(
                 banner,
                 {
@@ -86,11 +240,57 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                titleEls,
+                {
+                    duration: 0.8,
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.05,
+                    ease: "elastic.out(1,0.7)",
+                },
+                "start+=0.1",
+            )
+            .to(
+                shopGrid,
+                {
+                    duration: 0.3,
+                    opacity: 1,
+                    ease: "power2",
+                },
+                "start+=0.3",
             );
+
+        await waitForFooterSplineLoad();
+
+        tlAppear.play();
+    };
+
+    const init = () => {
+        page = document.querySelector("#page-shop");
+        if (!page) return;
+
+        setDOMVariables();
+        initFiltering();
+        initAppear();
     };
 
     const cleanup = () => {
         tlAppear?.kill();
+        brandButton?.removeEventListener("click", onFilterButtonClick);
+        myselfButton?.removeEventListener("click", onFilterButtonClick);
+        allButton?.removeEventListener("click", onFilterButtonClick);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {

@@ -1,0 +1,29 @@
+---
+import { useTranslations } from "../../i18n/utils";
+import ArrowLink from "../atoms/ArrowLink.astro";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { nbBrand, nbMyself } = Astro.props;
+---
+
+<div
+    style="--show: 0; pointer-events: none;"
+    class="container-main w-full translate-y-[calc(5rem*(1-var(--show)))] opacity-[var(--show)] transition-[opacity,translate] duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+    id="shop-grid-infos"
+>
+    <div class="flex w-full items-center justify-between">
+        <div class="px-gutter text-p-20">
+            <span data-category="brand" class="shop-infos-txt hidden"
+                >{nbBrand} {t("shop.brandProducts")}</span
+            >
+            <span data-category="myself" class="shop-infos-txt hidden"
+                >{nbMyself} {t("shop.myselfProducts")}</span
+            >
+        </div>
+        <div class="px-gutter flex-none">
+            <ArrowLink id="all-button" plus label={t("shop.all")} />
+        </div>
+    </div>
+</div>
