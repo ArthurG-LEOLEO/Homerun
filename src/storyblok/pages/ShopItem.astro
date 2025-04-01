@@ -49,15 +49,18 @@ const formattedPrice = formatPrice(blok.price, lang);
         <div class="md:sticky md:top-55 md:w-6/12 xl:flex xl:justify-center">
             <div class="xl:w-4/6">
                 <div class="px-gutter flex flex-col gap-8">
-                    <div>
+                    <div class="shop-item-tag self-start opacity-0">
                         <Tag category={blok.category} />
                     </div>
-                    <h1 class="text-title-1">
-                        <Title title={blok.title[0]} />
+                    <h1 class="text-title-1" id="shop-item-title">
+                        <Title reveal="manual" title={blok.title[0]} />
                     </h1>
-                    <div class="text-p-24 text-black/70">{formattedPrice}</div>
+                    <div
+                        class="shop-item-price text-p-24 text-black/70 opacity-0"
+                        >{formattedPrice}</div
+                    >
                 </div>
-                <div class="px-gutter mt-24">
+                <div class="px-gutter shop-item-desc mt-24 opacity-0">
                     <RichText content={blok.description} />
                 </div>
                 <div class="px-gutter mt-32 flex flex-col gap-32">
@@ -154,7 +157,9 @@ const formattedPrice = formatPrice(blok.price, lang);
                 </div>
             </div>
         </div>
-        <div class="px-gutter flex flex-col gap-20 md:w-6/12">
+        <div
+            class="shop-item-imgs px-gutter flex flex-col gap-20 opacity-0 md:w-6/12"
+        >
             <LayeredImage class="w-full" image={blok.cover} />
             {
                 blok.other_images &&
@@ -254,36 +259,94 @@ const formattedPrice = formatPrice(blok.price, lang);
             "#layout-header .layout-header",
         );
 
+        const tag = page.querySelector(".shop-item-tag");
+        const titleWordsDesktop = page.querySelectorAll(
+            "#shop-item-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#shop-item-title .title-wrap-mobile .word-inner",
+        );
+
+        const description = page.querySelector(".shop-item-desc");
+        const price = page.querySelector(".shop-item-price");
+        const imgs = page.querySelector(".shop-item-imgs");
+
         gsap.timeline()
-            .set(banner, {
-                y: "-100%",
+            .set(banner, { y: "-100%" })
+            .set(header, { y: -50, opacity: 0 })
+            .set(tag, { scale: 0.7, opacity: 0 })
+            .set([titleWordsMobile, titleWordsDesktop], {
+                y: "100%",
+                opacity: 1,
             })
-            .set(header, {
-                y: -50,
-                opacity: 0,
-            });
+            .set(description, { y: "20rem", opacity: 0 })
+            .set(imgs, { y: "20rem", opacity: 0 })
+            .set(price, { y: "100%", opacity: 0 });
 
         tlAppear = gsap
-            .timeline()
+            .timeline({
+                paused: true,
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+            })
+            .to(banner, { y: 0, duration: 0.6, ease: "expo.out" }, "start")
             .to(
-                banner,
-                {
-                    y: 0,
-                    duration: 0.6,
-                    ease: "expo.out",
-                },
+                header,
+                { y: 0, opacity: 1, duration: 0.6, ease: "expo.out" },
                 "start",
             )
             .to(
-                header,
+                imgs,
+                { duration: 1, opacity: 1, y: 0, ease: "elastic.out(1,0.7)" },
+                "start+=0.1",
+            )
+            .to(
+                tag,
                 {
-                    y: 0,
                     opacity: 1,
-                    duration: 0.6,
-                    ease: "expo.out",
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
                 },
-                "start",
+                "start+=0.2",
+            )
+            .to(
+                price,
+                { duration: 0.7, opacity: 1, y: 0, ease: "power4.out" },
+                "<+=0.1",
+            )
+            .to(
+                description,
+                { duration: 0.7, opacity: 1, y: 0, ease: "power4.out" },
+                "<",
             );
+
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, { y: 0 });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, { y: 0 });
+        }
 
         await waitForFooterSplineLoad();
 
