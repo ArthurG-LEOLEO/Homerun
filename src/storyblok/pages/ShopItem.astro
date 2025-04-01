@@ -178,13 +178,77 @@ const formattedPrice = formatPrice(blok.price, lang);
 </style>
 
 <script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
     let tlAppear: gsap.core.Timeline;
     let page: HTMLElement | null;
 
-    const init = () => {
-        page = document.querySelector("#page-shop-item");
-        if (!page) return;
+    let quantityUnit: HTMLElement | null;
+    let decreaseBtn: HTMLElement | null;
+    let increaseBtn: HTMLElement | null;
+    let quantityValue: HTMLElement | null;
+    let unitSingular: string;
+    let unitPlural: string;
 
+    let quantity: number = 1;
+
+    const updateQuantity = (value: number) => {
+        quantity = Math.max(1, value);
+        if (quantityValue) quantityValue.textContent = quantity.toString();
+
+        if (decreaseBtn) {
+            if (quantity <= 1) {
+                decreaseBtn.classList.remove("cursor-pointer");
+                decreaseBtn.classList.add("opacity-50", "cursor-not-allowed");
+                decreaseBtn.setAttribute("disabled", "disabled");
+            } else {
+                decreaseBtn.classList.remove(
+                    "opacity-50",
+                    "cursor-not-allowed",
+                );
+                decreaseBtn.classList.add("cursor-pointer");
+                decreaseBtn.removeAttribute("disabled");
+            }
+        }
+
+        if (quantityUnit) {
+            const unitText =
+                quantity > 1
+                    ? quantityUnit.getAttribute("data-plural") || unitPlural
+                    : quantityUnit.getAttribute("data-singular") ||
+                      unitSingular;
+            quantityUnit.textContent = unitText;
+        }
+    };
+
+    const onDecreaseQuantityClick = () => {
+        updateQuantity(quantity - 1);
+    };
+
+    const onIncreaseQuantityClick = () => {
+        updateQuantity(quantity + 1);
+    };
+
+    const initQuantity = () => {
+        const quantitySelector = document.querySelector(".quantity-selector");
+        if (!quantitySelector) return;
+        decreaseBtn = quantitySelector.querySelector(".decrease");
+        increaseBtn = quantitySelector.querySelector(".increase");
+        quantityValue = quantitySelector.querySelector(".quantity-value");
+        quantityUnit = quantitySelector.querySelector(".quantity-unit");
+
+        unitSingular = quantityUnit?.getAttribute("data-singular") || "article";
+        unitPlural = quantityUnit?.getAttribute("data-plural") || "articles";
+
+        quantity = 1;
+        if (quantityUnit) quantityUnit.textContent = unitSingular;
+
+        increaseBtn?.addEventListener("click", onIncreaseQuantityClick);
+        decreaseBtn?.addEventListener("click", onDecreaseQuantityClick);
+    };
+
+    const initAppear = async () => {
+        if (!page) return;
         const banner = document.querySelector("#layout-banner");
         const header = document.querySelectorAll(
             "#layout-header .layout-header",
@@ -221,72 +285,23 @@ const formattedPrice = formatPrice(blok.price, lang);
                 "start",
             );
 
-        const quantitySelector = document.querySelector(".quantity-selector");
-        if (!quantitySelector) return;
+        await waitForFooterSplineLoad();
 
-        const decreaseBtn = quantitySelector.querySelector(".decrease");
-        const increaseBtn = quantitySelector.querySelector(".increase");
-        const quantityValue = quantitySelector.querySelector(".quantity-value");
-        const quantityUnit = quantitySelector.querySelector(".quantity-unit");
+        tlAppear.play();
+    };
 
-        const unitSingular =
-            quantityUnit?.getAttribute("data-singular") || "article";
-        const unitPlural =
-            quantityUnit?.getAttribute("data-plural") || "articles";
+    const init = () => {
+        page = document.querySelector("#page-shop-item");
+        if (!page) return;
 
-        let quantity = 1;
-
-        const updateQuantity = (value) => {
-            quantity = Math.max(1, value);
-            if (quantityValue) quantityValue.textContent = quantity;
-
-            if (decreaseBtn) {
-                if (quantity <= 1) {
-                    decreaseBtn.classList.remove("cursor-pointer");
-                    decreaseBtn.classList.add(
-                        "opacity-50",
-                        "cursor-not-allowed",
-                    );
-                    decreaseBtn.setAttribute("disabled", "disabled");
-                } else {
-                    decreaseBtn.classList.remove(
-                        "opacity-50",
-                        "cursor-not-allowed",
-                    );
-                    decreaseBtn.classList.add("cursor-pointer");
-                    decreaseBtn.removeAttribute("disabled");
-                }
-            }
-
-            if (quantityUnit) {
-                const unitText =
-                    quantity > 1
-                        ? quantityUnit.getAttribute("data-plural") || unitPlural
-                        : quantityUnit.getAttribute("data-singular") ||
-                          unitSingular;
-                quantityUnit.textContent = unitText;
-            }
-        };
-
-        decreaseBtn?.addEventListener("click", () =>
-            updateQuantity(quantity - 1),
-        );
-        increaseBtn?.addEventListener("click", () =>
-            updateQuantity(quantity + 1),
-        );
-
-        if (quantityUnit) {
-            const singularLabel =
-                quantityUnit.getAttribute("data-singular") || "article";
-            const pluralLabel =
-                quantityUnit.getAttribute("data-plural") || "articles";
-
-            quantityUnit.textContent = singularLabel;
-        }
+        initQuantity();
+        initAppear();
     };
 
     const cleanup = () => {
         tlAppear?.kill();
+        increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
+        decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
