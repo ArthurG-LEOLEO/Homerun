@@ -19,8 +19,9 @@ const { logos, className = "" } = Astro.props;
 const logosArray = logos.logos || [];
 const animationInterval = logos.animation_interval || 3000;
 
-const MAX_LOGOS_MOBILE = 6;
-const MAX_LOGOS_DESKTOP = 12;
+const MAX_LOGOS_MOBILE = 9;
+const MAX_LOGOS_TABLET = 12;
+const MAX_LOGOS_DESKTOP = 24;
 ---
 
 <div class={`px-gutter mx-auto sm:w-10/12 lg:w-8/12 ${className}`}>
@@ -29,29 +30,37 @@ const MAX_LOGOS_DESKTOP = 12;
         data-logos={JSON.stringify(logosArray)}
         data-interval={animationInterval}
     >
-        <div class="grid grid-cols-2 gap-1 md:grid-cols-4">
+        <div class="grid grid-cols-3 gap-1 md:grid-cols-4 xl:grid-cols-6">
             {
-                // Mapper uniquement sur les logos disponibles
                 logosArray
                     .slice(0, Math.min(logosArray.length, MAX_LOGOS_DESKTOP))
-                    .map((logo, index) => (
-                        <div
-                            class={`relative aspect-square outline-1 outline-current ${
-                                index >= MAX_LOGOS_MOBILE
-                                    ? "hidden md:block"
-                                    : ""
-                            }`}
-                        >
-                            <div class="logo-container absolute inset-0 p-30 lg:p-40">
-                                <div class="relative flex h-full w-full items-center justify-center">
-                                    <SBImage
-                                        image={logo}
-                                        class="h-auto max-h-full w-auto max-w-full object-contain"
-                                    />
+                    .map((logo, index) => {
+                        let visibilityClass = "";
+
+                        if (
+                            index >= MAX_LOGOS_MOBILE &&
+                            index < MAX_LOGOS_TABLET
+                        ) {
+                            visibilityClass = "hidden md:block";
+                        } else if (index >= MAX_LOGOS_TABLET) {
+                            visibilityClass = "hidden xl:block";
+                        }
+
+                        return (
+                            <div
+                                class={`relative aspect-square outline-1 outline-current ${visibilityClass}`}
+                            >
+                                <div class="logo-container absolute inset-0 p-30 xl:p-20">
+                                    <div class="relative flex h-full w-full items-center justify-center">
+                                        <SBImage
+                                            image={logo}
+                                            class="h-auto max-h-full w-auto max-w-full object-contain"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
             }
         </div>
     </div>
@@ -60,13 +69,37 @@ const MAX_LOGOS_DESKTOP = 12;
 <script>
     import { gsap } from "gsap";
 
+    const MAX_LOGOS_MOBILE = 9;
+    const MAX_LOGOS_TABLET = 12;
+    const MAX_LOGOS_DESKTOP = 24;
+
     let currentLogos: number[] = [];
     let remainingLogos: number[] = [];
     let isAnimating = false;
     let intervalId: ReturnType<typeof setInterval> | null = null;
-    let previousIsMobile: boolean;
+    let previousBreakpoint: string;
 
-    const isMobile = () => !window.matchMedia("(min-width: 768px)").matches;
+    const getBreakpoint = () => {
+        if (window.matchMedia("(min-width: 1280px)").matches) {
+            return "desktop";
+        } else if (window.matchMedia("(min-width: 768px)").matches) {
+            return "tablet";
+        } else {
+            return "mobile";
+        }
+    };
+
+    const getMaxLogos = (breakpoint: string): number => {
+        switch (breakpoint) {
+            case "desktop":
+                return MAX_LOGOS_DESKTOP;
+            case "tablet":
+                return MAX_LOGOS_TABLET;
+            case "mobile":
+            default:
+                return MAX_LOGOS_MOBILE;
+        }
+    };
 
     const shuffleArray = (array: any[]) => {
         const newArray = [...array];
@@ -91,10 +124,9 @@ const MAX_LOGOS_DESKTOP = 12;
 
     const setupLogos = (allLogos: any[]) => {
         const totalLogos = allLogos.length;
-        const mobile = isMobile();
-        const maxLogos = mobile ? 6 : 12;
+        const breakpoint = getBreakpoint();
+        const maxLogos = getMaxLogos(breakpoint);
 
-        // Si on a assez de logos pour remplir la grille, pas besoin d'animation
         if (totalLogos <= maxLogos) {
             if (intervalId) {
                 clearInterval(intervalId);
@@ -106,7 +138,6 @@ const MAX_LOGOS_DESKTOP = 12;
             return;
         }
 
-        // Réinitialiser les logos avec un ordre aléatoire
         const allIndices = Array.from({ length: totalLogos }, (_, i) => i);
         const shuffledIndices = shuffleArray(allIndices);
 
@@ -115,7 +146,6 @@ const MAX_LOGOS_DESKTOP = 12;
 
         updateLogos(allLogos);
 
-        // Démarrer l'animation seulement si on a des logos en attente
         if (remainingLogos.length > 0) {
             if (intervalId) {
                 clearInterval(intervalId);
@@ -133,22 +163,19 @@ const MAX_LOGOS_DESKTOP = 12;
 
         try {
             const allLogos = JSON.parse(logosStr);
-            previousIsMobile = isMobile();
+            previousBreakpoint = getBreakpoint();
             setupLogos(allLogos);
 
-            // Gestionnaire de redimensionnement
             const handleResize = () => {
-                const mobile = isMobile();
-                // Vérifier si on a changé de breakpoint
-                if (mobile !== previousIsMobile) {
-                    previousIsMobile = mobile;
+                const currentBreakpoint = getBreakpoint();
+                if (currentBreakpoint !== previousBreakpoint) {
+                    previousBreakpoint = currentBreakpoint;
                     setupLogos(allLogos);
                 }
             };
 
             window.addEventListener("resize", handleResize);
 
-            // Cleanup du gestionnaire lors de la navigation
             document.addEventListener("astro:before-swap", () => {
                 window.removeEventListener("resize", handleResize);
             });
