@@ -42,6 +42,8 @@ const formattedPrice = formatPrice(blok.price, lang);
     class="shop-item bg-white text-black"
     data-unit-singular={blok.unit_label || "article"}
     data-unit-plural={blok.unit_plural_label || "articles"}
+    data-contact-url={t("links.contact")}
+    data-item-title={blok.title[0].mobile_title.replace(/\n/g, "")}
 >
     <div
         class="container-main flex flex-col gap-20 pt-115 pb-120 md:flex-row-reverse md:items-start md:gap-0 md:pt-160 md:pb-170"
@@ -69,7 +71,10 @@ const formattedPrice = formatPrice(blok.price, lang);
                         blok.select_label &&
                             Array.isArray(blok.select_options) &&
                             blok.select_options.length > 0 && (
-                                <div class="flex flex-col gap-8">
+                                <div
+                                    id="shop-item-select"
+                                    class="flex flex-col gap-8"
+                                >
                                     <label class="text-title-7">
                                         {blok.select_label}
                                     </label>
@@ -152,8 +157,8 @@ const formattedPrice = formatPrice(blok.price, lang);
                         </div>
                     </div>
                 </div>
-                <div class="px-gutter mt-32">
-                    <CTA label={blok.button_label} />
+                <div class="px-gutter mt-32" id="order-btn-wrap">
+                    <CTA id="order-btn" label={blok.button_label} />
                 </div>
             </div>
         </div>
@@ -187,6 +192,8 @@ const formattedPrice = formatPrice(blok.price, lang);
 
     let tlAppear: gsap.core.Timeline;
     let page: HTMLElement | null;
+
+    let orderBtn: HTMLElement | null;
 
     let quantityUnit: HTMLElement | null;
     let decreaseBtn: HTMLElement | null;
@@ -353,18 +360,60 @@ const formattedPrice = formatPrice(blok.price, lang);
         tlAppear.play();
     };
 
+    const onOrderBtnClick = () => {
+        if (!page) return;
+        let contactUrl = page.getAttribute("data-contact-url");
+        let itemTitle = page.getAttribute("data-item-title");
+        if (!contactUrl || !itemTitle) return;
+
+        const fullContactUrl = new URL(contactUrl, location.origin);
+        fullContactUrl.searchParams.append("shopTitle", itemTitle);
+
+        const shopSelect = page.querySelector("#shop-item-select");
+        if (shopSelect) {
+            const selectedOptionEl: HTMLInputElement | null =
+                shopSelect.querySelector(".topic-radio:checked");
+
+            const selectedOption: string | undefined = selectedOptionEl?.value;
+
+            if (selectedOption) {
+                fullContactUrl.searchParams.append(
+                    "shopOption",
+                    selectedOption,
+                );
+            }
+        }
+
+        if (quantityValue && quantityValue.textContent) {
+            fullContactUrl.searchParams.append(
+                "shopQuantity",
+                quantityValue.textContent,
+            );
+        }
+
+        window.location.href = fullContactUrl.toString();
+    };
+
+    const initOrder = () => {
+        if (!page) return;
+        orderBtn = page.querySelector("#order-btn");
+        orderBtn?.addEventListener("click", onOrderBtnClick);
+    };
+
     const init = () => {
         page = document.querySelector("#page-shop-item");
         if (!page) return;
 
         initQuantity();
         initAppear();
+        initOrder();
     };
 
     const cleanup = () => {
         tlAppear?.kill();
         increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
         decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);
+        orderBtn?.removeEventListener("click", onOrderBtnClick);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {

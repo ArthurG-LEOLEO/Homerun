@@ -14,6 +14,7 @@ interface Props {
     icon?: string;
     link?: StoryblokLink;
     onClick?: string;
+    id?: string;
     className?: string;
     color?: "orange" | "green" | "blue";
 }
@@ -23,6 +24,7 @@ const {
     icon,
     link,
     onClick,
+    id,
     className = "",
     color = "orange",
     ...attrs
@@ -46,7 +48,12 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
 
 {
     link ? (
-        <Link link={link} className={`${baseClasses} ${className}`} {...attrs}>
+        <Link
+            link={link}
+            className={`${baseClasses} ${className}`}
+            {...attrs}
+            id={id}
+        >
             <div class="cta-text flex items-center gap-10 opacity-0">
                 {label && (
                     <span class="font-space text-cta16 font-medium">
@@ -69,6 +76,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
             type="button"
             class={`${baseClasses} ${className} cursor-pointer`}
             onclick={onClick}
+            id={id}
         >
             <div class="cta-text flex items-center gap-10 opacity-0">
                 {label && (

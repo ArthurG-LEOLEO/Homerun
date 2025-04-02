@@ -45,6 +45,9 @@ const { language, blok } = Astro.props;
 
 <script>
     import { waitForFooterSplineLoad } from "../../scripts/spline";
+
+    let page: HTMLElement | null;
+
     let tlAppear: gsap.core.Timeline;
     let tlSection1: gsap.core.Timeline;
     let tlSection2: gsap.core.Timeline;
@@ -148,8 +151,30 @@ const { language, blok } = Astro.props;
         });
     };
 
+    const initUrlSetup = () => {
+        if (!page) return;
+        const form = page.querySelector("#contact-form");
+        const params = new URLSearchParams(window.location.search);
+        if (!form || params.size < 1) return;
+
+        const shopTitle = params.get("shopTitle");
+        const shopOption = params.get("shopOption");
+        const shopQuantity = params.get("shopQuantity");
+
+        const shopOrderMessageTemplate = `Bonjour,\n\nJe voudrais commander un article :\n\nNom : ${shopTitle}\nQuantity : ${shopQuantity}${shopOption ? `\nQuantity : ${shopQuantity}` : ""}\n\nMerci de prendre contact avec moi pour le paiement et l'envoi`;
+
+        const messageInput: HTMLTextAreaElement | null =
+            form.querySelector("#message");
+        const subjectInput: HTMLInputElement | null = form.querySelector(
+            ".subject-option .topic-radio#other",
+        );
+
+        if (messageInput) messageInput.value = shopOrderMessageTemplate;
+        if (subjectInput) subjectInput.checked = true;
+    };
+
     const init = async () => {
-        const page = document.querySelector("#page-contact");
+        page = document.querySelector("#page-contact");
         if (!page) return;
 
         const banner = document.querySelector("#layout-banner");
@@ -170,6 +195,8 @@ const { language, blok } = Astro.props;
         const titleWordsMobile = page.querySelectorAll(
             "#contact-title .title-wrap-mobile .word-inner",
         );
+
+        initUrlSetup();
 
         initBlockScroll();
 
