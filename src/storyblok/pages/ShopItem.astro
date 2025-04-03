@@ -180,8 +180,18 @@ const formattedPrice = formatPrice(blok.price, lang);
     {blok.other_items?.length > 0 && <OtherItems items={blok.other_items} />}
     <div
         id="order-popup"
-        class="bg-green invisible fixed top-[50%] left-[50%] z-[105] w-[calc(100%-20px)] max-w-1160 origin-center translate-x-[-50%] translate-y-[-50%] scale-[0.85] p-25 text-white opacity-0 md:p-50"
+        class="bg-green invisible fixed top-[50%] left-[50%] z-[105] w-[calc(100%-20px)] max-w-1160 origin-center translate-x-[-50%] translate-y-[-50%] scale-[0.85] px-25 py-50 text-white opacity-0 md:p-50"
     >
+        <Icon
+            name="angle-up"
+            size="12"
+            class="absolute top-10 left-10 md:top-23 md:left-23"
+        />
+        <Icon
+            name="angle-down"
+            size="12"
+            class="absolute right-10 bottom-10 md:right-23 md:bottom-23"
+        />
         <button
             id="order-popup-close"
             class="absolute top-16 right-16 cursor-pointer md:top-24 md:right-24"
