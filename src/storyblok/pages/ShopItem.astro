@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { renderRichText } from "@storyblok/astro";
 import { useTranslations } from "../../i18n/utils";
 import Tag from "../../components/atoms/Tag.astro";
 import Title from "../../components/atoms/Title.astro";
@@ -7,6 +8,7 @@ import LayeredImage from "../../components/global/LayeredImage.astro";
 import RichText from "../../components/shop/RichText.astro";
 import OtherItems from "../../components/shop/OtherItems.astro";
 import CTA from "../../components/global/CTA.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
 
 const { language, blok } = Astro.props;
 
@@ -176,6 +178,35 @@ const formattedPrice = formatPrice(blok.price, lang);
         </div>
     </div>
     {blok.other_items?.length > 0 && <OtherItems items={blok.other_items} />}
+    <div
+        id="order-popup"
+        class="bg-green invisible fixed top-[50%] left-[50%] z-[105] w-[calc(100%-20px)] max-w-1160 origin-center translate-x-[-50%] translate-y-[-50%] scale-[0.85] p-25 text-white opacity-0 md:p-50"
+    >
+        <button
+            id="order-popup-close"
+            class="absolute top-16 right-16 cursor-pointer md:top-24 md:right-24"
+        >
+            <Icon name="cross-circle" class="size-28 md:size-34" />
+        </button>
+        <div class="flex items-center gap-70">
+            <div class="hidden lg:block">
+                <LayeredImage class="w-full" image={blok.cover} />
+            </div>
+            <div class="flex w-full flex-col gap-20 md:gap-40">
+                <h3 class="text-title-3">{blok.popup_title}</h3>
+                <div
+                    class="text-p-24"
+                    set:html={renderRichText(blok.popup_text)}
+                />
+                <div>
+                    <ArrowLink
+                        id="confirm-order-btn"
+                        label={blok.popup_button_label}
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -194,6 +225,9 @@ const formattedPrice = formatPrice(blok.price, lang);
     let page: HTMLElement | null;
 
     let orderBtn: HTMLElement | null;
+    let orderPopup: HTMLElement | null;
+    let orderPopupClose: HTMLElement | null;
+    let confirmOrderBtn: HTMLElement | null;
 
     let quantityUnit: HTMLElement | null;
     let decreaseBtn: HTMLElement | null;
@@ -203,6 +237,7 @@ const formattedPrice = formatPrice(blok.price, lang);
     let unitPlural: string;
 
     let quantity: number = 1;
+    let isPopupOpen: boolean = false;
 
     const updateQuantity = (value: number) => {
         quantity = Math.max(1, value);
@@ -360,7 +395,39 @@ const formattedPrice = formatPrice(blok.price, lang);
         tlAppear.play();
     };
 
-    const onOrderBtnClick = () => {
+    const openOrderPopup = () => {
+        if (isPopupOpen || !orderPopup) return;
+
+        gsap.timeline().to(
+            orderPopup,
+            {
+                autoAlpha: 1,
+                scale: 1,
+                duration: 0.6,
+                ease: "elastic(1.2, 0.7)",
+            },
+            "<0.1",
+        );
+
+        isPopupOpen = true;
+        document.body.classList.add("overflow-hidden");
+    };
+
+    const closeOrderPopup = () => {
+        if (!isPopupOpen || !orderPopup) return;
+
+        gsap.timeline().to(orderPopup, {
+            scale: 0.85,
+            autoAlpha: 0,
+            duration: 0.2,
+            ease: "power3.in",
+        });
+
+        isPopupOpen = false;
+        document.body.classList.remove("overflow-hidden");
+    };
+
+    const processOrder = () => {
         if (!page) return;
         let contactUrl = page.getAttribute("data-contact-url");
         let itemTitle = page.getAttribute("data-item-title");
@@ -394,10 +461,22 @@ const formattedPrice = formatPrice(blok.price, lang);
         window.location.href = fullContactUrl.toString();
     };
 
+    const onOrderBtnClick = () => {
+        openOrderPopup();
+    };
+
     const initOrder = () => {
         if (!page) return;
+
         orderBtn = page.querySelector("#order-btn");
         orderBtn?.addEventListener("click", onOrderBtnClick);
+
+        orderPopup = document.querySelector("#order-popup");
+        orderPopupClose = document.querySelector("#order-popup-close");
+        confirmOrderBtn = document.querySelector("#confirm-order-btn");
+
+        orderPopupClose?.addEventListener("click", closeOrderPopup);
+        confirmOrderBtn?.addEventListener("click", processOrder);
     };
 
     const init = () => {
@@ -414,6 +493,8 @@ const formattedPrice = formatPrice(blok.price, lang);
         increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
         decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);
         orderBtn?.removeEventListener("click", onOrderBtnClick);
+        orderPopupClose?.removeEventListener("click", closeOrderPopup);
+        confirmOrderBtn?.removeEventListener("click", processOrder);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
