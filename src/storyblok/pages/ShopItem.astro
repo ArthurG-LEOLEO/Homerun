@@ -86,104 +86,115 @@ const formattedPrice = formatPrice(blok.price, lang);
                 <div class="px-gutter shop-item-desc mt-24 opacity-0">
                     <RichText content={blok.description} />
                 </div>
-                <div class="px-gutter mt-32 flex flex-col gap-32">
-                    <!-- Select -->
-                    {
-                        blok.select_label &&
-                            Array.isArray(blok.select_options) &&
-                            blok.select_options.length > 0 && (
-                                <div
-                                    id="shop-item-select"
-                                    class="flex flex-col gap-8"
-                                >
-                                    <label class="text-title-7">
-                                        {blok.select_label}
-                                    </label>
-                                    <div class="flex flex-wrap gap-4">
-                                        {(blok.select_options || []).map(
-                                            (option, index: number) => (
-                                                <div class="subject-option">
-                                                    <input
-                                                        type="radio"
-                                                        id={option.id}
-                                                        name="subject"
-                                                        value={option.label}
-                                                        class="topic-radio peer hidden"
-                                                        required={index === 0}
-                                                    />
-                                                    <label
-                                                        for={option.id}
-                                                        class="topic-label text-tag-lil peer-checked:bg-pink inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
-                                                    >
-                                                        <span class="arrow-icon relative -top-1">
-                                                            <Icon
-                                                                name="arrow-right"
-                                                                class="size-12 md:size-16"
-                                                            />
-                                                        </span>
-                                                        <span>
-                                                            {option.label}
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            ),
-                                        )}
+                <div class="shop-item-form opacity-0">
+                    <div class="px-gutter mt-32 flex flex-col gap-32">
+                        <!-- Select -->
+                        {
+                            blok.select_label &&
+                                Array.isArray(blok.select_options) &&
+                                blok.select_options.length > 0 && (
+                                    <div
+                                        id="shop-item-select"
+                                        class="flex flex-col gap-8"
+                                    >
+                                        <label class="text-title-7">
+                                            {blok.select_label}
+                                        </label>
+                                        <div class="flex flex-wrap gap-4">
+                                            {(blok.select_options || []).map(
+                                                (option, index: number) => (
+                                                    <div class="subject-option">
+                                                        <input
+                                                            type="radio"
+                                                            id={option.id}
+                                                            name="subject"
+                                                            value={option.label}
+                                                            class="topic-radio peer hidden"
+                                                            required={
+                                                                index === 0
+                                                            }
+                                                        />
+                                                        <label
+                                                            for={option.id}
+                                                            class="topic-label text-tag-lil peer-checked:bg-pink inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
+                                                        >
+                                                            <span class="arrow-icon relative -top-1">
+                                                                <Icon
+                                                                    name="arrow-right"
+                                                                    class="size-12 md:size-16"
+                                                                />
+                                                            </span>
+                                                            <span>
+                                                                {option.label}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                    }
+                                )
+                        }
 
-                    <!-- Quantity -->
-                    <div class="flex flex-col gap-8">
-                        <label class="text-title-7">{t("shop.quantity")}</label>
-                        <div>
-                            <div
-                                class="quantity-selector inline-flex min-w-10/12 items-center gap-16 border-b border-black py-13 sm:min-w-5/12 md:min-w-3/6 xl:min-w-3/4"
+                        <!-- Quantity -->
+                        <div class="flex flex-col gap-8">
+                            <label class="text-title-7"
+                                >{t("shop.quantity")}</label
                             >
+                            <div>
                                 <div
-                                    class="quantity-display flex flex-1 items-center gap-8"
+                                    class="quantity-selector inline-flex min-w-10/12 items-center gap-16 border-b border-black py-13 sm:min-w-5/12 md:min-w-3/6 xl:min-w-3/4"
                                 >
-                                    <span
-                                        class="quantity-value text-p-24 tabular-nums"
-                                        >1</span
+                                    <div
+                                        class="quantity-display flex flex-1 items-center gap-8"
                                     >
-                                    <span
-                                        class="quantity-unit text-p-24"
-                                        data-singular={blok.unit_label ||
-                                            "article"}
-                                        data-plural={blok.unit_plural_label ||
-                                            "articles"}
+                                        <span
+                                            class="quantity-value text-p-24 tabular-nums"
+                                            >1</span
+                                        >
+                                        <span
+                                            class="quantity-unit text-p-24"
+                                            data-singular={blok.unit_label ||
+                                                "article"}
+                                            data-plural={blok.unit_plural_label ||
+                                                "articles"}
+                                        >
+                                            {blok.unit_label}
+                                        </span>
+                                    </div>
+                                    <div
+                                        class="flex flex-none items-center gap-8"
                                     >
-                                        {blok.unit_label}
-                                    </span>
-                                </div>
-                                <div class="flex flex-none items-center gap-8">
-                                    <button
-                                        type="button"
-                                        class="quantity-btn decrease flex size-34 cursor-not-allowed items-center justify-center rounded-full border-2 opacity-50"
-                                        aria-label={t("shop.quantity.down")}
-                                        disabled
-                                    >
-                                        <Icon name="minus" class="size-16" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="quantity-btn increase flex size-34 cursor-pointer items-center justify-center rounded-full border-2"
-                                        aria-label={t("shop.quantity.up")}
-                                    >
-                                        <Icon name="plus" class="size-16" />
-                                    </button>
+                                        <button
+                                            type="button"
+                                            class="quantity-btn decrease flex size-34 cursor-not-allowed items-center justify-center rounded-full border-2 opacity-50"
+                                            aria-label={t("shop.quantity.down")}
+                                            disabled
+                                        >
+                                            <Icon
+                                                name="minus"
+                                                class="size-16"
+                                            />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="quantity-btn increase flex size-34 cursor-pointer items-center justify-center rounded-full border-2"
+                                            aria-label={t("shop.quantity.up")}
+                                        >
+                                            <Icon name="plus" class="size-16" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="px-gutter mt-32" id="order-btn-wrap">
-                    <CTA
-                        id="order-btn"
-                        label={blok.button_label}
-                        color={theme.buttonColor}
-                    />
+                    <div class="px-gutter mt-32" id="order-btn-wrap">
+                        <CTA
+                            id="order-btn"
+                            label={blok.button_label}
+                            color={theme.buttonColor}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -345,6 +356,7 @@ const formattedPrice = formatPrice(blok.price, lang);
         const description = page.querySelector(".shop-item-desc");
         const price = page.querySelector(".shop-item-price");
         const imgs = page.querySelector(".shop-item-imgs");
+        const formu = page.querySelector(".shop-item-form");
 
         gsap.timeline()
             .set(banner, { y: "-100%" })
@@ -356,7 +368,8 @@ const formattedPrice = formatPrice(blok.price, lang);
             })
             .set(description, { y: "20rem", opacity: 0 })
             .set(imgs, { y: "20rem", opacity: 0 })
-            .set(price, { y: "100%", opacity: 0 });
+            .set(price, { y: "100%", opacity: 0 })
+            .set(formu, { y: "20rem", opacity: 0 });
 
         tlAppear = gsap
             .timeline({
@@ -393,6 +406,11 @@ const formattedPrice = formatPrice(blok.price, lang);
                 description,
                 { duration: 0.7, opacity: 1, y: 0, ease: "power4.out" },
                 "<",
+            )
+            .to(
+                formu,
+                { duration: 0.7, opacity: 1, y: 0, ease: "power4.out" },
+                "<+=0.1",
             );
 
         if (window.innerWidth > 1024) {
