@@ -444,6 +444,20 @@ const formattedPrice = formatPrice(blok.price, lang);
 
         isPopupOpen = true;
         document.body.classList.add("overflow-hidden");
+        document.addEventListener("click", checkClickOutsidePopup);
+    };
+
+    const checkClickOutsidePopup = (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (!target || !orderPopup || !isPopupOpen) return;
+
+        const isOutsidePopup = !orderPopup.contains(target);
+
+        const isNotOnOrderBtn = orderBtn ? !orderBtn.contains(target) : true;
+
+        if (isOutsidePopup && isNotOnOrderBtn) {
+            closeOrderPopup();
+        }
     };
 
     const closeOrderPopup = () => {
@@ -458,6 +472,7 @@ const formattedPrice = formatPrice(blok.price, lang);
 
         isPopupOpen = false;
         document.body.classList.remove("overflow-hidden");
+        document.removeEventListener("click", checkClickOutsidePopup);
     };
 
     const processOrder = () => {
@@ -528,6 +543,7 @@ const formattedPrice = formatPrice(blok.price, lang);
         orderBtn?.removeEventListener("click", onOrderBtnClick);
         orderPopupClose?.removeEventListener("click", closeOrderPopup);
         confirmOrderBtn?.removeEventListener("click", processOrder);
+        document.removeEventListener("click", checkClickOutsidePopup);
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
