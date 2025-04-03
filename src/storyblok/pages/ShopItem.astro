@@ -15,6 +15,25 @@ const { language, blok } = Astro.props;
 const lang = Astro.currentLocale;
 const t = useTranslations(lang);
 
+const categoryTheme = {
+    myself: {
+        popupBg: "bg-blue",
+        popupText: "text-black",
+        buttonColor: "orange",
+    },
+    brand: {
+        popupBg: "bg-green",
+        popupText: "text-white",
+        buttonColor: "green",
+    },
+};
+
+const theme = categoryTheme[blok.category] || {
+    popupBg: "bg-green",
+    popupText: "text-white",
+    buttonColor: "green",
+};
+
 function formatPrice(price: number | string, locale: string = "fr"): string {
     if (price === null || price === undefined) return "";
 
@@ -160,7 +179,11 @@ const formattedPrice = formatPrice(blok.price, lang);
                     </div>
                 </div>
                 <div class="px-gutter mt-32" id="order-btn-wrap">
-                    <CTA id="order-btn" label={blok.button_label} />
+                    <CTA
+                        id="order-btn"
+                        label={blok.button_label}
+                        color={theme.buttonColor}
+                    />
                 </div>
             </div>
         </div>
@@ -180,7 +203,7 @@ const formattedPrice = formatPrice(blok.price, lang);
     {blok.other_items?.length > 0 && <OtherItems items={blok.other_items} />}
     <div
         id="order-popup"
-        class="bg-green invisible fixed top-[50%] left-[50%] z-[105] w-[calc(100%-20px)] max-w-1160 origin-center translate-x-[-50%] translate-y-[-50%] scale-[0.85] px-25 py-50 text-white opacity-0 md:p-50"
+        class={`${theme.popupBg} ${theme.popupText} invisible fixed top-[50%] left-[50%] z-[105] w-[calc(100%-20px)] max-w-1160 origin-center translate-x-[-50%] translate-y-[-50%] scale-[0.85] px-25 py-50 opacity-0 md:p-50`}
     >
         <Icon
             name="angle-up"
