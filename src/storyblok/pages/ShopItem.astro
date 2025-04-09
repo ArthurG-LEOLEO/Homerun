@@ -86,7 +86,7 @@ const formattedPrice = formatPrice(blok.price, lang);
                 <div class="px-gutter shop-item-desc mt-24 opacity-0">
                     <RichText content={blok.description} />
                 </div>
-                <div class="shop-item-form opacity-0">
+                <form id="shop-item-form" class="shop-item-form opacity-0">
                     <div class="px-gutter mt-32 flex flex-col gap-32">
                         <!-- Select -->
                         {
@@ -103,20 +103,20 @@ const formattedPrice = formatPrice(blok.price, lang);
                                         <div class="flex flex-wrap gap-4">
                                             {(blok.select_options || []).map(
                                                 (option, index: number) => (
-                                                    <div class="subject-option">
+                                                    <div class="subject-option relative">
                                                         <input
                                                             type="radio"
                                                             id={option.id}
                                                             name="subject"
                                                             value={option.label}
-                                                            class="topic-radio peer hidden"
+                                                            class="topic-radio peer pointer-events-none absolute top-0 left-0 size-full opacity-0"
                                                             required={
                                                                 index === 0
                                                             }
                                                         />
                                                         <label
                                                             for={option.id}
-                                                            class="topic-label text-tag-lil peer-checked:bg-pink inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
+                                                            class="topic-label text-tag-lil peer-checked:bg-pink relative inline-flex cursor-pointer items-center gap-6 rounded-[6rem] border-3 border-black px-10 py-1 transition-all md:gap-10 md:px-13 md:py-5"
                                                         >
                                                             <span class="arrow-icon relative -top-1">
                                                                 <Icon
@@ -193,9 +193,10 @@ const formattedPrice = formatPrice(blok.price, lang);
                             id="order-btn"
                             label={blok.button_label}
                             color={theme.buttonColor}
+                            type="submit"
                         />
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <div
@@ -282,6 +283,9 @@ const formattedPrice = formatPrice(blok.price, lang);
 
     let quantity: number = 1;
     let isPopupOpen: boolean = false;
+
+    let handleFormSubmit: ((e: Event) => void) | null = null;
+    let handleOrderBtnClick: ((e: Event) => void) | null = null;
 
     const updateQuantity = (value: number) => {
         quantity = Math.max(1, value);
@@ -527,15 +531,43 @@ const formattedPrice = formatPrice(blok.price, lang);
         window.location.href = fullContactUrl.toString();
     };
 
-    const onOrderBtnClick = () => {
-        openOrderPopup();
+    const onOrderBtnClick = (e) => {
+        e.preventDefault();
+
+        const form = document.getElementById(
+            "shop-item-form",
+        ) as HTMLFormElement;
+
+        if (form && form.checkValidity()) {
+            // Tous les champs requis sont remplis, ouvrir la popup
+            openOrderPopup();
+        } else if (form) {
+            // Déclencher l'UI de validation native
+            form.reportValidity();
+        }
     };
 
     const initOrder = () => {
         if (!page) return;
 
-        orderBtn = page.querySelector("#order-btn");
-        orderBtn?.addEventListener("click", onOrderBtnClick);
+        const form = document.getElementById(
+            "shop-item-form",
+        ) as HTMLFormElement;
+        const orderBtnEl = document.getElementById("order-btn");
+
+        if (form && orderBtnEl) {
+            handleFormSubmit = (e: Event) => {
+                e.preventDefault();
+
+                if (form.checkValidity()) {
+                    openOrderPopup();
+                } else {
+                    form.reportValidity();
+                }
+            };
+
+            form.addEventListener("submit", handleFormSubmit);
+        }
 
         orderPopup = document.querySelector("#order-popup");
         orderPopupClose = document.querySelector("#order-popup-close");
@@ -558,10 +590,24 @@ const formattedPrice = formatPrice(blok.price, lang);
         tlAppear?.kill();
         increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
         decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);
-        orderBtn?.removeEventListener("click", onOrderBtnClick);
+
+        const form = document.getElementById("shop-item-form");
+        const orderBtnEl = document.getElementById("order-btn");
+
+        if (form && handleFormSubmit) {
+            form.removeEventListener("submit", handleFormSubmit);
+        }
+
+        if (orderBtnEl && handleOrderBtnClick) {
+            orderBtnEl.removeEventListener("click", handleOrderBtnClick);
+        }
+
         orderPopupClose?.removeEventListener("click", closeOrderPopup);
         confirmOrderBtn?.removeEventListener("click", processOrder);
         document.removeEventListener("click", checkClickOutsidePopup);
+
+        handleFormSubmit = null;
+        handleOrderBtnClick = null;
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
