@@ -16,6 +16,7 @@ interface Props {
     onClick?: string;
     id?: string;
     className?: string;
+    type?: "button" | "submit" | "reset";
     color?: "orange" | "green" | "blue";
 }
 
@@ -25,6 +26,7 @@ const {
     link,
     onClick,
     id,
+    type = "button",
     className = "",
     color = "orange",
     ...attrs
@@ -73,8 +75,8 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
         </Link>
     ) : (
         <button
-            type="button"
             class={`${baseClasses} ${className} cursor-pointer`}
+            type={type}
             onclick={onClick}
             id={id}
         >
