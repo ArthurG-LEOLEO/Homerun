@@ -272,6 +272,7 @@ const formattedPrice = formatPrice(blok.price, lang);
     let tlAppear: gsap.core.Timeline;
     let page: HTMLElement | null;
 
+    let form: HTMLFormElement | null;
     let orderBtn: HTMLElement | null;
     let orderPopup: HTMLElement | null;
     let orderPopupClose: HTMLElement | null;
@@ -287,7 +288,6 @@ const formattedPrice = formatPrice(blok.price, lang);
     let quantity: number = 1;
     let isPopupOpen: boolean = false;
 
-    let handleFormSubmit: ((e: Event) => void) | null = null;
     let handleOrderBtnClick: ((e: Event) => void) | null = null;
 
     const updateQuantity = (value: number) => {
@@ -534,18 +534,14 @@ const formattedPrice = formatPrice(blok.price, lang);
         window.location.href = fullContactUrl.toString();
     };
 
-    const onOrderBtnClick = (e) => {
+    const handleFormSubmit = (e: Event) => {
         e.preventDefault();
 
-        const form = document.getElementById(
-            "shop-item-form",
-        ) as HTMLFormElement;
+        if (!form || !orderBtn) return;
 
-        if (form && form.checkValidity()) {
-            // Tous les champs requis sont remplis, ouvrir la popup
+        if (form.checkValidity()) {
             openOrderPopup();
-        } else if (form) {
-            // Déclencher l'UI de validation native
+        } else {
             form.reportValidity();
         }
     };
@@ -553,29 +549,14 @@ const formattedPrice = formatPrice(blok.price, lang);
     const initOrder = () => {
         if (!page) return;
 
-        const form = document.getElementById(
-            "shop-item-form",
-        ) as HTMLFormElement;
-        const orderBtnEl = document.getElementById("order-btn");
-
-        if (form && orderBtnEl) {
-            handleFormSubmit = (e: Event) => {
-                e.preventDefault();
-
-                if (form.checkValidity()) {
-                    openOrderPopup();
-                } else {
-                    form.reportValidity();
-                }
-            };
-
-            form.addEventListener("submit", handleFormSubmit);
-        }
+        form = document.getElementById("shop-item-form") as HTMLFormElement;
+        orderBtn = document.getElementById("order-btn");
 
         orderPopup = document.querySelector("#order-popup");
         orderPopupClose = document.querySelector("#order-popup-close");
         confirmOrderBtn = document.querySelector("#confirm-order-btn");
 
+        form?.addEventListener("submit", handleFormSubmit);
         orderPopupClose?.addEventListener("click", closeOrderPopup);
         confirmOrderBtn?.addEventListener("click", processOrder);
     };
@@ -591,26 +572,15 @@ const formattedPrice = formatPrice(blok.price, lang);
 
     const cleanup = () => {
         tlAppear?.kill();
+
         increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
         decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);
 
-        const form = document.getElementById("shop-item-form");
-        const orderBtnEl = document.getElementById("order-btn");
-
-        if (form && handleFormSubmit) {
-            form.removeEventListener("submit", handleFormSubmit);
-        }
-
-        if (orderBtnEl && handleOrderBtnClick) {
-            orderBtnEl.removeEventListener("click", handleOrderBtnClick);
-        }
+        form?.removeEventListener("submit", handleFormSubmit);
 
         orderPopupClose?.removeEventListener("click", closeOrderPopup);
         confirmOrderBtn?.removeEventListener("click", processOrder);
         document.removeEventListener("click", checkClickOutsidePopup);
-
-        handleFormSubmit = null;
-        handleOrderBtnClick = null;
     };
 
     document.addEventListener("storyblok-live-preview-updated", () => {
