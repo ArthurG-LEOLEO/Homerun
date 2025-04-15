@@ -269,7 +269,7 @@ const formattedPrice = formatPrice(blok.price, lang);
 <script>
     import { waitForFooterSplineLoad } from "../../scripts/spline";
 
-    let tlAppear: gsap.core.Timeline;
+    let tlAppear: gsap.core.Timeline | null;
     let page: HTMLElement | null;
 
     let form: HTMLFormElement | null;
@@ -287,8 +287,6 @@ const formattedPrice = formatPrice(blok.price, lang);
 
     let quantity: number = 1;
     let isPopupOpen: boolean = false;
-
-    let handleOrderBtnClick: ((e: Event) => void) | null = null;
 
     const updateQuantity = (value: number) => {
         quantity = Math.max(1, value);
@@ -572,6 +570,7 @@ const formattedPrice = formatPrice(blok.price, lang);
 
     const cleanup = () => {
         tlAppear?.kill();
+        tlAppear = null;
 
         increaseBtn?.removeEventListener("click", onIncreaseQuantityClick);
         decreaseBtn?.removeEventListener("click", onDecreaseQuantityClick);

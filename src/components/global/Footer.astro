@@ -263,6 +263,11 @@ const { footerData } = Astro.props;
 
     const cleanup = () => {};
 
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
     document.addEventListener("astro:before-swap", () => {
         cleanup();
     });
