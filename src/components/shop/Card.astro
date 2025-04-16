@@ -29,10 +29,14 @@ function formatPrice(price: number | string, locale: string = "fr"): string {
 }
 
 const formattedPrice = formatPrice(shopItem.content.price, lang);
+
+const hasExternalLink = shopItem.content.external_link?.cached_url;
 ---
 
 <Link
-    link={{ url: shopItem.full_slug, linktype: "story" }}
+    link={hasExternalLink
+        ? shopItem.content.external_link
+        : { url: shopItem.full_slug, linktype: "story" }}
     className={`shop-card ${className}`}
 >
     <div class="flex flex-col gap-16 md:gap-24">

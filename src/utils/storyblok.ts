@@ -34,6 +34,12 @@ export async function generateStaticPaths() {
         version: !isProd() ? "draft" : "published",
     });
 
+    const shopItems = await storyblokApi.get("cdn/stories", {
+        by_slugs: "en/shop/*,fr/shop/*",
+        per_page: 100,
+        version: !isProd() ? "draft" : "published",
+    });
+
     const links = await storyblokApi.getAll("cdn/links", {
         version: !isProd() ? "draft" : "published",
     });
@@ -42,10 +48,18 @@ export async function generateStaticPaths() {
         .filter((link) => !link.is_folder)
         .filter((link) => !link.slug.includes("_global"))
         .filter((link) => {
+            // Remove case study without dedicated page
             const isCase = cases.data.stories.find(
                 (c) => c.full_slug === link.slug,
             );
             return !isCase || isCase.content.has_case_study;
+        })
+        .filter((link) => {
+            // Remove shop item without dedicated page
+            const isShopItem = shopItems.data.stories.find(
+                (si) => si.full_slug === link.slug,
+            );
+            return !isShopItem || !isShopItem.content.external_link?.cached_url;
         })
         .map((link: { slug: string }) => {
             const fullSlug = link.slug;
