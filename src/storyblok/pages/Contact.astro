@@ -171,6 +171,13 @@ const { language, blok } = Astro.props;
 
         if (messageInput) messageInput.value = shopOrderMessageTemplate;
         if (subjectInput) subjectInput.checked = true;
+
+        if (shopTitle) {
+            // Wait for animations to complete before scrolling
+            setTimeout(() => {
+                form.scrollIntoView({ behavior: "smooth" });
+            }, 1000);
+        }
     };
 
     const init = async () => {
