@@ -57,19 +57,7 @@ const layerColor2 =
               ? t("socialfeed.linkedin")
               : t("socialfeed.instagram")}
     >
-        <div
-            class="relative z-[1] flex size-48 items-center justify-center rounded-full bg-black p-17 text-white"
-        >
-            {
-                post.type === "linkedin" ? (
-                    <Icon name="linkedin" size="16" />
-                ) : (
-                    <Icon name="instagram" size="16" />
-                )
-            }
-        </div>
-
-        {post.text && <p class="mt-46 md:mt-88">{post.text}</p>}
+        {post.text && <p>{post.text}</p>}
 
         {
             hasImage && (
