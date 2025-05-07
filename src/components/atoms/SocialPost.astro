@@ -46,35 +46,29 @@ const layerColor2 =
         href={post.link.url}
         target="_blank"
         draggable="false"
-        class="feed-link relative w-full overflow-hidden p-16 text-black [-webkit-touch-callout:none] select-none md:p-32"
-        style={{
-            backgroundColor: hasImage ? "#181817" : post.color,
-            aspectRatio,
-        }}
-        aria-label={post.text
-            ? post.text
-            : post.type === "linkedin"
-              ? t("socialfeed.linkedin")
-              : t("socialfeed.instagram")}
+        class="feed-link relative w-full overflow-hidden [-webkit-touch-callout:none] select-none"
+        style={{backgroundColor: post.color}}
     >
-        {post.text && <p>{post.text}</p>}
-
         {
             hasImage && (
-                <div class="absolute inset-0">
-                    <SBImage
-                        class="size-full object-cover"
-                        image={post.image}
-                    />
+                <div class="relative" style={{aspectRatio}}>
+                    <div class="absolute inset-0">
+                        <SBImage
+                            class="size-full object-cover"
+                            image={post.image}
+                        />
+                    </div>
                 </div>
             )
         }
-
         {
             post.text && (
-                <span class="relative mt-24 inline-flex flex-col gap-4 font-medium after:h-1 after:w-full after:bg-current">
-                    {t("post.more")}
-                </span>
+                <div class="p-16 text-black md:p-32">
+                    <p>{post.text}</p>
+                    <span class="relative mt-24 inline-flex flex-col gap-4 font-medium after:h-1 after:w-full after:bg-current">
+                        {t("post.more")}
+                    </span>
+                </div>
             )
         }
     </a>
