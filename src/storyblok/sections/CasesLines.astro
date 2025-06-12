@@ -1,0 +1,102 @@
+---
+import Line from "../../components/case/Line.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
+
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.currentLocale;
+const t = useTranslations(lang);
+
+const { blok } = Astro.props;
+const archivedCases = blok.cases.filter((c) => c.content);
+
+const NB_INITIAL_CASES = 5;
+---
+
+<div
+    id="archived-cases"
+    class="container-main pt-110 pb-100 md:pt-175 md:pb-130"
+>
+    <h3 class="text-title-2 px-gutter mb-24 md:mb-48">
+        {t("work.archived.title")}
+    </h3>
+    <div class="flex flex-col">
+        {
+            archivedCases.map(
+                (item: { content: { category: string } }, index: number) => (
+                    <div
+                        class={`work-archived-case w-full ${index >= NB_INITIAL_CASES && "hidden"}`}
+                        data-category={item.content?.category}
+                    >
+                        <Line caseItem={item} />
+                    </div>
+                ),
+            )
+        }
+    </div>
+    <div>
+        <ArrowLink
+            id="load-archived-button"
+            plus
+            label={t("work.archived.load")}
+            className={`px-gutter mt-40 flex cursor-pointer items-end gap-6 md:mt-48 md:gap-12 ${archivedCases.length <= NB_INITIAL_CASES && "hidden"}`}
+        />
+    </div>
+</div>
+
+<script>
+    const NB_INITIAL_CASES = 5;
+    const NB_LOAD_MORE_CASES = 5;
+    let shownCases = NB_INITIAL_CASES;
+    let container: HTMLElement | null;
+    let loadMoreButton: HTMLElement | null;
+    let archivedCases: NodeListOf<HTMLElement> | null;
+
+    const loadMoreCases = () => {
+        if (!container || !archivedCases?.length) return;
+
+        shownCases = shownCases + NB_LOAD_MORE_CASES;
+        archivedCases.forEach((c, index) => {
+            if (index < shownCases) {
+                c.classList.remove("hidden");
+            }
+        });
+
+        if (shownCases >= archivedCases.length) {
+            const btnWrapper = loadMoreButton?.parentNode as HTMLElement;
+            btnWrapper.classList.add("hidden");
+        }
+    };
+
+    const init = () => {
+        container = document.querySelector("#archived-cases");
+        if (!container) return;
+
+        archivedCases = container.querySelectorAll(".work-archived-case");
+        loadMoreButton = container.querySelector("#load-archived-button");
+
+        if (archivedCases.length <= NB_INITIAL_CASES && loadMoreButton) {
+            const btnWrapper = loadMoreButton.parentNode as HTMLElement;
+            btnWrapper.classList.add("hidden");
+        }
+
+        loadMoreButton?.addEventListener("click", loadMoreCases);
+    };
+
+    const cleanup = () => {
+        loadMoreButton?.removeEventListener("click", loadMoreCases);
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

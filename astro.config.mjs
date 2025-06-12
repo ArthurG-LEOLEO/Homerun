@@ -47,6 +47,8 @@ export default defineConfig({
                           "united.archived_cases",
                           "shop.shop_items",
                           "shop_item.other_items",
+                          "cases_grid.cases",
+                          "cases_lines.cases",
                       ],
                   }
                 : false,
@@ -65,6 +67,8 @@ export default defineConfig({
                 social_feed: "storyblok/sections/SocialFeed",
                 cards: "storyblok/sections/Cards",
                 logos_grid: "storyblok/sections/LogosGrid",
+                cases_grid: "storyblok/sections/CasesGrid",
+                cases_lines: "storyblok/sections/CasesLines",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",
