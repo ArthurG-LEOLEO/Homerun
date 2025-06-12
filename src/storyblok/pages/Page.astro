@@ -1,75 +1,164 @@
 ---
-import { splitText } from "../../utils/splitString";
-import SectionText from "../../components/SectionText.astro";
+import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+import Title from "../../components/atoms/Title.astro";
+
 const { language, blok } = Astro.props;
 ---
 
-<div class="page">
-    <div class="bg-blue flex flex-col items-center justify-center py-300">
-        <h1
-            class="text-title-1 hero-title block"
-            set:html={splitText("Page: " + blok.title)}
-        />
-        <div class="mt-50 flex gap-10">
-            <div class="bg-green hero-block size-50"></div>
-            <div class="bg-green hero-block size-50"></div>
-            <div class="bg-green hero-block size-50"></div>
-            <div class="bg-green hero-block size-50"></div>
-            <div class="bg-green hero-block size-50"></div>
+<div id="page-modular" class="page" {...storyblokEditable(blok)}>
+    <div
+        class="container-main overflow-hidden pt-150 pb-70 lg:pt-135 lg:pb-125"
+    >
+        <div class="flex flex-col items-center">
+            <span
+                class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
+            >
+                {blok.subtitle}
+            </span>
+            <h1
+                id="page-title"
+                class="text-title-1 px-gutter w-10/12 text-center"
+            >
+                <Title reveal="manual" title={blok.title[0]} />
+            </h1>
         </div>
     </div>
-    <SectionText />
+    <div>
+        {
+            blok.sections?.map((blok: SbBlokData) => {
+                return <StoryblokComponent blok={blok} language={language} />;
+            })
+        }
+    </div>
 </div>
 
 <script>
-    let title: NodeListOf<Element> | null;
-    let blocks: NodeListOf<Element> | null;
-    let tl: gsap.core.Timeline | null;
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
 
-    const setVariables = () => {
-        blocks = document.querySelectorAll(".page .hero-block");
-        title = document.querySelectorAll(".page .hero-title .word-inner");
-    };
-    const init = () => {
-        setVariables();
+    let page: HTMLElement | null;
 
-        tl = gsap
-            .timeline({
-                defaults: {
-                    ease: "power4",
-                },
+    let tlAppear: gsap.core.Timeline;
+
+    const init = async () => {
+        page = document.querySelector("#page-modular");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
+        const subtitle = page.querySelectorAll(".page-subtitle");
+
+        const titleWordsDesktop = page.querySelectorAll(
+            "#page-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#page-title .title-wrap-mobile .word-inner",
+        );
+
+        await waitForFooterSplineLoad();
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
             })
-            .from(title, {
-                duration: 1,
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            })
+            .set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            })
+            .set([titleWordsDesktop, titleWordsMobile], {
                 y: "100%",
-                stagger: 0.2,
+                opacity: 1,
+            });
+
+        tlAppear = gsap
+            .timeline({
+                paused: true,
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
             })
-            .from(
-                blocks,
+            .to(
+                banner,
                 {
-                    duration: 1.2,
-                    y: 50,
-                    opacity: 0,
-                    stagger: 0.05,
-                    ease: "elastic.out(1,0.3)",
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
                 },
-                "<+0.2",
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
             );
+        
+            if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+
+        tlAppear.play();
     };
 
     const cleanup = () => {
-        if (tl) {
-            tl.kill();
-            tl = null;
-        }
-        title = null;
-        blocks = null;
+        tlAppear?.kill();
     };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
 
     document.addEventListener("astro:page-load", () => {
         init();
     });
-
     document.addEventListener("astro:before-swap", () => {
         cleanup();
     });

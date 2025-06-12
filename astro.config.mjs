@@ -63,6 +63,8 @@ export default defineConfig({
                 shop_item: "storyblok/pages/ShopItem",
                 error: "storyblok/pages/Error",
                 social_feed: "storyblok/sections/SocialFeed",
+                cards: "storyblok/sections/Cards",
+                logos_grid: "storyblok/sections/LogosGrid",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",

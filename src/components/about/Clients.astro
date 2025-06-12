@@ -12,7 +12,7 @@ const { blok } = Astro.props;
         <p class="text-p-24 px-gutter mx-auto mt-25 w-10/12 whitespace-pre-wrap md:mt-55 lg:w-8/12 xl:w-6/12">{blok.clients_intro}</p>
     )
 }
-<LogosGrid logos={blok.clients_logos[0]} className="mt-55 md:mt-80" />
+<LogosGrid blok={blok.clients_logos[0]} className="mt-55 md:mt-80" />
 {
     // prettier-ignore
     blok.clients_text && (

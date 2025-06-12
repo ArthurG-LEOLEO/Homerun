@@ -8,16 +8,16 @@ interface Logo {
 }
 
 interface Props {
-    logos: {
+    blok: {
         animation_interval: number;
         logos: Logo[];
     };
     className?: string;
 }
 
-const { logos, className = "" } = Astro.props;
-const logosArray = logos.logos || [];
-const animationInterval = logos.animation_interval || 3000;
+const { blok, className = "" } = Astro.props;
+const logosArray = blok.logos || [];
+const animationInterval = blok.animation_interval || 3000;
 
 const MAX_LOGOS_MOBILE = 9;
 const MAX_LOGOS_TABLET = 12;
