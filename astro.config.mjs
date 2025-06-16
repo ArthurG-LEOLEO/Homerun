@@ -69,6 +69,7 @@ export default defineConfig({
                 logos_grid: "storyblok/sections/LogosGrid",
                 cases_grid: "storyblok/sections/CasesGrid",
                 cases_lines: "storyblok/sections/CasesLines",
+                headline: "storyblok/sections/Headline",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",
