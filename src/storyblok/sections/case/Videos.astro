@@ -1,7 +1,7 @@
 ---
 import { storyblokEditable } from "@storyblok/astro";
-import AssetsInline from "./AssetsInline.astro";
-import AssetsSlider from "./AssetsSlider.astro";
+import AssetsInline from "../AssetsInline.astro";
+import AssetsSlider from "../AssetsSlider.astro";
 
 const { language, blok } = Astro.props;
 const hasLessThanFourVideos = blok.videos && blok.videos.length <= 4;
