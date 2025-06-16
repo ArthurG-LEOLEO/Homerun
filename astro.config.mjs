@@ -73,6 +73,7 @@ export default defineConfig({
                 text_content: "storyblok/sections/TextContent",
                 images_content: "storyblok/sections/ImagesContent",
                 videos_content: "storyblok/sections/VideosContent",
+                wysiwyg: "storyblok/sections/Wysiwyg",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",
