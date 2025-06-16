@@ -70,6 +70,7 @@ export default defineConfig({
                 cases_grid: "storyblok/sections/CasesGrid",
                 cases_lines: "storyblok/sections/CasesLines",
                 headline: "storyblok/sections/Headline",
+                text_content: "storyblok/sections/TextContent",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",
