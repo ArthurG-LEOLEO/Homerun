@@ -2,9 +2,12 @@
 import SBRichText from "../../components/global/SBRichText.astro";
 
 const { language, blok } = Astro.props;
+
+const backgroundColor = blok.bg_color || 'var(--color-white)';
+const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--color-black)';
 ---
 
-<div class="container-main">
+<div class="container-main py-50 md:py-100" style={`background-color: ${backgroundColor}; color: ${textColor};`}>
     <div class="px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
         {
             blok.content && (
