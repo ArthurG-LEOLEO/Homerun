@@ -5,9 +5,11 @@ import AssetsSlider from "./AssetsSlider.astro";
 
 const { language, blok } = Astro.props;
 const hasLessThanFourImages = blok.images && blok.images.length <= 4;
+const backgroundColor = blok.bg_color || 'var(--color-white)';
+const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--color-black)';
 ---
 
-<div {...storyblokEditable(blok)}>
+<div class="py-50 md:py-100" style={`background-color: ${backgroundColor}; color: ${textColor};`} {...storyblokEditable(blok)}>
     {
         blok.intro && (
             <div class="container-main">
