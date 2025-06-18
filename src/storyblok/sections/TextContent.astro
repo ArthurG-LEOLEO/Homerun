@@ -2,9 +2,12 @@
 import { renderRichText, storyblokEditable } from "@storyblok/astro";
 
 const { language, blok } = Astro.props;
+const backgroundColor = blok.bg_color || 'var(--color-white)';
+const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--color-black)';
+const paragraphColor = blok.text_color === 'white' ? 'text-white/70' : 'text-black/70';
 ---
 
-<div class="container-main" {...storyblokEditable(blok)}>
+<div class="container-main py-50 md:py-100" style={`background-color: ${backgroundColor}; color: ${textColor};`} {...storyblokEditable(blok)}>
     <div
         class=`flex flex-col gap-16 w-10/12 mx-auto lg:w-8/12 lg:gap-32 ${blok.two_cols ? 'xl:w-10/12 xl:flex-row xl:gap-0 xl:justify-between' : 'xl:w-6/12'}`
     >
@@ -18,7 +21,7 @@ const { language, blok } = Astro.props;
             )
         }
         <div
-            class={`px-gutter text-p-20 text-black/70 ${blok.two_cols ? "xl:w-6/10 xl:ml-auto" : ""}`}
+            class={`px-gutter text-p-20 ${paragraphColor} ${blok.two_cols ? "xl:w-6/10 xl:ml-auto" : ""}`}
             set:html={renderRichText(blok.text)}
         />
     </div>
