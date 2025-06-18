@@ -2,11 +2,12 @@
 import { storyblokEditable } from "@storyblok/astro";
 
 const { language, blok } = Astro.props;
+const backgroundColor = blok.bg_color || 'var(--color-white)';
+const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--color-black)';
 ---
-
-<div class="container-main" {...storyblokEditable(blok)}>
+<div class="container-main py-50 md:py-100" style={`background-color: ${backgroundColor}; color: ${textColor};`} {...storyblokEditable(blok)}>
     <h4
-        class="px-gutter text-title-2 mx-auto w-10/12 text-center whitespace-pre-wrap text-black lg:w-8/12"
+        class="px-gutter text-title-2 mx-auto w-10/12 text-center whitespace-pre-wrap lg:w-8/12"
         >{blok.text}</h4
     >
 </div>
