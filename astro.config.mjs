@@ -67,6 +67,7 @@ export default defineConfig({
                 social_feed: "storyblok/sections/SocialFeed",
                 cards: "storyblok/sections/Cards",
                 logos_grid: "storyblok/sections/LogosGrid",
+                logos: "storyblok/sections/Logos",
                 cases_grid: "storyblok/sections/CasesGrid",
                 cases_lines: "storyblok/sections/CasesLines",
                 headline: "storyblok/sections/Headline",
