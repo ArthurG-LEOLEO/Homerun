@@ -22,10 +22,13 @@ const cardStyles = [
         back: "bg-blue text-black",
     },
 ];
+
+const backgroundColor = blok.bg_color || 'var(--color-white)';
+const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--color-black)';
 ---
 
 <div
-    class="container-main flex flex-col items-center gap-75 pt-40 pb-70 md:pt-130 md:pb-140 xl:flex-row xl:justify-start xl:gap-0"
+    class="container-main flex flex-col items-center gap-75 pt-40 pb-70 md:pt-130 md:pb-140 xl:flex-row xl:justify-start xl:gap-0"  style={`background-color: ${backgroundColor}; color: ${textColor};`}
 >
     <div class="px-gutter w-full xl:w-7/12">
         {
