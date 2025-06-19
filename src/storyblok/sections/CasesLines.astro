@@ -11,13 +11,15 @@ const { blok } = Astro.props;
 const archivedCases = blok.cases.filter((c) => c.content);
 
 const NB_INITIAL_CASES = 5;
+const backgroundColor = blok.bg_color || 'var(--color-white)';
 ---
 
 <div
     id="archived-cases"
     class="container-main pt-110 pb-100 md:pt-175 md:pb-130"
+    style={`background-color: ${backgroundColor};`}
 >
-    <h3 class="text-title-2 px-gutter mb-24 md:mb-48">
+    <h3 class="text-title-2 text-white px-gutter mb-24 md:mb-48">
         {t("work.archived.title")}
     </h3>
     <div class="flex flex-col">

@@ -9,11 +9,12 @@ const t = useTranslations(lang);
 const { blok } = Astro.props;
 
 const cases = blok.cases.filter((c) => c.content);
+const backgroundColor = blok.bg_color || 'var(--color-white)';
 ---
 
 {
     cases.length && (
-        <div id="united-cases" class="container-main">
+        <div id="united-cases" class="container-main" style={`background-color: ${backgroundColor};`}>
             <div class="flex flex-col gap-40 pt-70 pb-90 md:gap-70 md:pt-130 md:pb-100">
                 <h3 class="px-gutter text-title-2">{blok.cases_title}</h3>
                 <div class="flex flex-col gap-48 md:grid md:grid-cols-2 md:gap-x-0 md:gap-y-120">
