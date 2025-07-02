@@ -258,4 +258,20 @@
     .text-enormous {
         @apply text-h1 md:text-p86 lg:text-p216;
     }
+
+    .sb-table {
+        @apply my-10;
+        @apply border-collapse border border-current
+    }
+    .sb-table td, .sb-table th {
+        @apply border border-current;
+        @apply p-4;
+    }
+    .sb-table th {
+        @apply font-medium;
+    }
+    .sb-table p {
+        @apply m-0!;
+        @apply text-p18!;
+    }
 }

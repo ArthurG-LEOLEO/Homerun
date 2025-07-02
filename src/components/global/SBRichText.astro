@@ -3,6 +3,7 @@ import RichTextRenderer from "storyblok-rich-text-astro-renderer/RichTextRendere
 import { storyblokEditable } from "@storyblok/astro";
 import LayeredImage from "./LayeredImage.astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+import Table from "../wysiwyg/Table.astro";
 
 interface Props {
     content: any;
@@ -33,10 +34,56 @@ const { content, blok } = Astro.props;
                     class: "text-p-24 my-[1em] last:mb-0",
                 },
             }),
-            heading: ({ attrs }) => ({
-                component: "h3",
+            heading: ({ attrs }) => {
+                const level = attrs.level;
+                switch(level) {
+                    case 2:
+                        return {
+                            component: "h2",
+                            props: {
+                                class: "text-title-2 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                            },
+                        };
+                    case 3:
+                        return {
+                            component: "h3",
+                            props: {
+                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                            },
+                        };
+                    case 4:
+                        return {
+                            component: "h4",
+                            props: {
+                                class: "text-title-4 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                            },
+                        };
+                    default:
+                        return {
+                            component: "h3",
+                            props: {
+                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                            },
+                        };
+                }
+            },
+            table: () => ({
+                component: Table,
+            }),
+            bullet_list: () => ({
+                component: "ul",
                 props: {
-                    class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                    class: "list-disc text-p-24 my-[1em] last:mb-0",
+                },
+            }),
+        },
+        marks: {
+            link: ({ attrs }) => ({
+                component: "a",
+                props: {
+                    href: attrs.href,
+                    target: attrs.target,
+                    class: "underline",
                 },
             }),
         },

@@ -12,11 +12,15 @@ const { language, blok } = Astro.props;
         class="container-main overflow-hidden pt-150 pb-70 lg:pt-135 lg:pb-125"
     >
         <div class="flex flex-col items-center">
-            <span
-                class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
-            >
-                {blok.subtitle}
-            </span>
+            {
+                blok.subtitle && (
+                    <span
+                        class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-65 lg:px-24 lg:py-13"
+                    >
+                        {blok.subtitle}
+                    </span>
+                )
+            }
             <h1
                 id="page-title"
                 class="text-title-1 px-gutter w-10/12 text-center"
