@@ -9,7 +9,7 @@ const { language, blok } = Astro.props;
 
 <div id="page-modular" class="page" {...storyblokEditable(blok)}>
     <div
-        class="container-main overflow-hidden pt-150 pb-70 lg:pt-135 lg:pb-125"
+        class="container-main overflow-hidden pt-150 pb-70 lg:pt-135"
     >
         <div class="flex flex-col items-center">
             {
@@ -23,7 +23,7 @@ const { language, blok } = Astro.props;
             }
             <h1
                 id="page-title"
-                class="text-title-1 px-gutter w-10/12 text-center"
+                class={`text-title-1 px-gutter w-10/12 text-center ${!blok.subtitle ? 'pt-40 lg:pt-80' : ''}`}
             >
                 <Title reveal="manual" title={blok.title[0]} />
             </h1>
@@ -72,14 +72,17 @@ const { language, blok } = Astro.props;
                 y: -50,
                 opacity: 0,
             })
-            .set(subtitle, {
-                scale: 0.7,
-                opacity: 0,
-            })
             .set([titleWordsDesktop, titleWordsMobile], {
                 y: "100%",
                 opacity: 1,
             });
+
+        if (subtitle.length > 0) {
+            gsap.set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            });
+        }
 
         tlAppear = gsap
             .timeline({
@@ -104,8 +107,10 @@ const { language, blok } = Astro.props;
                     ease: "expo.out",
                 },
                 "start",
-            )
-            .to(
+            );
+
+        if (subtitle.length > 0) {
+            tlAppear.to(
                 subtitle,
                 {
                     opacity: 1,
@@ -115,6 +120,7 @@ const { language, blok } = Astro.props;
                 },
                 "start+=0.1",
             );
+        }
         
             if (window.innerWidth > 1024) {
             tlAppear
