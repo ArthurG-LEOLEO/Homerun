@@ -1,5 +1,5 @@
 ---
-import SBRichTextSmall from "../../components/global/SBRichTextSmall.astro";
+import SBRichText from "../../components/global/SBRichText.astro";
 import { Icon } from "astro-icon/components";
 import SBImage from "../../components/global/SBImage.astro";
 
@@ -85,7 +85,7 @@ const textColor = blok.text_color === 'white' ? 'var(--color-white)' : 'var(--co
         }
     </div>
     <div class="px-gutter w-10/12 xl:w-4/12">
-        <SBRichTextSmall content={blok.text} />
+        <SBRichText content={blok.text} textSize="medium" />
     </div>
 </div>
 

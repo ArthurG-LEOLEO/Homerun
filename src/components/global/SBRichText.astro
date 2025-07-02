@@ -4,13 +4,30 @@ import { storyblokEditable } from "@storyblok/astro";
 import LayeredImage from "./LayeredImage.astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 import Table from "../wysiwyg/Table.astro";
+import Link from "../wysiwyg/Link.astro";
 
 interface Props {
     content: any;
     blok?: any;
+    textSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }
 
-const { content, blok } = Astro.props;
+const { content, blok, textSize = 'large' } = Astro.props;
+
+const getTextClass = (size: string) => {
+    switch (size) {
+        case 'xsmall':
+            return 'text-p-14';
+        case 'small':
+            return 'text-p-18';
+        case 'medium':
+            return 'text-p-20';
+        case 'large':
+            return 'text-p-24';
+        default:
+            return 'text-p-24';
+    }
+};
 ---
 
 <RichTextRenderer
@@ -31,7 +48,7 @@ const { content, blok } = Astro.props;
             paragraph: () => ({
                 component: "p",
                 props: {
-                    class: "text-p-24 my-[1em] last:mb-0",
+                    class: `${getTextClass(textSize)} my-[1em] last:mb-0`,
                 },
             }),
             heading: ({ attrs }) => {
@@ -58,6 +75,13 @@ const { content, blok } = Astro.props;
                                 class: "text-title-4 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
                             },
                         };
+                    case 6:
+                        return {
+                            component: "h6",
+                            props: {
+                                class: "text-title-6 my-[4rem] first:mt-0 last:mb-0",
+                            },
+                        };
                     default:
                         return {
                             component: "h3",
@@ -73,19 +97,22 @@ const { content, blok } = Astro.props;
             bullet_list: () => ({
                 component: "ul",
                 props: {
-                    class: "list-disc text-p-24 my-[1em] last:mb-0",
+                    class: `list-disc ${getTextClass(textSize)} my-[1em] last:mb-0`,
                 },
             }),
         },
         marks: {
-            link: ({ attrs }) => ({
-                component: "a",
-                props: {
-                    href: attrs.href,
-                    target: attrs.target,
-                    class: "underline",
-                },
-            }),
+            link: ({ attrs }) => {
+                const { custom, ...restAttrs } = attrs;
+
+                return {
+                    component: Link,
+                    props: {
+                        link: { ...custom, ...restAttrs },
+                        class: "underline",
+                    },
+                };
+            },
         },
     }}
     resolver={(blok) => {

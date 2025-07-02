@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import SBRichText from "../global/SBRichText.astro";
 
 interface SubjectOption {
     id: string;
@@ -18,6 +19,7 @@ interface FormBlok {
     success_message: string;
     new_message_label: string;
     error_message: string;
+    gdpr?: any; // Storyblok richtext field
 }
 
 const { blok } = Astro.props as { blok: FormBlok };
@@ -200,6 +202,13 @@ const { blok } = Astro.props as { blok: FormBlok };
                     <span>{blok.required_fields_label}</span>
                 </div>
             </form>
+            {
+                blok.gdpr && (
+                    <div class="px-gutter mt-20">
+                        <SBRichText content={blok.gdpr} textSize="xsmall" />
+                    </div>
+                )
+            }
         </div>
     </div>
 </div>

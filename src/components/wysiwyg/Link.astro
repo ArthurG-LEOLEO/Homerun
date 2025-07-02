@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { Link } from "storyblok-rich-text-astro-renderer";
+
+export interface Props extends HTMLAttributes<"a"> {
+  link: Link["attrs"];
+}
+
+const {
+  link: { href, target },
+  ...props
+} = Astro.props;
+---
+
+<a {href} {target} {...props}><slot /></a>
