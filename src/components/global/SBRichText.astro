@@ -9,13 +9,15 @@ import Link from "../wysiwyg/Link.astro";
 interface Props {
     content: any;
     blok?: any;
-    textSize?: 'xsmall' | 'small' | 'medium' | 'large';
+    textSize?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
 }
 
 const { content, blok, textSize = 'large' } = Astro.props;
 
 const getTextClass = (size: string) => {
     switch (size) {
+        case 'xxsmall':
+            return 'text-p-10';
         case 'xsmall':
             return 'text-p-14';
         case 'small':
