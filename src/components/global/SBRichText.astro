@@ -9,25 +9,25 @@ import Link from "../wysiwyg/Link.astro";
 interface Props {
     content: any;
     blok?: any;
-    textSize?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
+    textSize?: "xxsmall" | "xsmall" | "small" | "medium" | "large";
 }
 
-const { content, blok, textSize = 'large' } = Astro.props;
+const { content, blok, textSize = "large" } = Astro.props;
 
 const getTextClass = (size: string) => {
     switch (size) {
-        case 'xxsmall':
-            return 'text-p-10';
-        case 'xsmall':
-            return 'text-p-14';
-        case 'small':
-            return 'text-p-18';
-        case 'medium':
-            return 'text-p-20';
-        case 'large':
-            return 'text-p-24';
+        case "xxsmall":
+            return "text-p-10";
+        case "xsmall":
+            return "text-p-16";
+        case "small":
+            return "text-p-18";
+        case "medium":
+            return "text-p-20";
+        case "large":
+            return "text-p-24";
         default:
-            return 'text-p-24';
+            return "text-p-24";
     }
 };
 ---
@@ -50,31 +50,31 @@ const getTextClass = (size: string) => {
             paragraph: () => ({
                 component: "p",
                 props: {
-                    class: `${getTextClass(textSize)} my-[1em] last:mb-0`,
+                    class: `${getTextClass(textSize)} my-[1em] first:mt-0 last:mb-0`,
                 },
             }),
             heading: ({ attrs }) => {
                 const level = attrs.level;
-                switch(level) {
+                switch (level) {
                     case 2:
                         return {
                             component: "h2",
                             props: {
-                                class: "text-title-2 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                                class: "text-title-2 my-[4.8rem] lg:my-[5.6rem] first:mt-0 last:mb-0",
                             },
                         };
                     case 3:
                         return {
                             component: "h3",
                             props: {
-                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] first:mt-0 last:mb-0",
                             },
                         };
                     case 4:
                         return {
                             component: "h4",
                             props: {
-                                class: "text-title-4 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                                class: "text-title-4 my-[4.8rem] lg:my-[5.6rem] first:mt-0 last:mb-0",
                             },
                         };
                     case 6:
@@ -88,7 +88,7 @@ const getTextClass = (size: string) => {
                         return {
                             component: "h3",
                             props: {
-                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] last:mb-0",
+                                class: "text-title-3 my-[4.8rem] lg:my-[5.6rem] first:mt-0 last:mb-0",
                             },
                         };
                 }
@@ -99,7 +99,7 @@ const getTextClass = (size: string) => {
             bullet_list: () => ({
                 component: "ul",
                 props: {
-                    class: `list-disc ${getTextClass(textSize)} my-[1em] last:mb-0`,
+                    class: `list-disc ${getTextClass(textSize)} my-[1em] first:mt-0 last:mb-0`,
                 },
             }),
         },

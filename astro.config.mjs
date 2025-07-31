@@ -76,6 +76,7 @@ export default defineConfig({
                 videos_content: "storyblok/sections/VideosContent",
                 wysiwyg: "storyblok/sections/Wysiwyg",
                 accordions: "storyblok/sections/Accordions",
+                plans: "storyblok/sections/Plans",
                 case_headline: "storyblok/sections/case/Headline",
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",

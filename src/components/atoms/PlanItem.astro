@@ -1,0 +1,72 @@
+---
+import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
+import SBImage from "../global/SBImage.astro";
+import PlanAccordionsItem from "./PlanAccordionsItem.astro";
+
+const {
+    blok,
+    from_label,
+    per_period_label,
+    included_label,
+    choose_label,
+    class: className,
+} = Astro.props;
+
+const borderColorMap = {
+    green: "border-green",
+    orange: "border-orange",
+    blue: "border-blue",
+    pink: "border-pink",
+};
+
+const backgroundColorMap = {
+    green: "bg-green",
+    orange: "bg-orange",
+    blue: "bg-blue",
+    pink: "bg-pink",
+};
+
+const borderColor =
+    borderColorMap[blok.border_color as keyof typeof borderColorMap] ||
+    "border-black";
+const backgroundBorderColor =
+    backgroundColorMap[blok.border_color as keyof typeof borderColorMap] ||
+    "bg-black";
+---
+
+<div
+    class={`relative border-12 ${borderColor} bg-[#ffffff] px-30 pb-40 z-[1] ${className || ""}`}
+    {...storyblokEditable(blok)}
+>
+    <!-- header -->
+    <div
+        class={`absolute top-0 left-0 right-0 w-132 h-60 mx-auto rounded-b-[4rem] -z-[1] ${backgroundBorderColor}`}
+    >
+    </div>
+    <div class="mx-auto -mt-58 size-94">
+        <SBImage class="size-full object-contain" image={blok.ball_image} />
+    </div>
+    <div class="mx-auto mt-52 h-90 w-195">
+        <SBImage class="size-full object-contain" image={blok.title_image} />
+    </div>
+    <div class="mt-30 flex flex-col items-center">
+        <p class="text-p14 text-center">{from_label}</p>
+        <div>
+            <span class="text-title-4">{blok.price}</span>
+            <span class="text-p16 md:text-p24">{per_period_label}</span>
+        </div>
+    </div>
+    <!-- content -->
+    <div class="mt-20">
+        <p class="text-p14">{included_label}</p>
+    </div>
+    {
+        blok.plan_accordions && blok.plan_accordions.length > 0 && (
+            <div class="mt-5 flex flex-col">
+                {blok.plan_accordions.map((item: SbBlokData) => (
+                    <PlanAccordionsItem blok={item} />
+                ))}
+            </div>
+        )
+    }
+</div>

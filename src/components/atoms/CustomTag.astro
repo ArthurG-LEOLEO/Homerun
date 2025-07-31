@@ -1,0 +1,27 @@
+---
+const { blok } = Astro.props;
+
+let backgroundClasses = "";
+switch (blok.background) {
+    case "pink":
+        backgroundClasses = "bg-pink border-black text-black";
+        break;
+    case "orange":
+        backgroundClasses = "bg-orange border-white text-white";
+        break;
+    case "blue":
+        backgroundClasses = "bg-blue border-black text-black";
+        break;
+    case "green":
+        backgroundClasses = "bg-green border-white text-white";
+        break;
+    default:
+        backgroundClasses = "";
+}
+---
+
+<div
+    class={`text-tag-lil inline-flex py-5 px-13 rounded-[6rem] border-3 ${backgroundClasses}`}
+>
+    {blok.text}
+</div>
