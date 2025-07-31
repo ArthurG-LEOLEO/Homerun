@@ -51,20 +51,22 @@ const beforeBackgroundTextBorderColor =
 >
     <!-- header -->
     <div
-        class={`absolute top-0 left-0 right-0 w-132 h-60 mx-auto rounded-b-[4rem] -z-[1] ${backgroundBorderColor}`}
+        class={`absolute top-0 left-0 right-0 w-132 h-60 mx-auto rounded-b-[4rem] -z-[1] ${backgroundBorderColor} lg:w-164 lg:h-72 lg:rounded-b-[4.8rem]`}
     >
     </div>
-    <div class="mx-auto -mt-58 size-94">
+    <div
+        class="relative mx-auto -mt-58 size-94 before:absolute before:-bottom-12 before:left-2 before:z-[-1] before:size-68 before:rounded-full before:bg-black before:opacity-10 before:mix-blend-multiply before:blur-[0.6rem] before:content-[''] lg:-mt-64 lg:size-117 lg:before:-bottom-16 lg:before:size-84"
+    >
         <SBImage class="size-full object-contain" image={blok.ball_image} />
     </div>
-    <div class="mx-auto mt-52 h-90 w-195">
+    <div class="mx-auto mt-52 h-73 w-155 lg:h-90 lg:w-195">
         <SBImage
             class="size-full object-contain"
             image={blok.title_image}
             aria-label={blok.title}
         />
     </div>
-    <div class="mt-30 flex flex-col items-center">
+    <div class="mt-18 flex -rotate-2 flex-col items-center lg:mt-30">
         <p class="text-p14 text-center">{from_label}</p>
         <div class="flex justify-center">
             <div
@@ -76,7 +78,7 @@ const beforeBackgroundTextBorderColor =
         </div>
     </div>
     <!-- content -->
-    <div class="mt-20">
+    <div class="mt-18 lg:mt-30">
         <p class="text-p14">{included_label}</p>
     </div>
     {
