@@ -1,5 +1,14 @@
 ---
+import { Icon } from "astro-icon/components";
+
 const { blok } = Astro.props;
 ---
 
-<div>Bottom notes item</div>
+<div class="flex items-center gap-10">
+    <div
+        class="flex size-28 flex-none items-center justify-center rounded-full border-2 border-black lg:size-34"
+    >
+        <Icon name="arrow-right" class="size-12" />
+    </div>
+    <p class="text-p16">{blok.text}</p>
+</div>

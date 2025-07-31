@@ -7,7 +7,10 @@ import BottomNotesItem from "../../components/atoms/BottomNotesItem.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div class="container-main py-50 md:py-100" {...storyblokEditable(blok)}>
+<div
+    class="container-main flex flex-col gap-32 py-50 md:py-100 lg:gap-48"
+    {...storyblokEditable(blok)}
+>
     <div
         class="flex flex-col items-center gap-80 lg:flex-row lg:items-start lg:gap-20"
     >
@@ -26,7 +29,7 @@ const { language, blok } = Astro.props;
     </div>
     {
         blok.bottom_notes && blok.bottom_notes.length > 0 && (
-            <div>
+            <div class="flex flex-col gap-12 lg:gap-16">
                 {blok.bottom_notes.map((item: SbBlokData) => (
                     <BottomNotesItem blok={item} />
                 ))}
