@@ -3,6 +3,7 @@ import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
 
 import PlanItem from "../../components/atoms/PlanItem.astro";
 import BottomNotesItem from "../../components/atoms/BottomNotesItem.astro";
+import CustomColsItem from "../../components/atoms/CustomColsItem.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -12,7 +13,7 @@ const { language, blok } = Astro.props;
     {...storyblokEditable(blok)}
 >
     <div
-        class="flex flex-col items-center gap-80 lg:flex-row lg:items-start lg:gap-20"
+        class="px-gutter flex flex-col items-center gap-80 lg:flex-row lg:items-start lg:gap-20"
     >
         {
             blok.items.map((item: SbBlokData) => (
@@ -29,11 +30,33 @@ const { language, blok } = Astro.props;
     </div>
     {
         blok.bottom_notes && blok.bottom_notes.length > 0 && (
-            <div class="flex flex-col gap-12 lg:gap-16">
+            <div class="px-gutter flex flex-col gap-12 lg:gap-16">
                 {blok.bottom_notes.map((item: SbBlokData) => (
                     <BottomNotesItem blok={item} />
                 ))}
             </div>
         )
     }
+    <div
+        class="before:left-gutter before:right-gutter relative py-48 text-white before:absolute before:top-0 before:bottom-0 before:z-[-1] before:bg-black xl:py-72"
+    >
+        <div class="mx-auto w-10/12 lg:flex">
+            <div class="px-gutter lg:w-3/10 lg:flex-none">
+                <h2 class="text-title-3">{blok.custom_title}</h2>
+                <div class="hidden lg:mt-30 lg:block">Nous contacter</div>
+            </div>
+            <div
+                class="px-gutter mt-24 flex flex-col gap-24 md:flex-row lg:mt-0 lg:flex-1 xl:gap-72"
+            >
+                {
+                    blok.custom_cols.map((item: SbBlokData) => (
+                        <CustomColsItem blok={item} />
+                    ))
+                }
+            </div>
+            <div class="px-gutter mt-32 lg:hidden">
+                <div>Nous contacter</div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,18 @@
+---
+import CustomTag from "./CustomTag.astro";
+import SBRichText from "../global/SBRichText.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="flex-1">
+    {
+        blok.tag && blok.tag[0] && (
+            <div class="mb-8">
+                <CustomTag blok={blok.tag[0]} />
+            </div>
+        )
+    }
+    <h3 class="text-p-24 mb-16">{blok.title}</h3>
+    <SBRichText content={blok.text} textSize="xsmall" />
+</div>

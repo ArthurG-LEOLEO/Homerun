@@ -58,7 +58,11 @@ const beforeBackgroundTextBorderColor =
         <SBImage class="size-full object-contain" image={blok.ball_image} />
     </div>
     <div class="mx-auto mt-52 h-90 w-195">
-        <SBImage class="size-full object-contain" image={blok.title_image} />
+        <SBImage
+            class="size-full object-contain"
+            image={blok.title_image}
+            aria-label={blok.title}
+        />
     </div>
     <div class="mt-30 flex flex-col items-center">
         <p class="text-p14 text-center">{from_label}</p>
