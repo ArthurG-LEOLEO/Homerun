@@ -26,12 +26,23 @@ const backgroundColorMap = {
     pink: "bg-pink",
 };
 
+const beforeBackgroundTextColorMap = {
+    green: "before:bg-pink text-black",
+    orange: "before:bg-blue text-black",
+    blue: "before:bg-orange text-white",
+    pink: "before:bg-green text-white",
+};
+
 const borderColor =
     borderColorMap[blok.border_color as keyof typeof borderColorMap] ||
     "border-black";
 const backgroundBorderColor =
     backgroundColorMap[blok.border_color as keyof typeof borderColorMap] ||
     "bg-black";
+const beforeBackgroundTextBorderColor =
+    beforeBackgroundTextColorMap[
+        blok.border_color as keyof typeof borderColorMap
+    ] || "before:bg-black text-white";
 ---
 
 <div
@@ -51,9 +62,13 @@ const backgroundBorderColor =
     </div>
     <div class="mt-30 flex flex-col items-center">
         <p class="text-p14 text-center">{from_label}</p>
-        <div>
-            <span class="text-title-4">{blok.price}</span>
-            <span class="text-p16 md:text-p24">{per_period_label}</span>
+        <div class="flex justify-center">
+            <div
+                class={`relative before:absolute before:top-0 before:-right-6 before:bottom-0 before:-left-6 before:-z-[1] before:-rotate-3 ${beforeBackgroundTextBorderColor}`}
+            >
+                <span class="text-title-4">{blok.price}</span>
+                <span class="text-p16 md:text-p24">{per_period_label}</span>
+            </div>
         </div>
     </div>
     <!-- content -->
