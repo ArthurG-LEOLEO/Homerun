@@ -9,7 +9,16 @@ import Offices from "../../components/contact/Offices.astro";
 const { language, blok } = Astro.props;
 ---
 
-<div id="page-contact" class="contact bg-black text-white">
+<div
+    id="page-contact"
+    class="contact bg-black text-white"
+    data-creative-club-prefix={blok.creative_club_prefix}
+    data-shop-prefix={blok.shop_prefix}
+    data-shop-name-label={blok.shop_name_label}
+    data-shop-quantity-label={blok.shop_quantity_label}
+    data-shop-option-label={blok.shop_option_label}
+    data-shop-suffix={blok.shop_suffix}
+>
     <div
         class="container-main overflow-hidden pt-150 pb-70 lg:pt-135 lg:pb-125"
     >
@@ -164,7 +173,14 @@ const { language, blok } = Astro.props;
 
         // Shop order handling
         if (shopTitle) {
-            const shopOrderMessageTemplate = `Bonjour,\n\nJe voudrais commander un article :\n\nNom : ${shopTitle}\nQuantity : ${shopQuantity}${shopOption ? `\nOption : ${shopOption}` : ""}\n\nMerci de prendre contact avec moi pour le paiement et l'envoi`;
+            const shopPrefix = page.dataset.shopPrefix || "";
+            const shopNameLabel = page.dataset.shopNameLabel || "Name : ";
+            const shopQuantityLabel =
+                page.dataset.shopQuantityLabel || "Quantity : ";
+            const shopOptionLabel = page.dataset.shopOptionLabel || "Option : ";
+            const shopSuffix = page.dataset.shopSuffix || "";
+
+            const shopOrderMessageTemplate = `${shopPrefix}\n${shopNameLabel}${shopTitle}\n${shopQuantityLabel}${shopQuantity}${shopOption ? `\n${shopOptionLabel}${shopOption}` : ""}\n${shopSuffix}`;
 
             const messageInput: HTMLTextAreaElement | null =
                 form.querySelector("#message");
@@ -183,7 +199,8 @@ const { language, blok } = Astro.props;
 
         // Plan subscription handling
         if (planTitle) {
-            const planSubscriptionMessageTemplate = `Bonjour,\n\nJe souhaiterais m'abonner au plan Creative Club suivant : ${planTitle}`;
+            const creativeClubPrefix = page.dataset.creativeClubPrefix || "";
+            const planSubscriptionMessageTemplate = `${creativeClubPrefix}${planTitle}`;
 
             const messageInput: HTMLTextAreaElement | null =
                 form.querySelector("#message");
