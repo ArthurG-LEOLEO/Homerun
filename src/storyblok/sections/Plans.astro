@@ -10,6 +10,7 @@ const { language, blok } = Astro.props;
 ---
 
 <div
+    id="plans-section"
     class="container-main flex flex-col gap-32 py-50 md:py-100 lg:gap-48"
     {...storyblokEditable(blok)}
 >
@@ -19,7 +20,7 @@ const { language, blok } = Astro.props;
         {
             blok.items.map((item: SbBlokData) => (
                 <PlanItem
-                    class="w-full max-w-600 flex-1 lg:max-w-none"
+                    class="plans-item w-full max-w-600 flex-1 lg:max-w-none opacity-0"
                     blok={item}
                     from_label={blok.from_label}
                     per_period_label={blok.per_period_label}
@@ -94,6 +95,35 @@ const { language, blok } = Astro.props;
         window.location.href = fullContactUrl.toString();
     };
 
+    const animatePlansReveal = () => {
+        const planItems = document.querySelectorAll(".plans-item");
+        const plansSection = document.getElementById("plans-section");
+        
+        if (planItems.length > 0 && plansSection) {
+            // Set initial state
+            gsap.set(planItems, {
+                y: "5rem",
+                opacity: 0,
+            });
+
+            // Create reveal animation with stagger triggered by scroll
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: plansSection,
+                    start: "top 80%",
+                    end: "bottom top",
+                    once: true, // Only trigger once
+                },
+            }).to(planItems, {
+                duration: 1,
+                stagger: 0.1,
+                opacity: 1,
+                y: 0,
+                ease: "elastic.out(1,0.7)",
+            });
+        }
+    };
+
     const init = () => {
         customPlanCta = document.getElementById("custom-plan-cta");
         customPlanCtaMobile = document.getElementById("custom-plan-cta-mobile");
@@ -107,6 +137,9 @@ const { language, blok } = Astro.props;
                 handleCustomPlanCtaClick,
             );
         }
+
+        // Animate plans reveal
+        animatePlansReveal();
     };
 
     const cleanup = () => {
@@ -124,6 +157,13 @@ const { language, blok } = Astro.props;
         }
         customPlanCta = null;
         customPlanCtaMobile = null;
+        
+        // Clean up ScrollTrigger instances
+        ScrollTrigger.getAll().forEach((trigger) => {
+            if (trigger.trigger === document.getElementById("plans-section")) {
+                trigger.kill();
+            }
+        });
     };
 
     document.addEventListener("astro:page-load", () => {
