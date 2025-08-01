@@ -20,7 +20,7 @@ const { language, blok } = Astro.props;
         {
             blok.items.map((item: SbBlokData) => (
                 <PlanItem
-                    class="plans-item w-full max-w-600 flex-1 lg:max-w-none opacity-0"
+                    class="plans-item w-full max-w-600 flex-1 opacity-0 lg:max-w-none"
                     blok={item}
                     from_label={blok.from_label}
                     per_period_label={blok.per_period_label}
@@ -98,7 +98,7 @@ const { language, blok } = Astro.props;
     const animatePlansReveal = () => {
         const planItems = document.querySelectorAll(".plans-item");
         const plansSection = document.getElementById("plans-section");
-        
+
         if (planItems.length > 0 && plansSection) {
             // Set initial state
             gsap.set(planItems, {
@@ -157,7 +157,7 @@ const { language, blok } = Astro.props;
         }
         customPlanCta = null;
         customPlanCtaMobile = null;
-        
+
         // Clean up ScrollTrigger instances
         ScrollTrigger.getAll().forEach((trigger) => {
             if (trigger.trigger === document.getElementById("plans-section")) {
