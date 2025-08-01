@@ -165,7 +165,7 @@ const { blok } = Astro.props as { blok: FormBlok };
                             name="message"
                             rows="6"
                             required
-                            class="text-p-18 relative block w-full resize-none border border-3 border-transparent bg-transparent p-8 focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-13"
+                            class="text-p-18 relative block w-full resize-none border-3 border-transparent bg-transparent p-8 focus:border-black focus-visible:border-black focus-visible:outline-0 md:py-13"
                         ></textarea>
                     </div>
                 </div>
@@ -252,6 +252,8 @@ const { blok } = Astro.props as { blok: FormBlok };
                 }
 
                 try {
+                    if (!form) return;
+
                     const formData = new FormData(form);
 
                     const response = await fetch("/", {
@@ -264,22 +266,30 @@ const { blok } = Astro.props as { blok: FormBlok };
 
                     if (response.ok) {
                         form.classList.add("hidden");
-                        successMessage.classList.remove("hidden");
-                        successMessage.classList.add("flex");
+                        if (successMessage) {
+                            successMessage.classList.remove("hidden");
+                            successMessage.classList.add("flex");
+                        }
 
-                        formContainer.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                        });
+                        if (formContainer) {
+                            formContainer.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                            });
+                        }
 
                         form.reset();
                     } else {
                         throw new Error("Error during submission");
                     }
                 } catch (error) {
-                    form.classList.add("hidden");
-                    errorMessage.classList.remove("hidden");
-                    errorMessage.classList.add("flex");
+                    if (form) {
+                        form.classList.add("hidden");
+                    }
+                    if (errorMessage) {
+                        errorMessage.classList.remove("hidden");
+                        errorMessage.classList.add("flex");
+                    }
 
                     console.error("Submission error:", error);
                 }
@@ -289,11 +299,17 @@ const { blok } = Astro.props as { blok: FormBlok };
 
             if (newButton) {
                 handleNewButton = () => {
-                    successMessage.classList.add("hidden");
-                    successMessage.classList.remove("flex");
-                    errorMessage.classList.add("hidden");
-                    errorMessage.classList.remove("flex");
-                    form.classList.remove("hidden");
+                    if (successMessage) {
+                        successMessage.classList.add("hidden");
+                        successMessage.classList.remove("flex");
+                    }
+                    if (errorMessage) {
+                        errorMessage.classList.add("hidden");
+                        errorMessage.classList.remove("flex");
+                    }
+                    if (form) {
+                        form.classList.remove("hidden");
+                    }
 
                     if (submitButton) {
                         submitButton.disabled = false;
