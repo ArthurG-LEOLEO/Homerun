@@ -46,9 +46,10 @@ const { language, blok } = Astro.props;
                 <h2 class="text-title-3">{blok.custom_title}</h2>
                 <div class="hidden lg:mt-30 lg:block">
                     <CTA
+                        id="custom-plan-cta"
                         label={blok.custom_link_label}
                         color="orange"
-                        type="submit"
+                        type="button"
                         icon="arrow-right"
                     />
                 </div>
@@ -64,12 +65,72 @@ const { language, blok } = Astro.props;
             </div>
             <div class="px-gutter mt-32 lg:hidden">
                 <CTA
+                    id="custom-plan-cta-mobile"
                     label={blok.custom_link_label}
                     color="orange"
-                    type="submit"
+                    type="button"
                     icon="arrow-right"
                 />
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let customPlanCta: HTMLElement | null = null;
+    let customPlanCtaMobile: HTMLElement | null = null;
+
+    const handleCustomPlanCtaClick = () => {
+        // Detect current language from URL
+        const currentPath = window.location.pathname;
+        const langMatch = currentPath.match(/^\/([a-z]{2})\//);
+        const currentLang = langMatch ? langMatch[1] : "";
+
+        // Construct contact URL with proper language prefix
+        const contactUrl = currentLang ? `/${currentLang}/contact` : "/contact";
+        const fullContactUrl = new URL(contactUrl, location.origin);
+        fullContactUrl.searchParams.append("planTitle", "Custom");
+
+        window.location.href = fullContactUrl.toString();
+    };
+
+    const init = () => {
+        customPlanCta = document.getElementById("custom-plan-cta");
+        customPlanCtaMobile = document.getElementById("custom-plan-cta-mobile");
+
+        if (customPlanCta) {
+            customPlanCta.addEventListener("click", handleCustomPlanCtaClick);
+        }
+        if (customPlanCtaMobile) {
+            customPlanCtaMobile.addEventListener(
+                "click",
+                handleCustomPlanCtaClick,
+            );
+        }
+    };
+
+    const cleanup = () => {
+        if (customPlanCta) {
+            customPlanCta.removeEventListener(
+                "click",
+                handleCustomPlanCtaClick,
+            );
+        }
+        if (customPlanCtaMobile) {
+            customPlanCtaMobile.removeEventListener(
+                "click",
+                handleCustomPlanCtaClick,
+            );
+        }
+        customPlanCta = null;
+        customPlanCtaMobile = null;
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

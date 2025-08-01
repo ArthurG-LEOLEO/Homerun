@@ -160,19 +160,41 @@ const { language, blok } = Astro.props;
         const shopTitle = params.get("shopTitle");
         const shopOption = params.get("shopOption");
         const shopQuantity = params.get("shopQuantity");
+        const planTitle = params.get("planTitle");
 
-        const shopOrderMessageTemplate = `Bonjour,\n\nJe voudrais commander un article :\n\nNom : ${shopTitle}\nQuantity : ${shopQuantity}${shopOption ? `\nOption : ${shopOption}` : ""}\n\nMerci de prendre contact avec moi pour le paiement et l'envoi`;
-
-        const messageInput: HTMLTextAreaElement | null =
-            form.querySelector("#message");
-        const subjectInput: HTMLInputElement | null = form.querySelector(
-            ".subject-option .topic-radio#shop",
-        );
-
-        if (messageInput) messageInput.value = shopOrderMessageTemplate;
-        if (subjectInput) subjectInput.checked = true;
-
+        // Shop order handling
         if (shopTitle) {
+            const shopOrderMessageTemplate = `Bonjour,\n\nJe voudrais commander un article :\n\nNom : ${shopTitle}\nQuantity : ${shopQuantity}${shopOption ? `\nOption : ${shopOption}` : ""}\n\nMerci de prendre contact avec moi pour le paiement et l'envoi`;
+
+            const messageInput: HTMLTextAreaElement | null =
+                form.querySelector("#message");
+            const subjectInput: HTMLInputElement | null = form.querySelector(
+                ".subject-option .topic-radio#shop",
+            );
+
+            if (messageInput) messageInput.value = shopOrderMessageTemplate;
+            if (subjectInput) subjectInput.checked = true;
+
+            // Wait for animations to complete before scrolling
+            setTimeout(() => {
+                form.scrollIntoView({ behavior: "smooth" });
+            }, 1000);
+        }
+
+        // Plan subscription handling
+        if (planTitle) {
+            const planSubscriptionMessageTemplate = `Bonjour,\n\nJe souhaiterais m'abonner au plan Creative Club suivant : ${planTitle}`;
+
+            const messageInput: HTMLTextAreaElement | null =
+                form.querySelector("#message");
+            const subjectInput: HTMLInputElement | null = form.querySelector(
+                ".subject-option .topic-radio#creative-club",
+            );
+
+            if (messageInput)
+                messageInput.value = planSubscriptionMessageTemplate;
+            if (subjectInput) subjectInput.checked = true;
+
             // Wait for animations to complete before scrolling
             setTimeout(() => {
                 form.scrollIntoView({ behavior: "smooth" });

@@ -44,11 +44,17 @@ const beforeBackgroundTextBorderColor =
     beforeBackgroundTextColorMap[
         blok.border_color as keyof typeof borderColorMap
     ] || "before:bg-black text-white";
+
+// Generate unique ID for this plan item
+const planCtaId = `plan-cta-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <div
     class={`relative border-12 ${borderColor} bg-[#ffffff] px-30 pb-40 z-[1] ${className || ""}`}
     {...storyblokEditable(blok)}
+    data-contact-url="/contact"
+    data-plan-title={blok.title}
+    data-plan-cta-id={planCtaId}
 >
     <!-- header -->
     <div
@@ -93,10 +99,79 @@ const beforeBackgroundTextBorderColor =
     }
     <div class="mt-18 lg:mt-30">
         <CTA
+            id={planCtaId}
             label={choose_label}
             color="green"
-            type="submit"
+            type="button"
             icon="arrow-right"
         />
     </div>
 </div>
+
+<script>
+    const handlePlanCtaClick = (event: Event) => {
+        const target = event.target as HTMLElement;
+        if (!target) return;
+
+        // Find the closest plan container from the clicked CTA
+        const planContainer = target.closest("[data-plan-title]");
+        if (!planContainer) return;
+
+        const contactUrl = planContainer.getAttribute("data-contact-url");
+        const planTitle = planContainer.getAttribute("data-plan-title");
+
+        if (!contactUrl || !planTitle) return;
+
+        // Detect current language from URL
+        const currentPath = window.location.pathname;
+        const langMatch = currentPath.match(/^\/([a-z]{2})\//);
+        const currentLang = langMatch ? langMatch[1] : "";
+
+        // Construct contact URL with proper language prefix
+        const finalContactUrl = currentLang
+            ? `/${currentLang}/contact`
+            : contactUrl;
+        const fullContactUrl = new URL(finalContactUrl, location.origin);
+        fullContactUrl.searchParams.append("planTitle", planTitle);
+
+        window.location.href = fullContactUrl.toString();
+    };
+
+    const init = () => {
+        // Find all plan containers on the page
+        const planContainers = document.querySelectorAll("[data-plan-cta-id]");
+
+        planContainers.forEach((container) => {
+            const ctaId = container.getAttribute("data-plan-cta-id");
+            if (ctaId) {
+                const cta = document.getElementById(ctaId);
+                if (cta) {
+                    cta.addEventListener("click", handlePlanCtaClick);
+                }
+            }
+        });
+    };
+
+    const cleanup = () => {
+        // Find all plan containers on the page and remove event listeners
+        const planContainers = document.querySelectorAll("[data-plan-cta-id]");
+
+        planContainers.forEach((container) => {
+            const ctaId = container.getAttribute("data-plan-cta-id");
+            if (ctaId) {
+                const cta = document.getElementById(ctaId);
+                if (cta) {
+                    cta.removeEventListener("click", handlePlanCtaClick);
+                }
+            }
+        });
+    };
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>
