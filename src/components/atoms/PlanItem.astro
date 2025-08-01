@@ -2,6 +2,7 @@
 import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
 import SBImage from "../global/SBImage.astro";
 import PlanAccordionsItem from "./PlanAccordionsItem.astro";
+import CTA from "../global/CTA.astro";
 
 const {
     blok,
@@ -90,4 +91,12 @@ const beforeBackgroundTextBorderColor =
             </div>
         )
     }
+    <div class="mt-18 lg:mt-30">
+        <CTA
+            label={choose_label}
+            color="green"
+            type="submit"
+            icon="arrow-right"
+        />
+    </div>
 </div>
