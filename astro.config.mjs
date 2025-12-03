@@ -22,6 +22,7 @@ const adapter =
 
 export default defineConfig({
     output: isPreview ? "server" : "static",
+    adapter,
     i18n,
     site: "https://homerun.today",
     integrations: [
@@ -81,6 +82,7 @@ export default defineConfig({
                 case_images: "storyblok/sections/case/Images",
                 case_text: "storyblok/sections/case/Text",
                 case_videos: "storyblok/sections/case/Videos",
+                cmo: "storyblok/pages/CMO",
             },
         }),
         icon(),
