@@ -35,9 +35,6 @@ export const POST: APIRoute = async ({ request }) => {
             await contactsApi.createContact({
                 email,
                 listIds: [3],
-                attributes: {
-                    DATE_TELECHARGEMENT: new Date().toISOString(),
-                },
                 updateEnabled: true,
             });
         } catch (contactError: any) {
