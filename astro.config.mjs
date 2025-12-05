@@ -22,7 +22,7 @@ const adapter =
 
 export default defineConfig({
     output: isPreview ? "server" : "static",
-    adapter,
+    adapter: isPreview ? adapter : undefined,
     i18n,
     site: "https://homerun.today",
     integrations: [
@@ -94,5 +94,4 @@ export default defineConfig({
             https: true,
         },
     },
-    adapter: isPreview ? adapter : undefined,
 });
