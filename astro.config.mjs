@@ -15,9 +15,14 @@ const env = loadEnv("", process.cwd(), ["STORYBLOK", "NETLIFY"]);
 
 const isPreview = env.STORYBLOK_PREVIEW === "true";
 
+const adapter =
+    env.NETLIFY === "true"
+        ? netlify({ imageCDN: false })
+        : node({ mode: "standalone" });
+
 export default defineConfig({
     output: isPreview ? "server" : "static",
-    adapter: netlify({ imageCDN: false }),
+    adapter,
     i18n,
     site: "https://homerun.today",
     integrations: [
