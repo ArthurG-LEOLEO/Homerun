@@ -79,6 +79,7 @@ const baseClasses = `cta-btn relative z-[0]  py-16 ${horizontalPadding} text-${t
             type={type}
             onclick={onClick}
             id={id}
+            {...attrs}
         >
             <div class="cta-text flex items-center gap-10 opacity-0">
                 {label && (

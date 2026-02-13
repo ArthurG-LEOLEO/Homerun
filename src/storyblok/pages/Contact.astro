@@ -12,7 +12,7 @@ const { language, blok } = Astro.props;
 <div
     id="page-contact"
     class="contact bg-black text-white"
-    data-creative-club-prefix={blok.creative_club_prefix}
+    data-creative-plan-prefix={blok.creative_plan_prefix}
     data-shop-prefix={blok.shop_prefix}
     data-shop-name-label={blok.shop_name_label}
     data-shop-quantity-label={blok.shop_quantity_label}
@@ -199,13 +199,13 @@ const { language, blok } = Astro.props;
 
         // Plan subscription handling
         if (planTitle) {
-            const creativeClubPrefix = page.dataset.creativeClubPrefix || "";
-            const planSubscriptionMessageTemplate = `${creativeClubPrefix}${planTitle}`;
+            const creativePlanPrefix = page.dataset.creativePlanPrefix || "";
+            const planSubscriptionMessageTemplate = `${creativePlanPrefix}${planTitle}`;
 
             const messageInput: HTMLTextAreaElement | null =
                 form.querySelector("#message");
             const subjectInput: HTMLInputElement | null = form.querySelector(
-                ".subject-option .topic-radio#creative-club",
+                ".subject-option .topic-radio#creative-plan",
             );
 
             if (messageInput)

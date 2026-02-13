@@ -9,6 +9,7 @@ import PlanIncludedDetailedItem from "./PlanIncludedDetailedItem.astro";
 
 const {
     blok,
+    planIndex,
     plan_label,
     interested_label,
     per_period_label,
@@ -39,15 +40,19 @@ const backgroundTextBorderColor =
 ---
 
 <div
-    class={`fixed overflow-auto lg:relative z-105 top-0 left-0 right-0 h-dvh bg-white lg:top-auto lg:left-auto lg:right-auto lg:h-auto lg:z-1 ${className || ""}`}
+    class={`plan-creative-detailed hidden lg:block fixed overflow-auto lg:relative z-105 top-0 left-0 right-0 h-dvh bg-white lg:top-auto lg:left-auto lg:right-auto lg:h-auto lg:z-1 lg:overflow-visible ${className || ""}`}
     {...storyblokEditable(blok)}
-    data-lenis-prevent
+    data-plan-index={planIndex}
 >
     <div
         class={`px-20 flex flex-col gap-24 border-b border-black py-32 lg:border-x lg:border-t lg:flex-row lg:items-center lg:justify-between lg:py-32 lg:px-40 lg:gap-0 ${backgroundTextColor}`}
     >
         <div class="flex justify-end lg:hidden">
-            <button type="button" class="size-28">
+            <button
+                type="button"
+                class="size-28 cursor-pointer"
+                data-plan-close
+            >
                 <Icon name="cross-circle" class="size-full" />
             </button>
         </div>
@@ -84,7 +89,7 @@ const backgroundTextBorderColor =
             }
         </div>
         <div
-            class="mt-24 flex flex-col gap-24 px-20 lg:flex-row lg:justify-between lg:gap-0 lg:px-0"
+            class="mt-24 flex flex-col gap-24 px-20 pb-32 lg:flex-row lg:justify-between lg:gap-0 lg:px-0 lg:pb-0"
         >
             {
                 hasRichTextContent(blok.bottom_notes) && (
@@ -99,9 +104,11 @@ const backgroundTextBorderColor =
             }
             <div class="lg:mt-auto lg:flex lg:w-4/10 lg:justify-end">
                 <CTA
+                    id={`interested-cta-${planIndex}`}
                     label={interested_label}
                     color={blok.pricing_color}
                     type="button"
+                    data-plan-title={blok.title}
                 />
             </div>
         </div>

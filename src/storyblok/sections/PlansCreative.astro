@@ -17,10 +17,11 @@ const { language, blok } = Astro.props;
         class="px-gutter flex flex-col items-center gap-80 lg:flex-row lg:items-start lg:gap-10 xl:gap-20"
     >
         {
-            blok.items.map((item: SbBlokData) => (
+            blok.items.map((item: SbBlokData, index: number) => (
                 <PlanCreativeItem
                     class="plan-creative-item w-full max-w-600 flex-1 lg:max-w-none"
                     blok={item}
+                    planIndex={index}
                     plan_label={blok.plan_label}
                     learn_more_label={blok.learn_more_label}
                     included_label={blok.included_label}
@@ -36,9 +37,10 @@ const { language, blok } = Astro.props;
         class="px-gutter lg:mt-80 lg:flex lg:flex-col lg:gap-52 xl:mx-auto xl:w-10/12"
     >
         {
-            blok.items.map((item: SbBlokData) => (
+            blok.items.map((item: SbBlokData, index: number) => (
                 <PlanCreativeDetailedItem
                     blok={item}
+                    planIndex={index}
                     plan_label={blok.plan_label}
                     interested_label={blok.interested_label}
                     per_period_label={blok.per_period_label}
@@ -47,3 +49,145 @@ const { language, blok } = Astro.props;
         }
     </div>
 </div>
+
+<script>
+    const handleInterestedCtaClick = (planTitle: string) => {
+        // Detect current language from URL
+        const currentPath = window.location.pathname;
+        const langMatch = currentPath.match(/^\/([a-z]{2})\//);
+        const currentLang = langMatch ? langMatch[1] : "";
+
+        // Construct contact URL with proper language prefix
+        const contactUrl = currentLang ? `/${currentLang}/contact` : "/contact";
+        const fullContactUrl = new URL(contactUrl, location.origin);
+        fullContactUrl.searchParams.append("planTitle", planTitle);
+
+        window.location.href = fullContactUrl.toString();
+    };
+
+    const initPlanModals = () => {
+        const planItems = document.querySelectorAll(".plan-creative-item");
+        const detailedItems = document.querySelectorAll(
+            ".plan-creative-detailed",
+        );
+
+        const isDesktop = () => window.innerWidth >= 1024; // lg breakpoint
+
+        // Manage data-lenis-prevent attribute based on screen size
+        const updateLenisPrevent = () => {
+            detailedItems.forEach((item) => {
+                if (isDesktop()) {
+                    // Desktop: remove data-lenis-prevent
+                    (item as HTMLElement).removeAttribute("data-lenis-prevent");
+                } else {
+                    // Mobile: add data-lenis-prevent for scroll within fixed modal
+                    (item as HTMLElement).setAttribute(
+                        "data-lenis-prevent",
+                        "",
+                    );
+                }
+            });
+        };
+
+        // Initial setup
+        updateLenisPrevent();
+
+        // Handler for CTA click
+        planItems.forEach((item, index) => {
+            const cta = item.querySelector("[data-plan-cta]");
+            const detailedItem = detailedItems[index] as HTMLElement;
+
+            if (!cta || !detailedItem) return;
+
+            cta.addEventListener("click", () => {
+                if (isDesktop()) {
+                    // Desktop: scroll to detailed item
+                    window.lenis?.scrollTo(detailedItem, {
+                        offset: -30,
+                        duration: 1.2,
+                        easing: (t: number) =>
+                            Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    });
+                } else {
+                    // Mobile: open modal
+                    detailedItem.classList.remove("hidden");
+                    window.lenis?.stop();
+                    window.gsap?.to(detailedItem, {
+                        autoAlpha: 1,
+                        duration: 0.3,
+                    });
+                }
+            });
+        });
+
+        // Handler to close modals
+        detailedItems.forEach((item) => {
+            const closeBtn = item.querySelector("[data-plan-close]");
+
+            if (!closeBtn) return;
+
+            closeBtn.addEventListener("click", () => {
+                window.gsap?.to(item, {
+                    autoAlpha: 0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        (item as HTMLElement).classList.add("hidden");
+                        window.lenis?.start();
+                    },
+                });
+            });
+        });
+
+        // Handle mobile -> desktop transition with ResizeObserver
+        let wasDesktop = isDesktop();
+
+        const resizeObserver = new ResizeObserver(() => {
+            const nowDesktop = isDesktop();
+
+            // Update data-lenis-prevent on resize
+            updateLenisPrevent();
+
+            if (!wasDesktop && nowDesktop) {
+                // Mobile -> desktop transition: ensure scroll is active and reset modal styles
+                window.lenis?.start();
+
+                // Reset GSAP inline styles that may have been applied on mobile
+                detailedItems.forEach((item) => {
+                    window.gsap?.set(item, { clearProps: "all" });
+                    // Ensure hidden class is present for lg:block to work correctly
+                    (item as HTMLElement).classList.add("hidden");
+                });
+            }
+
+            wasDesktop = nowDesktop;
+        });
+
+        // Observe the section container
+        const section = document.getElementById("plans-creative-section");
+        if (section) {
+            resizeObserver.observe(section);
+        }
+
+        // Handle interested CTA clicks
+        const interestedCtas = document.querySelectorAll(
+            "[id^='interested-cta-']",
+        );
+        interestedCtas.forEach((cta) => {
+            const planTitle = (cta as HTMLElement).getAttribute(
+                "data-plan-title",
+            );
+            if (planTitle) {
+                cta.addEventListener("click", () =>
+                    handleInterestedCtaClick(planTitle),
+                );
+            }
+        });
+    };
+
+    // Init on load
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initPlanModals);
+    } else {
+        initPlanModals();
+    }
+</script>
