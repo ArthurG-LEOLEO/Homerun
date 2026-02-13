@@ -1,5 +1,5 @@
 ---
-const { blok } = Astro.props;
+const { blok, noBorder = false } = Astro.props;
 
 let backgroundClasses = "";
 switch (blok.background) {
@@ -15,13 +15,18 @@ switch (blok.background) {
     case "green":
         backgroundClasses = "bg-green border-white text-white";
         break;
+    case "black":
+        backgroundClasses = "bg-black border-black text-white";
+        break;
     default:
         backgroundClasses = "";
 }
+
+const borderClass = noBorder ? "" : "border-3";
 ---
 
 <div
-    class={`text-tag-lil inline-flex py-5 px-13 rounded-[6rem] border-3 ${backgroundClasses}`}
+    class={`text-tag-lil inline-flex py-5 px-13 rounded-[6rem] ${borderClass} ${backgroundClasses}`}
 >
     {blok.text}
 </div>

@@ -9,15 +9,18 @@ import Link from "../wysiwyg/Link.astro";
 interface Props {
     content: any;
     blok?: any;
-    textSize?: "xxsmall" | "xsmall" | "small" | "medium" | "large";
+    textSize?: "xxxsmall" | "xxsmall" | "xsmall" | "small" | "medium" | "large";
+    listInside?: boolean;
 }
 
-const { content, blok, textSize = "large" } = Astro.props;
+const { content, blok, textSize = "large", listInside = false } = Astro.props;
 
 const getTextClass = (size: string) => {
     switch (size) {
-        case "xxsmall":
+        case "xxxsmall":
             return "text-p-10";
+        case "xxsmall":
+            return "text-p-12";
         case "xsmall":
             return "text-p-16";
         case "small":
@@ -99,7 +102,7 @@ const getTextClass = (size: string) => {
             bullet_list: () => ({
                 component: "ul",
                 props: {
-                    class: `list-disc ${getTextClass(textSize)} my-[1em] first:mt-0 last:mb-0`,
+                    class: `list-disc ${listInside ? "list-inside" : ""} ${getTextClass(textSize)} my-[1em] first:mt-0 last:mb-0`,
                 },
             }),
         },

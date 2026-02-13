@@ -1,0 +1,24 @@
+---
+import { Icon } from "astro-icon/components";
+import CustomTag from "./CustomTag.astro";
+
+const { blok } = Astro.props;
+---
+
+<div class="flex items-center gap-x-16 border-b border-[rgba(0,0,0,0.2)] py-8">
+    <div
+        class="flex size-34 flex-none items-center justify-center rounded-full border-[0.2rem]"
+    >
+        <Icon name="check" class="size-16" />
+    </div>
+    <span class="text-p16 flex-1 font-bold">{blok.title}</span>
+    <div class="flex-none">
+        <CustomTag
+            blok={{
+                background: blok.deliverable_color,
+                text: blok.deliverable,
+            }}
+            noBorder={true}
+        />
+    </div>
+</div>

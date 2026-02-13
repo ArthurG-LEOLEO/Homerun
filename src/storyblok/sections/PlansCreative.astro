@@ -1,0 +1,49 @@
+---
+import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
+
+import PlanCreativeItem from "../../components/atoms/PlanCreativeItem.astro";
+import PlanCreativeDetailedItem from "../../components/atoms/PlanCreativeDetailedItem.astro";
+import SBRichText from "../../components/global/SBRichText.astro";
+
+const { language, blok } = Astro.props;
+---
+
+<div
+    id="plans-creative-section"
+    class="container-main py-56 md:pt-60 md:pb-90"
+    {...storyblokEditable(blok)}
+>
+    <div
+        class="px-gutter flex flex-col items-center gap-80 lg:flex-row lg:items-start lg:gap-10 xl:gap-20"
+    >
+        {
+            blok.items.map((item: SbBlokData) => (
+                <PlanCreativeItem
+                    class="plan-creative-item w-full max-w-600 flex-1 lg:max-w-none"
+                    blok={item}
+                    plan_label={blok.plan_label}
+                    learn_more_label={blok.learn_more_label}
+                    included_label={blok.included_label}
+                    per_period_label={blok.per_period_label}
+                />
+            ))
+        }
+    </div>
+    <div class="px-gutter mx-auto mt-56 w-10/12 text-center lg:w-8/12">
+        <SBRichText content={blok.bottom_text} textSize="medium" />
+    </div>
+    <div
+        class="px-gutter lg:mt-80 lg:flex lg:flex-col lg:gap-52 xl:mx-auto xl:w-10/12"
+    >
+        {
+            blok.items.map((item: SbBlokData) => (
+                <PlanCreativeDetailedItem
+                    blok={item}
+                    plan_label={blok.plan_label}
+                    interested_label={blok.interested_label}
+                    per_period_label={blok.per_period_label}
+                />
+            ))
+        }
+    </div>
+</div>

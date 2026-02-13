@@ -1,0 +1,182 @@
+---
+import { storyblokEditable, type SbBlokData } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+import Title from "../../components/atoms/Title.astro";
+import SBImage from "../../components/global/SBImage.astro";
+
+const { language, blok } = Astro.props;
+---
+
+<div id="page-creative-plans" class="page" {...storyblokEditable(blok)}>
+    <div class="container-main overflow-hidden pt-150 pb-50 lg:pt-135 lg:pb-30">
+        <div class="flex flex-col items-center">
+            {
+                blok.subtitle && (
+                    <span class="page-subtitle text-tag-big mb-24 flex items-center justify-center rounded-[5rem] border-3 px-16 py-12 opacity-0 lg:mb-30 lg:px-24 lg:py-13">
+                        {blok.subtitle}
+                    </span>
+                )
+            }
+            <div
+                class={`flex flex-col gap-24 justify-center lg:justify-between lg:flex-row lg:items-center lg:gap-0 ${!blok.subtitle ? "pt-40 lg:pt-80" : ""}`}
+            >
+                <div class="px-gutter w-10/12 lg:w-1/2 lg:flex-none">
+                    <SBImage
+                        class="size-full object-cover"
+                        image={blok.hero_image}
+                    />
+                </div>
+                <h1
+                    id="page-title"
+                    class="text-title-3 px-gutter text-center lg:w-1/2 lg:flex-none lg:text-left"
+                >
+                    <Title reveal="manual" title={blok.title[0]} />
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div>
+        {
+            blok.sections?.map((blok: SbBlokData) => {
+                return <StoryblokComponent blok={blok} language={language} />;
+            })
+        }
+    </div>
+</div>
+
+<script>
+    import { waitForFooterSplineLoad } from "../../scripts/spline";
+
+    let page: HTMLElement | null;
+
+    let tlAppear: gsap.core.Timeline;
+
+    const init = async () => {
+        page = document.querySelector("#page-creative-plans");
+        if (!page) return;
+
+        const banner = document.querySelector("#layout-banner");
+        const header = document.querySelectorAll(
+            "#layout-header .layout-header",
+        );
+        const subtitle = page.querySelectorAll(".page-subtitle");
+
+        const titleWordsDesktop = page.querySelectorAll(
+            "#page-title .title-wrap-desktop .word-inner",
+        );
+        const titleWordsMobile = page.querySelectorAll(
+            "#page-title .title-wrap-mobile .word-inner",
+        );
+
+        await waitForFooterSplineLoad();
+
+        gsap.timeline()
+            .set(banner, {
+                y: "-100%",
+            })
+            .set(header, {
+                y: -50,
+                opacity: 0,
+            })
+            .set([titleWordsDesktop, titleWordsMobile], {
+                y: "100%",
+                opacity: 1,
+            });
+
+        if (subtitle.length > 0) {
+            gsap.set(subtitle, {
+                scale: 0.7,
+                opacity: 0,
+            });
+        }
+
+        tlAppear = gsap
+            .timeline({
+                paused: true,
+                delay: window.innerWidth >= 1024 ? 0.3 : 0,
+            })
+            .to(
+                banner,
+                {
+                    y: 0,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            )
+            .to(
+                header,
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "expo.out",
+                },
+                "start",
+            );
+
+        if (subtitle.length > 0) {
+            tlAppear.to(
+                subtitle,
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "elastic.out(1.2,0.7)",
+                },
+                "start+=0.1",
+            );
+        }
+
+        if (window.innerWidth > 1024) {
+            tlAppear
+                .to(
+                    titleWordsDesktop,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsMobile, {
+                    y: 0,
+                });
+        } else {
+            tlAppear
+                .to(
+                    titleWordsMobile,
+                    {
+                        duration: 0.8,
+                        y: 0,
+                        stagger: 0.05,
+                        ease: "elastic.out(1,0.7)",
+                    },
+                    "start+=0.1",
+                )
+                .set(titleWordsDesktop, {
+                    y: 0,
+                });
+        }
+
+        tlAppear.play();
+    };
+
+    const cleanup = () => {
+        tlAppear?.kill();
+    };
+
+    document.addEventListener("storyblok-live-preview-updated", () => {
+        cleanup();
+        init();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+        init();
+    });
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
+</script>

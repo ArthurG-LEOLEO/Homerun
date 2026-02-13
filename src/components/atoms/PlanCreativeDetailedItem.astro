@@ -1,0 +1,109 @@
+---
+import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
+import { Icon } from "astro-icon/components";
+
+import SBRichText from "../global/SBRichText.astro";
+import { hasRichTextContent } from "../../utils/richtext";
+import CTA from "../global/CTA.astro";
+import PlanIncludedDetailedItem from "./PlanIncludedDetailedItem.astro";
+
+const {
+    blok,
+    plan_label,
+    interested_label,
+    per_period_label,
+    class: className,
+} = Astro.props;
+
+const backgroundTextColorMap = {
+    green: "bg-green text-white",
+    orange: "bg-orange text-white",
+    blue: "bg-blue text-black",
+    pink: "bg-pink text-black",
+};
+const backgroundTextBorderColorMap = {
+    green: "bg-green text-white border-white",
+    orange: "bg-orange text-white border-white",
+    blue: "bg-blue text-black border-black",
+    pink: "bg-pink text-black border-black",
+};
+
+const backgroundTextColor =
+    backgroundTextColorMap[
+        blok.pricing_color as keyof typeof backgroundTextColorMap
+    ] || "bg-orange text-white";
+const backgroundTextBorderColor =
+    backgroundTextBorderColorMap[
+        blok.pricing_color as keyof typeof backgroundTextBorderColorMap
+    ] || "bg-orange text-white border-white";
+---
+
+<div
+    class={`fixed overflow-auto lg:relative z-105 top-0 left-0 right-0 h-dvh bg-white lg:top-auto lg:left-auto lg:right-auto lg:h-auto lg:z-1 ${className || ""}`}
+    {...storyblokEditable(blok)}
+    data-lenis-prevent
+>
+    <div
+        class={`px-20 flex flex-col gap-24 border-b border-black py-32 lg:border-x lg:border-t lg:flex-row lg:items-center lg:justify-between lg:py-32 lg:px-40 lg:gap-0 ${backgroundTextColor}`}
+    >
+        <div class="flex justify-end lg:hidden">
+            <button type="button" class="size-28">
+                <Icon name="cross-circle" class="size-full" />
+            </button>
+        </div>
+        <div
+            class={`flex gap-x-16 flex-wrap items-center lg:gap-x-24 lg:w-4/10 ${backgroundTextColor}`}
+        >
+            <span
+                class={`py-12 px-24 text-title-6 border-2 rounded-full ${backgroundTextBorderColor}`}
+            >
+                {plan_label}
+                <span class="font-bold">
+                    {blok.title}
+                </span>
+            </span>
+            <span class="text-p20 font-bold">
+                {blok.price}
+                {per_period_label}
+            </span>
+        </div>
+        <div class="lg:w-5/10">
+            <SBRichText
+                content={blok.short_intro}
+                textSize="medium"
+                listInside={true}
+            />
+        </div>
+    </div>
+    <div>
+        <div class="lg:border-x lg:border-black">
+            {
+                blok.included_items.map((item: SbBlokData) => (
+                    <PlanIncludedDetailedItem blok={item} />
+                ))
+            }
+        </div>
+        <div
+            class="mt-24 flex flex-col gap-24 px-20 lg:flex-row lg:justify-between lg:gap-0 lg:px-0"
+        >
+            {
+                hasRichTextContent(blok.bottom_notes) && (
+                    <div class="lg:w-5/10 lg:pl-8">
+                        <SBRichText
+                            content={blok.bottom_notes}
+                            textSize="xxsmall"
+                            listInside={true}
+                        />
+                    </div>
+                )
+            }
+            <div class="lg:mt-auto lg:flex lg:w-4/10 lg:justify-end">
+                <CTA
+                    label={interested_label}
+                    color={blok.pricing_color}
+                    type="button"
+                />
+            </div>
+        </div>
+    </div>
+</div>

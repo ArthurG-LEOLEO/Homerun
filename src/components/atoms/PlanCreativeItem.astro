@@ -1,0 +1,71 @@
+---
+import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
+
+import SBRichText from "../global/SBRichText.astro";
+import CTA from "../global/CTA.astro";
+import PlanIncludedItem from "./PlanIncludedItem.astro";
+
+const {
+    blok,
+    plan_label,
+    learn_more_label,
+    included_label,
+    per_period_label,
+    class: className,
+} = Astro.props;
+
+const backgroundTextColorMap = {
+    green: "bg-green text-white",
+    orange: "bg-orange text-white",
+    blue: "bg-blue text-black",
+    pink: "bg-pink text-black",
+};
+
+const backgroundTextColor =
+    backgroundTextColorMap[
+        blok.pricing_color as keyof typeof backgroundTextColorMap
+    ] || "bg-orange text-white";
+---
+
+<div
+    class={`relative z-1 border-2 lg:border-3 border-black ${className || ""}`}
+    {...storyblokEditable(blok)}
+>
+    <div
+        class="flex flex-col gap-15 border-b-2 border-black px-24 pb-24 lg:gap-30 lg:border-b-3 lg:px-12 xl:px-32"
+    >
+        <div
+            class={`-mt-[1.3em] text-title-6 flex gap-x-16 flex-wrap justify-center border-2 border-black py-12 px-12 rounded-full lg:border-3 lg:gap-x-8 xl:py-16 xl:gap-x-16 xl:-mt-[1.5em] ${backgroundTextColor}`}
+        >
+            <span>
+                {plan_label}
+                <span class="font-bold">
+                    {blok.title}
+                </span>
+            </span>
+            <span class="font-bold">
+                {blok.price}
+                {per_period_label}
+            </span>
+        </div>
+        <SBRichText content={blok.intro} textSize="small" />
+    </div>
+    <div class="p-24 xl:px-40 xl:pt-32 xl:pb-40">
+        <span class="text-p14">{included_label}</span>
+        <div class="mt-8 lg:mt-24">
+            {
+                blok.included_items.map(
+                    (item: SbBlokData) =>
+                        item.included && <PlanIncludedItem blok={item} />,
+                )
+            }
+        </div>
+        <div class="mt-16 flex justify-center lg:mt-32 lg:justify-start">
+            <CTA
+                label={learn_more_label}
+                color={blok.pricing_color}
+                type="button"
+            />
+        </div>
+    </div>
+</div>
