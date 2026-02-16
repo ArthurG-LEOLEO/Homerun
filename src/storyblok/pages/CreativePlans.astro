@@ -4,6 +4,8 @@ import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 
 import Title from "../../components/atoms/Title.astro";
 import SBImage from "../../components/global/SBImage.astro";
+import Accordions from "../sections/Accordions.astro";
+import ArrowLink from "../../components/atoms/ArrowLink.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -43,10 +45,60 @@ const { language, blok } = Astro.props;
             })
         }
     </div>
+    <div class="container-main bg-pink py-80 md:pt-140 md:pb-185">
+        <div
+            class="flex flex-col items-center gap-56 lg:flex-row lg:items-start xl:mx-auto xl:w-10/12"
+        >
+            <div
+                class="px-gutter w-10/12 lg:flex lg:w-4/12 lg:flex-col lg:gap-40 xl:w-3/10"
+            >
+                <h2 class="text-title-2">{blok.faq_title}</h2>
+                <div class="hidden lg:block">
+                    <ArrowLink
+                        className="faq-interested-link"
+                        label={blok.faq_interested_label}
+                    />
+                </div>
+            </div>
+            <div class="px-gutter w-full lg:w-8/12 xl:w-7/10">
+                {
+                    blok.faq_accordions?.map((blok: SbBlokData) => {
+                        return (
+                            <Accordions
+                                blok={blok}
+                                language={language}
+                                inline={true}
+                            />
+                        );
+                    })
+                }
+            </div>
+            <div class="px-gutter lg:hidden">
+                <ArrowLink
+                    className="faq-interested-link"
+                    label={blok.faq_interested_label}
+                />
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     import { waitForFooterSplineLoad } from "../../scripts/spline";
+
+    const handleInterestedCtaClick = (planTitle: string) => {
+        // Detect current language from URL
+        const currentPath = window.location.pathname;
+        const langMatch = currentPath.match(/^\/([a-z]{2})\//);
+        const currentLang = langMatch ? langMatch[1] : "";
+
+        // Construct contact URL with proper language prefix
+        const contactUrl = currentLang ? `/${currentLang}/contact` : "/contact";
+        const fullContactUrl = new URL(contactUrl, location.origin);
+        fullContactUrl.searchParams.append("planTitle", planTitle);
+
+        window.location.href = fullContactUrl.toString();
+    };
 
     let page: HTMLElement | null;
 
@@ -162,6 +214,16 @@ const { language, blok } = Astro.props;
         }
 
         tlAppear.play();
+
+        // Handle interested link click
+        const interestedLinks = document.querySelectorAll(
+            ".faq-interested-link",
+        );
+        interestedLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+                handleInterestedCtaClick("Start");
+            });
+        });
     };
 
     const cleanup = () => {

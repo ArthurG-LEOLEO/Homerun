@@ -3,14 +3,13 @@ import { type SbBlokData, storyblokEditable } from "@storyblok/astro";
 
 import Accordion from "../../components/atoms/Accordion.astro";
 
-const { language, blok } = Astro.props;
+const { language, blok, inline = false } = Astro.props;
 ---
-<div class="container-main py-50 md:py-100">
-    <div class="flex flex-col gap-6 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-        {
-            blok.items.map((item: SbBlokData) => (
-                <Accordion blok={item} />
-            ))
-        }
+
+<div class={`${!inline ? "container-main py-50 md:py-100" : ""}`}>
+    <div
+        class={`flex flex-col gap-6 ${!inline ? "px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12" : ""}`}
+    >
+        {blok.items.map((item: SbBlokData) => <Accordion blok={item} />)}
     </div>
 </div>
