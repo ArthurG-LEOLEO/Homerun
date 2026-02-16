@@ -1,0 +1,29 @@
+---
+import SBImage from "../global/SBImage.astro";
+import SBRichText from "../global/SBRichText.astro";
+
+const { blok, description, index } = Astro.props;
+---
+
+<div class="flex flex-col gap-24 md:w-1/2 lg:gap-40">
+    <div class="flex justify-center gap-34 md:gap-0">
+        <div class="max-w-162 md:max-w-none md:px-3">
+            <SBImage image={blok.first_photo} />
+        </div>
+        <div class="max-w-162 md:max-w-none">
+            <SBImage image={blok.second_photo} />
+        </div>
+    </div>
+    <div
+        class={`text-center md:flex md:flex-col md:text-left md:gap-24 ${
+            index === 0 ? "lg:pl-[20%] xl:pl-[25%]" : "lg:pr-[20%] xl:pr-[25%]"
+        }`}
+    >
+        <div class="text-title-7 md:px-gutter hidden md:block md:min-h-[1em]">
+            {index === 0 && description}
+        </div>
+        <div class="md:px-gutter">
+            <SBRichText content={blok.description} textSize="xsmall" />
+        </div>
+    </div>
+</div>

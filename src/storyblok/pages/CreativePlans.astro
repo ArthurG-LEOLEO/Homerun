@@ -6,6 +6,8 @@ import Title from "../../components/atoms/Title.astro";
 import SBImage from "../../components/global/SBImage.astro";
 import Accordions from "../sections/Accordions.astro";
 import ArrowLink from "../../components/atoms/ArrowLink.astro";
+import TeamGroup from "../../components/atoms/TeamGroup.astro";
+import SBRichText from "../../components/global/SBRichText.astro";
 
 const { language, blok } = Astro.props;
 ---
@@ -78,6 +80,33 @@ const { language, blok } = Astro.props;
                     className="faq-interested-link"
                     label={blok.faq_interested_label}
                 />
+            </div>
+        </div>
+    </div>
+    <div
+        class="container-main flex flex-col gap-56 pt-60 pb-35 lg:mx-auto lg:w-10/12 lg:pt-115 xl:w-8/12"
+    >
+        <div class="px-gutter text-center">
+            <h3 class="text-title-3">{blok.team_title}</h3>
+        </div>
+        <div class="flex flex-col gap-40 md:flex-row md:gap-0">
+            {
+                blok.team_groups?.map((group: SbBlokData, index: number) => {
+                    return (
+                        <TeamGroup
+                            blok={group}
+                            description={blok.team_groups_description}
+                            index={index}
+                        />
+                    );
+                })
+            }
+        </div>
+        <div class="px-gutter">
+            <div
+                class="bg-green rotate-[-1.2deg] px-32 py-40 text-white md:p-72"
+            >
+                <SBRichText content={blok.team_quote} textSize="medium" />
             </div>
         </div>
     </div>

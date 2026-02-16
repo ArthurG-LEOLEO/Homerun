@@ -3,13 +3,19 @@ import type { HTMLAttributes } from "astro/types";
 import type { Link } from "storyblok-rich-text-astro-renderer";
 
 export interface Props extends HTMLAttributes<"a"> {
-  link: Link["attrs"];
+    link: Link["attrs"];
 }
 
 const {
-  link: { href, target },
-  ...props
+    link: { href, target, linktype },
+    ...props
 } = Astro.props;
+
+// Handle email links
+const finalHref =
+    linktype === "email" && href && !href.startsWith("mailto:")
+        ? `mailto:${href}`
+        : href;
 ---
 
-<a {href} {target} {...props}><slot /></a>
+<a href={finalHref} {target} {...props}><slot /></a>
