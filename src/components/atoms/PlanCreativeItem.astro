@@ -41,16 +41,16 @@ const backgroundTextColor =
         <div
             class={`-mt-[1.3em] text-title-6 flex gap-x-16 flex-wrap justify-center border-2 border-black py-12 px-12 rounded-full lg:border-3 lg:gap-x-8 xl:py-16 xl:gap-x-16 xl:-mt-[1.5em] ${backgroundTextColor}`}
         >
-            <span>
+            <span class="flex gap-6">
                 {
                     lang === "en" ? (
                         <>
                             <span class="font-bold">{blok.title}</span>
-                            {plan_label}
+                            <span>{plan_label}</span>
                         </>
                     ) : (
                         <>
-                            {plan_label}
+                            <span>{plan_label}</span>
                             <span class="font-bold">{blok.title}</span>
                         </>
                     )

@@ -62,17 +62,17 @@ const backgroundTextBorderColor =
             class={`flex gap-x-16 flex-wrap items-center lg:gap-x-24 lg:w-4/10 ${backgroundTextColor}`}
         >
             <span
-                class={`py-12 px-24 text-title-6 border-2 rounded-full ${backgroundTextBorderColor}`}
+                class={`py-12 px-24 text-title-6 border-2 rounded-full flex gap-6 ${backgroundTextBorderColor}`}
             >
                 {
                     lang === "en" ? (
                         <>
                             <span class="font-bold">{blok.title}</span>
-                            {plan_label}
+                            <span>{plan_label}</span>
                         </>
                     ) : (
                         <>
-                            {plan_label}
+                            <span>{plan_label}</span>
                             <span class="font-bold">{blok.title}</span>
                         </>
                     )
