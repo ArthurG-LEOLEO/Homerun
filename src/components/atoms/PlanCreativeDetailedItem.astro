@@ -7,6 +7,8 @@ import { hasRichTextContent } from "../../utils/richtext";
 import CTA from "../global/CTA.astro";
 import PlanIncludedDetailedItem from "./PlanIncludedDetailedItem.astro";
 
+const lang = Astro.currentLocale;
+
 const {
     blok,
     planIndex,
@@ -62,10 +64,19 @@ const backgroundTextBorderColor =
             <span
                 class={`py-12 px-24 text-title-6 border-2 rounded-full ${backgroundTextBorderColor}`}
             >
-                {plan_label}
-                <span class="font-bold">
-                    {blok.title}
-                </span>
+                {
+                    lang === "en" ? (
+                        <>
+                            <span class="font-bold">{blok.title}</span>
+                            {plan_label}
+                        </>
+                    ) : (
+                        <>
+                            {plan_label}
+                            <span class="font-bold">{blok.title}</span>
+                        </>
+                    )
+                }
             </span>
             <span class="text-p20 font-bold">
                 {blok.price}
