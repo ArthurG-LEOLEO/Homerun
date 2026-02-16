@@ -19,7 +19,7 @@ const { language, blok } = Astro.props;
         {
             blok.items.map((item: SbBlokData, index: number) => (
                 <PlanCreativeItem
-                    class="plan-creative-item w-full max-w-600 flex-1 lg:max-w-none"
+                    class="plan-creative-item w-full max-w-600 flex-1 opacity-0 lg:max-w-none"
                     blok={item}
                     planIndex={index}
                     plan_label={blok.plan_label}
@@ -30,15 +30,19 @@ const { language, blok } = Astro.props;
             ))
         }
     </div>
-    <div class="px-gutter mx-auto mt-56 w-10/12 text-center lg:w-8/12">
+    <div
+        class="bottom-text px-gutter mx-auto mt-56 w-10/12 text-center opacity-0 lg:w-8/12"
+    >
         <SBRichText content={blok.bottom_text} textSize="medium" />
     </div>
     <div
+        id="plans-detailed-section"
         class="px-gutter lg:mt-80 lg:flex lg:flex-col lg:gap-52 xl:mx-auto xl:w-10/12"
     >
         {
             blok.items.map((item: SbBlokData, index: number) => (
                 <PlanCreativeDetailedItem
+                    class="plan-detailed-item opacity-0"
                     blok={item}
                     planIndex={index}
                     plan_label={blok.plan_label}
@@ -51,6 +55,108 @@ const { language, blok } = Astro.props;
 </div>
 
 <script>
+    const animatePlansReveal = () => {
+        const planItems = document.querySelectorAll(".plan-creative-item");
+        const plansSection = document.getElementById("plans-creative-section");
+
+        if (planItems.length > 0 && plansSection) {
+            // Set initial state
+            window.gsap?.set(planItems, {
+                y: "5rem",
+                opacity: 0,
+            });
+
+            // Create reveal animation with stagger triggered by scroll
+            window.gsap
+                ?.timeline({
+                    scrollTrigger: {
+                        trigger: plansSection,
+                        start: "top 80%",
+                        end: "bottom top",
+                        once: true, // Only trigger once
+                    },
+                })
+                .to(planItems, {
+                    duration: 1,
+                    stagger: 0.1,
+                    opacity: 1,
+                    y: 0,
+                    ease: "elastic.out(1,0.7)",
+                });
+        }
+    };
+
+    const animateBottomText = () => {
+        const bottomText = document.querySelector(".bottom-text");
+
+        if (bottomText) {
+            window.gsap?.set(bottomText, {
+                y: "3rem",
+                opacity: 0,
+            });
+
+            window.gsap
+                ?.timeline({
+                    scrollTrigger: {
+                        trigger: bottomText,
+                        start: "top 80%",
+                        once: true,
+                    },
+                })
+                .to(bottomText, {
+                    duration: 0.8,
+                    y: 0,
+                    opacity: 1,
+                    ease: "elastic.out(1,0.7)",
+                });
+        }
+    };
+
+    const animateDetailedPlans = () => {
+        const detailedItems = document.querySelectorAll(".plan-detailed-item");
+        const detailedSection = document.getElementById(
+            "plans-detailed-section",
+        );
+
+        // Only animate on desktop (modals on mobile)
+        const isDesktop = window.innerWidth >= 1024;
+
+        if (detailedItems.length > 0 && detailedSection && isDesktop) {
+            // Clean up existing ScrollTrigger for this section
+            window.ScrollTrigger?.getAll().forEach((trigger: any) => {
+                if (trigger.trigger === detailedSection) {
+                    trigger.kill();
+                }
+            });
+
+            window.gsap?.set(detailedItems, {
+                y: "3rem",
+                opacity: 0,
+            });
+
+            window.gsap
+                ?.timeline({
+                    scrollTrigger: {
+                        trigger: detailedSection,
+                        start: "top 80%",
+                        once: true,
+                    },
+                })
+                .to(detailedItems, {
+                    duration: 0.8,
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.2,
+                    ease: "elastic.out(1,0.7)",
+                });
+        } else if (!isDesktop && detailedItems.length > 0) {
+            // On mobile, keep items visible (they're managed as modals)
+            window.gsap?.set(detailedItems, {
+                opacity: 1,
+            });
+        }
+    };
+
     const handleInterestedCtaClick = (planTitle: string) => {
         // Detect current language from URL
         const currentPath = window.location.pathname;
@@ -157,6 +263,9 @@ const { language, blok } = Astro.props;
                     // Ensure hidden class is present for lg:block to work correctly
                     (item as HTMLElement).classList.add("hidden");
                 });
+
+                // Re-initialize detailed plans animation for desktop
+                animateDetailedPlans();
             }
 
             wasDesktop = nowDesktop;
@@ -182,6 +291,26 @@ const { language, blok } = Astro.props;
                 );
             }
         });
+
+        // Animate plans reveal
+        animatePlansReveal();
+        animateBottomText();
+        animateDetailedPlans();
+    };
+
+    const cleanup = () => {
+        // Clean up ScrollTrigger instances
+        window.ScrollTrigger?.getAll().forEach((trigger: any) => {
+            const triggerEl = trigger.trigger;
+            if (
+                triggerEl ===
+                    document.getElementById("plans-creative-section") ||
+                triggerEl === document.querySelector(".bottom-text") ||
+                triggerEl === document.getElementById("plans-detailed-section")
+            ) {
+                trigger.kill();
+            }
+        });
     };
 
     // Init on load
@@ -190,4 +319,12 @@ const { language, blok } = Astro.props;
     } else {
         initPlanModals();
     }
+
+    document.addEventListener("astro:page-load", () => {
+        initPlanModals();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+        cleanup();
+    });
 </script>
