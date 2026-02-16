@@ -34,11 +34,6 @@ const { blok } = Astro.props;
 
 <script>
     let buttons: NodeListOf<Element>;
-    let resizeObserver: ResizeObserver | null = null;
-    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    let stToRefresh = [];
-
     let isInitialized = false;
 
     const refreshScrollTriggersBelow = () => {
@@ -58,10 +53,9 @@ const { blok } = Astro.props;
 
         buttons.forEach((button) => {
             const content = button.nextElementSibling as HTMLElement;
-            const inner = content.querySelector("div") as HTMLElement;
             const accordionContainer = button.parentElement as HTMLElement;
 
-            const handleClick = (event: Event) => {
+            const handleClick = () => {
                 const isExpanded =
                     button.getAttribute("aria-expanded") === "true";
                 const icon = button.querySelector(
@@ -71,14 +65,17 @@ const { blok } = Astro.props;
                 if (!isExpanded) {
                     button.setAttribute("aria-expanded", "true");
                     gsap.to(content, {
-                        height: inner.offsetHeight,
+                        height: "auto",
                         duration: 0.2,
                         onComplete: refreshScrollTriggersBelow,
                     });
-                    if (icon) icon.style.transform = "rotate(180deg)";
-                    accordionContainer.classList.add("bg-black", "text-white");
+                    if (icon) gsap.to(icon, { rotation: 180, duration: 0.2 });
+                    accordionContainer.classList.add(
+                        "bg-black",
+                        "text-white",
+                        "border-black",
+                    );
                     accordionContainer.classList.remove("border-current/40");
-                    accordionContainer.classList.add("border-black");
                 } else {
                     button.setAttribute("aria-expanded", "false");
                     gsap.to(content, {
@@ -86,12 +83,12 @@ const { blok } = Astro.props;
                         duration: 0.1,
                         onComplete: refreshScrollTriggersBelow,
                     });
-                    if (icon) icon.style.transform = "rotate(0deg)";
+                    if (icon) gsap.to(icon, { rotation: 0, duration: 0.1 });
                     accordionContainer.classList.remove(
                         "bg-black",
                         "text-white",
+                        "border-black",
                     );
-                    accordionContainer.classList.remove("border-black");
                     accordionContainer.classList.add("border-current/40");
                 }
             };
@@ -100,54 +97,10 @@ const { blok } = Astro.props;
             button.addEventListener("click", handleClick);
         });
 
-        resizeObserver = new ResizeObserver((entries) => {
-            entries.forEach((entry) => {
-                const content = entry.target as HTMLElement;
-                const button =
-                    content.previousElementSibling as HTMLButtonElement;
-
-                if (button && button.getAttribute("aria-expanded") === "true") {
-                    const inner = content.querySelector("div") as HTMLElement;
-
-                    // Temporarily disable transition for immediate size update
-                    content.style.transition = "none";
-                    content.style.height = `${inner.offsetHeight}px`;
-
-                    // Force reflow to apply the height immediately
-                    content.offsetHeight;
-
-                    if (resizeTimeout) {
-                        clearTimeout(resizeTimeout);
-                    }
-
-                    resizeTimeout = setTimeout(() => {
-                        content.style.transition = "height 200ms ease-out";
-                    }, 50);
-                }
-            });
-        });
-
-        buttons.forEach((button) => {
-            const content = button.nextElementSibling as HTMLElement;
-            if (resizeObserver) {
-                resizeObserver.observe(content);
-            }
-        });
-
         isInitialized = true;
     };
 
     const cleanup = () => {
-        if (resizeObserver) {
-            resizeObserver.disconnect();
-            resizeObserver = null;
-        }
-
-        if (resizeTimeout) {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = null;
-        }
-
         if (buttons) {
             buttons.forEach((button) => {
                 if ((button as any)._accordionClickHandler) {
