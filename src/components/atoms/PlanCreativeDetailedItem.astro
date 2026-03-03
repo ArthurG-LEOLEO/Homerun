@@ -14,6 +14,8 @@ const {
     planIndex,
     plan_label,
     interested_label,
+    mail_recipients,
+    mail_subject,
     per_period_label,
     class: className,
 } = Astro.props;
@@ -39,6 +41,10 @@ const backgroundTextBorderColor =
     backgroundTextBorderColorMap[
         blok.pricing_color as keyof typeof backgroundTextBorderColorMap
     ] || "bg-orange text-white border-white";
+
+// Build mailto link for interested CTA
+const subject = `${mail_subject}${blok.title}`;
+const mailtoLink = `mailto:${mail_recipients}?subject=${encodeURIComponent(subject)}`;
 ---
 
 <div
@@ -118,8 +124,7 @@ const backgroundTextBorderColor =
                     id={`interested-cta-${planIndex}`}
                     label={interested_label}
                     color={blok.pricing_color}
-                    type="button"
-                    data-plan-title={blok.title}
+                    link={{ url: mailtoLink, linktype: "url" }}
                 />
             </div>
         </div>

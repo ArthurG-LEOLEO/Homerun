@@ -47,6 +47,8 @@ const { language, blok } = Astro.props;
                     planIndex={index}
                     plan_label={blok.plan_label}
                     interested_label={blok.interested_label}
+                    mail_recipients={blok.mail_recipients}
+                    mail_subject={blok.mail_subject}
                     per_period_label={blok.per_period_label}
                 />
             ))
@@ -157,20 +159,6 @@ const { language, blok } = Astro.props;
         }
     };
 
-    const handleInterestedCtaClick = (planTitle: string) => {
-        // Detect current language from URL
-        const currentPath = window.location.pathname;
-        const langMatch = currentPath.match(/^\/([a-z]{2})\//);
-        const currentLang = langMatch ? langMatch[1] : "";
-
-        // Construct contact URL with proper language prefix
-        const contactUrl = currentLang ? `/${currentLang}/contact` : "/contact";
-        const fullContactUrl = new URL(contactUrl, location.origin);
-        fullContactUrl.searchParams.append("planTitle", planTitle);
-
-        window.location.href = fullContactUrl.toString();
-    };
-
     const initPlanModals = () => {
         const planItems = document.querySelectorAll(".plan-creative-item");
         const detailedItems = document.querySelectorAll(
@@ -276,21 +264,6 @@ const { language, blok } = Astro.props;
         if (section) {
             resizeObserver.observe(section);
         }
-
-        // Handle interested CTA clicks
-        const interestedCtas = document.querySelectorAll(
-            "[id^='interested-cta-']",
-        );
-        interestedCtas.forEach((cta) => {
-            const planTitle = (cta as HTMLElement).getAttribute(
-                "data-plan-title",
-            );
-            if (planTitle) {
-                cta.addEventListener("click", () =>
-                    handleInterestedCtaClick(planTitle),
-                );
-            }
-        });
 
         // Animate plans reveal
         animatePlansReveal();
