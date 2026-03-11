@@ -77,9 +77,13 @@ const { blok } = Astro.props;
     }
 </div>
 <div class="mt-30 md:mt-65">
-    <h3 class="text-title-3 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
-        <Title title={blok.people_agency_title[0]} />
-    </h3>
+    {
+        blok.people_agency_title?.[0] && (
+            <h3 class="text-title-3 px-gutter mx-auto w-10/12 lg:w-8/12 xl:w-6/12">
+                <Title title={blok.people_agency_title[0]} />
+            </h3>
+        )
+    }
     {
         blok.people_agency_photo && (
             <div class="px-gutter mx-auto mt-24 md:mt-45 lg:w-8/12 xl:w-6/12">
