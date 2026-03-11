@@ -12,20 +12,25 @@ const { blok } = Astro.props;
         <div
             class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
         >
-            <div class="relative flex flex-col">
-                <div
-                    class="text-orange absolute -top-13 -left-38 h-107 w-150 md:-top-22 md:-left-67 md:h-154 md:w-217"
-                >
-                    <Icon name="punks" size="100%" />
-                </div>
-                <span
-                    class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
-                    >{blok.people_left_col_emoji}</span
-                >
-                <span class="text-tag-big relative"
-                    >{blok.people_left_col_title}</span
-                >
-            </div>
+            {
+                (blok.people_left_col_emoji || blok.people_left_col_title) && (
+                    <div class="relative flex flex-col">
+                        <div class="text-orange absolute -top-13 -left-38 h-107 w-150 md:-top-22 md:-left-67 md:h-154 md:w-217">
+                            <Icon name="punks" size="100%" />
+                        </div>
+                        {blok.people_left_col_emoji && (
+                            <span class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]">
+                                {blok.people_left_col_emoji}
+                            </span>
+                        )}
+                        {blok.people_left_col_title && (
+                            <span class="text-tag-big relative">
+                                {blok.people_left_col_title}
+                            </span>
+                        )}
+                    </div>
+                )
+            }
             {
                 // prettier-ignore
                 blok.people_left_col_text && (
@@ -36,20 +41,26 @@ const { blok } = Astro.props;
         <div
             class="px-gutter flex flex-col gap-32 md:flex-1 md:gap-42 md:pr-33"
         >
-            <div class="relative flex flex-col">
-                <div
-                    class="text-blue absolute -top-5 -left-17 h-82 w-107 md:top-3 md:-left-18 md:h-103 md:w-135"
-                >
-                    <Icon name="scouts" size="100%" />
-                </div>
-                <span
-                    class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]"
-                    >{blok.people_right_col_emoji}</span
-                >
-                <span class="text-tag-big relative text-black"
-                    >{blok.people_right_col_title}</span
-                >
-            </div>
+            {
+                (blok.people_right_col_emoji ||
+                    blok.people_right_col_title) && (
+                    <div class="relative flex flex-col">
+                        <div class="text-blue absolute -top-5 -left-17 h-82 w-107 md:top-3 md:-left-18 md:h-103 md:w-135">
+                            <Icon name="scouts" size="100%" />
+                        </div>
+                        {blok.people_right_col_emoji && (
+                            <span class="relative text-[4.5rem]/[4.5rem] md:text-[6rem]/[6rem]">
+                                {blok.people_right_col_emoji}
+                            </span>
+                        )}
+                        {blok.people_right_col_title && (
+                            <span class="text-tag-big relative text-black">
+                                {blok.people_right_col_title}
+                            </span>
+                        )}
+                    </div>
+                )
+            }
             {
                 // prettier-ignore
                 blok.people_right_col_text && (
