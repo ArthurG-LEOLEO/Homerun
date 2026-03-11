@@ -17,7 +17,11 @@ const { blok } = Astro.props;
             set:html={renderRichText(blok.right_frame)}
         />
     </div>
-    <h2 class="text-huge mt-80 text-center md:mt-105">
-        <Title title={blok.huge_title[0]} />
-    </h2>
+    {
+        blok.huge_title?.[0] && (
+            <h2 class="text-huge mt-80 text-center md:mt-105">
+                <Title title={blok.huge_title[0]} />
+            </h2>
+        )
+    }
 </div>
