@@ -85,6 +85,7 @@ export default defineConfig({
                 case_text: "storyblok/sections/case/Text",
                 case_videos: "storyblok/sections/case/Videos",
                 plans_creative: "storyblok/sections/PlansCreative",
+                soro_integration: "storyblok/sections/SoroIntegration",
             },
         }),
         icon(),
